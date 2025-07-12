@@ -1,8 +1,8 @@
 <?php
 
-    define('BASEURL', $_SERVER['DOCUMENT_ROOT'] . '/levina/');
+    define('BASEURL', $_SERVER['DOCUMENT_ROOT'] . '/susu/');
         
-    define('PROOT', '/levina/');
+    define('PROOT', '/susu/');
 
     // Load the environment variables from the .env file
     define('RECAPTCHA_SITE_KEY_PUBLIC', $_ENV['RECAPTCHA_SITE_KEY_PUBLIC']);
@@ -17,5 +17,3 @@
     define('IPINFO_KEY', $_ENV['IPINFO_KEY']);
 
     define('ARKESEL_SMS_API_KEY', $_ENV['ARKESEL_SMS_API_KEY']);
-
-    define ('COINCAP_APIKEY', $_ENV['COINCAP_APIKEY']);
