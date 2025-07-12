@@ -198,7 +198,7 @@
     </script>
     
     <!-- Favicon -->
-    <link rel="shortcut icon" href="../assets/favicon/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
     
     <!-- Fonts and icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -207,10 +207,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
     
     <!-- Libs CSS -->
-    <link rel="stylesheet" href="../assets/css/libs.bundle.css" />
+    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
     
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="../assets/css/theme.bundle.css" />
+    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
     
     <!-- Title -->
     <title>Dashbrd</title>
@@ -264,7 +264,7 @@
         <div class="row">
           <div class="col-auto">
             <div class="avatar avatar-xl rounded">
-              <img class="avatar-img" src="../assets/img/products/earbuds.jpg" alt="..." />
+              <img class="avatar-img" src="./assets/img/products/earbuds.jpg" alt="..." />
             </div>
           </div>
           <div class="col">
@@ -338,7 +338,7 @@
           <div class="col-auto">
             <!-- Avatar -->
             <div class="avatar avatar-sm">
-              <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
+              <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
             </div>
           </div>
           <div class="col">
@@ -362,7 +362,7 @@
           <div class="col-auto">
             <!-- Avatar -->
             <div class="avatar avatar-sm">
-              <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
+              <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
             </div>
           </div>
           <div class="col">
@@ -386,7 +386,7 @@
           <div class="col-auto">
             <!-- Avatar -->
             <div class="avatar avatar-sm">
-              <img class="avatar-img" src="../assets/img/photos/photo-3.jpg" alt="..." />
+              <img class="avatar-img" src="./assets/img/photos/photo-3.jpg" alt="..." />
             </div>
           </div>
           <div class="col">
@@ -435,7 +435,7 @@
               <div class="col">
                 <div class="d-flex align-items-center">
                   <div class="avatar">
-                    <img class="avatar-img rounded" src="../assets/img/products/vr-headset.jpg" alt="..." />
+                    <img class="avatar-img rounded" src="./assets/img/products/vr-headset.jpg" alt="..." />
                   </div>
                   <div class="ms-4">
                     <div>VR Headset</div>
@@ -450,7 +450,7 @@
               <div class="col">
                 <div class="d-flex align-items-center">
                   <div class="avatar">
-                    <img class="avatar-img rounded" src="../assets/img/products/smart-watch.jpg" alt="..." />
+                    <img class="avatar-img rounded" src="./assets/img/products/smart-watch.jpg" alt="..." />
                   </div>
                   <div class="ms-4">
                     <div>Smart Watch</div>
@@ -607,7 +607,7 @@
       <nav class="navbar navbar-expand-xl navbar-vertical">
         <div class="container-lg">
           <!-- Brand -->
-          <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="../index.html">
+          <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="./index.html">
             <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">Dashbrd</span>
           </a>
     
@@ -616,13 +616,13 @@
             <div class="dropdown my-n2">
               <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                  <img class="avatar-img" src="../assets/img/photos/photo-6.jpg" alt="..." />
+                  <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
                 </span>
                 <span class="d-none d-xl-block">John Williams</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="../account/account.html">Account</a></li>
-                <li><a class="dropdown-item" href="../auth/password-reset.html" target="_blank">Change password</a></li>
+                <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
+                <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="#">Sign out</a></li>
               </ul>
@@ -657,7 +657,7 @@
                     <div class="row gx-3">
                       <div class="col-auto">
                         <div class="avatar avatar-sm">
-                          <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
+                          <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
                         </div>
                       </div>
                       <div class="col">
@@ -674,7 +674,7 @@
                     <div class="row gx-3">
                       <div class="col-auto">
                         <div class="avatar avatar-sm">
-                          <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
+                          <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
                         </div>
                       </div>
                       <div class="col">
@@ -740,20 +740,20 @@
             <!-- Nav -->
             <nav class="navbar-nav nav-pills">
               <div class="nav-item dropend">
-                <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <span class="material-symbols-outlined">space_dashboard</span>
                   <span class="ms-3 d-xl-none">Home</span>
                 </a>
                 <div class="dropdown-menu ms-xl-3">
                   <h6 class="dropdown-header d-none d-xl-block">Dashboards</h6>
-                  <a class="dropdown-item " href="../index.html">Default</a>
-                  <a class="dropdown-item " href="../dashboards/crypto.html">Crypto</a>
-                  <a class="dropdown-item " href="../dashboards/saas.html">SaaS</a>
+                  <a class="dropdown-item active" href="./index.html">Default</a>
+                  <a class="dropdown-item " href="./dashboards/crypto.html">Crypto</a>
+                  <a class="dropdown-item " href="./dashboards/saas.html">SaaS</a>
                 </div>
               </div>
               <div class="nav-item dropend">
                 <a
-                  class="nav-link active"
+                  class="nav-link "
                   href="#"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -779,9 +779,9 @@
                       Customers <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../customers/customers.html">Customers</a>
-                      <a class="dropdown-item " href="../customers/customer.html">Customer details</a>
-                      <a class="dropdown-item " href="../customers/customer-new.html">New customer</a>
+                      <a class="dropdown-item " href="./customers/customers.html">Customers</a>
+                      <a class="dropdown-item " href="./customers/customer.html">Customer details</a>
+                      <a class="dropdown-item " href="./customers/customer-new.html">New customer</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -796,9 +796,9 @@
                       Projects <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../projects/projects.html">Projects</a>
-                      <a class="dropdown-item " href="../projects/project.html">Project overview</a>
-                      <a class="dropdown-item " href="../projects/project-new.html">New project</a>
+                      <a class="dropdown-item " href="./projects/projects.html">Projects</a>
+                      <a class="dropdown-item " href="./projects/project.html">Project overview</a>
+                      <a class="dropdown-item " href="./projects/project-new.html">New project</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -813,8 +813,8 @@
                       Account <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../account/account.html">Account overview</a>
-                      <a class="dropdown-item " href="../account/account-settings.html">Account settings</a>
+                      <a class="dropdown-item " href="./account/account.html">Account overview</a>
+                      <a class="dropdown-item " href="./account/account-settings.html">Account settings</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -829,10 +829,10 @@
                       E-commerce <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../ecommerce/products.html">Products</a>
-                      <a class="dropdown-item " href="../ecommerce/orders.html">Orders</a>
-                      <a class="dropdown-item " href="../ecommerce/invoice.html">Invoice</a>
-                      <a class="dropdown-item " href="../ecommerce/pricing.html">Pricing</a>
+                      <a class="dropdown-item " href="./ecommerce/products.html">Products</a>
+                      <a class="dropdown-item " href="./ecommerce/orders.html">Orders</a>
+                      <a class="dropdown-item " href="./ecommerce/invoice.html">Invoice</a>
+                      <a class="dropdown-item " href="./ecommerce/pricing.html">Pricing</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -847,9 +847,9 @@
                       Posts <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../posts/categories.html">Categories</a>
-                      <a class="dropdown-item " href="../posts/posts.html">Posts</a>
-                      <a class="dropdown-item " href="../posts/post-new.html">New post</a>
+                      <a class="dropdown-item " href="./posts/categories.html">Categories</a>
+                      <a class="dropdown-item " href="./posts/posts.html">Posts</a>
+                      <a class="dropdown-item " href="./posts/post-new.html">New post</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -857,16 +857,16 @@
                       Authentication <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="../auth/sign-in.html" target="_blank">Sign in</a>
-                      <a class="dropdown-item" href="../auth/sign-up.html" target="_blank">Sign up</a>
-                      <a class="dropdown-item" href="../auth/password-reset.html" target="_blank">Password reset</a>
-                      <a class="dropdown-item" href="../auth/verification-code.html" target="_blank">Verification code</a>
-                      <a class="dropdown-item" href="../auth/error.html" target="_blank">Error</a>
+                      <a class="dropdown-item" href="./auth/sign-in.html" target="_blank">Sign in</a>
+                      <a class="dropdown-item" href="./auth/sign-up.html" target="_blank">Sign up</a>
+                      <a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Password reset</a>
+                      <a class="dropdown-item" href="./auth/verification-code.html" target="_blank">Verification code</a>
+                      <a class="dropdown-item" href="./auth/error.html" target="_blank">Error</a>
                     </div>
                   </li>
                   <li class="dropend">
                     <a
-                      class="dropdown-item d-flex active"
+                      class="dropdown-item d-flex "
                       href="#"
                       role="button"
                       data-bs-toggle="dropdown"
@@ -876,7 +876,7 @@
                       Misc <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item active" href="../other/calendar.html">Calendar</a>
+                      <a class="dropdown-item " href="./other/calendar.html">Calendar</a>
                     </div>
                   </li>
                 </ul>
@@ -888,11 +888,11 @@
                 </a>
                 <div class="dropdown-menu ms-xl-3">
                   <h6 class="dropdown-header d-none d-xl-block">Emails</h6>
-                  <a class="dropdown-item" href="../emails/account-confirmation.html" target="_blank">Account confirmation</a>
-                  <a class="dropdown-item" href="../emails/new-post.html" target="_blank">New post</a>
-                  <a class="dropdown-item" href="../emails/order-confirmation.html" target="_blank">Order confirmation</a>
-                  <a class="dropdown-item" href="../emails/password-reset.html" target="_blank">Password reset</a>
-                  <a class="dropdown-item" href="../emails/product-update.html" target="_blank">Product update</a>
+                  <a class="dropdown-item" href="./emails/account-confirmation.html" target="_blank">Account confirmation</a>
+                  <a class="dropdown-item" href="./emails/new-post.html" target="_blank">New post</a>
+                  <a class="dropdown-item" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
+                  <a class="dropdown-item" href="./emails/password-reset.html" target="_blank">Password reset</a>
+                  <a class="dropdown-item" href="./emails/product-update.html" target="_blank">Product update</a>
                 </div>
               </div>
               <div class="nav-item dropend">
@@ -921,9 +921,9 @@
                 </a>
                 <div class="dropdown-menu ms-xl-3">
                   <h6 class="dropdown-header d-none d-xl-block">Documentation</h6>
-                  <a class="dropdown-item " href="../docs/getting-started.html">Getting started</a>
-                  <a class="dropdown-item " href="../docs/components.html">Components</a>
-                  <a class="dropdown-item d-flex " href="../docs/changelog.html"
+                  <a class="dropdown-item " href="./docs/getting-started.html">Getting started</a>
+                  <a class="dropdown-item " href="./docs/components.html">Components</a>
+                  <a class="dropdown-item d-flex " href="./docs/changelog.html"
                     >Changelog <span class="badge text-bg-primary ms-auto">1.0.6</span></a
                   >
                 </div>
@@ -1000,7 +1000,7 @@
       <nav class="navbar navbar-expand-xl navbar-vertical">
         <div class="container-lg">
           <!-- Brand -->
-          <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="../index.html">
+          <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="./index.html">
             <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">Dashbrd</span>
           </a>
     
@@ -1009,13 +1009,13 @@
             <div class="dropdown my-n2">
               <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                  <img class="avatar-img" src="../assets/img/photos/photo-6.jpg" alt="..." />
+                  <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
                 </span>
                 <span class="d-none d-xl-block">John Williams</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="../account/account.html">Account</a></li>
-                <li><a class="dropdown-item" href="../auth/password-reset.html" target="_blank">Change password</a></li>
+                <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
+                <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="#">Sign out</a></li>
               </ul>
@@ -1050,7 +1050,7 @@
                     <div class="row gx-3">
                       <div class="col-auto">
                         <div class="avatar avatar-sm">
-                          <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
+                          <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
                         </div>
                       </div>
                       <div class="col">
@@ -1067,7 +1067,7 @@
                     <div class="row gx-3">
                       <div class="col-auto">
                         <div class="avatar avatar-sm">
-                          <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
+                          <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
                         </div>
                       </div>
                       <div class="col">
@@ -1134,7 +1134,7 @@
             <nav class="navbar-nav nav-pills">
               <div class="nav-item dropend">
                 <a
-                  class="nav-link flex-xl-column "
+                  class="nav-link flex-xl-column active"
                   href="#"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -1144,14 +1144,14 @@
                   <span class="ms-3 ms-xl-0 mt-xl-1 d-xl-block align-self-stretch fs-xl-sm text-xl-center text-truncate">Home</span>
                 </a>
                 <div class="dropdown-menu ms-xl-3">
-                  <a class="dropdown-item " href="../index.html">Default</a>
-                  <a class="dropdown-item " href="../dashboards/crypto.html">Crypto</a>
-                  <a class="dropdown-item " href="../dashboards/saas.html">SaaS</a>
+                  <a class="dropdown-item active" href="./index.html">Default</a>
+                  <a class="dropdown-item " href="./dashboards/crypto.html">Crypto</a>
+                  <a class="dropdown-item " href="./dashboards/saas.html">SaaS</a>
                 </div>
               </div>
               <div class="nav-item dropend">
                 <a
-                  class="nav-link flex-xl-column active"
+                  class="nav-link flex-xl-column "
                   href="#"
                   role="button"
                   data-bs-toggle="dropdown"
@@ -1174,9 +1174,9 @@
                       Customers <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../customers/customers.html">Customers</a>
-                      <a class="dropdown-item " href="../customers/customer.html">Customer details</a>
-                      <a class="dropdown-item " href="../customers/customer-new.html">New customer</a>
+                      <a class="dropdown-item " href="./customers/customers.html">Customers</a>
+                      <a class="dropdown-item " href="./customers/customer.html">Customer details</a>
+                      <a class="dropdown-item " href="./customers/customer-new.html">New customer</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -1191,9 +1191,9 @@
                       Projects <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../projects/projects.html">Projects</a>
-                      <a class="dropdown-item " href="../projects/project.html">Project overview</a>
-                      <a class="dropdown-item " href="../projects/project-new.html">New project</a>
+                      <a class="dropdown-item " href="./projects/projects.html">Projects</a>
+                      <a class="dropdown-item " href="./projects/project.html">Project overview</a>
+                      <a class="dropdown-item " href="./projects/project-new.html">New project</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -1208,8 +1208,8 @@
                       Account <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../account/account.html">Account overview</a>
-                      <a class="dropdown-item " href="../account/account-settings.html">Account settings</a>
+                      <a class="dropdown-item " href="./account/account.html">Account overview</a>
+                      <a class="dropdown-item " href="./account/account-settings.html">Account settings</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -1224,10 +1224,10 @@
                       E-commerce <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../ecommerce/products.html">Products</a>
-                      <a class="dropdown-item " href="../ecommerce/orders.html">Orders</a>
-                      <a class="dropdown-item " href="../ecommerce/invoice.html">Invoice</a>
-                      <a class="dropdown-item " href="../ecommerce/pricing.html">Pricing</a>
+                      <a class="dropdown-item " href="./ecommerce/products.html">Products</a>
+                      <a class="dropdown-item " href="./ecommerce/orders.html">Orders</a>
+                      <a class="dropdown-item " href="./ecommerce/invoice.html">Invoice</a>
+                      <a class="dropdown-item " href="./ecommerce/pricing.html">Pricing</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -1242,9 +1242,9 @@
                       Posts <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item " href="../posts/categories.html">Categories</a>
-                      <a class="dropdown-item " href="../posts/posts.html">Posts</a>
-                      <a class="dropdown-item " href="../posts/post-new.html">New post</a>
+                      <a class="dropdown-item " href="./posts/categories.html">Categories</a>
+                      <a class="dropdown-item " href="./posts/posts.html">Posts</a>
+                      <a class="dropdown-item " href="./posts/post-new.html">New post</a>
                     </div>
                   </li>
                   <li class="dropend">
@@ -1252,16 +1252,16 @@
                       Authentication <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="../auth/sign-in.html" target="_blank">Sign in</a>
-                      <a class="dropdown-item" href="../auth/sign-up.html" target="_blank">Sign up</a>
-                      <a class="dropdown-item" href="../auth/password-reset.html" target="_blank">Password reset</a>
-                      <a class="dropdown-item" href="../auth/verification-code.html" target="_blank">Verification code</a>
-                      <a class="dropdown-item" href="../auth/error.html" target="_blank">Error</a>
+                      <a class="dropdown-item" href="./auth/sign-in.html" target="_blank">Sign in</a>
+                      <a class="dropdown-item" href="./auth/sign-up.html" target="_blank">Sign up</a>
+                      <a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Password reset</a>
+                      <a class="dropdown-item" href="./auth/verification-code.html" target="_blank">Verification code</a>
+                      <a class="dropdown-item" href="./auth/error.html" target="_blank">Error</a>
                     </div>
                   </li>
                   <li class="dropend">
                     <a
-                      class="dropdown-item d-flex active"
+                      class="dropdown-item d-flex "
                       href="#"
                       role="button"
                       data-bs-toggle="dropdown"
@@ -1271,7 +1271,7 @@
                       Misc <span class="material-symbols-outlined ms-auto">chevron_right</span>
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item active" href="../other/calendar.html">Calendar</a>
+                      <a class="dropdown-item " href="./other/calendar.html">Calendar</a>
                     </div>
                   </li>
                 </ul>
@@ -1282,11 +1282,11 @@
                   <span class="ms-3 ms-xl-0 mt-xl-1 d-xl-block align-self-stretch fs-xl-sm text-xl-center text-truncate">Emails</span>
                 </a>
                 <div class="dropdown-menu ms-xl-3">
-                  <a class="dropdown-item" href="../emails/account-confirmation.html" target="_blank">Account confirmation</a>
-                  <a class="dropdown-item" href="../emails/new-post.html" target="_blank">New post</a>
-                  <a class="dropdown-item" href="../emails/order-confirmation.html" target="_blank">Order confirmation</a>
-                  <a class="dropdown-item" href="../emails/password-reset.html" target="_blank">Password reset</a>
-                  <a class="dropdown-item" href="../emails/product-update.html" target="_blank">Product update</a>
+                  <a class="dropdown-item" href="./emails/account-confirmation.html" target="_blank">Account confirmation</a>
+                  <a class="dropdown-item" href="./emails/new-post.html" target="_blank">New post</a>
+                  <a class="dropdown-item" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
+                  <a class="dropdown-item" href="./emails/password-reset.html" target="_blank">Password reset</a>
+                  <a class="dropdown-item" href="./emails/product-update.html" target="_blank">Product update</a>
                 </div>
               </div>
               <div class="nav-item dropend">
@@ -1320,9 +1320,9 @@
                 </a>
                 <div class="dropdown-menu ms-xl-3">
                   <h6 class="dropdown-header d-none d-xl-block">Documentation</h6>
-                  <a class="dropdown-item " href="../docs/getting-started.html">Getting started</a>
-                  <a class="dropdown-item " href="../docs/components.html">Components</a>
-                  <a class="dropdown-item d-flex " href="../docs/changelog.html"
+                  <a class="dropdown-item " href="./docs/getting-started.html">Getting started</a>
+                  <a class="dropdown-item " href="./docs/components.html">Components</a>
+                  <a class="dropdown-item d-flex " href="./docs/changelog.html"
                     >Changelog <span class="badge text-bg-primary ms-auto">1.0.6</span></a
                   >
                 </div>
@@ -1405,7 +1405,7 @@
       <nav class="navbar navbar-expand-xl navbar-vertical">
         <div class="container-lg">
           <!-- Brand -->
-          <a class="navbar-brand d-flex align-items-center fs-5 fw-bold px-xl-3 mb-xl-4" href="../index.html">
+          <a class="navbar-brand d-flex align-items-center fs-5 fw-bold px-xl-3 mb-xl-4" href="./index.html">
             <i class="fs-4 text-secondary me-2" data-duoicon="box-2"></i> Dashbrd
           </a>
     
@@ -1414,13 +1414,13 @@
             <div class="dropdown my-n2">
               <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                  <img class="avatar-img" src="../assets/img/photos/photo-6.jpg" alt="..." />
+                  <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
                 </span>
                 <span class="d-none d-xl-block">John Williams</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="../account/account.html">Account</a></li>
-                <li><a class="dropdown-item" href="../auth/password-reset.html" target="_blank">Change password</a></li>
+                <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
+                <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="#">Sign out</a></li>
               </ul>
@@ -1455,7 +1455,7 @@
                     <div class="row gx-3">
                       <div class="col-auto">
                         <div class="avatar avatar-sm">
-                          <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
+                          <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
                         </div>
                       </div>
                       <div class="col">
@@ -1472,7 +1472,7 @@
                     <div class="row gx-3">
                       <div class="col-auto">
                         <div class="avatar avatar-sm">
-                          <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
+                          <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
                         </div>
                       </div>
                       <div class="col">
@@ -1539,7 +1539,7 @@
             <nav class="navbar-nav nav-pills mb-7">
               <div class="nav-item">
                 <a
-                  class="nav-link "
+                  class="nav-link active"
                   href="#"
                   data-bs-toggle="collapse"
                   data-bs-target="#dashboards"
@@ -1549,11 +1549,11 @@
                 >
                   <span class="material-symbols-outlined me-3">space_dashboard</span> Dashboards
                 </a>
-                <div class="collapse " id="dashboards">
+                <div class="collapse show" id="dashboards">
                   <nav class="nav nav-pills">
-                    <a class="nav-link " href="../index.html">Default</a>
-                    <a class="nav-link " href="../dashboards/crypto.html">Crypto</a>
-                    <a class="nav-link " href="../dashboards/saas.html">SaaS</a>
+                    <a class="nav-link active" href="./index.html">Default</a>
+                    <a class="nav-link " href="./dashboards/crypto.html">Crypto</a>
+                    <a class="nav-link " href="./dashboards/saas.html">SaaS</a>
                   </nav>
                 </div>
               </div>
@@ -1571,9 +1571,9 @@
                 </a>
                 <div class="collapse " id="customers">
                   <nav class="nav nav-pills">
-                    <a class="nav-link " href="../customers/customers.html">Customers</a>
-                    <a class="nav-link " href="../customers/customer.html">Customer details</a>
-                    <a class="nav-link " href="../customers/customer-new.html">New customer</a>
+                    <a class="nav-link " href="./customers/customers.html">Customers</a>
+                    <a class="nav-link " href="./customers/customer.html">Customer details</a>
+                    <a class="nav-link " href="./customers/customer-new.html">New customer</a>
                   </nav>
                 </div>
               </div>
@@ -1591,9 +1591,9 @@
                 </a>
                 <div class="collapse " id="projects">
                   <nav class="nav nav-pills">
-                    <a class="nav-link " href="../projects/projects.html">Projects</a>
-                    <a class="nav-link " href="../projects/project.html">Project overview</a>
-                    <a class="nav-link " href="../projects/project-new.html">New project</a>
+                    <a class="nav-link " href="./projects/projects.html">Projects</a>
+                    <a class="nav-link " href="./projects/project.html">Project overview</a>
+                    <a class="nav-link " href="./projects/project-new.html">New project</a>
                   </nav>
                 </div>
               </div>
@@ -1611,8 +1611,8 @@
                 </a>
                 <div class="collapse " id="account">
                   <nav class="nav nav-pills">
-                    <a class="nav-link " href="../account/account.html">Account overview</a>
-                    <a class="nav-link " href="../account/account-settings.html">Account settings</a>
+                    <a class="nav-link " href="./account/account.html">Account overview</a>
+                    <a class="nav-link " href="./account/account-settings.html">Account settings</a>
                   </nav>
                 </div>
               </div>
@@ -1630,10 +1630,10 @@
                 </a>
                 <div class="collapse " id="ecommerce">
                   <nav class="nav nav-pills">
-                    <a class="nav-link " href="../ecommerce/products.html">Products</a>
-                    <a class="nav-link " href="../ecommerce/orders.html">Orders</a>
-                    <a class="nav-link " href="../ecommerce/invoice.html">Invoice</a>
-                    <a class="nav-link " href="../ecommerce/pricing.html">Pricing</a>
+                    <a class="nav-link " href="./ecommerce/products.html">Products</a>
+                    <a class="nav-link " href="./ecommerce/orders.html">Orders</a>
+                    <a class="nav-link " href="./ecommerce/invoice.html">Invoice</a>
+                    <a class="nav-link " href="./ecommerce/pricing.html">Pricing</a>
                   </nav>
                 </div>
               </div>
@@ -1651,9 +1651,9 @@
                 </a>
                 <div class="collapse " id="posts">
                   <nav class="nav nav-pills">
-                    <a class="nav-link " href="../posts/categories.html">Categories</a>
-                    <a class="nav-link " href="../posts/posts.html">Posts</a>
-                    <a class="nav-link " href="../posts/post-new.html">New post</a>
+                    <a class="nav-link " href="./posts/categories.html">Categories</a>
+                    <a class="nav-link " href="./posts/posts.html">Posts</a>
+                    <a class="nav-link " href="./posts/post-new.html">New post</a>
                   </nav>
                 </div>
               </div>
@@ -1671,29 +1671,29 @@
                 </a>
                 <div class="collapse" id="authentication">
                   <nav class="nav nav-pills">
-                    <a class="nav-link" href="../auth/sign-in.html" target="_blank">Sign in</a>
-                    <a class="nav-link" href="../auth/sign-up.html" target="_blank">Sign up</a>
-                    <a class="nav-link" href="../auth/password-reset.html" target="_blank">Password reset</a>
-                    <a class="nav-link" href="../auth/verification-code.html" target="_blank">Verification code</a>
-                    <a class="nav-link" href="../auth/error.html" target="_blank">Error</a>
+                    <a class="nav-link" href="./auth/sign-in.html" target="_blank">Sign in</a>
+                    <a class="nav-link" href="./auth/sign-up.html" target="_blank">Sign up</a>
+                    <a class="nav-link" href="./auth/password-reset.html" target="_blank">Password reset</a>
+                    <a class="nav-link" href="./auth/verification-code.html" target="_blank">Verification code</a>
+                    <a class="nav-link" href="./auth/error.html" target="_blank">Error</a>
                   </nav>
                 </div>
               </div>
               <div class="nav-item">
                 <a
-                  class="nav-link active"
+                  class="nav-link "
                   href="#"
                   data-bs-toggle="collapse"
                   data-bs-target="#other"
                   role="button"
-                  aria-expanded="true"
+                  aria-expanded="false"
                   aria-controls="other"
                 >
                   <span class="material-symbols-outlined me-3">category</span> Misc
                 </a>
-                <div class="collapse show" id="other">
+                <div class="collapse " id="other">
                   <nav class="nav nav-pills">
-                    <a class="nav-link active" href="../other/calendar.html">Calendar</a>
+                    <a class="nav-link " href="./other/calendar.html">Calendar</a>
                   </nav>
                 </div>
               </div>
@@ -1703,11 +1703,11 @@
                 </a>
                 <div class="collapse" id="emails">
                   <nav class="nav nav-pills">
-                    <a class="nav-link" href="../emails/account-confirmation.html" target="_blank">Account confirmation</a>
-                    <a class="nav-link" href="../emails/new-post.html" target="_blank">New post</a>
-                    <a class="nav-link" href="../emails/order-confirmation.html" target="_blank">Order confirmation</a>
-                    <a class="nav-link" href="../emails/password-reset.html" target="_blank">Password reset</a>
-                    <a class="nav-link" href="../emails/product-update.html" target="_blank">Product update</a>
+                    <a class="nav-link" href="./emails/account-confirmation.html" target="_blank">Account confirmation</a>
+                    <a class="nav-link" href="./emails/new-post.html" target="_blank">New post</a>
+                    <a class="nav-link" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
+                    <a class="nav-link" href="./emails/password-reset.html" target="_blank">Password reset</a>
+                    <a class="nav-link" href="./emails/product-update.html" target="_blank">Product update</a>
                   </nav>
                 </div>
               </div>
@@ -1731,17 +1731,17 @@
             <!-- Nav -->
             <nav class="navbar-nav nav-pills mb-xl-7">
               <div class="nav-item">
-                <a class="nav-link " href="../docs/getting-started.html">
+                <a class="nav-link " href="./docs/getting-started.html">
                   <span class="material-symbols-outlined me-3">sticky_note_2</span> Getting started
                 </a>
               </div>
               <div class="nav-item">
-                <a class="nav-link " href="../docs/components.html">
+                <a class="nav-link " href="./docs/components.html">
                   <span class="material-symbols-outlined me-3">deployed_code</span> Components
                 </a>
               </div>
               <div class="nav-item">
-                <a class="nav-link " href="../docs/changelog.html">
+                <a class="nav-link " href="./docs/changelog.html">
                   <span class="material-symbols-outlined me-3">list_alt</span> Changelog
                   <span class="badge text-bg-primary ms-auto">1.0.6</span>
                 </a>
@@ -1822,7 +1822,7 @@
     <nav class="navbar navbar-expand-xl topnav-base">
       <div class="container-lg">
         <!-- Brand -->
-        <a class="navbar-brand d-flex align-items-center fs-5 fw-bold" href="../index.html"
+        <a class="navbar-brand d-flex align-items-center fs-5 fw-bold" href="./index.html"
           ><i class="fs-4 text-secondary me-2" data-duoicon="box-2"></i>Dashbrd</a
         >
     
@@ -1831,13 +1831,13 @@
           <div class="dropdown my-n2">
             <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                <img class="avatar-img" src="../assets/img/photos/photo-6.jpg" alt="..." />
+                <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
               </span>
               <span class="d-none d-xl-block">John Williams</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="../account/account.html">Account</a></li>
-              <li><a class="dropdown-item" href="../auth/password-reset.html" target="_blank">Change password</a></li>
+              <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
+              <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
               <li><hr class="dropdown-divider" /></li>
               <li><a class="dropdown-item" href="#">Sign out</a></li>
             </ul>
@@ -1872,7 +1872,7 @@
                   <div class="row gx-3">
                     <div class="col-auto">
                       <div class="avatar avatar-sm">
-                        <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
+                        <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
                       </div>
                     </div>
                     <div class="col">
@@ -1889,7 +1889,7 @@
                   <div class="row gx-3">
                     <div class="col-auto">
                       <div class="avatar avatar-sm">
-                        <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
+                        <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
                       </div>
                     </div>
                     <div class="col">
@@ -1955,18 +1955,18 @@
           <!-- Nav -->
           <nav class="navbar-nav nav-pills mx-auto">
             <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Dashboards
               </a>
               <div class="dropdown-menu">
-                <a class="dropdown-item " href="../index.html">Default</a>
-                <a class="dropdown-item " href="../dashboards/crypto.html">Crypto</a>
-                <a class="dropdown-item " href="../dashboards/saas.html">SaaS</a>
+                <a class="dropdown-item active" href="./index.html">Default</a>
+                <a class="dropdown-item " href="./dashboards/crypto.html">Crypto</a>
+                <a class="dropdown-item " href="./dashboards/saas.html">SaaS</a>
               </div>
             </div>
             <div class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle active"
+                class="nav-link dropdown-toggle "
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -1988,9 +1988,9 @@
                     Customers <span class="material-symbols-outlined ms-auto">chevron_right</span>
                   </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item " href="../customers/customers.html">Customers</a>
-                    <a class="dropdown-item " href="../customers/customer.html">Customer details</a>
-                    <a class="dropdown-item " href="../customers/customer-new.html">New customer</a>
+                    <a class="dropdown-item " href="./customers/customers.html">Customers</a>
+                    <a class="dropdown-item " href="./customers/customer.html">Customer details</a>
+                    <a class="dropdown-item " href="./customers/customer-new.html">New customer</a>
                   </div>
                 </li>
                 <li class="dropend">
@@ -2005,9 +2005,9 @@
                     Projects <span class="material-symbols-outlined ms-auto">chevron_right</span>
                   </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item " href="../projects/projects.html">Projects</a>
-                    <a class="dropdown-item " href="../projects/project.html">Project overview</a>
-                    <a class="dropdown-item " href="../projects/project-new.html">New project</a>
+                    <a class="dropdown-item " href="./projects/projects.html">Projects</a>
+                    <a class="dropdown-item " href="./projects/project.html">Project overview</a>
+                    <a class="dropdown-item " href="./projects/project-new.html">New project</a>
                   </div>
                 </li>
                 <li class="dropend">
@@ -2022,8 +2022,8 @@
                     Account <span class="material-symbols-outlined ms-auto">chevron_right</span>
                   </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item " href="../account/account.html">Account overview</a>
-                    <a class="dropdown-item " href="../account/account-settings.html">Account settings</a>
+                    <a class="dropdown-item " href="./account/account.html">Account overview</a>
+                    <a class="dropdown-item " href="./account/account-settings.html">Account settings</a>
                   </div>
                 </li>
                 <li class="dropend">
@@ -2038,10 +2038,10 @@
                     E-commerce <span class="material-symbols-outlined ms-auto">chevron_right</span>
                   </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item " href="../ecommerce/products.html">Products</a>
-                    <a class="dropdown-item " href="../ecommerce/orders.html">Orders</a>
-                    <a class="dropdown-item " href="../ecommerce/invoice.html">Invoice</a>
-                    <a class="dropdown-item " href="../ecommerce/pricing.html">Pricing</a>
+                    <a class="dropdown-item " href="./ecommerce/products.html">Products</a>
+                    <a class="dropdown-item " href="./ecommerce/orders.html">Orders</a>
+                    <a class="dropdown-item " href="./ecommerce/invoice.html">Invoice</a>
+                    <a class="dropdown-item " href="./ecommerce/pricing.html">Pricing</a>
                   </div>
                 </li>
                 <li class="dropend">
@@ -2056,9 +2056,9 @@
                     Posts <span class="material-symbols-outlined ms-auto">chevron_right</span>
                   </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item " href="../posts/categories.html">Categories</a>
-                    <a class="dropdown-item " href="../posts/posts.html">Posts</a>
-                    <a class="dropdown-item " href="../posts/post-new.html">New post</a>
+                    <a class="dropdown-item " href="./posts/categories.html">Categories</a>
+                    <a class="dropdown-item " href="./posts/posts.html">Posts</a>
+                    <a class="dropdown-item " href="./posts/post-new.html">New post</a>
                   </div>
                 </li>
                 <li class="dropend">
@@ -2066,16 +2066,16 @@
                     Authentication <span class="material-symbols-outlined ms-auto">chevron_right</span>
                   </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="../auth/sign-in.html" target="_blank">Sign in</a>
-                    <a class="dropdown-item" href="../auth/sign-up.html" target="_blank">Sign up</a>
-                    <a class="dropdown-item" href="../auth/password-reset.html" target="_blank">Password reset</a>
-                    <a class="dropdown-item" href="../auth/verification-code.html" target="_blank">Verification code</a>
-                    <a class="dropdown-item" href="../auth/error.html" target="_blank">Error</a>
+                    <a class="dropdown-item" href="./auth/sign-in.html" target="_blank">Sign in</a>
+                    <a class="dropdown-item" href="./auth/sign-up.html" target="_blank">Sign up</a>
+                    <a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Password reset</a>
+                    <a class="dropdown-item" href="./auth/verification-code.html" target="_blank">Verification code</a>
+                    <a class="dropdown-item" href="./auth/error.html" target="_blank">Error</a>
                   </div>
                 </li>
                 <li class="dropend">
                   <a
-                    class="dropdown-item d-flex active"
+                    class="dropdown-item d-flex "
                     href="#"
                     role="button"
                     data-bs-toggle="dropdown"
@@ -2085,7 +2085,7 @@
                     Misc <span class="material-symbols-outlined ms-auto">chevron_right</span>
                   </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item active" href="../other/calendar.html">Calendar</a>
+                    <a class="dropdown-item " href="./other/calendar.html">Calendar</a>
                   </div>
                 </li>
               </ul>
@@ -2093,11 +2093,11 @@
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Emails</a>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="../emails/account-confirmation.html" target="_blank">Account confirmation</a>
-                <a class="dropdown-item" href="../emails/new-post.html" target="_blank">New post</a>
-                <a class="dropdown-item" href="../emails/order-confirmation.html" target="_blank">Order confirmation</a>
-                <a class="dropdown-item" href="../emails/password-reset.html" target="_blank">Password reset</a>
-                <a class="dropdown-item" href="../emails/product-update.html" target="_blank">Product update</a>
+                <a class="dropdown-item" href="./emails/account-confirmation.html" target="_blank">Account confirmation</a>
+                <a class="dropdown-item" href="./emails/new-post.html" target="_blank">New post</a>
+                <a class="dropdown-item" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
+                <a class="dropdown-item" href="./emails/password-reset.html" target="_blank">Password reset</a>
+                <a class="dropdown-item" href="./emails/product-update.html" target="_blank">Product update</a>
               </div>
             </div>
             <div class="nav-item dropdown">
@@ -2119,9 +2119,9 @@
                 Documentation
               </a>
               <div class="dropdown-menu">
-                <a class="dropdown-item " href="../docs/getting-started.html">Getting started</a>
-                <a class="dropdown-item " href="../docs/components.html">Components</a>
-                <a class="dropdown-item d-flex " href="../docs/changelog.html"
+                <a class="dropdown-item " href="./docs/getting-started.html">Getting started</a>
+                <a class="dropdown-item " href="./docs/components.html">Components</a>
+                <a class="dropdown-item d-flex " href="./docs/changelog.html"
                   >Changelog <span class="badge text-bg-primary ms-auto">1.0.6</span></a
                 >
               </div>
@@ -2204,13 +2204,13 @@
             <div class="dropdown my-n2">
               <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                  <img class="avatar-img" src="../assets/img/photos/photo-6.jpg" alt="..." />
+                  <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
                 </span>
                 <span class="d-none d-xl-block">John Williams</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="../account/account.html">Account</a></li>
-                <li><a class="dropdown-item" href="../auth/password-reset.html" target="_blank">Change password</a></li>
+                <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
+                <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="#">Sign out</a></li>
               </ul>
@@ -2245,7 +2245,7 @@
                     <div class="row gx-3">
                       <div class="col-auto">
                         <div class="avatar avatar-sm">
-                          <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
+                          <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
                         </div>
                       </div>
                       <div class="col">
@@ -2262,7 +2262,7 @@
                     <div class="row gx-3">
                       <div class="col-auto">
                         <div class="avatar avatar-sm">
-                          <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
+                          <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
                         </div>
                       </div>
                       <div class="col">
@@ -2309,44 +2309,553 @@
     <main class="main px-lg-6">
       <!-- Content -->
       <div class="container-lg">
-        <!-- Page header -->
-        <div class="row align-items-center mb-7">
-          <div class="col-auto">
-            <!-- Avatar -->
-            <div class="avatar avatar-xl rounded text-primary">
-              <i class="fs-2" data-duoicon="calendar"></i>
+        <!-- Page content -->
+        <div class="row align-items-center">
+          <div class="col-12 col-md-auto order-md-1 d-flex align-items-center justify-content-center mb-4 mb-md-0">
+            <div class="avatar text-info me-2">
+              <i class="fs-4" data-duoicon="world"></i>
             </div>
+            San Francisco, CA –&nbsp;<span>8:00 PM</span>
           </div>
-          <div class="col">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb mb-1">
-                <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Other</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Calendar</li>
-              </ol>
-            </nav>
-
-            <!-- Heading -->
-            <h1 class="fs-4 mb-0">Calendar</h1>
-          </div>
-          <div class="col-12 col-sm-auto mt-4 mt-sm-0">
-            <!-- Action -->
-            <button class="btn btn-secondary w-100" type="button" data-bs-toggle="modal" data-bs-target="#eventModal">
-              <span class="material-symbols-outlined me-1">add</span> New event
-            </button>
+          <div class="col-12 col-md order-md-0 text-center text-md-start">
+            <h1>Hello, John</h1>
+            <p class="fs-lg text-body-secondary mb-0">Here's a summary of your account activity for this week.</p>
           </div>
         </div>
 
-        <!-- Page content -->
-        <div id="fullcalendar"></div>
+        <!-- Divider -->
+        <hr class="my-8" />
+
+        <!-- Stats -->
+        <div class="row mb-8">
+          <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+            <div class="card bg-body-tertiary border-transparent">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <!-- Heading -->
+                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Earned</h4>
+
+                    <!-- Text -->
+                    <div class="fs-4 fw-semibold">$1,250</div>
+                  </div>
+                  <div class="col-auto">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-lg bg-body text-primary">
+                      <i class="fs-4" data-duoicon="credit-card"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+            <div class="card bg-body-tertiary border-transparent">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <!-- Heading -->
+                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Hours logged</h4>
+
+                    <!-- Text -->
+                    <div class="fs-4 fw-semibold">35.5 hrs</div>
+                  </div>
+                  <div class="col-auto">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-lg bg-body text-primary">
+                      <i class="fs-4" data-duoicon="clock"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-md-0">
+            <div class="card bg-body-tertiary border-transparent">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <!-- Heading -->
+                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Avg. time</h4>
+
+                    <!-- Text -->
+                    <div class="fs-4 fw-semibold">2:55 hrs</div>
+                  </div>
+                  <div class="col-auto">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-lg bg-body text-primary">
+                      <i class="fs-4" data-duoicon="slideshow"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-xxl-3">
+            <div class="card bg-body-tertiary border-transparent">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <!-- Heading -->
+                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Weekly growth</h4>
+
+                    <!-- Text -->
+                    <div class="fs-4 fw-semibold">14.5%</div>
+                  </div>
+                  <div class="col-auto">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-lg bg-body text-primary">
+                      <i class="fs-4" data-duoicon="discount"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-xxl-8">
+            <!-- Performance -->
+            <div class="card mb-6">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h3 class="fs-6 mb-0">Performance</h3>
+                  </div>
+                  <div class="col-auto fs-sm me-n3">
+                    <span class="material-symbols-outlined text-primary me-1">circle</span>
+                    Total
+                  </div>
+                  <div class="col-auto fs-sm">
+                    <span class="material-symbols-outlined text-dark me-1">circle</span>
+                    Tracked
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart">
+                  <canvas class="chart-canvas" id="userPerformanceChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Projects -->
+            <div class="card mb-6 mb-xxl-0">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h3 class="fs-6 mb-0">Active projects</h3>
+                  </div>
+                  <div class="col-auto my-n3 me-n3">
+                    <a class="btn btn-sm btn-link" href="./projects/projects.html">
+                      Browse all
+                      <span class="material-symbols-outlined">arrow_right_alt</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <th class="fs-sm">Title</th>
+                    <th class="fs-sm">Status</th>
+                    <th class="fs-sm">Author</th>
+                    <th class="fs-sm">Team</th>
+                  </thead>
+                  <tbody>
+                    <tr onclick="window.location.href='./projects/project.html'" role="link" tabindex="0">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="avatar">
+                            <img class="avatar-img" src="./assets/img/projects/project-1.png" alt="..." />
+                          </div>
+                          <div class="ms-4">
+                            <div>Filters AI</div>
+                            <div class="fs-sm text-body-secondary">Updated on Apr 10, 2024</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge bg-success-subtle text-success">Ready to Ship</span>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center text-nowrap">
+                          <div class="avatar avatar-xs me-2">
+                            <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
+                          </div>
+                          Michael Johnson
+                        </div>
+                      </td>
+                      <td>
+                        <div class="avatar-group">
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Michael Johnson">
+                            <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Robert Garcia">
+                            <img class="avatar-img" src="./assets/img/photos/photo-3.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Olivia Davis">
+                            <img class="avatar-img" src="./assets/img/photos/photo-4.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Jessica Miller">
+                            <img class="avatar-img" src="./assets/img/photos/photo-5.jpg" alt="..." />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr onclick="window.location.href='./projects/project.html'" role="link" tabindex="0">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="avatar">
+                            <img class="avatar-img" src="./assets/img/projects/project-2.png" alt="..." />
+                          </div>
+                          <div class="ms-4">
+                            <div>Design landing page</div>
+                            <div class="fs-sm text-body-secondary">Created on Mar 05, 2024</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge bg-danger-subtle text-danger">Cancelled</span>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center text-nowrap">
+                          <div class="avatar avatar-xs me-2">
+                            <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
+                          </div>
+                          Emily Thompson
+                        </div>
+                      </td>
+                      <td>
+                        <div class="avatar-group">
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Olivia Davis">
+                            <img class="avatar-img" src="./assets/img/photos/photo-4.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Jessica Miller">
+                            <img class="avatar-img" src="./assets/img/photos/photo-5.jpg" alt="..." />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr onclick="window.location.href='./projects/project.html'" role="link" tabindex="0">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="avatar text-primary">
+                            <i class="fs-4" data-duoicon="book-3"></i>
+                          </div>
+                          <div class="ms-4">
+                            <div>Update documentation</div>
+                            <div class="fs-sm text-body-secondary">Created on Jan 22, 2024</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge bg-secondary-subtle text-secondary">In Testing</span>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center text-nowrap">
+                          <div class="avatar avatar-xs me-2">
+                            <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
+                          </div>
+                          Michael Johnson
+                        </div>
+                      </td>
+                      <td>
+                        <div class="avatar-group">
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Emily Thompson">
+                            <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Robert Garcia">
+                            <img class="avatar-img" src="./assets/img/photos/photo-3.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="John Williams">
+                            <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr onclick="window.location.href='./projects/project.html'" role="link" tabindex="0">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="avatar">
+                            <img class="avatar-img" src="./assets/img/projects/project-3.png" alt="..." />
+                          </div>
+                          <div class="ms-4">
+                            <div>Update Touche</div>
+                            <div class="fs-sm text-body-secondary">Updated on Apr 14, 2024</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge bg-success-subtle text-success">Ready to Ship</span>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center text-nowrap">
+                          <div class="avatar avatar-xs me-2">
+                            <img class="avatar-img" src="./assets/img/photos/photo-5.jpg" alt="..." />
+                          </div>
+                          Jessica Miller
+                        </div>
+                      </td>
+                      <td>
+                        <div class="avatar-group">
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Robert Garcia">
+                            <img class="avatar-img" src="./assets/img/photos/photo-3.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Olivia Davis">
+                            <img class="avatar-img" src="./assets/img/photos/photo-4.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Jessica Miller">
+                            <img class="avatar-img" src="./assets/img/photos/photo-5.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="John Williams">
+                            <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr onclick="window.location.href='./projects/project.html'" role="link" tabindex="0">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="avatar text-primary">
+                            <i class="fs-4" data-duoicon="box"></i>
+                          </div>
+                          <div class="ms-4">
+                            <div>Add Transactions</div>
+                            <div class="fs-sm text-body-secondary">Created on Apr 25, 2024</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge bg-light text-body-secondary">Backlog</span>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center text-nowrap">
+                          <div class="avatar avatar-xs me-2">
+                            <img class="avatar-img" src="./assets/img/photos/photo-4.jpg" alt="..." />
+                          </div>
+                          Olivia Davis
+                        </div>
+                      </td>
+                      <td>
+                        <div class="avatar-group">
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Robert Garcia">
+                            <img class="avatar-img" src="./assets/img/photos/photo-3.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="John Williams">
+                            <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
+                          </div>
+                          <div class="avatar avatar-xs" data-bs-toggle="tooltip" data-bs-title="Emily Thompson">
+                            <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xxl-4">
+            <!-- Goals -->
+            <div class="card mb-6">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h3 class="fs-6 mb-0">Goals</h3>
+                  </div>
+                  <div class="col-auto my-n3 me-n3">
+                    <button class="btn btn-sm btn-link" type="button">+ Add</a>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body py-3">
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item px-0">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="avatar">
+                          <div
+                            class="progress progress-circle text-primary"
+                            role="progressbar"
+                            aria-label="Increase monthly revenue"
+                            aria-valuenow="75"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            data-bs-toggle="tooltip"
+                            data-bs-title="75%"
+                            style="--bs-progress-circle-value: 75"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="col ms-n2">
+                        <h6 class="fs-base fw-normal mb-0">Increase monthly revenue</h6>
+                        <span class="fs-sm text-body-secondary">$10,000</span>
+                      </div>
+                      <div class="col-auto">
+                        <span class="text-body-secondary">Mar 15</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="list-group-item px-0">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="avatar">
+                          <div
+                            class="progress progress-circle text-secondary"
+                            role="progressbar"
+                            aria-label="Launch new feature"
+                            aria-valuenow="50"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            data-bs-toggle="tooltip"
+                            data-bs-title="50%"
+                            style="--bs-progress-circle-value: 50"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="col ms-n2">
+                        <h6 class="fs-base fw-normal mb-0">Launch new feature</h6>
+                        <span class="fs-sm text-body-secondary">Dark mode</span>
+                      </div>
+                      <div class="col-auto">
+                        <span class="text-body-secondary">Oct 01</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="list-group-item px-0">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="avatar">
+                          <div
+                            class="progress progress-circle text-danger"
+                            role="progressbar"
+                            aria-label="Grow user base"
+                            aria-valuenow="45"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            data-bs-toggle="tooltip"
+                            data-bs-title="45%"
+                            style="--bs-progress-circle-value: 45"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="col ms-n2">
+                        <h6 class="fs-base fw-normal mb-0">Grow user base</h6>
+                        <span class="fs-sm text-body-secondary">75%</span>
+                      </div>
+                      <div class="col-auto">
+                        <span class="text-body-secondary">Dec 12</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="list-group-item px-0">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="avatar">
+                          <div
+                            class="progress progress-circle text-primary"
+                            role="progressbar"
+                            aria-label="Improve customer satisfaction"
+                            aria-valuenow="60"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            data-bs-toggle="tooltip"
+                            data-bs-title="60%"
+                            style="--bs-progress-circle-value: 60"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="col ms-n2">
+                        <h6 class="fs-base fw-normal mb-0">Improve customer satisfaction</h6>
+                        <span class="fs-sm text-body-secondary">85%</span>
+                      </div>
+                      <div class="col-auto">
+                        <span class="text-body-secondary">Dec 15</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="list-group-item px-0">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="avatar">
+                          <div
+                            class="progress progress-circle text-success"
+                            role="progressbar"
+                            aria-label="Reduce response time"
+                            aria-valuenow="100"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            data-bs-toggle="tooltip"
+                            data-bs-title="100%"
+                            style="--bs-progress-circle-value: 100"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="col ms-n2">
+                        <h6 class="fs-base fw-normal mb-0">Reduce response time</h6>
+                        <span class="fs-sm text-body-secondary">1hr</span>
+                      </div>
+                      <div class="col-auto">
+                        <span class="text-body-secondary">Jan 01</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Activity -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="fs-6 mb-0">Recent activity</h3>
+              </div>
+              <div class="card-body">
+                <ul class="activity">
+                  <li data-icon="thumb_up">
+                    <div>
+                      <h6 class="fs-base mb-1">You <span class="fs-sm fw-normal text-body-secondary ms-1">1hr ago</span></h6>
+                      <p class="mb-0">Liked a post by @john_doe</p>
+                    </div>
+                  </li>
+                  <li data-icon="chat_bubble">
+                    <div>
+                      <h6 class="fs-base mb-1">Jessica Miller <span class="fs-sm fw-normal text-body-secondary ms-1">3hr ago</span></h6>
+                      <p class="mb-0">Commented on a photo</p>
+                    </div>
+                  </li>
+                  <li data-icon="share">
+                    <div>
+                      <h6 class="fs-base mb-1">Emily Thompson <span class="fs-sm fw-normal text-body-secondary ms-1">3hr ago</span></h6>
+                      <p class="mb-0">Shared an article: "Top 10 Travel Destinations"</p>
+                    </div>
+                  </li>
+                  <li data-icon="person_add">
+                    <div>
+                      <h6 class="fs-base mb-1">You <span class="fs-sm fw-normal text-body-secondary ms-1">1 day ago</span></h6>
+                      <p class="mb-0">Started following @jane_smith</p>
+                    </div>
+                  </li>
+                  <li data-icon="account_circle">
+                    <div>
+                      <h6 class="fs-base mb-1">Olivia Davis <span class="fs-sm fw-normal text-body-secondary ms-1">2 days ago</span></h6>
+                      <p class="mb-0">Updated profile picture</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
     <!-- JAVASCRIPT -->
     <!-- Vendor JS -->
-    <script src="../assets/js/vendor.bundle.js"></script>
+    <script src="./assets/js/vendor.bundle.js"></script>
     
     <!-- Theme JS -->
-    <script src="../assets/js/theme.bundle.js"></script>
+    <script src="./assets/js/theme.bundle.js"></script>
   </body>
 </html>
