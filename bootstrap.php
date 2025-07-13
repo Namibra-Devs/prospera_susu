@@ -1,7 +1,7 @@
 <?php
     
     // AUTO LOAD VENDOR FILES
-    require dirname(__DIR__)  . '/levina/vendor/autoload.php';
+    require dirname(__DIR__)  . '/susu/vendor/autoload.php';
 
     
     // LOAD DOTENV
