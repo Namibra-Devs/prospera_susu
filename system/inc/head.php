@@ -206,10 +206,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
     
     <!-- Libs CSS -->
-    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+    <link rel="stylesheet" href="<?= PROOT; ?>/assets/css/libs.bundle.css" />
     
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+    <link rel="stylesheet" href="<?= PROOT; ?>/assets/css/theme.bundle.css" />
     
     <!-- Title -->
     <title>Dashbrd</title>
