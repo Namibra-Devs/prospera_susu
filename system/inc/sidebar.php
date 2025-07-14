@@ -1,89 +1,89 @@
     <!-- Sidenav -->
     <!-- Sidenav (toolbar) -->
     <aside class="aside aside-sm sidenav-toolbar d-none d-xl-flex">
-      <nav class="navbar navbar-expand-xl navbar-vertical">
-        <div class="container-fluid">
-          <!-- Nav -->
-          <nav class="navbar-nav nav-pills h-100">
-            <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Go to product page">
-              <a class="nav-link" href="https://themes.getbootstrap.com/product/dashbrd/" target="_blank">
-                <span class="material-symbols-outlined">local_mall</span>
-              </a>
+        <nav class="navbar navbar-expand-xl navbar-vertical">
+            <div class="container-fluid">
+                <!-- Nav -->
+                <nav class="navbar-nav nav-pills h-100">
+                    <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Go to product page">
+                        <a class="nav-link" href="javascript:;" target="_blank">
+                            <span class="material-symbols-outlined">local_mall</span>
+                        </a>
+                    </div>
+                    <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
+                        <a class="nav-link" href="mailto:yevgenysim+simpleqode@gmail.com">
+                            <span class="material-symbols-outlined">support</span>
+                        </a>
+                    </div>
+                    <div class="nav-item dropend mt-auto">
+                        <a href="#" role="button" data-bs-toggle="dropdown" data-bs-settings-switcher aria-expanded="false">
+                            <div class="nav-link">
+                                <span class="material-symbols-outlined">settings</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu top-auto bottom-0 ms-xl-3">
+                            <!-- Color mode -->
+                            <h6 class="dropdown-header">Color mode</h6>
+                            <a class="dropdown-item d-flex" data-bs-theme-value="light" href="#" role="button"> <span class="material-symbols-outlined me-2">light_mode</span> Light </a>
+                            <a class="dropdown-item d-flex" data-bs-theme-value="dark" href="#" role="button"> <span class="material-symbols-outlined me-2">dark_mode</span> Dark </a>
+                            <a class="dropdown-item d-flex" data-bs-theme-value="auto" href="#" role="button"> <span class="material-symbols-outlined me-2">contrast</span> Auto </a>
+                    
+                            <!-- Navigation position -->
+                            <hr class="dropdown-divider" />
+                            <h6 class="dropdown-header">Navigation position</h6>
+                            <a class="dropdown-item d-flex" data-bs-navigation-position-value="sidenav" href="#" role="button">
+                                <span class="material-symbols-outlined me-2">keyboard_tab_rtl</span> Sidenav
+                            </a>
+                            <a class="dropdown-item d-flex" data-bs-navigation-position-value="topnav" href="#" role="button">
+                                <span class="material-symbols-outlined me-2">vertical_align_top</span> Topnav
+                            </a>
+                        
+                            <!-- Sidenav sizing -->
+                            <div class="sidenav-sizing">
+                                <hr class="dropdown-divider" />
+                                <h6 class="dropdown-header">Sidenav sizing</h6>
+                                <a class="dropdown-item d-flex" data-bs-sidenav-sizing-value="base" href="#" role="button">
+                                    <span class="material-symbols-outlined me-2">density_large</span> Base
+                                </a>
+                                <a class="dropdown-item d-flex" data-bs-sidenav-sizing-value="md" href="#" role="button">
+                                    <span class="material-symbols-outlined me-2">density_medium</span> Medium
+                                </a>
+                                <a class="dropdown-item d-flex" data-bs-sidenav-sizing-value="sm" href="#" role="button">
+                                    <span class="material-symbols-outlined me-2">density_small</span> Small
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
             </div>
-            <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
-              <a class="nav-link" href="mailto:yevgenysim+simpleqode@gmail.com">
-                <span class="material-symbols-outlined">support</span>
-              </a>
-            </div>
-            <div class="nav-item dropend mt-auto">
-              <a href="#" role="button" data-bs-toggle="dropdown" data-bs-settings-switcher aria-expanded="false">
-                <div class="nav-link">
-                  <span class="material-symbols-outlined">settings</span>
-                </div>
-              </a>
-              <div class="dropdown-menu top-auto bottom-0 ms-xl-3">
-                <!-- Color mode -->
-                <h6 class="dropdown-header">Color mode</h6>
-                <a class="dropdown-item d-flex" data-bs-theme-value="light" href="#" role="button"> <span class="material-symbols-outlined me-2">light_mode</span> Light </a>
-                <a class="dropdown-item d-flex" data-bs-theme-value="dark" href="#" role="button"> <span class="material-symbols-outlined me-2">dark_mode</span> Dark </a>
-                <a class="dropdown-item d-flex" data-bs-theme-value="auto" href="#" role="button"> <span class="material-symbols-outlined me-2">contrast</span> Auto </a>
-              
-                <!-- Navigation position -->
-                <hr class="dropdown-divider" />
-                <h6 class="dropdown-header">Navigation position</h6>
-                <a class="dropdown-item d-flex" data-bs-navigation-position-value="sidenav" href="#" role="button">
-                  <span class="material-symbols-outlined me-2">keyboard_tab_rtl</span> Sidenav
-                </a>
-                <a class="dropdown-item d-flex" data-bs-navigation-position-value="topnav" href="#" role="button">
-                  <span class="material-symbols-outlined me-2">vertical_align_top</span> Topnav
-                </a>
-              
-                <!-- Sidenav sizing -->
-                <div class="sidenav-sizing">
-                  <hr class="dropdown-divider" />
-                  <h6 class="dropdown-header">Sidenav sizing</h6>
-                  <a class="dropdown-item d-flex" data-bs-sidenav-sizing-value="base" href="#" role="button">
-                    <span class="material-symbols-outlined me-2">density_large</span> Base
-                  </a>
-                  <a class="dropdown-item d-flex" data-bs-sidenav-sizing-value="md" href="#" role="button">
-                    <span class="material-symbols-outlined me-2">density_medium</span> Medium
-                  </a>
-                  <a class="dropdown-item d-flex" data-bs-sidenav-sizing-value="sm" href="#" role="button">
-                    <span class="material-symbols-outlined me-2">density_small</span> Small
-                  </a>
-                </div>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </nav>
+        </nav>
     </aside>
     
     <!-- Sidenav (sm) -->
     <aside class="aside aside-sm sidenav-sm">
-      <nav class="navbar navbar-expand-xl navbar-vertical">
-        <div class="container-lg">
-          <!-- Brand -->
-          <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="./index.html">
-            <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">Dashbrd</span>
-          </a>
-    
-          <!-- User -->
-          <div class="d-flex ms-auto d-xl-none">
-            <div class="dropdown my-n2">
-              <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                  <img class="avatar-img" src="./assets/img/photos/photo-6.jpg" alt="..." />
-                </span>
-                <span class="d-none d-xl-block">John Williams</span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
-                <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
-              </ul>
-            </div>
+        <nav class="navbar navbar-expand-xl navbar-vertical">
+            <div class="container-lg">
+                <!-- Brand -->
+                <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="<?= PROOT; ?>index">
+                    <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">Dashbrd</span>
+                </a>
+            
+                <!-- User -->
+                <div class="d-flex ms-auto d-xl-none">
+                    <div class="dropdown my-n2">
+                        <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
+                            <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
+                            </span>
+                            <span class="d-none d-xl-block">John Williams</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>auth/password-reset" target="_blank">Change password</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
+                    </ul>
+                </div>
     
             <!-- Divider -->
             <div class="vr align-self-center bg-dark mx-2"></div>
@@ -1078,27 +1078,6 @@
                   class="nav-link "
                   href="#"
                   data-bs-toggle="collapse"
-                  data-bs-target="#ecommerce"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="ecommerce"
-                >
-                  <span class="material-symbols-outlined me-3">shopping_cart</span> E-commerce
-                </a>
-                <div class="collapse " id="ecommerce">
-                  <nav class="nav nav-pills">
-                    <a class="nav-link " href="./ecommerce/products.html">Products</a>
-                    <a class="nav-link " href="./ecommerce/orders.html">Orders</a>
-                    <a class="nav-link " href="./ecommerce/invoice.html">Invoice</a>
-                    <a class="nav-link " href="./ecommerce/pricing.html">Pricing</a>
-                  </nav>
-                </div>
-              </div>
-              <div class="nav-item">
-                <a
-                  class="nav-link "
-                  href="#"
-                  data-bs-toggle="collapse"
                   data-bs-target="#posts"
                   role="button"
                   aria-expanded="false"
@@ -1165,18 +1144,6 @@
                     <a class="nav-link" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
                     <a class="nav-link" href="./emails/password-reset.html" target="_blank">Password reset</a>
                     <a class="nav-link" href="./emails/product-update.html" target="_blank">Product update</a>
-                  </nav>
-                </div>
-              </div>
-              <div class="nav-item">
-                <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#mdoals" role="button" aria-expanded="false" aria-controls="mdoals">
-                  <span class="material-symbols-outlined me-3">tooltip</span> Modals
-                </a>
-                <div class="collapse" id="mdoals">
-                  <nav class="nav nav-pills">
-                    <a class="nav-link" href="#productModal" data-bs-toggle="offcanvas" aria-controls="productModal">Product</a>
-                    <a class="nav-link" href="#orderModal" data-bs-toggle="offcanvas" aria-controls="orderModal">Order</a>
-                    <a class="nav-link" href="#eventModal" data-bs-toggle="modal" aria-controls="eventModal">Event</a>
                   </nav>
                 </div>
               </div>
