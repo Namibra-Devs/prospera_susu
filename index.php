@@ -1,6 +1,7 @@
 <?php 
     require ('system/DatabaseConnector.php');
     include ('system/inc/head.php');
+    include ('system/inc/modal.php');
     include ('system/inc/sidebar.php');
     include ('system/inc/topnav-base.php');
     include ('system/inc/topnav.php');
