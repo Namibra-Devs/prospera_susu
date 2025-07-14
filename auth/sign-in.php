@@ -57,13 +57,17 @@
                 <form class="mb-5">
                     <div class="mb-4">
                         <label class="visually-hidden" for="email">Email Address</label>
-                        <input class="form-control" id="email" type="email" placeholder="Enter your email address..." autocomplete="off" autofocus/>
+                        <input class="form-control" id="email" type="email" name="email" placeholder="Enter your email address..." autocomplete="off" autofocus/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="visually-hidden" for="email">Password</label>
+                        <input class="form-control" id="password" name="password" type="password" placeholder="******" autocomplete="off" />
                     </div>
                     <button class="btn btn-warning w-100" type="submit">Sign in</button>
                 </form>
 
                 <!-- Text -->
-                <p class="text-center text-body-warning mb-0">Don't remember account details? <a href="./sign-up.html">Forget password</a>.</p>
+                <p class="text-center text-body-warning mb-0">Don't remember account details? <a href="<?= PROOT; ?>auth/forget-password">Forget password</a>.</p>
             </div>
         </div>
     </div>

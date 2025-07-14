@@ -1,6 +1,7 @@
-        <?= $flash_user; ?>
 
     </main>
+    <?= $flash_user; ?>
+
 
     <!-- JAVASCRIPT -->
      <script src="<?= PROOT; ?>assets/js/jquery-3.7.1.min.js"></script>
