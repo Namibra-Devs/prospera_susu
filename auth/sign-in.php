@@ -10,12 +10,12 @@
     include ('../system/inc/head.php');
 
     $error = '';
-    if (isset($_POST['submit_login'])) {
+     if (isset($_POST['submit_login'])) {
         if (empty($_POST['admin_email']) || empty($_POST['admin_password'])) {
             $error = 'You must provide email and password.';
         }
         $query = "
-            SELECT * FROM giltmarket_admin 
+            SELECT * FROM susu_admin 
             WHERE admin_email = ? 
             AND admin_status = ?
             LIMIT 1 

@@ -1,5 +1,11 @@
 <?php 
     require ('system/DatabaseConnector.php');
+    
+	// Check if the user is logged in
+	if (!admin_is_logged_in()) {
+		admin_login_redirect();
+	}
+    
     $body_class = '';
     include ('system/inc/head.php');
     include ('system/inc/modals.php');

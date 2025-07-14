@@ -49,20 +49,20 @@ function get_products() {
 
 // Sessions For login
 function adminLogin($user_id) {
-	$_SESSION['XPADMIN'] = $user_id;
+	$_SESSION['SUADMIN'] = $user_id;
     $_SESSION['flash_success'] = 'You are now logged in!';
-    redirect(PROOT . 'xd192/');
+    redirect(PROOT);
 }
 
 function admin_is_logged_in() {
-	if (isset($_SESSION['XPADMIN']) && $_SESSION['XPADMIN'] > 0) {
+	if (isset($_SESSION['SUADMIN']) && $_SESSION['SUADMIN'] > 0) {
 		return true;
 	}
 	return false;
 }
 
 // Redirect admin if !logged in
-function admin_login_redirect($url = 'xd192/logout') {
+function admin_login_redirect($url = 'auth/sign-out') {
 	$_SESSION['flash_error'] = 'You must be logged in to access that page.';
 	redirect(PROOT . $url);
 }
