@@ -7,7 +7,7 @@
     }
     $title = 'Account - Sign In | ';
     $body_class = 'd-flex align-items-center';
-    include ('system/inc/head.php');
+    include ('../system/inc/head.php');
 
     $error = '';
     if (isset($_POST['submit_login'])) {
