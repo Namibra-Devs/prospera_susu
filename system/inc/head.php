@@ -213,7 +213,5 @@
     
     <!-- Title -->
     <title>Dashbrd</title>
-  </head>
-
-  <body>
-    
+</head>
+<body class="<?= $body_class; ?>">

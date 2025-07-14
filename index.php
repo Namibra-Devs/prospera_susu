@@ -1,5 +1,6 @@
 <?php 
     require ('system/DatabaseConnector.php');
+    $body_class = '';
     include ('system/inc/head.php');
     include ('system/inc/modal.php');
     include ('system/inc/sidebar.php');
