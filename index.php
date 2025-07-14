@@ -11,22 +11,22 @@
 
     <!-- Main -->
     <main class="main px-lg-6">
-      <!-- Content -->
-      <div class="container-lg">
-        <!-- Page content -->
-        <div class="row align-items-center mb-2">
-          <div class="col">
-            <!-- Heading -->
-            <h2 class="fs-3 mb-0">Trends</h2>
-          </div>
-          <div class="col-auto my-n2">
-            <!-- Select -->
-            <select
-              class="form-select"
-              data-choices='{ "searchEnabled": false, "choices": [{ "value": "month", "label": "Last month" }, { "value": "week", "label": "Last week" }, { "value": "day", "label": "Today" }] }'
-            ></select>
-          </div>
-        </div>
+        <!-- Content -->
+        <div class="container-lg">
+            <!-- Page content -->
+            <div class="row align-items-center mb-2">
+                <div class="col">
+                    <!-- Heading -->
+                    <h2 class="fs-3 mb-0">Trends</h2>
+                </div>
+                <div class="col-auto my-n2">
+                    <!-- Select -->
+                    <select
+                    class="form-select"
+                    data-choices='{ "searchEnabled": false, "choices": [{ "value": "month", "label": "Last month" }, { "value": "week", "label": "Last week" }, { "value": "day", "label": "Today" }] }'
+                    ></select>
+                </div>
+            </div>
 
         <!-- Tabs -->
         <ul class="nav nav-underline">
