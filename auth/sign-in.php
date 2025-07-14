@@ -51,7 +51,7 @@
                 <h1 class="fs-1 text-center">Sign in</h1>
 
                 <!-- Subheading -->
-                <p class="lead text-center text-body-secondary">Access our dashboard and start tracking your tasks.</p>
+                <p class="lead text-center text-body-warning">Access our dashboard and start tracking your tasks.</p>
 
                 <!-- Form -->
                 <form class="mb-5">
@@ -59,11 +59,11 @@
                         <label class="visually-hidden" for="email">Email Address</label>
                         <input class="form-control" id="email" type="email" placeholder="Enter your email address..." autocomplete="off" autofocus/>
                     </div>
-                    <button class="btn btn-secondary w-100" type="submit">Sign in</button>
+                    <button class="btn btn-warning w-100" type="submit">Sign in</button>
                 </form>
 
                 <!-- Text -->
-                <p class="text-center text-body-secondary mb-0">Don't have an account yet? <a href="./sign-up.html">Sign up</a>.</p>
+                <p class="text-center text-body-warning mb-0">Don't remember account details? <a href="./sign-up.html">Forget password</a>.</p>
             </div>
         </div>
     </div>
