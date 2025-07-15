@@ -1008,9 +1008,9 @@
                             </a>
                             <div class="collapse show" id="dashboards">
                                 <nav class="nav nav-pills">
-                                    <a class="nav-link active" href="./index.html">Default</a>
-                                    <a class="nav-link " href="./dashboards/crypto.html">Crypto</a>
-                                    <a class="nav-link " href="./dashboards/saas.html">SaaS</a>
+                                    <a class="nav-link active" href="<?= PROOT; ?>">Home</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>live">Live</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>summary">Summary</a>
                                 </nav>
                             </div>
                         </div>
@@ -1030,7 +1030,7 @@
                                 <nav class="nav nav-pills">
                                     <a class="nav-link " href="<?= PROOT; ?>customers">Customers</a>
                                     <a class="nav-link " href="<?= PROOT; ?>archived-customer.html">Archived customers</a>
-                                    <a class="nav-link " href="./customers/customer-new.html">New customer</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>customer-new">New customer</a>
                                 </nav>
                             </div>
                         </div>
@@ -1240,4 +1240,3 @@
             </div>
         </nav>
     </aside>
-    
