@@ -60,56 +60,84 @@
 
                     <!-- Form -->
                     <form>
-                        <h5>Personal</h5>
-                        <div class="mb-4">
-                            <label class="form-label" for="name">Full name</label>
-                            <input class="form-control" id="name" type="text" />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="phone">Phone</label>
-                            <input type="text" class="form-control mb-3" id="phone" placeholder="(___)___-____"
-                            data-inputmask="'mask': '(999)999-9999'">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="company">Location</label>
-                            <input class="form-control" id="company" type="text" />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="location">ID</label>
-                            <input class="form-control" id="location" type="text" />
-                        </div>
-                        <h5>Saving plan</h5>
-                        <div class="mb-4">
-                            <label class="form-label" for="location">Daily amount</label>
-                            <input class="form-control" id="location" type="text" />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="location">Target</label>
-                            <input class="form-control" id="location" type="text" />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="location">Duration</label>
-                            <input class="form-control" id="location" type="text" />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="location">Start date</label>
-                            <input class="form-control" id="location" type="text" />
-                        </div>
-                        <h5>More</h5>
-                        <div class="mb-4">
-                            <label class="form-label mb-0" for="tiptapExample">About</label>
-                            <div class="form-text mt-0 mb-3">
-                                A brief description of the customer.
+
+                        <section class="card card-line bg-body-tertiary border-transparent mb-5">
+                            <div class="card-body">
+                                <h3 class="fs-5 mb-1">General</h3>
+                                <p class="text-body-secondary mb-5">General information about the project.</p>
+                                <hr>
+                                <div class="mb-4">
+                                    <label class="form-label" for="name">Full name</label>
+                                    <input class="form-control bg-body" id="name" type="text" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="phone">Phone</label>
+                                    <input type="text" class="form-control bg-body mb-3" id="phone" placeholder="(___)___-____"
+                                    data-inputmask="'mask': '(999)999-9999'">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" class="form-control bg-body" id="email" placeholder="name@company.com" />
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label" for="company">Location</label>
+                                    <input class="form-control bg-body" id="company" type="text" />
+                                </div>
                             </div>
-                            <di class="form-control" id="tiptapExample"></di>
-                        </div>
-                        <div class="mb-7">
-                            <label for="dropzone">Files</label>
-                            <div class="form-text mt-0 mb-3">
-                                Attach files to this customer.
+                        </section>
+
+                        <section class="card card-line bg-body-tertiary border-transparent mb-5">
+                            <div class="card-body">
+                                <h3 class="fs-5 mb-1">Saving plan</h3>
+                                <p class="text-body-secondary mb-5">General information about the project.</p>
+                                <hr>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">Daily amount</label>
+                                    <input class="form-control bg-body" id="location" type="text" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">Target</label>
+                                    <input class="form-control bg-body" id="location" type="text" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">Duration</label>
+                                    <input class="form-control bg-body" id="location" type="text" />
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label" for="projectStartDate">Start date</label>
+                                    <input class="form-control bg-body bg-body flatpickr-input" id="projectStartDate" type="text" data-flatpickr="" readonly="readonly">
+                                </div>
                             </div>
-                            <div class="dropzone" id="dropzone"></div>
-                        </div>
+                        </section>
+                        
+                        <section class="card bg-body-tertiary border-transparent mb-7">
+                            <div class="card-body">
+                                <h3 class="fs-5 mb-1">Files</h3>
+                                <p class="text-body-secondary mb-5">Starting files for the project.</p>
+                                <hr>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">ID</label>
+                                    <input class="form-control bg-body" id="location" type="text" />
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <div class="mb-0">
+                                            <label for="dropzone">Files</label>
+                                            <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
+                                            <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-0">
+                                            <label for="dropzone">Files</label>
+                                            <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
+                                            <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
                         <button type="submit" class="btn btn-secondary w-100">
                             Save customer
                         </button>
