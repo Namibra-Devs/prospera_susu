@@ -52,9 +52,9 @@
     require_once dirname(__DIR__) . "/config.php";
 
     // Display on Messages on Errors And Success for users
- 	$flash_user = '';
+ 	$flash_message = '';
  	if (isset($_SESSION['flash_success'])) {
- 	 	$flash_user = '
+ 	 	$flash_message = '
 			<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x rounded-3" style="z-index: 9999;">
 				<div class="p-3">
 					<div class="toast show text-bg-primary border-0" id="temporary">
@@ -69,7 +69,7 @@
  	}
 
  	if (isset($_SESSION['flash_error'])) {
- 	 	$flash_user = '
+ 	 	$flash_message = '
             <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x rounded-3" style="z-index: 9999;">
                 <div class="p-3">
                     <div class="toast show text-bg-danger border-0" id="temporary">

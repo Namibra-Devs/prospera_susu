@@ -1,10 +1,10 @@
 
     </main>
-    <?= $flash_user; ?>
+    <?php echo $flash_message; ?>
 
 
     <!-- JAVASCRIPT -->
-     <script src="<?= PROOT; ?>assets/js/jquery-3.7.1.min.js"></script>
+    <script src="<?= PROOT; ?>assets/js/jquery-3.7.1.min.js"></script>
 
     <!-- Vendor JS -->
     <script src="<?= PROOT; ?>assets/js/vendor.bundle.js"></script>

@@ -161,27 +161,33 @@ function get_number_of_products() {
 
 
 // get user by id
-function get_user($user_id) {
+function findAdminByEmail($email) {
     global $dbConnection;
+
     $query = "
-        SELECT * FROM levina_users 
-        WHERE user_id = ?
+        SELECT * FROM susu_admin 
+        WHERE admin_email = ? 
+		AND admin_status = ? 
+		LIMIT 1
     ";
     $statement = $dbConnection->prepare($query);
-    $statement->execute([$user_id]);
+    $statement->execute([$email, 0]);
     $user = $statement->fetch(PDO::FETCH_OBJ);
     return $user;
 }
 
 // get user by email
-function get_user_by_email($user_email) {
+function findAdminById($id) {
     global $dbConnection;
+	
     $query = "
-        SELECT * FROM levina_users 
-        WHERE user_email = :user_email
+        SELECT * FROM susu_admin 
+        WHERE admin_id = ? 
+		AND admin_status = ? 
+		LIMIT 1
     ";
     $statement = $dbConnection->prepare($query);
-    $statement->execute([':user_email' => $user_email]);
+    $statement->execute([$id, 0]);
     $user = $statement->fetch(PDO::FETCH_OBJ);
     return $user;
 }

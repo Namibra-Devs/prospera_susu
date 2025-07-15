@@ -10,34 +10,26 @@
     include ('../system/inc/head.php');
 
     $error = '';
-     if (isset($_POST['submit_login'])) {
+    if ($_POST) {
         if (empty($_POST['admin_email']) || empty($_POST['admin_password'])) {
             $error = 'You must provide email and password.';
         }
-        $query = "
-            SELECT * FROM susu_admin 
-            WHERE admin_email = ? 
-            AND admin_status = ?
-            LIMIT 1 
-        ";
-        $statement = $conn->prepare($query);
-        $statement->execute([sanitize($_POST['admin_email']), 0]);
-        $count_row = $statement->rowCount();
-        $row = $statement->fetchAll();
+        //
+        $row = findAdminByEmail(sanitize($_POST['admin_email']));
 
-        if ($count_row < 1) {
+        if (!$row) {
             $error = 'Unkown admin!';
         } else {
-            if (!password_verify($_POST['admin_password'], $row[0]['admin_password'])) {
+            if (!password_verify(sanitize($_POST['admin_password']), $row->admin_password)) {
                 $error = 'Unkown admin!';
             }
         }
 
-        if (!empty($error)) {
+        if (!empty($error) || $error != '') {
             $_SESSION['flash_error'] = $error;
-            redirect(PROOT . 'auth/login');
+            redirect(PROOT . 'auth/sign-in');
         } else {
-            $admin_id = $row[0]['admin_id'];
+            $admin_id = $row->admin_id;
             adminLogin($admin_id);
         }
         
@@ -71,6 +63,7 @@
             </div>
         </div>
     </div>
+    
 <?php include ('../system/inc/footer.php'); ?>
 
 <script>
