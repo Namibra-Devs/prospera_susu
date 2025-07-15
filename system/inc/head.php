@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc." />
@@ -197,7 +197,7 @@
     </script>
     
     <!-- Favicon -->
-    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?= PROOT; ?>assets/media/avatar.png" type="image/x-icon" />
     
     <!-- Fonts and icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -210,6 +210,7 @@
     
     <!-- Theme CSS -->
     <link rel="stylesheet" href="<?= PROOT; ?>assets/css/theme.bundle.css" />
+    <link rel="stylesheet" href="<?= PROOT; ?>assets/css/susu.css" />
     
     <!-- Title -->
     <title>Dashbrd</title>

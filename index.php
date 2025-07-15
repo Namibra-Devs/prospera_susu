@@ -5,7 +5,7 @@
 	if (!admin_is_logged_in()) {
 		admin_login_redirect();
 	}
-    
+
     $body_class = '';
     include ('system/inc/head.php');
     include ('system/inc/modals.php');
@@ -34,30 +34,30 @@
                 </div>
             </div>
 
-        <!-- Tabs -->
-        <ul class="nav nav-underline">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link py-5 active" data-bs-toggle="tab" data-saas-performance-chart-type="revenue" type="button" aria-selected="true">
-              Revenue
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="users" type="button" aria-selected="false">
-              Active users
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="churn" type="button" aria-selected="false">Churn rate</button>
-          </li>
-        </ul>
+            <!-- Tabs -->
+            <ul class="nav nav-underline">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link py-5 active" data-bs-toggle="tab" data-saas-performance-chart-type="revenue" type="button" aria-selected="true">
+                Revenue
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="users" type="button" aria-selected="false">
+                Active users
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="churn" type="button" aria-selected="false">Churn rate</button>
+            </li>
+            </ul>
 
-        <!-- Divider -->
-        <hr class="mt-0 mb-8" />
+            <!-- Divider -->
+            <hr class="mt-0 mb-8" />
 
-        <!-- Chart -->
-        <div class="chart">
-          <canvas class="chart-canvas" id="saasPerformanceChart"></canvas>
-        </div>
+            <!-- Chart -->
+            <div class="chart">
+            <canvas class="chart-canvas" id="saasPerformanceChart"></canvas>
+            </div>
 
         <!-- Divider -->
         <hr class="my-8" />

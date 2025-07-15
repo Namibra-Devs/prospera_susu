@@ -1,0 +1,4 @@
+.input-field-error {
+    border-color: tomato !important;
+    box-shadow: 0 0 transparent, 0 0 0 .25rem #d22d2d1c !important;
+}

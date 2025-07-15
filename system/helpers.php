@@ -40,7 +40,7 @@ function get_products() {
 	global $dbConnection;
 	$statement = $dbConnection->query("SELECT * FROM levina_products WHERE product_trash = 0 ORDER BY createdAt DESC")->fetchAll(PDO::FETCH_ASSOC);
 	return $statement;
- }
+}
 
 
 

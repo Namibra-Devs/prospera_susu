@@ -54,7 +54,7 @@
                 <p class="lead text-center text-body-warning">Access our dashboard and start tracking your tasks.</p>
 
                 <!-- Form -->
-                <form class="mb-5">
+                <form class="mb-5" id="sigin-form" method="POST">
                     <div class="mb-4">
                         <label class="visually-hidden" for="email">Email Address</label>
                         <input class="form-control" id="email" type="email" name="email" placeholder="Enter your email address..." autocomplete="off" autofocus/>
@@ -63,7 +63,7 @@
                         <label class="visually-hidden" for="email">Password</label>
                         <input class="form-control" id="password" name="password" type="password" placeholder="******" autocomplete="off" />
                     </div>
-                    <button class="btn btn-warning w-100" type="submit">Sign in</button>
+                    <button class="btn btn-warning w-100" id="signin-button" type="button">Sign in</button>
                 </form>
 
                 <!-- Text -->
@@ -71,5 +71,33 @@
             </div>
         </div>
     </div>
-
 <?php include ('../system/inc/footer.php'); ?>
+
+<script>
+    $('#signin-button').on('click', function() {
+        if ($('#email').val() != '') {
+            if ($('#password').val() != '') {
+                $('#signin-button').attr('disabled', true);
+                $('#signin-button').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+
+                setTimeout(function () {
+                    $('#sigin-form').submit()
+                }, 2000)
+            } else {
+                $('#password').addClass('input-field-error')
+                $('#email').removeClass('input-field-error')
+                alert("Password is required!");
+                $('#password').val('');
+                $('#password').focus()
+                return false;
+            }
+        } else {
+            $('#email').addClass('input-field-error')
+            alert("Email is required!");
+            $('#email').val('');
+            $('#email').focus()
+            return false;
+        }
+        return false
+    });
+</script>
