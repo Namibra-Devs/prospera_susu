@@ -45,6 +45,20 @@ function get_products() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////// FOR ADMIN
 
 // Sessions For login
@@ -179,7 +193,7 @@ function findAdminByEmail($email) {
 // get user by email
 function findAdminById($id) {
     global $dbConnection;
-	
+
     $query = "
         SELECT * FROM susu_admin 
         WHERE admin_id = ? 
@@ -190,4 +204,69 @@ function findAdminById($id) {
     $statement->execute([$id, 0]);
     $user = $statement->fetch(PDO::FETCH_OBJ);
     return $user;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////// GENERAL
+// add to logs
+function add_to_log($message, $log_admin) {
+	global $conn;
+
+	$log_id = guidv4();
+	$sql = "
+		INSERT INTO `susu_logs`(`log_id`, `log_message`, `log_admin`) 
+		VALUES (?, ?, ?)
+	";
+	$statement = $conn->prepare($sql);
+	$result = $statement->execute([$log_id, $message, $log_admin]);
+
+	if ($result) {
+		return true;
+	}
+	return false;
+}
+
+function idle_user() {
+
+    // Check the last activity time
+    if (isset($_SESSION['last_activity'])) {
+        $idleTime = time() - $_SESSION['last_activity'];
+
+        // If the idle time exceeds the timeout period
+        if ($idleTime > IDLE_TIMEOUT) {
+            // Destroy the session and log out the user
+            //session_unset();
+            //session_destroy();
+
+            // Redirect to the login page or show a message
+			// $_SESSION['flash_error'] = 'Session expired. Please log in again!';
+			//redirect(PROOT . 'auth/login');
+            //exit;
+			return false;
+        }
+    }
+
+    // Update the last activity timestamp
+    $_SESSION['last_activity'] = time();
+	return true;
 }

@@ -44,8 +44,45 @@
             unset($_SESSION['LVNUser']);
             redirect(PROOT . 'app/');
         }
-
     }
+
+    if (isset($_SESSION['SUADMIN'])) {
+ 		$admin_id = $_SESSION['SUADMIN'];
+
+ 		$sql = "
+ 			SELECT * FROM susu_admins 
+ 			WHERE susu_admins.admin_id = ? 
+ 			LIMIT 1
+ 		";
+ 		$statement = $conn->prepare($sql);
+ 		$statement->execute([$admin_id]);
+ 		$admin_dt = $statement->fetchAll();
+		if ($statement->rowCount() > 0) {
+			$admin_data = $admin_dt[0];
+
+			$details_data = $conn->query("SELECT * FROM susu_admin_login_details WHERE susu_admin_login_details.login_details_admin_id = '" . $admin_id . "' ORDER BY id DESC LIMIT 1")->fetchAll();
+			
+			if (is_array($details_data) && count($details_data) > 0) {
+				$admin_data = array_merge($admin_data, $details_data[0]);
+			}
+
+			$fn = explode(' ', $admin_data['admin_fullname']);
+			$admin_data['first'] = ucwords($fn[0]);
+			$admin_data['middle'] = '';
+			if (count($fn) > 2) {
+				$admin_data['middle'] = ucwords($fn[1]);
+				$admin_data['first'] = $admin_data['first'] . ' ' . $admin_data['middle'];
+			}
+			$admin_data['last'] = '';
+			if (count($fn) > 1) {
+				$admin_data['last'] = ucwords($fn[1]);
+			}
+			$admin_permission = $admin_data['admin_permissions']; // get admin's permission
+		} else {
+			redirect(PROOT . 'auth/sign-out');
+		}
+		
+	}
 
     require_once ("Functions.php");
     require_once ("helpers.php");
@@ -57,7 +94,7 @@
  	 	$flash_message = '
 			<div aria-live="polite" aria-atomic="true" class="position-fixed top-0 start-50 translate-middle-x rounded-3" style="z-index: 9999;">
 				<div class="p-3">
-					<div class="toast show text-bg-primary border-0" id="temporary">
+					<div class="toast show text-bg-success border-0" id="temporary">
                         <div class="toast-body">
                             ' . $_SESSION['flash_success'] . '
                         </div>

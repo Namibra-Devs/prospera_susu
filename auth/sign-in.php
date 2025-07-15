@@ -11,17 +11,17 @@
 
     $error = '';
     if ($_POST) {
-        if (empty($_POST['admin_email']) || empty($_POST['admin_password'])) {
-            $error = 'You must provide email and password.';
+        if (empty($_POST['email']) || empty($_POST['password'])) {
+            $error = 'You must provide email and password !';
         }
         //
-        $row = findAdminByEmail(sanitize($_POST['admin_email']));
+        $row = findAdminByEmail(sanitize($_POST['email']));
 
         if (!$row) {
-            $error = 'Unkown admin!';
+            $error = 'This admin is unknown !';
         } else {
-            if (!password_verify(sanitize($_POST['admin_password']), $row->admin_password)) {
-                $error = 'Unkown admin!';
+            if (!password_verify(sanitize($_POST['password']), $row->admin_password)) {
+                $error = 'This admin is unknow or password is incorrect !';
             }
         }
 
@@ -47,13 +47,13 @@
 
                 <!-- Form -->
                 <form class="mb-5" id="sigin-form" method="POST">
-                    <div class="mb-4">
+                    <div class="mb-4 email">
                         <label class="visually-hidden" for="email">Email Address</label>
-                        <input class="form-control" id="email" type="email" name="email" placeholder="Enter your email address..." autocomplete="off" autofocus/>
+                        <input class="form-control" id="email" type="email" name="email" placeholder="Enter your email address..." autocomplete="off" autofocus required />
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-4 password">
                         <label class="visually-hidden" for="email">Password</label>
-                        <input class="form-control" id="password" name="password" type="password" placeholder="******" autocomplete="off" />
+                        <input class="form-control" id="password" name="password" type="password" placeholder="******" autocomplete="off" required />
                     </div>
                     <button class="btn btn-warning w-100" id="signin-button" type="button">Sign in</button>
                 </form>
@@ -72,6 +72,13 @@
             if ($('#password').val() != '') {
                 $('#signin-button').attr('disabled', true);
                 $('#signin-button').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+                
+                $('.email').addClass('placeholder');
+                $('.email').addClass('col-12');
+                $('#email').addClass('placeholder-wave');
+                $('.password').addClass('placeholder');
+                $('.password').addClass('col-12');
+                $('#password').addClass('placeholder-wave');
 
                 setTimeout(function () {
                     $('#sigin-form').submit()

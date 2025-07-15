@@ -525,4 +525,32 @@
         </div>
       </div>
     </main>
+
 <?php include ('system/inc/footer.php'); ?>
+<script>
+    $(document).ready(function() {
+
+        // check user iddleness
+        function is_idle() {
+            var type = 'idle';
+
+            $.ajax ({
+                method : "POST",
+                url : "<?= PROOT; ?>auth/idle.checker.php",
+                data : { type : type},
+                success : function (data) {
+                    console.log(data);
+                    if (data != '') {
+                        window.location.href = "<?= PROOT; ?>auth/login"
+                    }
+                }
+            })
+        }
+        // setInterval(updateTime, 1000);
+
+        setInterval(() => {
+            // is_idle()
+        }, 300000); // referesh after every 30sec
+        
+    });
+</script>

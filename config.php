@@ -17,3 +17,6 @@
     define('IPINFO_KEY', $_ENV['IPINFO_KEY']);
 
     define('ARKESEL_SMS_API_KEY', $_ENV['ARKESEL_SMS_API_KEY']);
+    
+    // Define the idle timeout period (e.g., 5 minutes = 300 seconds)
+	define('IDLE_TIMEOUT', 600); // 600 seconds = 10 minutes
