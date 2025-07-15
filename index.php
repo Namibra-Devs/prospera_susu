@@ -541,7 +541,7 @@
                 success : function (data) {
                     console.log(data);
                     if (data != '') {
-                        window.location.href = "<?= PROOT; ?>auth/login"
+                        window.location.href = "<?= PROOT; ?>auth/sign-in"
                     }
                 }
             })
@@ -551,6 +551,6 @@
         setInterval(() => {
             // is_idle()
         }, 300000); // referesh after every 30sec
-        
+
     });
 </script>

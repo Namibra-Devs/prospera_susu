@@ -13,7 +13,7 @@
     <script src="<?= PROOT; ?>assets/js/theme.bundle.js"></script>
     <script>
 		// Fade out messages 
-		// $("#temporary").fadeOut(10000);
+		$("#temporary").fadeOut(10000);
 
         // Get the current URL
         var currentUrl = window.location.href;

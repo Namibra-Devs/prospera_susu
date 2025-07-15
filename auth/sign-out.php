@@ -1,17 +1,22 @@
 <?php 
 
-	// USER SIGNOUT FILE
+	// USER SIGN OUT FILE
 
     require_once ("../system/DatabaseConnector.php");
 
+    if (!isset($_SESSION['SUADMIN'])) {
+        session_destroy();
+        redirect(PROOT . 'auth/sign-in');
+    }
+
     $query = "
-		UPDATE susu_admin_login_details 
-		SET updateAt = ? 
-		WHERE login_details_admin_id = ? 
+        UPDATE susu_admin_login_details 
+        SET updateAt = ? 
+        WHERE login_details_admin_id = ? 
         AND login_details_id = ?
-	";
-	$statement = $conn->prepare($query);
-	$statement->execute([
+    ";
+    $statement = $dbConnection->prepare($query);
+    $statement->execute([
         date("Y-m-d H:i:s"), 
         $_SESSION['SUADMIN'], 
         $admin_data['login_details_id']

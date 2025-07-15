@@ -179,7 +179,7 @@ function findAdminByEmail($email) {
     global $dbConnection;
 
     $query = "
-        SELECT * FROM susu_admin 
+        SELECT * FROM susu_admins 
         WHERE admin_email = ? 
 		AND admin_status = ? 
 		LIMIT 1
@@ -195,7 +195,7 @@ function findAdminById($id) {
     global $dbConnection;
 
     $query = "
-        SELECT * FROM susu_admin 
+        SELECT * FROM susu_admins 
         WHERE admin_id = ? 
 		AND admin_status = ? 
 		LIMIT 1
