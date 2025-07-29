@@ -112,24 +112,33 @@
                         
                         <section class="card bg-body-tertiary border-transparent mb-7">
                             <div class="card-body">
-                                <h3 class="fs-5 mb-1">Files</h3>
+                                <h3 class="fs-5 mb-1">ID details</h3>
                                 <p class="text-body-secondary mb-5">Starting files for the project.</p>
                                 <hr>
                                 <div class="mb-4">
                                     <label class="form-label" for="location">ID</label>
+                                    <select class="form-control bg-body" id="location" type="text">
+                                        <option value=""></option>
+                                        <option value="ghana-card">Ghana Card</option>
+                                        <option value="driver-licence">Driver Licence</option>
+                                        <option value="voters-id-card">Voters ID card</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">ID Number</label>
                                     <input class="form-control bg-body" id="location" type="text" />
                                 </div>
                                 <div class="row mb-4">
                                     <div class="col">
                                         <div class="mb-0">
-                                            <label for="dropzone">Files</label>
+                                            <label for="dropzone">Front card</label>
                                             <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
                                             <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="mb-0">
-                                            <label for="dropzone">Files</label>
+                                            <label for="dropzone">Back Card</label>
                                             <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
                                             <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
                                         </div>
