@@ -19,8 +19,8 @@
     }
     session_start();
 
-    if (isset($_SESSION['LVNUser'])) {
-        $user_id = $_SESSION['LVNUser'];
+    if (isset($_SESSION['PRSUser'])) {
+        $user_id = $_SESSION['PRSUser'];
         $data = array($user_id);
         $sql = "
             SELECT * FROM levina_users 
@@ -41,7 +41,7 @@
             }
 
         } else {
-            unset($_SESSION['LVNUser']);
+            unset($_SESSION['PRSUser']);
             redirect(PROOT . 'app/');
         }
     }
