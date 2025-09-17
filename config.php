@@ -1,8 +1,8 @@
 <?php
 
-    define('BASEURL', $_SERVER['DOCUMENT_ROOT'] . '/susu/');
+    define('BASEURL', $_SERVER['DOCUMENT_ROOT'] . '/prospera_susu/');
         
-    define('PROOT', '/susu/');
+    define('PROOT', '/prospera_susu/');
 
     // Load the environment variables from the .env file
     define('RECAPTCHA_SITE_KEY_PUBLIC', $_ENV['RECAPTCHA_SITE_KEY_PUBLIC']);
