@@ -46,8 +46,8 @@
         }
     }
 
-    if (isset($_SESSION['SUADMIN'])) {
- 		$admin_id = $_SESSION['SUADMIN'];
+    if (isset($_SESSION['PRSADMIN'])) {
+ 		$admin_id = $_SESSION['PRSADMIN'];
 
  		$sql = "
  			SELECT * FROM susu_admins 

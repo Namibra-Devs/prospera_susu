@@ -4,13 +4,13 @@
 
 // Sessions For login
 function userLogin($user_id) {
-	$_SESSION['LVNUser'] = $user_id;
+	$_SESSION['PRSUser'] = $user_id;
     $_SESSION['flash_success'] = 'You are now logged in!';
     redirect(PROOT . 'app/');
 }
 
 function user_is_logged_in() {
-	if (isset($_SESSION['LVNUser']) && $_SESSION['LVNUser'] > 0) {
+	if (isset($_SESSION['PRSUser']) && $_SESSION['PRSUser'] > 0) {
 		return true;
 	}
 	return false;
