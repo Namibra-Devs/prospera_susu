@@ -70,7 +70,7 @@
                     $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
                 ]);
                 if ($result) {
-                    $_SESSION['flash_success'] = "Collector added successfully!";
+                    $_SESSION['success_flash'] = "Collector added successfully!";
                     redirect(PROOT . 'app/collectors');
                 } else {
                     $error = "Failed to add collector. Please try again.";
