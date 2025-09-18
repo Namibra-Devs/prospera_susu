@@ -250,6 +250,23 @@
                                     data-bs-auto-close="outside"
                                     aria-expanded="false"
                                     >
+                                        Customers <span class="material-symbols-outlined ms-auto">chevron_right</span>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item " href="./customers/customers.html">Customers</a>
+                                        <a class="dropdown-item " href="./customers/customer.html">Archive customers</a>
+                                        <a class="dropdown-item " href="./customers/customer-new.html">New customer</a>
+                                    </div>
+                                </li>
+                                <li class="dropend">
+                                    <a
+                                    class="dropdown-item d-flex "
+                                    href="#"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    data-bs-auto-close="outside"
+                                    aria-expanded="false"
+                                    >
                                         Projects <span class="material-symbols-outlined ms-auto">chevron_right</span>
                                     </a>
                                     <div class="dropdown-menu">
@@ -645,6 +662,23 @@
                                     data-bs-auto-close="outside"
                                     aria-expanded="false"
                                     >
+                                        Customers <span class="material-symbols-outlined ms-auto">chevron_right</span>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item " href="<?= PROOT; ?>customers">Customers</a>
+                                        <a class="dropdown-item " href="<?= PROOT; ?>archive-customer">Archived customers</a>
+                                        <a class="dropdown-item " href="<?= PROOT; ?>customer-new">New customer</a>
+                                    </div>
+                                </li>
+                                <li class="dropend">
+                                    <a
+                                    class="dropdown-item d-flex "
+                                    href="#"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    data-bs-auto-close="outside"
+                                    aria-expanded="false"
+                                    >
                                         Projects <span class="material-symbols-outlined ms-auto">chevron_right</span>
                                     </a>
                                     <div class="dropdown-menu">
@@ -1011,6 +1045,26 @@
                                     <a class="nav-link active" href="<?= PROOT; ?>">Home</a>
                                     <a class="nav-link " href="<?= PROOT; ?>live">Live</a>
                                     <a class="nav-link " href="<?= PROOT; ?>summary">Summary</a>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="nav-item">
+                            <a
+                                class="nav-link "
+                                href="#"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collectors"
+                                role="button"
+                                aria-expanded="false"
+                                aria-controls="collectors"
+                            >
+                                <span class="material-symbols-outlined me-3">group</span> Collectors
+                            </a>
+                            <div class="collapse " id="collectors">
+                                <nav class="nav nav-pills">
+                                    <a class="nav-link " href="<?= PROOT; ?>collectors">Customers</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>archived-collectors">Archived collectors</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>collector-new">New customer</a>
                                 </nav>
                             </div>
                         </div>

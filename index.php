@@ -27,7 +27,7 @@
                     <div class="avatar text-info me-2">
                         <i class="fs-4" data-duoicon="world"></i>
                     </div>
-                    San Francisco, CA –&nbsp;<span>8:00 PM</span>
+                    Ghana, Gh –&nbsp;<span datetime="20:00" id="time_span"></span>
                 </div>
                 <div class="col-12 col-md order-md-0 text-center text-md-start">
                     <h1>Hello, John</h1>
@@ -636,8 +636,32 @@
     </main>
 
 <?php include ('system/inc/footer.php'); ?>
+
 <script>
     $(document).ready(function() {
+
+        // fetch current time.
+		function updateTime() {
+			var currentTime = new Date()
+			var hours = currentTime.getHours()
+			var seconds = currentTime.getSeconds();
+			var minutes = currentTime.getMinutes()
+			if (minutes < 10){
+				minutes = "0" + minutes
+			}
+			if (seconds < 10){
+				seconds = "0" + seconds
+			}
+			var t_str = hours + ":" + minutes + " " + seconds + " ";
+			if(hours > 11){
+				t_str += "PM";
+			} else {
+				t_str += "AM";
+			}
+			document.getElementById('time_span').innerHTML = t_str;
+		}
+		setInterval(updateTime, 1000);
+	
 
         // check user iddleness
         function is_idle() {
