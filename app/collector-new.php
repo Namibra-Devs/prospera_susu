@@ -14,6 +14,7 @@
     include ('../system/inc/topnav.php');
 
     // submit collector form
+    $error = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post = cleanPost($_POST);
 
@@ -57,10 +58,12 @@
 
             if (!$error) {
                 // Hash password
-                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                $password_hash = password_hash($password, PASSWORD_BCRYPT);
                 $conn = $dbConnection;
                 // Insert into database
-                $stmt = $conn->prepare("INSERT INTO collectors (name, email, phone, address, region, city, password, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $conn->prepare("
+                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ");
                 $result = $stmt->execute([
                     $name, $email, $phone, $address, $region, $city, $password_hash, $photo_path
                 ]);
@@ -191,6 +194,17 @@
 
 <script>
     $(document).ready(function() {
+
+        Dropzone.options.myDropzone = {
+            paramName: "photo", // 👈 This sets the name used in $_FILES['myFile']
+            maxFilesize: 2, // MB
+            acceptedFiles: "image/*",
+            init: function () {
+                this.on("success", function (file, response) {
+                    console.log("File uploaded:", response);
+                });
+            }
+        };
 
         // 
         $('#new-collector-form').on('submit', function (e) {
