@@ -1,5 +1,5 @@
 <?php 
-    require ('system/DatabaseConnector.php');
+    require ('../system/DatabaseConnector.php');
     
 	// Check if the user is logged in
 	if (!admin_is_logged_in()) {
@@ -7,11 +7,11 @@
 	}
 
     $body_class = '';
-    include ('system/inc/head.php');
-    include ('system/inc/modals.php');
-    include ('system/inc/sidebar.php');
-    include ('system/inc/topnav-base.php');
-    include ('system/inc/topnav.php');
+    include ('../system/inc/head.php');
+    include ('../system/inc/modals.php');
+    include ('../system/inc/sidebar.php');
+    include ('../system/inc/topnav-base.php');
+    include ('../system/inc/topnav.php');
 
 ?>
 
@@ -36,20 +36,20 @@
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-1">
-                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Customers</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">New customer</li>
+                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Collector</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">New collector</li>
                         </ol>
                     </nav>
 
                     <!-- Heading -->
-                    <h1 class="fs-4 mb-0">New customer</h1>
+                    <h1 class="fs-4 mb-0">New collector</h1>
 
                 </div>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
 
                     <!-- Action -->
-                    <button class="btn btn-light w-100" type="button">
-                        Save draft
+                    <button class="btn btn-light w-100" href="<?= goback(); ?>">
+                        Go back
                     </button>
 
                 </div>
@@ -66,34 +66,46 @@
                             <input class="form-control" id="name" type="text" />
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="company">Company</label>
-                            <input class="form-control" id="company" type="text" />
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control" id="email" name="email" type="email" />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="phone">Phone</label>
-                            <input type="text" class="form-control mb-3" id="phone" placeholder="(___)___-____"
+                            <input type="text" class="form-control mb-3" id="phone" name="phone" placeholder="(___)___-____"
                             data-inputmask="'mask': '(999)999-9999'">
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="location">Location</label>
-                            <input class="form-control" id="location" type="text" />
+                            <label class="form-label" for="address">Address</label>
+                            <input class="form-control" id="address" name="address" type="text" />
                         </div>
                         <div class="mb-4">
+                            <label class="form-label" for="region">Region</label>
+                            <input class="form-control" id="region" name="region" type="text" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="city">City</label>
+                            <input class="form-control" id="city" name="city" type="text" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="address">Address</label>
+                            <input class="form-control" id="address" type="text" />
+                        </div>
+                        <!-- <div class="mb-4">
                             <label class="form-label mb-0" for="tiptapExample">About</label>
                             <div class="form-text mt-0 mb-3">
                                 A brief description of the customer.
                             </div>
                             <di class="form-control" id="tiptapExample"></di>
-                        </div>
+                        </div> -->
                         <div class="mb-7">
-                            <label for="dropzone">Files</label>
+                            <label for="dropzone">Photo</label>
                             <div class="form-text mt-0 mb-3">
-                                Attach files to this customer.
+                                Attach photo to this collector.
                             </div>
                             <div class="dropzone" id="dropzone"></div>
                         </div>
                         <button type="submit" class="btn btn-secondary w-100">
-                            Save customer
+                            Save collector
                         </button>
                         <button type="reset" class="btn btn-link w-100 mt-3">
                             Reset form
@@ -103,9 +115,8 @@
                 </div>
             </div>
         </div>
-    </main>
 
-<?php include ('system/inc/footer.php'); ?>
+<?php include ('../system/inc/footer.php'); ?>
 
 <script>
     $(document).ready(function() {
