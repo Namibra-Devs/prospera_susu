@@ -1058,13 +1058,13 @@
                                 aria-expanded="false"
                                 aria-controls="collectors"
                             >
-                                <span class="material-symbols-outlined me-3">group</span> Collectors
+                                <span class="material-symbols-outlined me-3">reduce_capacity</span> Collectors
                             </a>
                             <div class="collapse " id="collectors">
                                 <nav class="nav nav-pills">
-                                    <a class="nav-link " href="<?= PROOT; ?>collectors">Customers</a>
-                                    <a class="nav-link " href="<?= PROOT; ?>archived-collectors">Archived collectors</a>
-                                    <a class="nav-link " href="<?= PROOT; ?>collector-new">New customer</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/collectors">Collectors</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/archived-collectors">Archived collectors</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/collector-new">New customer</a>
                                 </nav>
                             </div>
                         </div>
