@@ -13,6 +13,11 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    // submite collector form
+
+
+
+
 ?>
 
     <!-- Main -->
@@ -48,7 +53,7 @@
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
 
                     <!-- Action -->
-                    <button class="btn btn-light w-100" href="<?= goback(); ?>">
+                    <button class="btn btn-light w-100" href="<?= goBack(); ?>">
                         Go back
                     </button>
 
@@ -60,35 +65,35 @@
                 <div class="col">
 
                     <!-- Form -->
-                    <form>
+                    <form class="" id="new-collector-form" method="POST" enctype="multipart/form-data">
                         <div class="mb-4">
                             <label class="form-label" for="name">Full name</label>
-                            <input class="form-control" id="name" type="text" />
+                            <input class="form-control" id="name" type="text" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="email">Email</label>
-                            <input class="form-control" id="email" name="email" type="email" />
+                            <input class="form-control" id="email" name="email" type="email" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="phone">Phone</label>
                             <input type="text" class="form-control mb-3" id="phone" name="phone" placeholder="(___)___-____"
-                            data-inputmask="'mask': '(999)999-9999'">
+                            data-inputmask="'mask': '(999)999-9999'" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="address">Address</label>
-                            <input class="form-control" id="address" name="address" type="text" />
+                            <input class="form-control" id="address" name="address" type="text" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="region">Region</label>
-                            <input class="form-control" id="region" name="region" type="text" />
+                            <input class="form-control" id="region" name="region" type="text" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="city">City</label>
-                            <input class="form-control" id="city" name="city" type="text" />
+                            <input class="form-control" id="city" name="city" type="text" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="address">Address</label>
-                            <input class="form-control" id="address" type="text" />
+                            <input class="form-control" id="address" type="text" required />
                         </div>
                         <!-- <div class="mb-4">
                             <label class="form-label mb-0" for="tiptapExample">About</label>
@@ -104,7 +109,7 @@
                             </div>
                             <div class="dropzone" id="dropzone"></div>
                         </div>
-                        <button type="submit" class="btn btn-secondary w-100">
+                        <button type="submit" id="submit-collector" class="btn btn-secondary w-100">
                             Save collector
                         </button>
                         <button type="reset" class="btn btn-link w-100 mt-3">
@@ -121,27 +126,23 @@
 <script>
     $(document).ready(function() {
 
-        // fetch current time.
-		function updateTime() {
-			var currentTime = new Date()
-			var hours = currentTime.getHours()
-			var seconds = currentTime.getSeconds();
-			var minutes = currentTime.getMinutes()
-			if (minutes < 10){
-				minutes = "0" + minutes
-			}
-			if (seconds < 10){
-				seconds = "0" + seconds
-			}
-			var t_str = hours + ":" + minutes + " " + seconds + " ";
-			if(hours > 11){
-				t_str += "PM";
-			} else {
-				t_str += "AM";
-			}
-			document.getElementById('time_span').innerHTML = t_str;
-		}
-		setInterval(updateTime, 1000);
+        // 
+        $('#new-collector-form').on('submit', function (e) {
+            e.preventDefault();
+            $('#submit-collector').attr('disabled', true);
+            $('#submit-collector').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+
+            // $('#spinner').show(); // Show spinner
+
+            // Simulate a delay (e.g., AJAX call)
+            setTimeout(function () {
+                $('#spinner').hide(); // Hide spinner after process
+                alert('Form submitted!');
+                $('#submit-collector').attr('disabled', false);
+            }, 2000);
+        });
+
+
 	
 
         // check user iddleness
