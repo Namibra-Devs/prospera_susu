@@ -13,7 +13,66 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
-    // submite collector form
+    // submit collector form
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $post = cleanPost($_POST);
+
+        // Collect and sanitize input
+        $name     = $post['name'] ?? '';
+        $email    = $post['email'] ?? '';
+        $phone    = $post['phone'] ?? '';
+        $address  = $post['address'] ?? '';
+        $region   = $post['region'] ?? '';
+        $city     = $post['city'] ?? '';
+        $password = $post['password'] ?? '';
+        $confirm  = $post['confirm'] ?? '';
+
+        // Validate required fields
+        if (!$name || !$email || !$phone || !$address || !$region || !$city || !$password || !$confirm) {
+            $error = "All fields are required.";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Invalid email address.";
+        } elseif ($password !== $confirm) {
+            $error = "Passwords do not match.";
+        } elseif (strlen($password) < 6) {
+            $error = "Password must be at least 6 characters.";
+        } else {
+            // Handle file upload if exists
+            $photo_path = null;
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+                $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+                if (in_array($ext, $allowed)) {
+                    $upload_dir = '../uploads/collectors/';
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0777, true);
+                    }
+                    $filename = uniqid('collector_', true) . '.' . $ext;
+                    $photo_path = $upload_dir . $filename;
+                    move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path);
+                } else {
+                    $error = "Invalid photo file type.";
+                }
+            }
+
+            if (!$error) {
+                // Hash password
+                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                $conn = $dbConnection;
+                // Insert into database
+                $stmt = $conn->prepare("INSERT INTO collectors (name, email, phone, address, region, city, password, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $result = $stmt->execute([
+                    $name, $email, $phone, $address, $region, $city, $password_hash, $photo_path
+                ]);
+                if ($result) {
+                    $_SESSION['success_flash'] = "Collector added successfully!";
+                    redirect(PROOT . 'app/collectors.php');
+                } else {
+                    $error = "Failed to add collector. Please try again.";
+                }
+            }
+        }
+    }
 
 
 
@@ -66,6 +125,9 @@
 
                     <!-- Form -->
                     <form class="" id="new-collector-form" method="POST" enctype="multipart/form-data">
+                        <?php if ($error): ?>
+                        <div class="alert alert-danger"><?= $error ?></div>
+                        <?php endif; ?>
                         <div class="mb-4">
                             <label class="form-label" for="name">Full name</label>
                             <input class="form-control" id="name" type="text" required />
@@ -92,8 +154,12 @@
                             <input class="form-control" id="city" name="city" type="text" required />
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="address">Address</label>
-                            <input class="form-control" id="address" type="text" required />
+                            <label class="form-label" for="password">Password</label>
+                            <input class="form-control" id="password" name="password" type="password" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="confirm">Confirm password</label>
+                            <input class="form-control" id="confirm" name="confirm" type="password" required />
                         </div>
                         <!-- <div class="mb-4">
                             <label class="form-label mb-0" for="tiptapExample">About</label>
@@ -107,7 +173,7 @@
                             <div class="form-text mt-0 mb-3">
                                 Attach photo to this collector.
                             </div>
-                            <div class="dropzone" id="dropzone"></div>
+                            <div class="dropzone" id="dropzone" name="dropzone"></div>
                         </div>
                         <button type="submit" id="submit-collector" class="btn btn-secondary w-100">
                             Save collector
