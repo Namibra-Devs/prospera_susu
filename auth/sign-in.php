@@ -21,7 +21,7 @@
             $error = 'This admin is unknown !';
         } else {
             if (!password_verify(sanitize($_POST['password']), $row->admin_password)) {
-                $error = 'This admin is unknow or password is incorrect !';
+                $error = 'This admin is unknown or password is incorrect !';
             }
         }
 
@@ -68,6 +68,8 @@
 
 <script>
     $('#signin-button').on('click', function() {
+        e.preventDefault(); 
+        
         if ($('#email').val() != '') {
             if ($('#password').val() != '') {
                 $('#signin-button').attr('disabled', true);
