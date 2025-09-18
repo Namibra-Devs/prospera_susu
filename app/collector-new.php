@@ -44,7 +44,7 @@
                 $allowed = ['jpg', 'jpeg', 'png', 'gif'];
                 $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
                 if (in_array($ext, $allowed)) {
-                    $upload_dir = '../uploads/collectors/';
+                    $upload_dir = '../assets/media/uploads/collectors-media/';
                     if (!is_dir($upload_dir)) {
                         mkdir($upload_dir, 0777, true);
                     }
@@ -59,13 +59,15 @@
             if (!$error) {
                 // Hash password
                 $password_hash = password_hash($password, PASSWORD_BCRYPT);
+                $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
                 $conn = $dbConnection;
                 // Insert into database
                 $stmt = $conn->prepare("
-                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ");
                 $result = $stmt->execute([
-                    $name, $email, $phone, $address, $region, $city, $password_hash, $photo_path
+                    $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
                 ]);
                 if ($result) {
                     $_SESSION['success_flash'] = "Collector added successfully!";
@@ -129,11 +131,11 @@
                     <!-- Form -->
                     <form class="" id="new-collector-form" method="POST" enctype="multipart/form-data">
                         <?php if ($error): ?>
-                        <div class="alert alert-danger"><?= $error ?></div>
+                        <div class="alert alert-danger" id="temporary"><?= $error ?></div>
                         <?php endif; ?>
                         <div class="mb-4">
                             <label class="form-label" for="name">Full name</label>
-                            <input class="form-control" id="name" type="text" required />
+                            <input class="form-control" id="name" name="name" type="text" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="email">Email</label>
@@ -141,8 +143,7 @@
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="phone">Phone</label>
-                            <input type="text" class="form-control mb-3" id="phone" name="phone" placeholder="(___)___-____"
-                            data-inputmask="'mask': '(999)999-9999'" required />
+                            <input type="text" class="form-control mb-3" id="phone" name="phone" placeholder="(___)___-____" data-inputmask="'mask': '(999)999-9999'" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="address">Address</label>
@@ -173,11 +174,15 @@
                         </div> -->
                         <div class="mb-7">
                             <label for="dropzone">Photo</label>
+                            <input class="form-control" id="photo" name="photo" type="file" />
+                        </div>
+                        <!-- <div class="mb-7">
+                            <label for="dropzone">Photo</label>
                             <div class="form-text mt-0 mb-3">
                                 Attach photo to this collector.
                             </div>
                             <div class="dropzone" id="dropzone" name="dropzone"></div>
-                        </div>
+                        </div> -->
                         <button type="submit" id="submit-collector" class="btn btn-secondary w-100">
                             Save collector
                         </button>
@@ -193,22 +198,14 @@
 <?php include ('../system/inc/footer.php'); ?>
 
 <script>
+
     $(document).ready(function() {
 
-        Dropzone.options.myDropzone = {
-            paramName: "photo", // 👈 This sets the name used in $_FILES['myFile']
-            maxFilesize: 2, // MB
-            acceptedFiles: "image/*",
-            init: function () {
-                this.on("success", function (file, response) {
-                    console.log("File uploaded:", response);
-                });
-            }
-        };
 
         // 
         $('#new-collector-form').on('submit', function (e) {
-            e.preventDefault();
+            // e.preventDefault();
+
             $('#submit-collector').attr('disabled', true);
             $('#submit-collector').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
 
@@ -216,14 +213,14 @@
 
             // Simulate a delay (e.g., AJAX call)
             setTimeout(function () {
-                $('#spinner').hide(); // Hide spinner after process
                 alert('Form submitted!');
+                $('#spinner').hide(); // Hide spinner after process
+                $('#submit-collector').html('Save collector');
                 $('#submit-collector').attr('disabled', false);
             }, 2000);
         });
 
 
-	
 
         // check user iddleness
         function is_idle() {
