@@ -25,7 +25,7 @@
                 <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
                 <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
                 <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
               </ul>
             </div>
     

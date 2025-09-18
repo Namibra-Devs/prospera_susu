@@ -19,20 +19,129 @@
     <main class="main px-lg-6">
         <!-- Content -->
         <div class="container-lg">
+
+
             <!-- Page content -->
-            <div class="row align-items-center mb-2">
-                <div class="col">
-                    <!-- Heading -->
-                    <h2 class="fs-3 mb-0">Trends</h2>
+            <div class="row align-items-center">
+                <div class="col-12 col-md-auto order-md-1 d-flex align-items-center justify-content-center mb-4 mb-md-0">
+                    <div class="avatar text-info me-2">
+                        <i class="fs-4" data-duoicon="world"></i>
+                    </div>
+                    San Francisco, CA –&nbsp;<span>8:00 PM</span>
                 </div>
-                <div class="col-auto my-n2">
-                    <!-- Select -->
-                    <select
-                    class="form-select"
-                    data-choices='{ "searchEnabled": false, "choices": [{ "value": "month", "label": "Last month" }, { "value": "week", "label": "Last week" }, { "value": "day", "label": "Today" }] }'
-                    ></select>
+                <div class="col-12 col-md order-md-0 text-center text-md-start">
+                    <h1>Hello, John</h1>
+                    <p class="fs-lg text-body-secondary mb-0">Here's a summary of your account activity for this week.</p>
                 </div>
             </div>
+
+            <!-- Divider -->
+            <hr class="my-8" />
+
+            <!-- Stats -->
+            <div class="row mb-8">
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Earned</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold">$1,250</div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Customers</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold">35.5 hrs</div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                    <i class="fs-4" data-duoicon="clock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-md-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <!-- Heading -->
+                                        <h4 class="fs-sm fw-normal text-body-secondary mb-1">Collectors</h4>
+
+                                        <!-- Text -->
+                                        <div class="fs-4 fw-semibold">2:55 hrs</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <!-- Avatar -->
+                                        <div class="avatar avatar-lg bg-body text-primary">
+                                            <i class="fs-4" data-duoicon="slideshow"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-xxl-3">
+                        <div class="card bg-body-tertiary border-transparent">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <!-- Heading -->
+                                        <h4 class="fs-sm fw-normal text-body-secondary mb-1">Loans</h4>
+
+                                        <!-- Text -->
+                                        <div class="fs-4 fw-semibold">14.5%</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <!-- Avatar -->
+                                        <div class="avatar avatar-lg bg-body text-primary">
+                                            <i class="fs-4" data-duoicon="discount"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+
+                <!-- Page content -->
+                <div class="row align-items-center mb-2">
+                    <div class="col">
+                        <!-- Heading -->
+                        <h2 class="fs-3 mb-0">Trends</h2>
+                    </div>
+                    <div class="col-auto my-n2">
+                        <!-- Select -->
+                        <select
+                        class="form-select"
+                        data-choices='{ "searchEnabled": false, "choices": [{ "value": "month", "label": "Last month" }, { "value": "week", "label": "Last week" }, { "value": "day", "label": "Today" }] }'
+                        ></select>
+                    </div>
+                </div>
 
             <!-- Tabs -->
             <ul class="nav nav-underline">

@@ -67,7 +67,7 @@
 <?php include ('../system/inc/footer.php'); ?>
 
 <script>
-    $('#signin-button').on('click', function() {
+    $('#signin-button').on('click', function(e) {
         e.preventDefault(); 
         
         if ($('#email').val() != '') {
