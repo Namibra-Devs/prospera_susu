@@ -380,5 +380,32 @@
             // is_idle()
         }, 300000); // referesh after every 30sec
 
+        // SEARCH AND PAGINATION FOR LIST
+        function load_data(page, query = '') {
+            $.ajax({
+                url : "<?= PROOT; ?>auth/trade.list.php",
+                method : "POST",
+                data : {
+                    page : page, 
+                    query : query
+                },
+                success : function(data) {
+                    $("#load-content").html(data);
+                }
+            });
+        }
+
+        load_data(1);
+        $('#search').keyup(function() {
+            var query = $('#search').val();
+            load_data(1, query);
+        });
+
+        $(document).on('click', '.page-link-go', function() {
+            var page = $(this).data('page_number');
+            var query = $('#search').val();
+            load_data(page, query);
+        });
+
     });
 </script>
