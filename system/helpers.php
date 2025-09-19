@@ -87,12 +87,15 @@ function admin_permission_redirect($url = 'index') {
 	redirect(PROOT . $url);
 }
 
-function admin_has_permission($permission = 'admin') {
+function admin_has_permission($permission = 'Super Admin') {
 	global $admin_data;
-	$permissions = explode(',', $admin_data['admin_permissions']);
-	if (in_array($permission, $permissions, true)) {
+	if ($admin_data['admin_role '] == $permission) {
 		return true;
 	}
+	// $permissions = explode(',', $admin_data['admin_permissions']);
+	// if (in_array($permission, $permissions, true)) {
+	// 	return true;
+	// }
 	return false;
 }
 

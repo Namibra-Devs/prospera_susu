@@ -4,76 +4,65 @@
 
 require ('../../system/DatabaseConnector.php');
 
-$today = date("Y-m-d");
-$limit = 10;
-$page = 1;
+    $today = date("Y-m-d");
+    $limit = 10;
+    $page = 1;
 
-if ($_POST['page'] > 1) {
-	$start = (($_POST['page'] - 1) * $limit);
-	$page = $_POST['page'];
-} else {
-	$start = 0;
-}
+    if ($_POST['page'] > 1) {
+        $start = (($_POST['page'] - 1) * $limit);
+        $page = $_POST['page'];
+    } else {
+        $start = 0;
+    }
 
-$where = '';
-if (!admin_has_permission()) {
-	$where = ' AND sale_by = "'.$admin_data["admin_id"].'" AND CAST(giltmarket_sales.createdAt AS date) = "' . $today . '" ';
-}
-$query = "
-	SELECT *, 
-		giltmarket_sales.id AS sid, 
-		giltmarket_sales.createdAt AS sca, 
-		giltmarket_sales.updatedAt AS sua, 
-		giltmarket_admin.id AS aid, 
-		CAST(giltmarket_sales.createdAt AS date) AS sdate  
-	FROM giltmarket_sales 
-	INNER JOIN giltmarket_admin 
-	ON giltmarket_admin.admin_id = giltmarket_sales.sale_by 
-	WHERE sale_status = 0 
-	$where 
-";
-$search_query = ((isset($_POST['query'])) ? sanitize($_POST['query']) : '');
-$find_query = str_replace(' ', '%', $search_query);
-if ($search_query != '') {
-	$query .= '
-		AND (sale_id LIKE "%'.$find_query.'%" 
-		OR sale_customer_name LIKE "%'.$find_query.'%" 
-		OR sale_customer_contact LIKE "%'.$find_query.'%" 
-		OR admin_fullname LIKE "%'.$find_query.'%") 
-	';
-} else {
-	$query .= 'ORDER BY createdAt DESC ';
-}
+    $query = "SELECT * FROM collectors ";
+    $search_query = ((isset($_POST['query'])) ? sanitize($_POST['query']) : '');
+    $find_query = str_replace(' ', '%', $search_query);
+    if ($search_query != '') {
+        $query .= '
+            WHERE collector_name LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR collector_email LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR collector_phone LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR collector_address LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR collector_state LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR collector_city LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR collector_status LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR created_at LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR collector_id LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" ';
 
-$filter_query = $query . 'LIMIT ' . $start . ', ' . $limit . '';
+    }
+    $query .= 'ORDER BY id ASC ';
 
-$total_data = $conn->query("SELECT * FROM giltmarket_sales INNER JOIN giltmarket_admin ON giltmarket_admin.admin_id = giltmarket_sales.sale_by WHERE sale_status = 0 $where")->rowCount();
+    $filter_query = $query . 'LIMIT ' . $start . ', ' . $limit . '';
 
-$statement = $conn->prepare($filter_query);
-$statement->execute();
-$result = $statement->fetchAll();
-$count_filter = $statement->rowCount();
+    $statement = $conn->prepare($query);
+	$statement->execute();
+	$total_data = $statement->rowCount();
 
-$output = '
-	<div class="card mb-6">
-		<div class="table-responsive">
-			<table class="table table-flush align-middle mb-0">
-				<thead>
-					<tr>
-						<th>#</th>
-						' .  ((admin_has_permission()) ? '<th scope="col">Handler</th>' : '') . '
-						<th>Customer</th>
-						<th>Gram</th>
-						<th>Volume</th>
-						<th>Price</th>
-						<th>Amount</th>
-						<th></th>
-						<th>Date</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-';
+	$statement = $conn->prepare($filter_query);
+	$statement->execute();
+	$result = $statement->fetchAll();
+
+    $output = '
+        <div class="card mb-6">
+            <div class="table-responsive">
+                <table class="table table-flush align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            ' .  ((admin_has_permission()) ? '<th scope="col">Handler</th>' : '') . '
+                            <th>Customer</th>
+                            <th>Gram</th>
+                            <th>Volume</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                            <th></th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    ';
 
 if ($total_data > 0) {
 	$i = 1;
