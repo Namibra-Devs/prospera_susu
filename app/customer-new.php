@@ -12,6 +12,79 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    $post = cleanPost($_POST);
+
+    // Collect and sanitize input
+    $name     = $post['name'] ?? '';
+    $email    = $post['email'] ?? '';
+    $phone    = $post['phone'] ?? '';
+    $address  = $post['address'] ?? '';
+    $region   = $post['region'] ?? '';
+    $city     = $post['city'] ?? '';
+    $amount   = $post['amount'] ?? '';
+    $target   = $post['target'] ?? '';
+    $duration = $post['duration'] ?? '';
+    $startdate = $post['startdate'] ?? '';
+    $idcard    = $post['idcard'] ?? '';
+    $idnumber  = $post['idnumber'] ?? '';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        // Validate required fields
+        if (!$name || !$email || !$phone || !$address || !$region || !$city || !$password || !$confirm) {
+            $error = "All fields are required.";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Invalid email address.";
+        } elseif ($password !== $confirm) {
+            $error = "Passwords do not match.";
+        } elseif (strlen($password) < 6) {
+            $error = "Password must be at least 6 characters.";
+        } else {
+            
+            // check if email or phone number already exist
+
+            // Handle file upload if exists
+            $photo_path = null;
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+                $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+                if (in_array($ext, $allowed)) {
+                    $upload_dir = '../assets/media/uploads/collectors-media/';
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0777, true);
+                    }
+                    $filename = uniqid('collector_', true) . '.' . $ext;
+                    $photo_path = $upload_dir . $filename;
+                    move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path);
+                } else {
+                    $error = "Invalid photo file type.";
+                }
+            }
+
+            if (!$error) {
+                // Hash password
+                $password_hash = password_hash($password, PASSWORD_BCRYPT);
+                $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
+                $conn = $dbConnection;
+                // Insert into database
+                $stmt = $conn->prepare("
+                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ");
+                $result = $stmt->execute([
+                    $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
+                ]);
+                if ($result) {
+                    $_SESSION['flash_success'] = "Collector added successfully!";
+                    redirect(PROOT . 'app/collectors');
+                } else {
+                    $error = "Failed to add collector. Please try again.";
+                }
+            }
+        }
+    }
+
+
 ?>
 
     <!-- Main -->
@@ -59,7 +132,7 @@
                 <div class="col">
 
                     <!-- Form -->
-                    <form>
+                    <form class="" id="new-customer-form" method="POST" enctype="multipart/form-data">
 
                         <section class="card card-line bg-body-tertiary border-transparent mb-5">
                             <div class="card-body">
@@ -68,29 +141,29 @@
                                 <hr>
                                 <div class="mb-4">
                                     <label class="form-label" for="name">Full name</label>
-                                    <input class="form-control bg-body" id="name" name="name" type="text" />
+                                    <input class="form-control bg-body" id="name" name="name" type="text" value="<?= $name; ?>" />
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="phone">Phone</label>
                                     <input type="text" class="form-control bg-body mb-3" name="phone" id="phone" placeholder="(___)___-____"
-                                    data-inputmask="'mask': '(999)999-9999'">
+                                    data-inputmask="'mask': '(999)999-9999'" value="<?= $phone; ?>">
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="email">Email</label>
-                                    <input type="email" class="form-control bg-body" name="email" id="email" placeholder="name@company.com" />
+                                    <input type="email" class="form-control bg-body" name="email" id="email" placeholder="name@company.com" value="<?= $email; ?>" />
                                 </div>
                                 <div class="row mb-0">
                                     <div class="col-md-4 mb-2">
                                         <label class="form-label" for="company">Address</label>
-                                        <input class="form-control bg-body" id="address" name="address" type="text" />
+                                        <input class="form-control bg-body" id="address" name="address" type="text" value="<?= $address; ?>" />
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label class="form-label" for="company">Region</label>
-                                        <input class="form-control bg-body" id="region" name="region" type="text" />
+                                        <input class="form-control bg-body" id="region" name="region" type="text" value="<?= $region; ?>" />
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label class="form-label" for="company">City</label>
-                                        <input class="form-control bg-body" id="city" name="city" type="text" />
+                                        <input class="form-control bg-body" id="city" name="city" type="text" value="<?= $city; ?>" />
                                     </div>
                                 </div>
                             </div>
@@ -102,20 +175,20 @@
                                 <p class="text-body-secondary mb-5">General information about the project.</p>
                                 <hr>
                                 <div class="mb-4">
-                                    <label class="form-label" for="location">Daily amount</label>
-                                    <input class="form-control bg-body" id="location" type="text" />
+                                    <label class="form-label" for="amount">Daily amount</label>
+                                    <input class="form-control bg-body" id="amount" name="amount" type="number" value="<?= $amount; ?>" />
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label" for="location">Target</label>
-                                    <input class="form-control bg-body" id="location" type="text" />
+                                    <label class="form-label" for="target">Target</label>
+                                    <input class="form-control bg-body" id="target" name="target" type="number" value="<?= $target; ?>" />
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label" for="location">Duration</label>
-                                    <input class="form-control bg-body" id="location" type="text" />
+                                    <label class="form-label" for="duration">Duration</label>
+                                    <input class="form-control bg-body" id="duration" name="duration" type="date" value="<?= $duration; ?>" />
                                 </div>
                                 <div class="mb-0">
-                                    <label class="form-label" for="projectStartDate">Start date</label>
-                                    <input class="form-control bg-body bg-body flatpickr-input" id="projectStartDate" type="text" data-flatpickr="" readonly="readonly">
+                                    <label class="form-label" for="startdate">Start date</label>
+                                    <input class="form-control bg-body bg-body flatpickr-input" id="startdate" name="startdate" type="text" data-flatpickr="" readonly="readonly" value="<?= $startdate; ?>">
                                 </div>
                             </div>
                         </section>
@@ -126,17 +199,17 @@
                                 <p class="text-body-secondary mb-5">Starting files for the project.</p>
                                 <hr>
                                 <div class="mb-4">
-                                    <label class="form-label" for="location">ID</label>
-                                    <select class="form-control bg-body" id="location" type="text">
+                                    <label class="form-label" for="idcard">ID</label>
+                                    <select class="form-control bg-body" id="idcard" name="idcard" type="text">
                                         <option value=""></option>
-                                        <option value="ghana-card">Ghana Card</option>
-                                        <option value="driver-licence">Driver Licence</option>
-                                        <option value="voters-id-card">Voters ID card</option>
+                                        <option value="ghana-card"<?= (($idcard == 'ghana-card') ? 'selected' : ''); ?>>Ghana Card</option>
+                                        <option value="driver-licence"<?= (($idcard == 'driver-licence') ? 'selected' : ''); ?>>Driver Licence</option>
+                                        <option value="voters-id-card"<?= (($idcard == 'voters-id-card') ? 'selected' : ''); ?>>Voters ID card</option>
                                     </select>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label" for="location">ID Number</label>
-                                    <input class="form-control bg-body" id="location" type="text" />
+                                    <label class="form-label" for="idnumber">ID Number</label>
+                                    <input class="form-control bg-body" id="idnumber" name="idnumber" type="text" value="<?= $idnumber; ?>" />
                                 </div>
                                 <div class="row mb-4">
                                     <div class="col">
@@ -157,7 +230,7 @@
                             </div>
                         </section>
 
-                        <button type="submit" class="btn btn-secondary w-100">
+                        <button type="submit" class="btn btn-secondary w-100" id="submit-customer">
                             Save customer
                         </button>
                         <button type="reset" class="btn btn-link w-100 mt-3">
@@ -173,6 +246,19 @@
 <?php include ('../system/inc/footer.php'); ?>
 <script>
     $(document).ready(function() {
+         // 
+        $('#new-customer-form').on('submit', function (e) {
+            // e.preventDefault();
 
+            $('#submit-customer').attr('disabled', true);
+            $('#submit-customer').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+
+            // Simulate a delay (e.g., AJAX call)
+            setTimeout(function () {
+                alert('Form submitted!');
+                $('#submit-customer').html('Save customer');
+                $('#submit-customer').attr('disabled', false);
+            }, 2000);
+        });
     });
 </script>
