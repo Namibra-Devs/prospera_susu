@@ -84,6 +84,15 @@
 		
 	}
 
+    //
+    if (array_key_exists('PRSADMIN', $_SESSION)) {
+        $added_by = 'admin';
+        $added_by_id = $_SESSION['PRSADMIN'];
+    } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+        $added_by = 'collector';
+        $added_by_id = $_SESSION['PRSCOLLECTOR'];
+    }
+
     require_once ("Functions.php");
     require_once ("helpers.php");
     require_once dirname(__DIR__) . "/config.php";

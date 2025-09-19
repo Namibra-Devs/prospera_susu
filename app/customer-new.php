@@ -12,15 +12,6 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
-    
-
-    // $a = issetElse($_SESSION, 'SUADMIN', 0);
-    // if ($a == 0) {
-    //     admin_login_redirect();
-    // } else {
-    //     dnd($a);
-    // }
-
     // fetch collectors
     // $collector_row = $dbConnection->query("SELECT * FROM collectors WHERE collector_status = 'active' ORDER BY collector_name ASC")->fetchAll();
     // $collector_options = '';

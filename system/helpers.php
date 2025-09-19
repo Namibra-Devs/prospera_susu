@@ -8,7 +8,7 @@ function who_logged_in($session) {
 		$person = 'user';
 	} else if ($string == 'PRSCollector') {
 		$person = 'collector';
-	} else if ($string == 'SUADMIN') {
+	} else if ($string == 'PRSADMIN') {
 		$person = 'admin';
 	}
 	return $person;
@@ -77,13 +77,13 @@ function get_products() {
 
 // Sessions For login
 function adminLogin($user_id) {
-	$_SESSION['SUADMIN'] = $user_id;
+	$_SESSION['PRSADMIN'] = $user_id;
     $_SESSION['flash_success'] = 'You are now logged in!';
     redirect(PROOT);
 }
 
 function admin_is_logged_in() {
-	if (isset($_SESSION['SUADMIN']) && $_SESSION['SUADMIN'] > 0) {
+	if (isset($_SESSION['PRSADMIN']) && $_SESSION['PRSADMIN'] > 0) {
 		return true;
 	}
 	return false;
