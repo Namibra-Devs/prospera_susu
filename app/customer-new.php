@@ -12,6 +12,8 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    
+
     // $a = issetElse($_SESSION, 'SUADMIN', 0);
     // if ($a == 0) {
     //     admin_login_redirect();
@@ -111,15 +113,18 @@
             $conn = $dbConnection;
             // Insert into database
             $stmt = $conn->prepare("
-                INSERT INTO collectors (customer_id, customer_collector_id, customer_added_by, customer_name, customer_phone, customer_email, customer_address, customer_region, customer_city, customer_id_type, customer_id_number, customer_id_photo_front, customer_id_photo_back, customer_default_daily_amount, customer_target, customer_duration, customer_start_date) 
+                INSERT INTO customers (customer_id, customer_collector_id, customer_added_by, customer_name, customer_phone, customer_email, customer_address, customer_region, customer_city, customer_id_type, customer_id_number, customer_id_photo_front, customer_id_photo_back, customer_default_daily_amount, customer_target, customer_duration, customer_start_date) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $result = $stmt->execute([
                 $unique_id, $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $front_photo_path, $back_photo_path, $amount, $target, $duration, $startdate
             ]);
             if ($result) {
+                $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new customer ' . ucwords($name) . ' (' . $phone . ')';
+                add_to_log($log_message, $added_by_id, $added_by);
+
                 $_SESSION['flash_success'] = "Customer added successfully!";
-                redirect(PROOT . 'app/collectors');
+                redirect(PROOT . 'app/customers');
             } else {
                 $error = "Failed to add collector. Please try again.";
             }

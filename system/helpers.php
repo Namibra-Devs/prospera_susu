@@ -262,16 +262,34 @@ function findAdminById($id) {
 
 ////////////////////////////////// GENERAL
 // add to logs
-function add_to_log($message, $log_admin) {
+// function add_to_log($message, $log_admin) {
+// 	global $conn;
+
+// 	$log_id = guidv4();
+// 	$sql = "
+// 		INSERT INTO `susu_logs`(`log_id`, `log_message`, `log_admin`) 
+// 		VALUES (?, ?, ?)
+// 	";
+// 	$statement = $conn->prepare($sql);
+// 	$result = $statement->execute([$log_id, $message, $log_admin]);
+
+// 	if ($result) {
+// 		return true;
+// 	}
+// 	return false;
+// }
+
+// add to logs
+function add_to_log($message, $person, $type) {
 	global $conn;
 
-	$log_id = guidv4();
+	$log_id = guidv4() . '-' . strtotime(date('Y-m-d H:m:s'));
 	$sql = "
-		INSERT INTO `susu_logs`(`log_id`, `log_message`, `log_admin`) 
-		VALUES (?, ?, ?)
+		INSERT INTO `susu_logs`(`log_id`, `log_message`, `log_person`, `log_type`) 
+		VALUES (?, ?, ?, ?)
 	";
 	$statement = $conn->prepare($sql);
-	$result = $statement->execute([$log_id, $message, $log_admin]);
+	$result = $statement->execute([$log_id, $message, $person, $type]);
 
 	if ($result) {
 		return true;
