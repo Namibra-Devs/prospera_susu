@@ -1,5 +1,6 @@
 <?php 
     require ('../system/DatabaseConnector.php');
+    // dnd($added_by_id);
     
 	// Check if the user is logged in
 	if (!admin_is_logged_in()) {
@@ -90,15 +91,6 @@
         }
 
         if (!$error) {
-            // 
-            if (array_key_exists('PRSADMIN', $_SESSION)) {
-                $added_by = 'admin';
-                $added_by_id = $_SESSION['PRSADMIN'];
-            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
-                $added_by = 'collector';
-                $added_by_id = $_SESSION['PRSCOLLECTOR'];
-            }
-
             // Hash password
             $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
             $conn = $dbConnection;

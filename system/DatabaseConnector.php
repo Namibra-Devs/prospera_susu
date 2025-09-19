@@ -60,13 +60,13 @@
 		if ($statement->rowCount() > 0) {
 			$admin_data = $admin_dt[0];
 
-			$details_data = $dbConnection->query("SELECT * FROM susu_admin_login_details WHERE susu_admin_login_details.login_details_admin_id = '" . $admin_id . "' ORDER BY id DESC LIMIT 1")->fetchAll();
+			$details_data = $dbConnection->query("SELECT * FROM susu_login_details WHERE susu_login_details.login_details_person_id = '" . $admin_id . "' ORDER BY id DESC LIMIT 1")->fetchAll();
 			
 			if (is_array($details_data) && count($details_data) > 0) {
 				$admin_data = array_merge($admin_data, $details_data[0]);
 			}
 
-			$fn = explode(' ', $admin_data['admin_fullname']);
+			$fn = explode(' ', $admin_data['admin_name']);
 			$admin_data['first'] = ucwords($fn[0]);
 			$admin_data['middle'] = '';
 			if (count($fn) > 2) {
@@ -77,7 +77,7 @@
 			if (count($fn) > 1) {
 				$admin_data['last'] = ucwords($fn[1]);
 			}
-			$admin_permission = $admin_data['admin_permissions']; // get admin's permission
+			$admin_permission = $admin_data['admin_role']; // get admin's permission
 		} else {
 			redirect(PROOT . 'auth/sign-out');
 		}
@@ -85,6 +85,17 @@
 	}
 
     //
+    $added_by = null;
+    $added_by_id = null;
+    if (array_key_exists('PRSADMIN', $_SESSION)) {
+        $added_by = 'admin';
+        $added_by_id = $_SESSION['PRSADMIN'];
+    } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+        $added_by = 'collector';
+        $added_by_id = $_SESSION['PRSCOLLECTOR'];
+    }
+
+    // 
     if (array_key_exists('PRSADMIN', $_SESSION)) {
         $added_by = 'admin';
         $added_by_id = $_SESSION['PRSADMIN'];
