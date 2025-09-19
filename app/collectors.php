@@ -257,6 +257,7 @@
                         </div>
                     </div>
                 </div>
+                <div id="load-content"></div>
 
                 <!-- Table -->
                 <div class="table-responsive mb-7">
@@ -383,7 +384,7 @@
         // SEARCH AND PAGINATION FOR LIST
         function load_data(page, query = '') {
             $.ajax({
-                url : "<?= PROOT; ?>auth/trade.list.php",
+                url : "<?= PROOT; ?>app/controller/list.collectors.php",
                 method : "POST",
                 data : {
                     page : page, 
