@@ -61,18 +61,36 @@
         // check if email or phone number already exist
 
         // Handle file upload if exists
-        $photo_path = null;
-        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $front_photo_path = null;
+        if (isset($_FILES['front_photo']) && $_FILES['front_photo']['error'] === UPLOAD_ERR_OK) {
             $allowed = ['jpg', 'jpeg', 'png', 'gif'];
-            $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+            $ext = strtolower(pathinfo($_FILES['front_photo']['name'], PATHINFO_EXTENSION));
             if (in_array($ext, $allowed)) {
-                $upload_dir = '../assets/media/uploads/collectors-media/';
+                $upload_dir = '../assets/media/uploads/customers-media/';
                 if (!is_dir($upload_dir)) {
                     mkdir($upload_dir, 0777, true);
                 }
-                $filename = uniqid('collector_', true) . '.' . $ext;
-                $photo_path = $upload_dir . $filename;
-                move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path);
+                $filename = uniqid('customer_front_id_', true) . '.' . $ext;
+                $front_photo_path = $upload_dir . $filename;
+                move_uploaded_file($_FILES['front_photo']['tmp_name'], $front_photo_path);
+            } else {
+                $error = "Invalid photo file type.";
+            }
+        }
+        
+        // Handle file upload if exists
+        $back_photo_path = null;
+        if (isset($_FILES['back_photo']) && $_FILES['back_photo']['error'] === UPLOAD_ERR_OK) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+            $ext = strtolower(pathinfo($_FILES['back_photo']['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, $allowed)) {
+                $upload_dir = '../assets/media/uploads/customers-media/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0777, true);
+                }
+                $filename = uniqid('customer_back_id_', true) . '.' . $ext;
+                $back_photo_path = $upload_dir . $filename;
+                move_uploaded_file($_FILES['back_photo']['tmp_name'], $back_photo_path);
             } else {
                 $error = "Invalid photo file type.";
             }
@@ -97,7 +115,7 @@
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $result = $stmt->execute([
-                $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
+                $unique_id, $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $idphot, $photo_path, $password_hash
             ]);
             if ($result) {
                 $_SESSION['flash_success'] = "Customer added successfully!";
