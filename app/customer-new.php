@@ -12,14 +12,21 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    // $a = issetElse($_SESSION, 'SUADMIN', 0);
+    // if ($a == 0) {
+    //     admin_login_redirect();
+    // } else {
+    //     dnd($a);
+    // }
+
     // fetch collectors
-    $collector_row = $conn->query("SELECT * FROM collectors WHERE collector_status = 'active'")->fetchAll();
-    $collector_options = '';
-    if ($fetch_collectors_sql) {
-        $collector_options .= '
-            <option value="' . $collector_row['collector_id'] . '">' . ucwords($collector_row["collector_name"]) . '</option>
-        ';
-    }
+    // $collector_row = $dbConnection->query("SELECT * FROM collectors WHERE collector_status = 'active' ORDER BY collector_name ASC")->fetchAll();
+    // $collector_options = '';
+    // if ($collector_row) {
+    //     $collector_options .= '
+    //         <option value="' . $collector_row['collector_id'] . '">' . ucwords($collector_row["collector_name"]) . '</option>
+    //     ';
+    // }
 
     $post = cleanPost($_POST);
 
@@ -36,6 +43,9 @@
     $startdate = $post['startdate'] ?? '';
     $idcard    = $post['idcard'] ?? '';
     $idnumber  = $post['idnumber'] ?? '';
+    $collector = $post['collector'] ?? '';
+    $added_by = null;
+    $added_by_id = '';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -48,7 +58,6 @@
             $error = "Invalid email address.";
         }
         
-            
         // check if email or phone number already exist
 
         // Handle file upload if exists
@@ -70,20 +79,28 @@
         }
 
         if (!$error) {
+            // 
+            if (array_key_exists('PRSADMIN', $_SESSION)) {
+                $added_by = 'admin';
+                $added_by_id = $_SESSION['PRSADMIN'];
+            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) { {
+                $added_by = 'collector';
+                $added_by_id = $_SESSION['PRSCOLLECTOR'];
+            }
+
             // Hash password
-            $password_hash = password_hash($password, PASSWORD_BCRYPT);
             $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
             $conn = $dbConnection;
             // Insert into database
             $stmt = $conn->prepare("
-                INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO collectors (customer_id, customer_collector_id, customer_added_by, customer_name, customer_phone, customer_email, customer_address, customer_region, customer_city, customer_id_type, customer_id_number, customer_id_photo_front, customer_id_photo_back, customer_default_daily_amount, customer_target, customer_duration, customer_start_date) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $result = $stmt->execute([
                 $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
             ]);
             if ($result) {
-                $_SESSION['flash_success'] = "Collector added successfully!";
+                $_SESSION['flash_success'] = "Customer added successfully!";
                 redirect(PROOT . 'app/collectors');
             } else {
                 $error = "Failed to add collector. Please try again.";
@@ -235,15 +252,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <?php if (admin_has_permission()): ?>
-                                <div class="mb-4">
-                                    <label class="form-label" for="collector">Assign to</label>
-                                    <select class="form-control bg-body" id="collector" name="collector" type="text">
-                                        <option value=""></option>
-                                        <?= $collector_options; ?>
-                                    </select>
-                                </div>
-                                <?php endif; ?>
                             </div>
                         </section>
 
@@ -263,7 +271,7 @@
 <?php include ('../system/inc/footer.php'); ?>
 <script>
     $(document).ready(function() {
-         // 
+        // 
         $('#new-customer-form').on('submit', function (e) {
             // e.preventDefault();
 

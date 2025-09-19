@@ -1,5 +1,19 @@
 <?php
 
+// find the logged in person
+function who_logged_in($session) {
+	$person = null;
+	$string = issetElse($_SESSION, $session, 0);
+	if ($string == 'PRSUser') {
+		$person = 'user';
+	} else if ($string == 'PRSCollector') {
+		$person = 'collector';
+	} else if ($string == 'SUADMIN') {
+		$person = 'admin';
+	}
+	return $person;
+}
+
 ////////////////////////////////////////////////////// FOR USER
 
 // Sessions For login
@@ -89,7 +103,7 @@ function admin_permission_redirect($url = 'index') {
 
 function admin_has_permission($permission = 'Super Admin') {
 	global $admin_data;
-	if ($admin_data['admin_role '] == $permission) {
+	if ($admin_data['admin_role'] == $permission) {
 		return true;
 	}
 	// $permissions = explode(',', $admin_data['admin_permissions']);
