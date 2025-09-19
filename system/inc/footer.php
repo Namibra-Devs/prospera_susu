@@ -15,6 +15,28 @@
 		// Fade out messages 
 		$("#temporary").fadeOut(10000);
 
+        // check user iddleness
+        function is_idle() {
+            var type = 'idle';
+
+            $.ajax ({
+                method : "POST",
+                url : "<?= PROOT; ?>auth/idle.checker.php",
+                data : { type : type},
+                success : function (data) {
+                    console.log(data);
+                    if (data != '') {
+                        window.location.href = "<?= PROOT; ?>auth/sign-in"
+                    }
+                }
+            })
+        }
+        // setInterval(updateTime, 1000);
+
+        setInterval(() => {
+            // is_idle()
+        }, 300000); // referesh after every 30sec
+
         // Get the current URL
         var currentUrl = window.location.href;
 
@@ -44,27 +66,27 @@
         // activate left nav link upon url
 
         if (window.location.href.indexOf("index") > -1) {
-            $('.nav-dashboard').addClass('active');
-            $('.nav-dashboard').attr('aria-expanded', true);
-            $('#dashboard').addClass('show');
+            $('.nav-dashboards').addClass('active');
+            $('.nav-dashboards').attr('aria-expanded', true);
+            $('#dashboards').addClass('show');
         }
         
-        if (window.location.href.indexOf("analytics") > -1) {
-            $('.nav-dashboard').addClass('active');
-            $('.nav-dashboard').attr('aria-expanded', true);
-            $('#dashboard').addClass('show');
+        if (window.location.href.indexOf("live") > -1) {
+            $('.nav-dashboards').addClass('active');
+            $('.nav-dashboards').attr('aria-expanded', true);
+            $('#dashboards').addClass('show');
         }
 
-        if ((window.location.href.indexOf("trades") > -1) || (window.location.href.indexOf("end-trade") > -1)) {
-            $('.nav-market').addClass('active');
-            $('.nav-market').attr('aria-expanded', true);
-            $('#market').addClass('show');
+        if ((window.location.href.indexOf("collectors") > -1) || (window.location.href.indexOf("collector-new") > -1)) {
+            $('.nav-collectors').addClass('active');
+            $('.nav-collectors').attr('aria-expanded', true);
+            $('#collectors').addClass('show');
         }
 
-        if (window.location.href.indexOf("expenditure") > -1) {
-            $('.nav-expenditure').addClass('active');
-            $('.nav-expenditure').attr('aria-expanded', true);
-            $('#expenditure').addClass('show');
+        if (window.location.href.indexOf("customers") > -1) {
+            $('.nav-customers').addClass('active');
+            $('.nav-customers').attr('aria-expanded', true);
+            $('#customers').addClass('show');
         }
         
         if (window.location.href.indexOf("pushes") > -1) {

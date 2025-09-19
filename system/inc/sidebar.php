@@ -1030,7 +1030,7 @@
                     <nav class="navbar-nav nav-pills mb-7">
                         <div class="nav-item">
                             <a
-                            class="nav-link active"
+                            class="nav-link nav-dashboards"
                             href="#"
                             data-bs-toggle="collapse"
                             data-bs-target="#dashboards"
@@ -1040,9 +1040,9 @@
                             >
                                 <span class="material-symbols-outlined me-3">space_dashboard</span> Dashboards
                             </a>
-                            <div class="collapse show" id="dashboards">
+                            <div class="collapse" id="dashboards">
                                 <nav class="nav nav-pills">
-                                    <a class="nav-link active" href="<?= PROOT; ?>">Home</a>
+                                    <a class="nav-link active" href="<?= PROOT; ?>index">Home</a>
                                     <a class="nav-link " href="<?= PROOT; ?>live">Live</a>
                                     <a class="nav-link " href="<?= PROOT; ?>summary">Summary</a>
                                 </nav>
@@ -1050,7 +1050,7 @@
                         </div>
                         <div class="nav-item">
                             <a
-                                class="nav-link "
+                                class="nav-link nav-collectors"
                                 href="#"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#collectors"
@@ -1070,7 +1070,7 @@
                         </div>
                         <div class="nav-item">
                             <a
-                            class="nav-link "
+                            class="nav-link nav-customers"
                             href="#"
                             data-bs-toggle="collapse"
                             data-bs-target="#customers"
