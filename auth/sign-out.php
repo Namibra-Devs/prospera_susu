@@ -22,10 +22,8 @@
         $admin_data['login_details_id']
     ]);
     
-    $message = "logged out from system";
-    add_to_log($message, $_SESSION['PRSADMIN']);
 
-    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new customer ' . ucwords($name) . ' (' . $phone . ')';
+    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] has logged out.';
     add_to_log($log_message, $added_by_id, $added_by);
     
     unset($_SESSION['PRSADMIN']);
