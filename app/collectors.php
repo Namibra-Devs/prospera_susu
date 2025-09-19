@@ -105,13 +105,13 @@
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-1">
-                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Collector</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">New collector</li>
+                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Collectors</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Collectors</li>
                         </ol>
                     </nav>
 
                     <!-- Heading -->
-                    <h1 class="fs-4 mb-0">New collector</h1>
+                    <h1 class="fs-4 mb-0">Collectors</h1>
 
                 </div>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
@@ -125,74 +125,9 @@
             </div>
 
             <!-- Page content -->
-            <div class="row">
-                <div class="col">
+            
 
-                    <!-- Form -->
-                    <form class="" id="new-collector-form" method="POST" enctype="multipart/form-data">
-                        <?php if ($error): ?>
-                        <div class="alert alert-danger" id="temporary"><?= $error ?></div>
-                        <?php endif; ?>
-                        <div class="mb-4">
-                            <label class="form-label" for="name">Full name</label>
-                            <input class="form-control" id="name" name="name" type="text" value="<?= $name; ?>" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="email">Email</label>
-                            <input class="form-control" id="email" name="email" type="email" value="<?= $email; ?>" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="phone">Phone</label>
-                            <input type="text" class="form-control mb-3" id="phone" name="phone" placeholder="(___)___-____" data-inputmask="'mask': '(999)999-9999'" required value="<?= $phone; ?>" />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="address">Address</label>
-                            <input class="form-control" id="address" name="address" type="text" value="<?= $address; ?>" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="region">Region</label>
-                            <input class="form-control" id="region" name="region" value="<?= $region; ?>" type="text" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="city">City</label>
-                            <input class="form-control" id="city" name="city" value="<?= $city; ?>" type="text" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="password">Password</label>
-                            <input class="form-control" id="password" name="password" type="password" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="confirm">Confirm password</label>
-                            <input class="form-control" id="confirm" name="confirm" type="password" required />
-                        </div>
-                        <!-- <div class="mb-4">
-                            <label class="form-label mb-0" for="tiptapExample">About</label>
-                            <div class="form-text mt-0 mb-3">
-                                A brief description of the customer.
-                            </div>
-                            <di class="form-control" id="tiptapExample"></di>
-                        </div> -->
-                        <div class="mb-7">
-                            <label for="dropzone">Photo</label>
-                            <input class="form-control" id="photo" name="photo" type="file" />
-                        </div>
-                        <!-- <div class="mb-7">
-                            <label for="dropzone">Photo</label>
-                            <div class="form-text mt-0 mb-3">
-                                Attach photo to this collector.
-                            </div>
-                            <div class="dropzone" id="dropzone" name="dropzone"></div>
-                        </div> -->
-                        <button type="submit" id="submit-collector" class="btn btn-secondary w-100">
-                            Save collector
-                        </button>
-                        <button type="reset" class="btn btn-link w-100 mt-3">
-                            Reset form
-                        </button>
-                    </form>
 
-                </div>
-            </div>
         </div>
 
 <?php include ('../system/inc/footer.php'); ?>
@@ -200,26 +135,6 @@
 <script>
 
     $(document).ready(function() {
-
-
-        // 
-        $('#new-collector-form').on('submit', function (e) {
-            // e.preventDefault();
-
-            $('#submit-collector').attr('disabled', true);
-            $('#submit-collector').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
-
-            // $('#spinner').show(); // Show spinner
-
-            // Simulate a delay (e.g., AJAX call)
-            setTimeout(function () {
-                alert('Form submitted!');
-                $('#spinner').hide(); // Hide spinner after process
-                $('#submit-collector').html('Save collector');
-                $('#submit-collector').attr('disabled', false);
-            }, 2000);
-        });
-
 
 
         // check user iddleness

@@ -38,6 +38,9 @@
         } elseif (strlen($password) < 6) {
             $error = "Password must be at least 6 characters.";
         } else {
+            
+            // check if email or phone number already exist
+
             // Handle file upload if exists
             $photo_path = null;
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
