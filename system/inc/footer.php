@@ -83,7 +83,7 @@
             $('#collectors').addClass('show');
         }
 
-        if (window.location.href.indexOf("customers") > -1) {
+        if (window.location.href.indexOf("customers") > -1 || (window.location.href.indexOf("customer-new") > -1)) {
             $('.nav-customers').addClass('active');
             $('.nav-customers').attr('aria-expanded', true);
             $('#customers').addClass('show');

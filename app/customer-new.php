@@ -5,85 +5,12 @@
 	if (!admin_is_logged_in()) {
 		admin_login_redirect();
 	}
-
     $body_class = '';
     include ('../system/inc/head.php');
     include ('../system/inc/modals.php');
     include ('../system/inc/sidebar.php');
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
-
-    // submit collector form
-    $error = '';
-    $post = cleanPost($_POST);
-
-    // Collect and sanitize input
-    $name     = $post['name'] ?? '';
-    $email    = $post['email'] ?? '';
-    $phone    = $post['phone'] ?? '';
-    $address  = $post['address'] ?? '';
-    $region   = $post['region'] ?? '';
-    $city     = $post['city'] ?? '';
-    $password = $post['password'] ?? '';
-    $confirm  = $post['confirm'] ?? '';
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-        // Validate required fields
-        if (!$name || !$email || !$phone || !$address || !$region || !$city || !$password || !$confirm) {
-            $error = "All fields are required.";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = "Invalid email address.";
-        } elseif ($password !== $confirm) {
-            $error = "Passwords do not match.";
-        } elseif (strlen($password) < 6) {
-            $error = "Password must be at least 6 characters.";
-        } else {
-            
-            // check if email or phone number already exist
-
-            // Handle file upload if exists
-            $photo_path = null;
-            if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
-                $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
-                if (in_array($ext, $allowed)) {
-                    $upload_dir = '../assets/media/uploads/collectors-media/';
-                    if (!is_dir($upload_dir)) {
-                        mkdir($upload_dir, 0777, true);
-                    }
-                    $filename = uniqid('collector_', true) . '.' . $ext;
-                    $photo_path = $upload_dir . $filename;
-                    move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path);
-                } else {
-                    $error = "Invalid photo file type.";
-                }
-            }
-
-            if (!$error) {
-                // Hash password
-                $password_hash = password_hash($password, PASSWORD_BCRYPT);
-                $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
-                $conn = $dbConnection;
-                // Insert into database
-                $stmt = $conn->prepare("
-                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ");
-                $result = $stmt->execute([
-                    $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
-                ]);
-                if ($result) {
-                    $_SESSION['flash_success'] = "Collector added successfully!";
-                    redirect(PROOT . 'app/collectors');
-                } else {
-                    $error = "Failed to add collector. Please try again.";
-                }
-            }
-        }
-    }
-
-
-
 
 ?>
 
@@ -108,7 +35,7 @@
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-1">
-                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Customer</a></li>
+                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Customers</a></li>
                             <li class="breadcrumb-item active" aria-current="page">New customer</li>
                         </ol>
                     </nav>
@@ -120,8 +47,8 @@
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
 
                     <!-- Action -->
-                    <button class="btn btn-light w-100" href="<?= goBack(); ?>">
-                        Go back
+                    <button class="btn btn-light w-100" type="button">
+                        Save draft
                     </button>
 
                 </div>
@@ -132,69 +59,105 @@
                 <div class="col">
 
                     <!-- Form -->
-                    <form class="" id="new-customer-form" method="POST" enctype="multipart/form-data">
-                        <?php if ($error): ?>
-                        <div class="alert alert-danger" id="temporary"><?= $error ?></div>
-                        <?php endif; ?>
-                        <div class="mb-4">
-                            <label class="form-label" for="name">Full name</label>
-                            <input class="form-control" id="name" name="name" type="text" value="<?= $name; ?>" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="email">Email</label>
-                            <input class="form-control" id="email" name="email" type="email" value="<?= $email; ?>" />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="phone">Phone</label>
-                            <input type="text" class="form-control mb-3" id="phone" name="phone" placeholder="(___)___-____" data-inputmask="'mask': '(999)999-9999'" required value="<?= $phone; ?>" />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="address">Address</label>
-                            <input class="form-control" id="address" name="address" type="text" value="<?= $address; ?>" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="region">Region</label>
-                            <input class="form-control" id="region" name="region" value="<?= $region; ?>" type="text" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="city">City</label>
-                            <input class="form-control" id="city" name="city" value="<?= $city; ?>" type="text" required />
-                        </div>
-                        <!-- <div class="mb-4">
-                            <label class="form-label mb-0" for="tiptapExample">About</label>
-                            <div class="form-text mt-0 mb-3">
-                                A brief description of the customer.
+                    <form>
+
+                        <section class="card card-line bg-body-tertiary border-transparent mb-5">
+                            <div class="card-body">
+                                <h3 class="fs-5 mb-1">General</h3>
+                                <p class="text-body-secondary mb-5">General information about the project.</p>
+                                <hr>
+                                <div class="mb-4">
+                                    <label class="form-label" for="name">Full name</label>
+                                    <input class="form-control bg-body" id="name" name="name" type="text" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="phone">Phone</label>
+                                    <input type="text" class="form-control bg-body mb-3" name="phone" id="phone" placeholder="(___)___-____"
+                                    data-inputmask="'mask': '(999)999-9999'">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" class="form-control bg-body" name="email" id="email" placeholder="name@company.com" />
+                                </div>
+                                <div class="row mb-0">
+                                    <div class="col-md-4 mb-2">
+                                        <label class="form-label" for="company">Address</label>
+                                        <input class="form-control bg-body" id="address" name="address" type="text" />
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <label class="form-label" for="company">Region</label>
+                                        <input class="form-control bg-body" id="region" name="region" type="text" />
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <label class="form-label" for="company">City</label>
+                                        <input class="form-control bg-body" id="city" name="city" type="text" />
+                                    </div>
+                                </div>
                             </div>
-                            <di class="form-control" id="tiptapExample"></di>
-                        </div> -->
-                        <div class="mb-4">
-                            <label class="form-label" for="city">ID type</label>
-                            <input class="form-control" id="city" name="city" value="<?= $city; ?>" type="text" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="city">ID number</label>
-                            <input class="form-control" id="city" name="city" value="<?= $city; ?>" type="text" required />
-                        </div>
-                        <div class="mb-7">
-                            <label for="dropzone">ID photo</label>
-                            <input class="form-control" id="photo" name="photo" type="file" />
-                        </div>
-                        <!-- <div class="mb-7">
-                            <label for="dropzone">Photo</label>
-                            <div class="form-text mt-0 mb-3">
-                                Attach photo to this collector.
+                        </section>
+
+                        <section class="card card-line bg-body-tertiary border-transparent mb-5">
+                            <div class="card-body">
+                                <h3 class="fs-5 mb-1">Saving plan</h3>
+                                <p class="text-body-secondary mb-5">General information about the project.</p>
+                                <hr>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">Daily amount</label>
+                                    <input class="form-control bg-body" id="location" type="text" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">Target</label>
+                                    <input class="form-control bg-body" id="location" type="text" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">Duration</label>
+                                    <input class="form-control bg-body" id="location" type="text" />
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label" for="projectStartDate">Start date</label>
+                                    <input class="form-control bg-body bg-body flatpickr-input" id="projectStartDate" type="text" data-flatpickr="" readonly="readonly">
+                                </div>
                             </div>
-                            <div class="dropzone" id="dropzone" name="dropzone"></div>
-                        </div> -->
-                        <div class="mb-4">
-                            <label class="form-label" for="city">Default daily amount</label>
-                            <input class="form-control" id="city" name="city" value="<?= $city; ?>" type="number" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="password">Start date</label>
-                            <input class="form-control" id="password" name="password" type="date" required />
-                        </div>
-                        <button type="submit" id="submit-customer" class="btn btn-secondary w-100">
+                        </section>
+                        
+                        <section class="card bg-body-tertiary border-transparent mb-7">
+                            <div class="card-body">
+                                <h3 class="fs-5 mb-1">ID details</h3>
+                                <p class="text-body-secondary mb-5">Starting files for the project.</p>
+                                <hr>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">ID</label>
+                                    <select class="form-control bg-body" id="location" type="text">
+                                        <option value=""></option>
+                                        <option value="ghana-card">Ghana Card</option>
+                                        <option value="driver-licence">Driver Licence</option>
+                                        <option value="voters-id-card">Voters ID card</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="location">ID Number</label>
+                                    <input class="form-control bg-body" id="location" type="text" />
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <div class="mb-0">
+                                            <label for="dropzone">Front card</label>
+                                            <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
+                                            <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-0">
+                                            <label for="dropzone">Back Card</label>
+                                            <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
+                                            <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <button type="submit" class="btn btn-secondary w-100">
                             Save customer
                         </button>
                         <button type="reset" class="btn btn-link w-100 mt-3">
@@ -205,31 +168,11 @@
                 </div>
             </div>
         </div>
+    
 
 <?php include ('../system/inc/footer.php'); ?>
-
 <script>
-
     $(document).ready(function() {
-
-
-        // 
-        $('#new-customer-form').on('submit', function (e) {
-            // e.preventDefault();
-
-            $('#submit-customer').attr('disabled', true);
-            $('#submit-customer').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
-
-            // $('#spinner').show(); // Show spinner
-
-            // Simulate a delay (e.g., AJAX call)
-            setTimeout(function () {
-                alert('Form submitted!');
-                $('#spinner').hide(); // Hide spinner after process
-                $('#submit-customer').html('Save customer');
-                $('#submit-customer').attr('disabled', false);
-            }, 2000);
-        });
 
     });
 </script>

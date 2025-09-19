@@ -1082,9 +1082,9 @@
                             </a>
                             <div class="collapse " id="customers">
                                 <nav class="nav nav-pills">
-                                    <a class="nav-link " href="<?= PROOT; ?>customers">Customers</a>
-                                    <a class="nav-link " href="<?= PROOT; ?>archived-customer.html">Archived customers</a>
-                                    <a class="nav-link " href="<?= PROOT; ?>customer-new">New customer</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/customers">Customers</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/archived-customer.html">Archived customers</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/customer-new">New customer</a>
                                 </nav>
                             </div>
                         </div>
