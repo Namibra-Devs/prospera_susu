@@ -74,7 +74,7 @@
                 $front_photo_path = $upload_dir . $filename;
                 move_uploaded_file($_FILES['front_photo']['tmp_name'], $front_photo_path);
             } else {
-                $error = "Invalid photo file type.";
+                $error = "Invalid front photo id card file type.";
             }
         }
         
@@ -92,7 +92,7 @@
                 $back_photo_path = $upload_dir . $filename;
                 move_uploaded_file($_FILES['back_photo']['tmp_name'], $back_photo_path);
             } else {
-                $error = "Invalid photo file type.";
+                $error = "Invalid back photo id card file type.";
             }
         }
 
@@ -101,7 +101,7 @@
             if (array_key_exists('PRSADMIN', $_SESSION)) {
                 $added_by = 'admin';
                 $added_by_id = $_SESSION['PRSADMIN'];
-            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) { {
+            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
                 $added_by = 'collector';
                 $added_by_id = $_SESSION['PRSCOLLECTOR'];
             }
@@ -115,7 +115,7 @@
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $result = $stmt->execute([
-                $unique_id, $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $idphot, $photo_path, $password_hash
+                $unique_id, $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $front_photo_path, $back_photo_path, $amount, $target, $duration, $startdate
             ]);
             if ($result) {
                 $_SESSION['flash_success'] = "Customer added successfully!";
@@ -257,6 +257,18 @@
                                 <div class="row mb-4">
                                     <div class="col">
                                         <div class="mb-0">
+                                            <label for="front_photo">Front card</label>
+                                            <input class="form-control" id="front_photo" name="front_photo" type="file" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-0">
+                                            <label for="back_photo">Back card</label>
+                                            <input class="form-control" id="back_photo" name="back_photo" type="file" />
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col">
+                                        <div class="mb-0">
                                             <label for="dropzone">Front card</label>
                                             <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
                                             <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
@@ -268,7 +280,7 @@
                                             <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
                                             <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </section>
