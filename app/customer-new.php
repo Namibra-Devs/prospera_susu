@@ -31,7 +31,7 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Validate required fields
-        if (!$name || !$email || !$phone || !$address || !$region || !$city || !$password || !$confirm) {
+        if (!$name || !$phone || !$address || !$region || !$city || !$amount || !$startdate) {
             $error = "All fields are required.";
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Invalid email address.";
@@ -141,12 +141,12 @@
                                 <hr>
                                 <div class="mb-4">
                                     <label class="form-label" for="name">Full name</label>
-                                    <input class="form-control bg-body" id="name" name="name" type="text" value="<?= $name; ?>" />
+                                    <input class="form-control bg-body" id="name" name="name" type="text" value="<?= $name; ?>" required />
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="phone">Phone</label>
                                     <input type="text" class="form-control bg-body mb-3" name="phone" id="phone" placeholder="(___)___-____"
-                                    data-inputmask="'mask': '(999)999-9999'" value="<?= $phone; ?>">
+                                    data-inputmask="'mask': '(999)999-9999'" value="<?= $phone; ?>" required>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="email">Email</label>
@@ -155,15 +155,15 @@
                                 <div class="row mb-0">
                                     <div class="col-md-4 mb-2">
                                         <label class="form-label" for="company">Address</label>
-                                        <input class="form-control bg-body" id="address" name="address" type="text" value="<?= $address; ?>" />
+                                        <input class="form-control bg-body" id="address" name="address" type="text" value="<?= $address; ?>" required />
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label class="form-label" for="company">Region</label>
-                                        <input class="form-control bg-body" id="region" name="region" type="text" value="<?= $region; ?>" />
+                                        <input class="form-control bg-body" id="region" name="region" type="text" value="<?= $region; ?>" required />
                                     </div>
                                     <div class="col-md-4 mb-2">
                                         <label class="form-label" for="company">City</label>
-                                        <input class="form-control bg-body" id="city" name="city" type="text" value="<?= $city; ?>" />
+                                        <input class="form-control bg-body" id="city" name="city" type="text" value="<?= $city; ?>" required />
                                     </div>
                                 </div>
                             </div>
@@ -176,7 +176,8 @@
                                 <hr>
                                 <div class="mb-4">
                                     <label class="form-label" for="amount">Daily amount</label>
-                                    <input class="form-control bg-body" id="amount" name="amount" type="number" value="<?= $amount; ?>" />
+                                    <input class="form-control bg-body" id="amount" name="amount" type="number" min="10" value="<?= $amount; ?>" required />
+                                    <small>mininum GHS 10.00</small>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="target">Target</label>
@@ -188,7 +189,7 @@
                                 </div>
                                 <div class="mb-0">
                                     <label class="form-label" for="startdate">Start date</label>
-                                    <input class="form-control bg-body bg-body flatpickr-input" id="startdate" name="startdate" type="text" data-flatpickr="" readonly="readonly" value="<?= $startdate; ?>">
+                                    <input class="form-control bg-body bg-body flatpickr-input" id="startdate" name="startdate" type="text" data-flatpickr="" readonly="readonly" value="<?= $startdate; ?>" required>
                                 </div>
                             </div>
                         </section>
