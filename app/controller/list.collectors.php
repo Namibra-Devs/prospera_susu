@@ -1,8 +1,8 @@
 <?php 
 
-// LIST AND SEARCH FOR TRADES
+// LIST AND SEARCH FOR COLLECTORS
 
-require_once ("../db_connection/conn.php");
+require ('../../system/DatabaseConnector.php');
 
 $today = date("Y-m-d");
 $limit = 10;

@@ -81,6 +81,22 @@ function admin_login_redirect($url = 'auth/sign-out') {
 	redirect(PROOT . $url);
 }
 
+// Redirect admin if do not have permission
+function admin_permission_redirect($url = 'index') {
+	$_SESSION['flash_error'] = 'You do not have permission in to access that page.';
+	redirect(PROOT . $url);
+}
+
+function admin_has_permission($permission = 'admin') {
+	global $admin_data;
+	$permissions = explode(',', $admin_data['admin_permissions']);
+	if (in_array($permission, $permissions, true)) {
+		return true;
+	}
+	return false;
+}
+
+
 // GET ALL PRODUCTS WHERE TRASH = 0
 function get_all_product($product_trash = '') {
 	global $dbConnection;
