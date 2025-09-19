@@ -12,6 +12,15 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    // fetch collectors
+    $collector_row = $conn->query("SELECT * FROM collectors WHERE collector_status = 'active'")->fetchAll();
+    $collector_options = '';
+    if ($fetch_collectors_sql) {
+        $collector_options .= '
+            <option value="' . $collector_row['collector_id'] . '">' . ucwords($collector_row["collector_name"]) . '</option>
+        ';
+    }
+
     $post = cleanPost($_POST);
 
     // Collect and sanitize input
@@ -33,53 +42,51 @@
         // Validate required fields
         if (!$name || !$phone || !$address || !$region || !$city || !$amount || !$startdate) {
             $error = "All fields are required.";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        }
+        
+        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Invalid email address.";
-        } elseif ($password !== $confirm) {
-            $error = "Passwords do not match.";
-        } elseif (strlen($password) < 6) {
-            $error = "Password must be at least 6 characters.";
-        } else {
+        }
+        
             
-            // check if email or phone number already exist
+        // check if email or phone number already exist
 
-            // Handle file upload if exists
-            $photo_path = null;
-            if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
-                $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
-                if (in_array($ext, $allowed)) {
-                    $upload_dir = '../assets/media/uploads/collectors-media/';
-                    if (!is_dir($upload_dir)) {
-                        mkdir($upload_dir, 0777, true);
-                    }
-                    $filename = uniqid('collector_', true) . '.' . $ext;
-                    $photo_path = $upload_dir . $filename;
-                    move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path);
-                } else {
-                    $error = "Invalid photo file type.";
+        // Handle file upload if exists
+        $photo_path = null;
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+            $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, $allowed)) {
+                $upload_dir = '../assets/media/uploads/collectors-media/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0777, true);
                 }
+                $filename = uniqid('collector_', true) . '.' . $ext;
+                $photo_path = $upload_dir . $filename;
+                move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path);
+            } else {
+                $error = "Invalid photo file type.";
             }
+        }
 
-            if (!$error) {
-                // Hash password
-                $password_hash = password_hash($password, PASSWORD_BCRYPT);
-                $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
-                $conn = $dbConnection;
-                // Insert into database
-                $stmt = $conn->prepare("
-                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ");
-                $result = $stmt->execute([
-                    $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
-                ]);
-                if ($result) {
-                    $_SESSION['flash_success'] = "Collector added successfully!";
-                    redirect(PROOT . 'app/collectors');
-                } else {
-                    $error = "Failed to add collector. Please try again.";
-                }
+        if (!$error) {
+            // Hash password
+            $password_hash = password_hash($password, PASSWORD_BCRYPT);
+            $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
+            $conn = $dbConnection;
+            // Insert into database
+            $stmt = $conn->prepare("
+                INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+            $result = $stmt->execute([
+                $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
+            ]);
+            if ($result) {
+                $_SESSION['flash_success'] = "Collector added successfully!";
+                redirect(PROOT . 'app/collectors');
+            } else {
+                $error = "Failed to add collector. Please try again.";
             }
         }
     }
@@ -120,9 +127,9 @@
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
 
                     <!-- Action -->
-                    <button class="btn btn-light w-100" type="button">
-                        Save draft
-                    </button>
+                    <a class="btn btn-light w-100" href="<?= goBack(); ?>">
+                        Go back
+                    </a>
 
                 </div>
             </div>
@@ -177,7 +184,7 @@
                                 <div class="mb-4">
                                     <label class="form-label" for="amount">Daily amount</label>
                                     <input class="form-control bg-body" id="amount" name="amount" type="number" min="10" value="<?= $amount; ?>" required />
-                                    <small>mininum GHS 10.00</small>
+                                    <small class="form-text">Mininum GHS 10.00</small>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="target">Target</label>
@@ -228,6 +235,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php if (admin_has_permission()): ?>
+                                <div class="mb-4">
+                                    <label class="form-label" for="collector">Assign to</label>
+                                    <select class="form-control bg-body" id="collector" name="collector" type="text">
+                                        <option value=""></option>
+                                        <?= $collector_options; ?>
+                                    </select>
+                                </div>
+                                <?php endif; ?>
                             </div>
                         </section>
 
