@@ -83,17 +83,17 @@ function adminLogin($admin_id) {
 
 	$data = array(date("Y-m-d H:i:s"), $admin_id);
 	$query = "
-		UPDATE giltmarket_admin 
-		SET admin_last_login = ? 
+		UPDATE susu_admins 
+		SET updated_at = ? 
 		WHERE admin_id = ?
 	";
 	$statement = $dbConnection->prepare($query);
 	$result = $statement->execute($data);
 	if (isset($result)) {
-
-		$log_message = 'Admin [' . $admin_id . '] has logged in!.';
+		
+		$log_message = 'Admin [' . $admin_id . '] has logged in!';
     	add_to_log($log_message, $admin_id, 'admin');
-
+		
 		// get other details
 		$a = getBrowserAndOs();
 		$a = json_decode($a);
@@ -118,10 +118,11 @@ function adminLogin($admin_id) {
 			$browser, 
 			getIPAddress(),
 		]);
+		//login_details_id
 
 		$_SESSION['last_activity'] = time();
 		$_SESSION['flash_success'] = 'You are now logged in!';
-		redirect(PROOT . 'index');
+		// redirect(PROOT . 'index');
 	}
 }
 
@@ -309,14 +310,14 @@ function findAdminById($id) {
 
 // add to logs
 function add_to_log($message, $person, $type) {
-	global $conn;
+	global $dbConnection;
 
 	$log_id = guidv4() . '-' . strtotime(date('Y-m-d H:m:s'));
 	$sql = "
 		INSERT INTO `susu_logs`(`log_id`, `log_message`, `log_person`, `log_type`) 
 		VALUES (?, ?, ?, ?)
 	";
-	$statement = $conn->prepare($sql);
+	$statement = $dbConnection->prepare($sql);
 	$result = $statement->execute([$log_id, $message, $person, $type]);
 
 	if ($result) {

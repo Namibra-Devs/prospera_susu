@@ -3,16 +3,15 @@
 	// USER SIGN OUT FILE
 
     require_once ("../system/DatabaseConnector.php");
-
     if (!isset($_SESSION['PRSADMIN'])) {
         session_destroy();
         redirect(PROOT . 'auth/sign-in');
     }
 
     $query = "
-        UPDATE susu_admin_login_details 
-        SET updateAt = ? 
-        WHERE login_details_admin_id = ? 
+        UPDATE susu_login_details 
+        SET update_at = ? 
+        WHERE login_details_person_id = ? 
         AND login_details_id = ?
     ";
     $statement = $dbConnection->prepare($query);
