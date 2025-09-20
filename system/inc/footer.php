@@ -95,6 +95,12 @@
             $('#admins').addClass('show');
         }
         
+        if (window.location.href.indexOf("transactions") > -1 || (window.location.href.indexOf("transactions-approve") > -1)) {
+            $('.nav-transactions').addClass('active');
+            $('.nav-transactions').attr('aria-expanded', true);
+            $('#transactions').addClass('show');
+        }
+        
         if (window.location.href.indexOf("pushes") > -1) {
             $('.nav-pushes').addClass('active');
             $('.nav-pushes').attr('aria-expanded', true);

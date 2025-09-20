@@ -1050,6 +1050,27 @@
                         </div>
                         <div class="nav-item">
                             <a
+                            class="nav-link nav-transactions"
+                            href="#"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#transactions"
+                            role="button"
+                            aria-expanded="false"
+                            aria-controls="transactions"
+                            >
+                                <span class="material-symbols-outlined me-3">receipt</span> Transactions
+                            </a>
+                            <div class="collapse " id="transactions">
+                                <nav class="nav nav-pills">
+                                    <a class="nav-link " href="<?= PROOT; ?>app/transactions">Transactions</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="nav-item">
+                            <a
                                 class="nav-link nav-collectors"
                                 href="#"
                                 data-bs-toggle="collapse"
@@ -1108,7 +1129,6 @@
                                 </nav>
                             </div>
                         </div>
-                        
                     </nav>
             
                     <!-- Heading -->

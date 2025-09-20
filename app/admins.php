@@ -40,7 +40,7 @@ if (isset($_GET['delete'])) {
     $result = $statement->execute([1, $admin_id]);
     if (isset($result)) {
 
-        $message = "delete an admin with id " . $admin_id . "";
+        $message = "admin with id " . $admin_id . " has been deleted!";
         add_to_log($message, $admin_data['admin_id'], 'admin');
 
         $_SESSION['flash_success'] = 'Admin has been deleted!';
