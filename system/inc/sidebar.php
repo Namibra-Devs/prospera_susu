@@ -1083,124 +1083,32 @@
                             <div class="collapse " id="customers">
                                 <nav class="nav nav-pills">
                                     <a class="nav-link " href="<?= PROOT; ?>app/customers">Customers</a>
-                                    <a class="nav-link " href="<?= PROOT; ?>app/archived-customer.html">Archived customers</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/archived-customers">Archived customers</a>
                                     <a class="nav-link " href="<?= PROOT; ?>app/customer-new">New customer</a>
                                 </nav>
                             </div>
                         </div>
                         <div class="nav-item">
                             <a
-                            class="nav-link "
+                            class="nav-link nav-admins"
                             href="#"
                             data-bs-toggle="collapse"
-                            data-bs-target="#projects"
+                            data-bs-target="#admins"
                             role="button"
                             aria-expanded="false"
-                            aria-controls="projects"
+                            aria-controls="admins"
                             >
-                                <span class="material-symbols-outlined me-3">list_alt</span> Projects
+                                <span class="material-symbols-outlined me-3">shield_person</span> Admins
                             </a>
-                            <div class="collapse " id="projects">
+                            <div class="collapse " id="admins">
                                 <nav class="nav nav-pills">
-                                    <a class="nav-link " href="./projects/projects.html">Projects</a>
-                                    <a class="nav-link " href="./projects/project.html">Project overview</a>
-                                    <a class="nav-link " href="./projects/project-new.html">New project</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/admins">Admins</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/archived-admins">Archive admins</a>
+                                    <a class="nav-link " href="<?= PROOT; ?>app/admin-new">New admin</a>
                                 </nav>
                             </div>
                         </div>
-                        <div class="nav-item">
-                            <a
-                            class="nav-link "
-                            href="#"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#account"
-                            role="button"
-                            aria-expanded="false"
-                            aria-controls="account"
-                            >
-                                <span class="material-symbols-outlined me-3">person</span> Account
-                            </a>
-                            <div class="collapse " id="account">
-                                <nav class="nav nav-pills">
-                                    <a class="nav-link " href="./account/account.html">Account overview</a>
-                                    <a class="nav-link " href="./account/account-settings.html">Account settings</a>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="nav-item">
-                            <a
-                            class="nav-link "
-                            href="#"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#posts"
-                            role="button"
-                            aria-expanded="false"
-                            aria-controls="posts"
-                            >
-                                <span class="material-symbols-outlined me-3">text_fields</span> Posts
-                            </a>
-                            <div class="collapse " id="posts">
-                                <nav class="nav nav-pills">
-                                    <a class="nav-link " href="./posts/categories.html">Categories</a>
-                                    <a class="nav-link " href="./posts/posts.html">Posts</a>
-                                    <a class="nav-link " href="./posts/post-new.html">New post</a>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="nav-item">
-                            <a
-                            class="nav-link"
-                            href="#"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#authentication"
-                            role="button"
-                            aria-expanded="false"
-                            aria-controls="authentication"
-                            >
-                                <span class="material-symbols-outlined me-3">login</span> Authentication
-                            </a>
-                            <div class="collapse" id="authentication">
-                                <nav class="nav nav-pills">
-                                    <a class="nav-link" href="./auth/sign-in.html" target="_blank">Sign in</a>
-                                    <a class="nav-link" href="./auth/sign-up.html" target="_blank">Sign up</a>
-                                    <a class="nav-link" href="./auth/password-reset.html" target="_blank">Password reset</a>
-                                    <a class="nav-link" href="./auth/verification-code.html" target="_blank">Verification code</a>
-                                    <a class="nav-link" href="./auth/error.html" target="_blank">Error</a>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="nav-item">
-                            <a
-                            class="nav-link "
-                            href="#"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#other"
-                            role="button"
-                            aria-expanded="false"
-                            aria-controls="other"
-                            >
-                                <span class="material-symbols-outlined me-3">category</span> Misc
-                            </a>
-                            <div class="collapse " id="other">
-                                <nav class="nav nav-pills">
-                                    <a class="nav-link " href="./other/calendar.html">Calendar</a>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="nav-item">
-                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#emails" role="button" aria-expanded="false" aria-controls="emails">
-                                <span class="material-symbols-outlined me-3">mail</span> Emails
-                            </a>
-                            <div class="collapse" id="emails">
-                                <nav class="nav nav-pills">
-                                    <a class="nav-link" href="./emails/account-confirmation.html" target="_blank">Account confirmation</a>
-                                    <a class="nav-link" href="./emails/new-post.html" target="_blank">New post</a>
-                                    <a class="nav-link" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
-                                    <a class="nav-link" href="./emails/password-reset.html" target="_blank">Password reset</a>
-                                    <a class="nav-link" href="./emails/product-update.html" target="_blank">Product update</a>
-                                </nav>
-                            </div>
-                        </div>
+                        
                     </nav>
             
                     <!-- Heading -->

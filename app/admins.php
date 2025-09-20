@@ -2,7 +2,7 @@
 
 // ADMINS
 
-require_once ("../db_connection/conn.php");
+    require ('../system/DatabaseConnector.php');
 
 // if not logged in
 if (!admin_is_logged_in()) {
@@ -13,12 +13,14 @@ if (!admin_is_logged_in()) {
 if (!admin_has_permission()) {
     admin_permission_redirect('index');
 }
-include ("../includes/header.inc.php");
-include ("../includes/aside.inc.php");
-include ("../includes/left.nav.inc.php");
-include ("../includes/top.nav.inc.php");
+$body_class = '';
+include ('../system/inc/head.php');
+include ('../system/inc/modals.php');
+include ('../system/inc/sidebar.php');
+include ('../system/inc/topnav-base.php');
+include ('../system/inc/topnav.php');
 
-$total_admins = $conn->query("SELECT * FROM giltmarket_admin WHERE admin_status = 0")->rowCount();
+$total_admins = $dbConnection->query("SELECT * FROM susu_admins WHERE admin_status = 0")->rowCount();
 $admin_count = '';
 if ($total_admins > 0) {
     $admin_count = '(' . $total_admins . ')';
@@ -30,11 +32,11 @@ if (isset($_GET['delete'])) {
     $admin_id = sanitize($_GET['delete']);
 
     $query = "
-        UPDATE giltmarket_admin 
+        UPDATE susu_admins 
         SET admin_status = ? 
         WHERE admin_id = ?
     ";
-    $statement = $conn->prepare($query);
+    $statement = $dbConnection->prepare($query);
     $result = $statement->execute([1, $admin_id]);
     if (isset($result)) {
 
@@ -82,10 +84,10 @@ if (isset($_GET['add'])) {
         } else {
             $data = array($admin_id, $admin_fullname, $admin_email, $admin_phone, password_hash($admin_password, PASSWORD_BCRYPT), $admin_permissions);
             $query = "
-                INSERT INTO `giltmarket_admin`(`admin_id`, `admin_fullname`, `admin_email`, `admin_phone`, `admin_password`, `admin_permissions`) 
+                INSERT INTO `susu_admins`(`admin_id`, `admin_fullname`, `admin_email`, `admin_phone`, `admin_password`, `admin_permissions`) 
                 VALUES (?, ?, ?, ?, ?, ?)
             ";
-            $statement = $conn->prepare($query);
+            $statement = $dbConnection->prepare($query);
             $result = $statement->execute($data);
             if (isset($result)) {
 
@@ -240,4 +242,4 @@ if (isset($_GET['add'])) {
 
 </div>
 
-<?php include ("../includes/footer.inc.php"); ?>
+<?php include ('../system/inc/footer.php'); ?>

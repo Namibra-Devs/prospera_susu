@@ -76,10 +76,53 @@ function get_products() {
 /////////////////////////////////////////////////// FOR ADMIN
 
 // Sessions For login
-function adminLogin($user_id) {
-	$_SESSION['PRSADMIN'] = $user_id;
-    $_SESSION['flash_success'] = 'You are now logged in!';
-    redirect(PROOT);
+// Sessions For login
+function adminLogin($admin_id) {
+	$_SESSION['PRSADMIN'] = $admin_id;
+	global $dbConnection;
+
+	$data = array(date("Y-m-d H:i:s"), $admin_id);
+	$query = "
+		UPDATE giltmarket_admin 
+		SET admin_last_login = ? 
+		WHERE admin_id = ?
+	";
+	$statement = $dbConnection->prepare($query);
+	$result = $statement->execute($data);
+	if (isset($result)) {
+
+		$log_message = 'Admin [' . $admin_id . '] has logged in!.';
+    	add_to_log($log_message, $admin_id, 'admin');
+
+		// get other details
+		$a = getBrowserAndOs();
+		$a = json_decode($a);
+
+		$browser = $a->browser;
+		$operatingSystem = $a->operatingSystem;
+		$refferer = $a->refferer;
+
+		// insert into login details table
+		$SQL = "
+			INSERT INTO `susu_login_details`(`login_details_id`, `login_details_person`, `login_details_person_id`, `login_details_device`, `login_details_os`, `login_details_refferer`, `login_details_browser`, `login_details_ip`) 
+			VALUE (?, ?, ?, ?, ?, ?, ?, ?)
+		";
+		$statement = $dbConnection->prepare($SQL);
+		$statement->execute([
+			guidv4() . '-' . strtotime(date("Y-m-d H:m:s")), 
+			'admin',
+			$admin_id, 
+			getDeviceType(), 
+			$operatingSystem, 
+			$refferer, 
+			$browser, 
+			getIPAddress(),
+		]);
+
+		$_SESSION['last_activity'] = time();
+		$_SESSION['flash_success'] = 'You are now logged in!';
+		redirect(PROOT . 'index');
+	}
 }
 
 function admin_is_logged_in() {
@@ -113,77 +156,62 @@ function admin_has_permission($permission = 'Super Admin') {
 	return false;
 }
 
-
-// GET ALL PRODUCTS WHERE TRASH = 0
-function get_all_product($product_trash = '') {
+// GET ALL ADMINS
+function get_all_admins() {
 	global $dbConnection;
+	global $admin_data;
 	$output = '';
 
 	$query = "
-		SELECT * FROM levina_products 
-		INNER JOIN levina_admin
-		ON levina_admin.admin_id = levina_products.product_added_by
-		WHERE levina_products.product_trash = :product_trash 
-		ORDER BY levina_products.id DESC
+		SELECT * FROM susu_Admins 
+		WHERE admin_status = ?
 	";
 	$statement = $dbConnection->prepare($query);
-	$statement->execute([':product_trash' => $product_trash]);
-	$count_products = $statement->rowCount();
+	$statement->execute([0]);
 	$result = $statement->fetchAll();
 
-	if ($count_products > 0) {
-		$i = 1;
-		foreach ($result as $key => $row) {
-			$output .= '
-				<tr>
-					<td>' . $i . '</td>
-					<td>' . ucwords($row["product_name"]) . '</td>
-					<td>' . money($row["product_price"]) . '</td>
-					<td>' . ucwords($row["admin_fullname"]) . '</td>
-					<td>' . pretty_date($row["createdAt"]) . '</td>
-				';
-				if ($product_trash == 0) {
-					$output .= '
-						<td>
-							<a href="' . PROOT . 'admin/products?featured='.(($row['product_featured'] == 0)? "1" : "0") . '&id='.$row["product_id"].'" class="btn btn-sm btn-light">
-								<i class="bi bi-' . (($row['product_featured'] == 0) ? "plus" : "dash").'-circle-fill"></i> ' . (($row['product_featured'] == 0)?"" : "Featured product").'
-							</a>
-						</td>
-						<td>
-					';
-				} else {
-					$output .= '
-						<td>
-						</td>
-						<td>
-					';
-				}
-				if ($product_trash == 1) {
-					$output .= '
-						<a href="'.PROOT.'admin/products?permanent_delete='.$row["product_id"].'&upload_product_image_name='.$row["product_image"].'" class="btn btn-sm btn-outline-primary"><i class="bi bi-trash3"></i></a>&nbsp;
-                        <a href="'.PROOT.'admin/products?restore='.$row["product_id"].'" class="btn btn-sm btn-outline-danger"><i class="bi bi-recycle"></i></a>&nbsp;
-					';
-				} else {
-					$output .= '
-							<a href="'.PROOT.'admin/products?edit='.$row["product_id"].'" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
-							<a href="'.PROOT.'admin/products?delete='.$row["product_id"].'" class="btn btn-sm btn-secondary"><i class="bi bi-trash3"></i></a>
-						';
-				}
-				$output .= '
-						</td>
-					</tr>
-				';
-			$i++;
+	foreach ($result as $row) {
+		$admin_last_login = $row["admin_last_login"];
+		if ($admin_last_login == NULL) {
+			$admin_last_login = '<span class="text-secondary">Never</span>';
+		} else {
+			$admin_last_login = pretty_date($admin_last_login);
 		}
-	} else {
-		$output = '
+		$output .= '
 			<tr>
-				<td colspan="9">No products found in the database.</h3></td>
+				<td>
+		';
+					
+		if ($row['admin_id'] != $admin_data['admin_id']) {
+			$output .= '
+				<a href="' . PROOT . 'acc/admins?delete='.$row["admin_id"].'" class="btn btn-sm btn-light"><span class="material-symbols-outlined">delete</span></a>
+			';
+		}
+
+		$output .= '
+				</td>
+				<td>
+					<div class="d-flex align-items-center">
+                        <div class="avatar">
+                          <img class="avatar-img" src="' . PROOT . (($row["admin_profile"] != NULL) ? $row["admin_profile"] : 'assets/media/avatar.png') . '" alt="..." />
+                        </div>
+                        <div class="ms-4">
+                          <div>' . ucwords($row["admin_fullname"]) . '</div>
+                          <div class="fs-sm text-body-secondary">
+                            <a class="text-reset" href="mailto:' . $row["admin_email"] . '">' . $row["admin_email"] . '</a>
+                          </div>
+                        </div>
+                      </div>
+				<td>' . strtoupper($row["admin_permissions"]) . '</td>
+				<td><a class="text-muted" href="tel:' . $row["admin_phone"] . '">' . $row["admin_phone"] . '</a></td>
+				<td>' . pretty_date($row["admin_joined_date"]) . '</td>
+				<td>' . $admin_last_login . '</td>
 			</tr>
 		';
 	}
 	return $output;
 }
+
 
 // get number of clients
 function get_number_of_clients() {

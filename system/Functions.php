@@ -298,6 +298,30 @@
 	    return $output;
 	}
 
+	// get user/visitor device
+	function getDeviceType() {
+		$userAgent = $_SERVER['HTTP_USER_AGENT'];
+
+		// Check if it's a mobile device
+		if (preg_match('/mobile/i', $userAgent)) {
+			if (preg_match('/android/i', $userAgent)) {
+				return "Mobile (Android)";
+			} elseif (preg_match('/iphone|ipad|ipod/i', $userAgent)) {
+				return "Mobile (iOS)";
+			} else {
+				return "Mobile (Other)";
+			}
+		}
+
+		// Check if it's a tablet
+		if (preg_match('/tablet|ipad/i', $userAgent)) {
+			return "Tablet";
+		}
+
+		// Default to desktop
+		return "Desktop";
+	} 
+
 	function convertNumber($number) {
 	    list($integer, $fraction) = explode(".", (string) $number);
 

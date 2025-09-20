@@ -89,6 +89,12 @@
             $('#customers').addClass('show');
         }
         
+        if (window.location.href.indexOf("admins") > -1 || (window.location.href.indexOf("admin-new") > -1)) {
+            $('.nav-admins').addClass('active');
+            $('.nav-admins').attr('aria-expanded', true);
+            $('#admins').addClass('show');
+        }
+        
         if (window.location.href.indexOf("pushes") > -1) {
             $('.nav-pushes').addClass('active');
             $('.nav-pushes').attr('aria-expanded', true);
