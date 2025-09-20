@@ -64,6 +64,7 @@ $conn = $dbConnection;
                     <th>Phone</th>
                     <th>Default amount</th>
                     <th>Address</th>
+                    <th>Start date</th>
                     <th>Joined date</th>
                     <th>Status</th>
                     <th colspan="2">Total saved</th>
@@ -87,57 +88,28 @@ if ($total_data > 0) {
 
         // get total saved by customer
         $total_saved = 0;
-        $query_total = "SELECT SUM(payment_amount) AS total FROM payments WHERE payment_customer_id = ? AND payment_status = 'completed'";
-        $statement_total = $conn->prepare($query_total);
-        $statement_total->execute([$row['customer_id']]);
-        $result_total = $statement_total->fetchAll();
-        if ($statement_total->rowCount() > 0) {
-            $total_saved = $result_total[0]['total'];
-        }
+        // $query_total = "SELECT SUM(payment_amount) AS total FROM payments WHERE payment_customer_id = ? AND payment_status = 'completed'";
+        // $statement_total = $conn->prepare($query_total);
+        // $statement_total->execute([$row['customer_id']]);
+        // $result_total = $statement_total->fetchAll();
+        // if ($statement_total->rowCount() > 0) {
+        //     $total_saved = $result_total[0]['total'];
+        // }
 
 		$output .= '
-            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
+            <tr class="align-middle">
                 <td style="width: 0px">' . $i . '</td>
                 <td class="text-body-secondary">#3456</td>
                 <td>' . ucwords($row["customer_name"]) . '</td>
                 <td>' . $row['customer_phone'] . '</td>
                 <td>' . money($row['customer_default_daily_amount']) . '</td>
                 <td>' . $row['customer_address'] . '</td>
+                <td>' . pretty_date_notime($row['customer_start_date']) . '</td>
                 <td>' . pretty_date_notime($row['created_at']) . '</td>
-                <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                <td>' . money(0) . '</td>
-                <td style="width: 0px">
-                    <div class="dropdown">
-                    <button class="btn btn-sm btn-link text-body-tertiary" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="material-symbols-outlined scale-125">more_horiz</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                    </div>
-                </td>
-                </tr>
-
-            <!-- DELETE Expenditure -->
-            <div class="modal fade" id="deleteModal_' . $row["id"] . '" tabindex="-1" aria-labelledby="deleteModalLabel_' . $row["id"] . '" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header border-bottom-0 pb-0">
-                            <h1 class="modal-title fs-5" id="deleteModalLabel_' . $row["id"] . '">Delete collector</h1>
-                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>
-                                Collector with name '. strtoupper($row['collector_name']) . ' will be deleted.
-                                <br>Are you sure you want to proceed to this action.
-                            </p>
-                            <a href="' . PROOT . 'app/collectors?delete=' . $row["collector_id"] . '" class="btn btn-secondary w-100 mt-4">Delete</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <td>' . $status_badge . '</td>
+                <td>' . money($total_saved) . '</td>
+                <td style="width: 0px"><a href="' . PROOT . 'app/customers/' . $row["customer_id"] . '" class="btn btn-secondary w-100 mt-4"><span class="material-symbols-outlined">visibility</span></a></td>
+            </tr>
 		';
 		$i++;
 	}

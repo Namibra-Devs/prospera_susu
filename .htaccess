@@ -4,6 +4,9 @@ RewriteRule ^xd192/delete.transaction/([0-9a-zA-Z-]+)$ xd192/delete.transaction.
 RewriteRule ^admin/products/([0-9a-zA-Z]+)$ admin/products.php?edit=$1 [NC,L]
 RewriteRule ^admin/clients/([0-9a-zA-Z-_]+)$ admin/clients.php?view=$1 [NC,L]
 
+RewriteRule ^app/collectors/([0-9a-zA-Z-_]+)$ app/collectors.php?view=$1 [NC,L]
+RewriteRule ^app/customers/([0-9a-zA-Z-_]+)$ app/customers.php?view=$1 [NC,L]
+
 RewriteRule ^auth/verified/([0-9a-zA-Z_-]+)$ auth/verified.php?vericode=$1 [NC,L]
 RewriteRule ^app/resources-details/([0-9a-zA-Z_-]+)$ app/resources-details.php?url=$1 [NC,L]
 RewriteRule ^app/account-billing/([0-9a-zA-Z_-]+)$ app/account-billing.php?primary=$1 [NC,L]
