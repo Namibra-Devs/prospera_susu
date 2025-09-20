@@ -117,7 +117,7 @@ if ($total_data > 0) {
 } else {
 	$output .= '
 		<tr class="text-warning">
-			<td colspan="6"> 
+			<td colspan="10"> 
 				<div class="alert alert-info">No data found!</div>
 			</td>
 		</tr>

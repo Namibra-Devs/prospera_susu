@@ -88,6 +88,120 @@
     <main class="main px-lg-6">
         <!-- Content -->
         <div class="container-lg">
+            <?php if (isset($_GET['view'])): 
+                $view = sanitize($_GET['view']);
+                $query = "
+                    SELECT * FROM customers 
+                    WHERE customer_id = ? 
+                    -- AND customers.customer_status = 'active'
+                    LIMIT 1
+                ";
+                $statement = $dbConnection->prepare($query);
+                $statement->execute([$view]);
+                if ($statement->rowCount() < 1) {
+                    $_SESSION['flash_error'] = 'Customer not found!';
+                   // redirect(PROOT . 'app/customers');
+                } else {
+                    $customer_data = $statement->fetch(PDO::FETCH_ASSOC);
+                }
+            ?>
+
+            <!-- Stats -->
+            <div class="row mb-8">
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Start date</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold"><?= pretty_date_notime($customer_data['customer_start_date']); ?></div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Default</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold"><?= money($customer_data['customer_default_daily_amount']); ?></div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Target</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold"><?= money($customer_data['customer_target']); ?></div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="clock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-md-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold"><?= money(0); ?></div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="slideshow"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+            <?php else: ?>
             <!-- Page header -->
             <div class="row align-items-center mb-7">
                 <div class="col-auto">
@@ -261,6 +375,7 @@
                     <div id="load-content"></div>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
 
 <?php include ('../system/inc/footer.php'); ?>
