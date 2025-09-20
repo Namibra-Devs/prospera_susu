@@ -16,23 +16,27 @@ $conn = $dbConnection;
         $start = 0;
     }
 
-    $query = "SELECT * FROM collectors ";
+    $query = "SELECT * FROM customers ";
     $search_query = ((isset($_POST['query'])) ? sanitize($_POST['query']) : '');
     $find_query = str_replace(' ', '%', $search_query);
     if ($search_query != '') {
         $query .= '
-            WHERE collector_name LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_email LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_phone LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_address LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_state LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_city LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_status LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            WHERE customer_name LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_phone LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_email LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_address LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_region LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_city LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_id_number LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_id_type LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_start_date LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_status LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR created_at LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_id LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" ';
+            OR customer_added_by LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR customer_collector_id LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" ';
 
     }
-    $query .= 'ORDER BY id ASC ';
+    $query .= 'ORDER BY customer_name ASC ';
 
     $filter_query = $query . 'LIMIT ' . $start . ', ' . $limit . '';
 
@@ -56,10 +60,13 @@ $conn = $dbConnection;
                         </div>
                     </th>
                     <th>ID</th>
-                    <th>Product</th>
-                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Default amount</th>
+                    <th>Address</th>
+                    <th>Joined date</th>
                     <th>Status</th>
-                    <th colspan="2">Price</th>
+                    <th colspan="2">Total saved</th>
                 </thead>
                 <tbody>
     ';
@@ -67,26 +74,38 @@ $conn = $dbConnection;
 if ($total_data > 0) {
 	$i = 1;
 	foreach ($result as $row) {
-        // check if collector has photo
-        if ($row['collector_photo'] != '') {
-            $photo = $row['collector_photo'];
+        // check status of customer
+        if ($row['customer_status'] == 'active') {
+            $status_badge = '<span class="badge bg-success-subtle text-success">Active</span>';
+        } elseif ($row['customer_status'] == 'inactive') {
+            $status_badge = '<span class="badge bg-warning-subtle text-warning">Inactive</span>';
+        } elseif ($row['customer_status'] == 'suspended') {
+            $status_badge = '<span class="badge bg-danger-subtle text-danger">Suspended</span>';
         } else {
-            $photo = PROOT . 'assets/media/avatar.png';
+            $status_badge = '<span class="badge bg-secondary-subtle text-secondary">Unknown</span>';
+        }
+
+        // get total saved by customer
+        $total_saved = 0;
+        $query_total = "SELECT SUM(payment_amount) AS total FROM payments WHERE payment_customer_id = ? AND payment_status = 'completed'";
+        $statement_total = $conn->prepare($query_total);
+        $statement_total->execute([$row['customer_id']]);
+        $result_total = $statement_total->fetchAll();
+        if ($statement_total->rowCount() > 0) {
+            $total_saved = $result_total[0]['total'];
         }
 
 		$output .= '
             <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                <td style="width: 0px">
-                    <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="tableCheckOne" />
-                    <label class="form-check-label" for="tableCheckOne"></label>
-                    </div>
-                </td>
+                <td style="width: 0px">' . $i . '</td>
                 <td class="text-body-secondary">#3456</td>
-                <td>Apple MacBook Pro</td>
-                <td>2021-08-12</td>
+                <td>' . ucwords($row["customer_name"]) . '</td>
+                <td>' . $row['customer_phone'] . '</td>
+                <td>' . money($row['customer_default_daily_amount']) . '</td>
+                <td>' . $row['customer_address'] . '</td>
+                <td>' . pretty_date_notime($row['created_at']) . '</td>
                 <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                <td>$2,499</td>
+                <td>' . money(0) . '</td>
                 <td style="width: 0px">
                     <div class="dropdown">
                     <button class="btn btn-sm btn-link text-body-tertiary" role="button" data-bs-toggle="dropdown" aria-expanded="false">

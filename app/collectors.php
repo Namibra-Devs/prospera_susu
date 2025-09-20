@@ -272,7 +272,7 @@
         // SEARCH AND PAGINATION FOR LIST
         function load_data(page, query = '') {
             $.ajax({
-                url : "<?= PROOT; ?>app/controller/list.customers.php",
+                url : "<?= PROOT; ?>app/controller/list.collectors.php",
                 method : "POST",
                 data : {
                     page : page, 

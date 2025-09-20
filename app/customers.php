@@ -269,33 +269,10 @@
 
     $(document).ready(function() {
 
-
-        // check user iddleness
-        function is_idle() {
-            var type = 'idle';
-
-            $.ajax ({
-                method : "POST",
-                url : "<?= PROOT; ?>auth/idle.checker.php",
-                data : { type : type},
-                success : function (data) {
-                    console.log(data);
-                    if (data != '') {
-                        window.location.href = "<?= PROOT; ?>auth/sign-in"
-                    }
-                }
-            })
-        }
-        // setInterval(updateTime, 1000);
-
-        setInterval(() => {
-            // is_idle()
-        }, 300000); // referesh after every 30sec
-
         // SEARCH AND PAGINATION FOR LIST
         function load_data(page, query = '') {
             $.ajax({
-                url : "<?= PROOT; ?>app/controller/list.collectors.php",
+                url : "<?= PROOT; ?>app/controller/list.customers.php",
                 method : "POST",
                 data : {
                     page : page, 
