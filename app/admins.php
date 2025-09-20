@@ -84,7 +84,7 @@ if (isset($_GET['add'])) {
         } else {
             $data = array($admin_id, $admin_fullname, $admin_email, $admin_phone, password_hash($admin_password, PASSWORD_BCRYPT), $admin_permissions);
             $query = "
-                INSERT INTO `susu_admins`(`admin_id`, `admin_fullname`, `admin_email`, `admin_phone`, `admin_password`, `admin_permissions`) 
+                INSERT INTO `susu_admins`(`admin_id`, `admin_name`, `admin_email`, `admin_phone`, `admin_password`, `admin_permissions`) 
                 VALUES (?, ?, ?, ?, ?, ?)
             ";
             $statement = $dbConnection->prepare($query);
@@ -186,8 +186,8 @@ if (isset($_GET['add'])) {
                                         <div class="text-sm text-muted">Enter email in this field</div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="admin_email" class="form-label">Phone number</label>
-                                        <input type="number" class="form-control" name="admin_phone" id="admin_phone" value="<?= $admin_phone; ?>" required>
+                                        <label for="admin_phone" class="form-label">Phone number</label>
+                                        <input type="number" class="form-control" name="admin_phone" id="admin_phone" value="<?= $admin_phone; ?>" placeholder="(___)___-____" data-inputmask="'mask': '(999)999-9999'" required>
                                         <div class="text-sm text-muted">Enter phone numner in this field</div>
                                     </div>
                                     <div class="mb-3">

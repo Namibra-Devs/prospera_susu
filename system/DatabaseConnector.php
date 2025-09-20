@@ -77,7 +77,7 @@
 			if (count($fn) > 1) {
 				$admin_data['last'] = ucwords($fn[1]);
 			}
-			$admin_permission = $admin_data['admin_role']; // get admin's permission
+			$admin_permission = $admin_data['admin_permissions']; // get admin's permission
 		} else {
 			redirect(PROOT . 'auth/sign-out');
 		}

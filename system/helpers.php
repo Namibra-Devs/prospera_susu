@@ -200,7 +200,7 @@ function get_all_admins() {
                           </div>
                         </div>
                       </div>
-				<td>' . strtoupper($row["admin_role"]) . '</td>
+				<td>' . strtoupper($row["admin_permissions"]) . '</td>
 				<td><a class="text-muted" href="tel:' . $row["admin_phone"] . '">' . $row["admin_phone"] . '</a></td>
 				<td>' . pretty_date($row["created_at"]) . '</td>
 				<td>' . $admin_last_login . '</td>
