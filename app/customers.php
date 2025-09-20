@@ -6,6 +6,33 @@
 		admin_login_redirect();
 	}
 
+    // get all saves from customer
+    function get_all_saves($customer_id) {
+        global $dbConnection;
+        $query = "
+            SELECT * FROM savings 
+            WHERE savings.save_customer_id = ? 
+            -- AND savings.save_status = 'active' 
+            ORDER BY savings.created_at DESC
+        ";
+        $statement = $dbConnection->prepare($query);
+        $statement->execute([$customer_id]);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // get collector by id
+    function get_collector_by_id($collector_id) {
+        global $dbConnection;
+        $query = "
+            SELECT * FROM collectors 
+            WHERE collectors.collector_id = ? 
+            LIMIT 1
+        ";
+        $statement = $dbConnection->prepare($query);
+        $statement->execute([$collector_id]);
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
     $body_class = '';
     include ('../system/inc/head.php');
     include ('../system/inc/modals.php');
@@ -206,7 +233,7 @@
                                 <h1 class="card-title fs-5"><?= ucwords($customer_data["customer_name"]); ?></h1>
 
                                 <!-- Text -->
-                                <p class="text-body-secondary mb-6">James is a susu saver</p>
+                                <p class="text-body-secondary mb-6">A susu saver</p>
 
                                 <!-- List -->
                                 <ul class="list-group list-group-flush mb-0">
@@ -242,7 +269,7 @@
                     <section class="mb-8">
                         <!-- Header -->
                         <div class="d-flex align-items-center justify-content-between mb-5">
-                            <h2 class="fs-5 mb-0">Recent orders</h2>
+                            <h2 class="fs-5 mb-0">Saves history</h2>
                             <div class="d-flex">
                                 <div class="dropdown">
                                     <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -269,19 +296,50 @@
                         <table class="table table-hover table-round mb-0">
                         <thead>
                             <th>ID</th>
-                            <th>Product</th>
+                            <th>Collector</th>
                             <th>Date</th>
                             <th>Status</th>
-                            <th>Price</th>
+                            <th>Amount</th>
                         </thead>
                         <tbody>
-                            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                                <td class="text-body-secondary">#3456</td>
-                                <td>Apple MacBook Pro</td>
-                                <td>2021-08-12</td>
-                                <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                                <td>$2,499</td>
+                            <?php 
+                                $all_saves = get_all_saves($customer_data['customer_id']);
+                                if (count($all_saves) > 0):
+                                    $i = 1;
+                                    foreach ($all_saves as $save):
+                                        $collector = get_collector_by_id($save['save_collector_id']) ?? null;
+                                        $collector = $collector ? ucwords($collector['collector_name']) : 'N/A';
+                                        $status_badge = '';
+                                        if ($save['save_status'] == 'active') {
+                                            $status_badge = '<span class="badge bg-success-subtle text-success">Completed</span>';
+                                        } elseif ($save['save_status'] == 'pending') {
+                                            $status_badge = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
+                                        } elseif ($save['save_status'] == 'cancelled') {
+                                            $status_badge = '<span class="badge bg-danger-subtle text-danger">Cancelled</span>';
+                                        } else {
+                                            $status_badge = '<span class="badge bg-secondary-subtle text-secondary">Unknown</span>';
+                                        }
+                            ?>
+                            <tr>
+                                <td class="text-body-secondary"><?= $i; ?></td>
+                                <td><?= ucwords($collector); ?></td>
+                                <td><?= pretty_date_notime($save['created_at']); ?></td>
+                                <td><?= $status_badge; ?></td>
+                                <td><?= money($save["saving_amount"]); ?></td>
                             </tr>
+                            <?php 
+                                        $i++;
+                                    endforeach;
+                                else:
+                                    echo '
+                                        <tr>
+                                            <td colspan="5">
+                                                <div class="alert alert-info">No saves found!</div>
+                                            </td>
+                                        </tr>
+                                    ';
+                                endif;
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -290,7 +348,7 @@
                 <!-- Header -->
                 <div class="row align-items-center justify-content-between mb-5">
                     <div class="col">
-                        <h2 class="fs-5 mb-0">Files</h2>
+                        <h2 class="fs-5 mb-0">Documents</h2>
                     </div>
                     <div class="col-auto">
                         <button class="btn btn-light" type="button"><span class="material-symbols-outlined text-body-secondary me-1">upload</span>Upload</button>
@@ -341,7 +399,7 @@
             </section>
 
             <?php else: ?>
-                
+
             <!-- Page header -->
             <div class="row align-items-center mb-7">
                 <div class="col-auto">
