@@ -172,7 +172,7 @@ function get_all_admins() {
 	$result = $statement->fetchAll();
 
 	foreach ($result as $row) {
-		$admin_last_login = $row["admin_last_login"];
+		$admin_last_login = $row["updated_at"];
 		if ($admin_last_login == NULL) {
 			$admin_last_login = '<span class="text-secondary">Never</span>';
 		} else {
@@ -197,15 +197,15 @@ function get_all_admins() {
                           <img class="avatar-img" src="' . PROOT . (($row["admin_profile"] != NULL) ? $row["admin_profile"] : 'assets/media/avatar.png') . '" alt="..." />
                         </div>
                         <div class="ms-4">
-                          <div>' . ucwords($row["admin_fullname"]) . '</div>
+                          <div>' . ucwords($row["admin_name"]) . '</div>
                           <div class="fs-sm text-body-secondary">
                             <a class="text-reset" href="mailto:' . $row["admin_email"] . '">' . $row["admin_email"] . '</a>
                           </div>
                         </div>
                       </div>
-				<td>' . strtoupper($row["admin_permissions"]) . '</td>
+				<td>' . strtoupper($row["admin_role"]) . '</td>
 				<td><a class="text-muted" href="tel:' . $row["admin_phone"] . '">' . $row["admin_phone"] . '</a></td>
-				<td>' . pretty_date($row["admin_joined_date"]) . '</td>
+				<td>' . pretty_date($row["created_at"]) . '</td>
 				<td>' . $admin_last_login . '</td>
 			</tr>
 		';

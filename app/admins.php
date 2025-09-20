@@ -41,7 +41,7 @@ if (isset($_GET['delete'])) {
     if (isset($result)) {
 
         $message = "delete an admin with id " . $admin_id . "";
-        add_to_log($message, $admin_data['admin_id']);
+        add_to_log($message, $admin_data['admin_id'], 'admin');
 
         $_SESSION['flash_success'] = 'Admin has been deleted!';
         redirect(PROOT . "account/admins");
@@ -106,8 +106,8 @@ if (isset($_GET['add'])) {
 
 
 ?>
-
-
+    <!-- Main -->
+    <main class="main px-lg-6">
     <!-- Content -->
     <div class="container-lg">
         <!-- Page header -->
