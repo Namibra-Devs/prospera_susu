@@ -194,14 +194,154 @@
                 </div>
             </div>
 
+            <!-- Page content -->
+            <div class="row">
+                <div class="col-12 col-xxl-4">
+                    <div class="position-sticky mb-8" style="top: 40px">
+                        <!-- Card -->
+                        <div class="card bg-body mb-3">
+                            <!-- Body -->
+                            <div class="card-body text-center">
+                            <!-- Heading -->
+                                <h1 class="card-title fs-5"><?= ucwords($customer_data["customer_name"]); ?></h1>
 
+                                <!-- Text -->
+                                <p class="text-body-secondary mb-6">James is a susu saver</p>
 
+                                <!-- List -->
+                                <ul class="list-group list-group-flush mb-0">
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Address</span>
+                                        <span><?= ucwords($customer_data["customer_address"]); ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Phone</span>
+                                        <a class="text-body" href="tel:<?= $customer_data["customer_phone"]; ?>"><?= $customer_data["customer_phone"]; ?></a>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Location</span>
+                                        <span><?= ucwords($customer_data["customer_region"] . ',' . $customer_data["customer_city"]); ?></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
+                        <!-- Buttons -->
+                        <div class="row gx-3">
+                            <div class="col">
+                                <a class="btn btn-light w-100" href="<?= PROOT; ?>app/customers/edit=<?= $customer_data['customer_id']; ?>">Update</a>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-danger w-100" type="button">Deactivate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="col-12 col-xxl">
+                    <section class="mb-8">
+                        <!-- Header -->
+                        <div class="d-flex align-items-center justify-content-between mb-5">
+                            <h2 class="fs-5 mb-0">Recent orders</h2>
+                            <div class="d-flex">
+                                <div class="dropdown">
+                                    <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                        <span class="material-symbols-outlined">filter_list</span>
+                                    </button>
+                                    <div class="dropdown-menu rounded-3 p-6">
+                                        <h4 class="fs-lg mb-4">Filter</h4>
+                                     
+                                    </div>
+                                </div>
+                                <div class="dropdown ms-1">
+                                    <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                        <span class="material-symbols-outlined">sort_by_alpha</span>
+                                    </button>
+                                    <div class="dropdown-menu rounded-3 p-6">
+                                    <h4 class="fs-lg mb-4">Sort</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-round mb-0">
+                        <thead>
+                            <th>ID</th>
+                            <th>Product</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Price</th>
+                        </thead>
+                        <tbody>
+                            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
+                                <td class="text-body-secondary">#3456</td>
+                                <td>Apple MacBook Pro</td>
+                                <td>2021-08-12</td>
+                                <td><span class="badge bg-success-subtle text-success">Completed</span></td>
+                                <td>$2,499</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section>
+                <!-- Header -->
+                <div class="row align-items-center justify-content-between mb-5">
+                    <div class="col">
+                        <h2 class="fs-5 mb-0">Files</h2>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-light" type="button"><span class="material-symbols-outlined text-body-secondary me-1">upload</span>Upload</button>
+                    </div>
+                </div>
 
+                <!-- Table -->
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar rounded text-primary">
+                                            <i class="fs-4" data-duoicon="id-card"></i>
+                                        </div>
+                                        <div class="ms-4">
+                                            <div class="fw-normal">invoice.pdf</div>
+                                            <div class="fs-sm text-body-secondary">1.5mb · PNG</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-body-secondary">Uploaded on Mar 01, 2024</td>
+                                <td style="width: 0">
+                                    <button class="btn btn-sm btn-light" type="button">Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar rounded text-primary">
+                                            <i class="fs-4" data-duoicon="id-card"></i>
+                                        </div>
+                                        <div class="ms-4">
+                                            <div class="fw-normal">agreement_123.pdf</div>
+                                            <div class="fs-sm text-body-secondary">3.7mb · PDF</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-body-secondary">Updated on Mar 03, 2024</td>
+                                <td style="width: 0">
+                                    <button class="btn btn-sm btn-light" type="button">Download</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
             <?php else: ?>
+                
             <!-- Page header -->
             <div class="row align-items-center mb-7">
                 <div class="col-auto">
