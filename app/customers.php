@@ -11,7 +11,7 @@
         global $dbConnection;
         $query = "
             SELECT * FROM savings 
-            WHERE savings.save_customer_id = ? 
+            WHERE savings.saving_customer_id = ? 
             -- AND savings.save_status = 'active' 
             ORDER BY savings.created_at DESC
         ";
@@ -31,6 +31,23 @@
         $statement = $dbConnection->prepare($query);
         $statement->execute([$collector_id]);
         return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // get customer added by
+    function get_customer_added_by($by, $id) {
+        global $dbConnection;
+        if ($by == 'collector') {
+            $query = "
+                SELECT * FROM collectors 
+                WHERE collectors.collector_id = (SELECT customers.customer_added_by FROM customers WHERE customers.customer_id = ? LIMIT 1) 
+                LIMIT 1
+            ";
+            $statement = $dbConnection->prepare($query);
+            $statement->execute([$id]);
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            return $row['customer_name'];
+        }
+        return 'Admin';
     }
 
     $body_class = '';
@@ -249,6 +266,22 @@
                                         <span class="text-body-secondary">Location</span>
                                         <span><?= ucwords($customer_data["customer_region"] . ',' . $customer_data["customer_city"]); ?></span>
                                     </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">ID card name</span>
+                                        <span><?= $customer_data["customer_id_type"] ?? 'N/A'; ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">ID card number</span>
+                                        <span><?= $customer_data["customer_id_number"] ?? 'N/A'; ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Added by</span>
+                                        <span><?= get_customer_added_by($customer_data['customer_added_by'], $customer_data['customer_collector_id']); ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Joined at</span>
+                                        <span><?= pretty_date_notime($customer_data["created_at"]); ?></span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -307,15 +340,15 @@
                                 if (count($all_saves) > 0):
                                     $i = 1;
                                     foreach ($all_saves as $save):
-                                        $collector = get_collector_by_id($save['save_collector_id']) ?? null;
+                                        $collector = get_collector_by_id($save['saving_customer_id']) ?? null;
                                         $collector = $collector ? ucwords($collector['collector_name']) : 'N/A';
                                         $status_badge = '';
-                                        if ($save['save_status'] == 'active') {
-                                            $status_badge = '<span class="badge bg-success-subtle text-success">Completed</span>';
-                                        } elseif ($save['save_status'] == 'pending') {
+                                        if ($save['saving_status'] == 'Approved') {
+                                            $status_badge = '<span class="badge bg-success-subtle text-success">Approved</span>';
+                                        } elseif ($save['saving_status'] == 'Pending') {
                                             $status_badge = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
-                                        } elseif ($save['save_status'] == 'cancelled') {
-                                            $status_badge = '<span class="badge bg-danger-subtle text-danger">Cancelled</span>';
+                                        } elseif ($save['saving_status'] == 'Rejected') {
+                                            $status_badge = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
                                         } else {
                                             $status_badge = '<span class="badge bg-secondary-subtle text-secondary">Unknown</span>';
                                         }
@@ -359,40 +392,62 @@
                 <div class="table-responsive">
                     <table class="table align-middle mb-0">
                         <tbody>
+                            <?php if ($customer_data['customer_id_photo_front'] != ''): 
+                                // get the file name
+                                $file_name = basename($customer_data['customer_id_photo_front']);
+                                
+                                // get file size
+                                $file_size = filesize($customer_data['customer_id_photo_front']);
+
+                                // get file extension
+                                $file_ext = pathinfo($customer_data['customer_id_photo_front'], PATHINFO_EXTENSION);
+                            ?>
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar rounded text-primary">
-                                            <i class="fs-4" data-duoicon="id-card"></i>
+                                            <img class="img-fluid" src="../<?= $customer_data["customer_id_photo_front"]; ?>" />
                                         </div>
                                         <div class="ms-4">
-                                            <div class="fw-normal">invoice.pdf</div>
-                                            <div class="fs-sm text-body-secondary">1.5mb · PNG</div>
+                                            <div class="fw-normal"><a class="" href="../<?= $customer_data['customer_id_photo_front']; ?>" target="_blank"><?= $file_name; ?></a></div>
+                                            <div class="fs-sm text-body-secondary"><?= $file_size; ?>kb · <?= strtoupper($file_ext); ?></div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-body-secondary">Uploaded on Mar 01, 2024</td>
+                                <td class="text-body-secondary">Uploaded on <?= pretty_date_notime($customer_data['created_at']); ?></td>
                                 <td style="width: 0">
                                     <button class="btn btn-sm btn-light" type="button">Download</button>
                                 </td>
                             </tr>
+                            <?php endif; ?>
+                            <?php if ($customer_data['customer_id_photo_back'] != ''): 
+                                // get the file name
+                                $file_name = basename($customer_data['customer_id_photo_back']);
+                                
+                                // get file size
+                                $file_size = filesize($customer_data['customer_id_photo_back']);
+
+                                // get file extension
+                                $file_ext = pathinfo($customer_data['customer_id_photo_back'], PATHINFO_EXTENSION);
+                            ?>
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar rounded text-primary">
-                                            <i class="fs-4" data-duoicon="id-card"></i>
+                                            <img class="img-fluid" src="../<?= $customer_data["customer_id_photo_back"]; ?>" />
                                         </div>
                                         <div class="ms-4">
-                                            <div class="fw-normal">agreement_123.pdf</div>
-                                            <div class="fs-sm text-body-secondary">3.7mb · PDF</div>
+                                            <div class="fw-normal"><a class="" href="../<?= $customer_data['customer_id_photo_back']; ?>" target="_blank"><?= $file_name; ?></a></div>
+                                            <div class="fs-sm text-body-secondary"><?= $file_size; ?>kb · <?= strtoupper($file_ext); ?></div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-body-secondary">Updated on Mar 03, 2024</td>
+                                <td class="text-body-secondary">Updated on <?= pretty_date_notime($customer_data['created_at']); ?></td>
                                 <td style="width: 0">
                                     <button class="btn btn-sm btn-light" type="button">Download</button>
                                 </td>
                             </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
