@@ -1,6 +1,5 @@
 <?php 
     require ('../system/DatabaseConnector.php');
-    // dnd($added_by_id);
     
 	// Check if the user is logged in
 	if (!admin_is_logged_in()) {
@@ -13,6 +12,24 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    //
+    function email_exist($email) {
+        global $dbConnection;
+        $query = "SELECT customer_email FROM customers WHERE customer_email = ? LIMIT 1";
+        $statement = $dbConnection->prepare($query);
+        $statement->execute([$email]);
+        return $statement->rowCount() > 0;
+    }
+    
+    //
+    function phone_exist($phone) {
+        global $dbConnection;
+        $query = "SELECT customer_phone FROM customers WHERE customer_phone = ? LIMIT 1";
+        $statement = $dbConnection->prepare($query);
+        $statement->execute([$phone]);
+        return $statement->rowCount() > 0;
+    }
+
     // fetch collectors
     // $collector_row = $dbConnection->query("SELECT * FROM collectors WHERE collector_status = 'active' ORDER BY collector_name ASC")->fetchAll();
     // $collector_options = '';
@@ -21,7 +38,7 @@
     //         <option value="' . $collector_row['collector_id'] . '">' . ucwords($collector_row["collector_name"]) . '</option>
     //     ';
     // }
-
+    $error = '';
     $post = cleanPost($_POST);
 
     // Collect and sanitize input
@@ -38,8 +55,6 @@
     $idcard    = $post['idcard'] ?? '';
     $idnumber  = $post['idnumber'] ?? '';
     $collector = $post['collector'] ?? '';
-    $added_by = null;
-    $added_by_id = '';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -53,6 +68,13 @@
         }
         
         // check if email or phone number already exist
+        if (email_exist($email)) {
+            $error = "Email address already exists.";
+        }
+
+        if (phone_exist($phone)) {
+            $error = "Phone number already exists.";
+        }
 
         // Handle file upload if exists
         $front_photo_path = null;
@@ -107,7 +129,7 @@
                 add_to_log($log_message, $added_by_id, $added_by);
 
                 $_SESSION['flash_success'] = "Customer added successfully!";
-                redirect(PROOT . 'app/customers');
+                // redirect(PROOT . 'app/customers');
             } else {
                 $error = "Failed to add collector. Please try again.";
             }

@@ -110,8 +110,8 @@
                 </div>
                     <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                         <!-- Action -->
-                        <a class="btn btn-secondary d-block" href="<?= PROOT; ?>app/collector-new">
-                        <span class="material-symbols-outlined me-1">add</span> New collector
+                        <a class="btn btn-secondary d-block" href="<?= PROOT; ?>app/customer-new">
+                        <span class="material-symbols-outlined me-1">add</span> New customer
                     </a>
                 </div>
             </div>

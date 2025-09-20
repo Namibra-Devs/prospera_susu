@@ -13,6 +13,25 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    //
+    function email_exist($email) {
+        global $dbConnection;
+        $query = "SELECT customer_email FROM customers WHERE customer_email = ? LIMIT 1";
+        $statement = $dbConnection->prepare($query);
+        $statement->execute([$email]);
+        return $statement->rowCount() > 0;
+    }
+
+    //
+    function phone_exist($phone) {
+        global $dbConnection;
+        $query = "SELECT customer_phone FROM customers WHERE customer_phone = ? LIMIT 1";
+        $statement = $dbConnection->prepare($query);
+        $statement->execute([$phone]);
+        return $statement->rowCount() > 0;
+    }
+
+
     // submit collector form
     $error = '';
     $post = cleanPost($_POST);
@@ -40,6 +59,13 @@
         } else {
             
             // check if email or phone number already exist
+            if (email_exist($email)) {
+                $error = "Email address already exists.";
+            }
+
+            if (phone_exist($phone)) {
+                $error = "Phone number already exists.";
+            }
 
             // Handle file upload if exists
             $photo_path = null;
