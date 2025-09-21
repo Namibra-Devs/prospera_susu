@@ -38,7 +38,7 @@
 
     // Collect and sanitize input
     $name     = $post['name'] ?? '';
-    $email    = $post['email'] ?? '';
+    // $email    = $post['email'] ?? '';
     $phone    = $post['phone'] ?? '';
     $address  = $post['address'] ?? '';
     $region   = $post['region'] ?? '';
@@ -48,20 +48,23 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Validate required fields
-        if (!$name || !$email || !$phone || !$address || !$region || !$city || !$password || !$confirm) {
+        // if (!$name || !$email || !$phone || !$address || !$region || !$city || !$password || !$confirm) {
+        if (!$name || !$phone || !$address || !$region || !$city || !$password || !$confirm) {
             $error = "All fields are required.";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = "Invalid email address.";
-        } elseif ($password !== $confirm) {
+        } 
+        // elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        //     $error = "Invalid email address.";
+        // } 
+        elseif ($password !== $confirm) {
             $error = "Passwords do not match.";
         } elseif (strlen($password) < 6) {
             $error = "Password must be at least 6 characters.";
         } else {
             
             // check if email or phone number already exist
-            if (email_exist($email)) {
-                $error = "Email address already exists.";
-            }
+            // if (email_exist($email)) {
+            //     $error = "Email address already exists.";
+            // }
 
             if (phone_exist($phone)) {
                 $error = "Phone number already exists.";
@@ -92,13 +95,20 @@
                 $conn = $dbConnection;
                 // Insert into database
                 $stmt = $conn->prepare("
-                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_address, collector_state, collector_city, collector_photo, collector_password) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ");
+                // $stmt = $conn->prepare("
+                //     INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
+                //     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                // ");
                 $result = $stmt->execute([
-                    $unique_id, $name, $phone, $email, $address, $region, $city, $photo_path, $password_hash
+                    $unique_id, $name, $phone, $address, $region, $city, $photo_path, $password_hash
                 ]);
+                $collectorId = $conn->lastInsertId();
+                $generated_email = generateCollectorEmail($collectorId, $name);
                 if ($result) {
+                    $updateQuery = $conn->query("UPDATE collectors SET collector_email = '".$generated_email."' WHERE id = '".$collectorId."'")->execute();
                     $_SESSION['flash_success'] = "Collector added successfully!";
                     redirect(PROOT . 'app/collectors');
                 } else {
@@ -163,10 +173,10 @@
                             <label class="form-label" for="name">Full name</label>
                             <input class="form-control" id="name" name="name" type="text" value="<?= $name; ?>" required />
                         </div>
-                        <div class="mb-4">
+                        <!-- <div class="mb-4">
                             <label class="form-label" for="email">Email</label>
                             <input class="form-control" id="email" name="email" type="email" value="<?= $email; ?>" required />
-                        </div>
+                        </div> -->
                         <div class="mb-4">
                             <label class="form-label" for="phone">Phone</label>
                             <input type="text" class="form-control mb-3" id="phone" name="phone" placeholder="(___)___-____" data-inputmask="'mask': '(999)999-9999'" required value="<?= $phone; ?>" />

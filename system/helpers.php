@@ -1,18 +1,20 @@
 <?php
 
-// find the logged in person
-function who_logged_in($session) {
-	$person = null;
-	$string = issetElse($_SESSION, $session, 0);
-	if ($string == 'PRSUser') {
-		$person = 'user';
-	} else if ($string == 'PRSCollector') {
-		$person = 'collector';
-	} else if ($string == 'PRSADMIN') {
-		$person = 'admin';
-	}
-	return $person;
+// generate automatic email (eg; collector_ps_01@susu.com) for collectors
+// function generate_collector_email($name) {
+// 	$name = strtolower($name);
+// 	$name = str_replace(' ', '_', $name);
+// 	$random_number = rand(10, 99);
+// 	return $name . '_' . $random_number . '@susu.com';
+// }
+
+function generateCollectorEmail($collectorId, $name) {
+	$name = strtolower($name);
+	$name = str_replace(' ', '_', $name);
+
+	return "collector_" . $name . "_" . $collectorId . "@susu.com";
 }
+
 
 ////////////////////////////////////////////////////// FOR USER
 
