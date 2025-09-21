@@ -15,6 +15,17 @@ function generateCollectorEmail($collectorId, $name) {
 	return "collector_" . $name . "_" . $collectorId . "@susu.com";
 }
 
+function isCollectorEmail($email) {
+    return preg_match('/^collector_\d+@yourdomain\.com$/', $email);
+}
+
+// if (isCollectorEmail($emailInput)) {
+//     echo "This is a collector.";
+// } else {
+//     echo "Not a collector.";
+// }
+
+
 
 ////////////////////////////////////////////////////// FOR USER
 
