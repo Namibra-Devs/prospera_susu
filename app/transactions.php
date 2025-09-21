@@ -2,9 +2,16 @@
     require ('../system/DatabaseConnector.php');
     
 	// Check if the user is logged in
-	if (!admin_is_logged_in()) {
-		admin_login_redirect();
-	}
+	// if (!admin_is_logged_in()) {
+	// 	admin_login_redirect();
+	// }
+
+    // Check if the admin or collector is logged in
+    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+        redirect(PROOT . 'auth/sign-in');
+    }
+
+    $title = 'Transactions | ';
 
     $body_class = '';
     include ('../system/inc/head.php');
@@ -22,6 +29,34 @@
     <main class="main px-lg-6">
         <!-- Content -->
         <div class="container-lg">
+
+            <!-- Page header -->
+            <div class="row align-items-center mb-7">
+                <div class="col-auto">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-xl rounded text-primary">
+                        <i class="fs-2" data-duoicon="calendar"></i>
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Other</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Transactions</li>
+                        </ol>
+                    </nav>
+
+                    <!-- Heading -->
+                    <h1 class="fs-4 mb-0">Transactions</h1>
+                </div>
+                <div class="col-12 col-sm-auto mt-4 mt-sm-0">
+                    <!-- Action -->
+                    <button class="btn btn-secondary w-100" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
+                        <span class="material-symbols-outlined me-1">add</span> New transaction
+                    </button>
+                </div>
+            </div>
 
             <!-- Stats -->
             <div class="row mb-8">
