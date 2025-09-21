@@ -294,7 +294,7 @@ function collectorLogin($collector_id) {
 	$result = $statement->execute($data);
 	if (isset($result)) {
 		
-		$log_message = 'COllector [' . $collector_id . '] has logged in!';
+		$log_message = 'Collector [' . $collector_id . '] has logged in!';
     	add_to_log($log_message, $collector_id, 'admin');
 		
 		// get other details
