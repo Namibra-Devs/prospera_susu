@@ -16,15 +16,14 @@ function generateCollectorEmail($collectorId, $name) {
 }
 
 function isCollectorEmail($email) {
-    return preg_match('/^collector_\d+@yourdomain\.com$/', $email);
+	if (preg_match('/^collector_([a-zA-Z0-9]+)_([0-9]+)@susu\.com$/', $email, $matches)) {
+		$name = $matches[1];         // 'john'
+		$collectorId = $matches[2];  // '123'
+		// echo "Valid collector email. Name: $name, ID: $collectorId";
+		return true;
+	}
+	return false;
 }
-
-// if (isCollectorEmail($emailInput)) {
-//     echo "This is a collector.";
-// } else {
-//     echo "Not a collector.";
-// }
-
 
 
 ////////////////////////////////////////////////////// FOR USER
@@ -246,7 +245,7 @@ function get_number_of_products() {
 }
 
 
-// get user by id
+// get admin by email
 function findAdminByEmail($email) {
     global $dbConnection;
 
@@ -262,7 +261,7 @@ function findAdminByEmail($email) {
     return $user;
 }
 
-// get user by email
+// get admin by id
 function findAdminById($id) {
     global $dbConnection;
 
@@ -280,6 +279,24 @@ function findAdminById($id) {
 
 
 
+
+
+////////////////// COLECTOR
+// get collector by email
+function findCollectorByEmail($email) {
+    global $dbConnection;
+
+    $query = "
+        SELECT * FROM collectors 
+        WHERE collector_email = ? 
+		-- AND admin_status = ? 
+		LIMIT 1
+    ";
+    $statement = $dbConnection->prepare($query);
+    $statement->execute([$email]);
+    $user = $statement->fetch(PDO::FETCH_OBJ);
+    return $user;
+}
 
 
 
@@ -300,23 +317,6 @@ function findAdminById($id) {
 
 
 ////////////////////////////////// GENERAL
-// add to logs
-// function add_to_log($message, $log_admin) {
-// 	global $conn;
-
-// 	$log_id = guidv4();
-// 	$sql = "
-// 		INSERT INTO `susu_logs`(`log_id`, `log_message`, `log_admin`) 
-// 		VALUES (?, ?, ?)
-// 	";
-// 	$statement = $conn->prepare($sql);
-// 	$result = $statement->execute([$log_id, $message, $log_admin]);
-
-// 	if ($result) {
-// 		return true;
-// 	}
-// 	return false;
-// }
 
 // add to logs
 function add_to_log($message, $person, $type) {

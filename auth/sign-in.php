@@ -11,26 +11,49 @@
 
     $error = '';
     if ($_POST) {
-        if (empty($_POST['email']) || empty($_POST['password'])) {
+        $email = sanitize($_POST['email']);
+        $emailInput = filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : '';
+
+        if (empty($emailInput) || empty($_POST['password'])) {
             $error = 'You must provide email and password !';
         }
-        //
-        $row = findAdminByEmail(sanitize($_POST['email']));
 
-        if (!$row) {
-            $error = 'This admin is unknown !';
+        // check if person is collector or admin
+        if (isCollectorEmail($emailInput)) {
+            $collector_row = findCollectorByEmail($emailInput);
+            // check if collector status is active
+            if ($collector_row) {
+                if ($collector_row->collector_status == 'inactive') {
+                    $error = 'This collector account is not active. Please contact admin.';
+                }
+                if (password_verify(sanitize($_POST['password']), $collector_row->collector_password)) {
+                    $collector_id = $collector_row->id;
+                    collectorLogin($collector_id);
+                } else {
+                    $error = 'This collector is unknown or password is incorrect !';
+                }
+            } else {
+                $error = 'This collector is unknown !';
+            }
         } else {
-            if (!password_verify(sanitize($_POST['password']), $row->admin_password)) {
-                $error = 'This admin is unknown or password is incorrect !';
+            //
+            $row = findAdminByEmail($emailInput);
+
+            if (!$row) {
+                $error = 'This admin is unknown !';
+            } else {
+                if (!password_verify(sanitize($_POST['password']), $row->admin_password)) {
+                    $error = 'This admin is unknown or password is incorrect !';
+                }
+
+                $admin_id = $row->admin_id;
+                adminLogin($admin_id);
             }
         }
 
         if (!empty($error) || $error != '') {
             $_SESSION['flash_error'] = $error;
             redirect(PROOT . 'auth/sign-in');
-        } else {
-            $admin_id = $row->admin_id;
-            adminLogin($admin_id);
         }
         
     }
