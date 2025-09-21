@@ -39,7 +39,7 @@
                                 <div class="col-auto">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-lg bg-body text-primary">
-                                        <i class="fs-4" data-duoicon="payment-card"></i>
+                                        <i class="fs-4" data-duoicon="clock"></i>
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                                 <div class="col-auto">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-lg bg-body text-primary">
-                                        <i class="fs-4" data-duoicon="clock"></i>
+                                        <i class="fs-4" data-duoicon="calendar"></i>
                                     </div>
                                 </div>
                             </div>
