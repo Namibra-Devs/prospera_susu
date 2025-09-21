@@ -1112,13 +1112,24 @@
                             </a>
                             <div class="collapse " id="transactions">
                                 <nav class="nav nav-pills">
+                                    <?php
+                                        // show transactions menu only to admins and approvers
+                                        if ((admin_is_logged_in() && admin_has_permission('approver')) || collector_is_logged_in()):
+                                    ?>
                                     <a class="nav-link " href="<?= PROOT; ?>app/transactions">Transactions</a>
                                     <a class="nav-link " href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
+                                    <?php endif; ?>
+                                    <?php
+                                        // show not approved transactions menu only to admins and approvers
+                                        if ((admin_is_logged_in() && admin_has_permission('approver'))):
+                                    ?>
                                     <a class="nav-link " href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
                                     <a class="nav-link " href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a>
+                                    <?php endif; ?>
                                 </nav>
                             </div>
                         </div>
+                        <?php if ((admin_is_logged_in() && admin_has_permission('approver'))): ?>
                         <div class="nav-item">
                             <a
                                 class="nav-link nav-collectors"
@@ -1139,6 +1150,7 @@
                                 </nav>
                             </div>
                         </div>
+                        <?php endif; ?>
                         <div class="nav-item">
                             <a
                             class="nav-link nav-customers"
@@ -1154,11 +1166,14 @@
                             <div class="collapse " id="customers">
                                 <nav class="nav nav-pills">
                                     <a class="nav-link " href="<?= PROOT; ?>app/customers">Customers</a>
+                                    <?php if ((admin_is_logged_in() && admin_has_permission('approver'))): ?>
                                     <a class="nav-link " href="<?= PROOT; ?>app/archived-customers">Archived customers</a>
+                                    <?php endif; ?>
                                     <a class="nav-link " href="<?= PROOT; ?>app/customer-new">New customer</a>
                                 </nav>
                             </div>
                         </div>
+                        <?php if ((admin_is_logged_in() && admin_has_permission('approver'))): ?>
                         <div class="nav-item">
                             <a
                             class="nav-link nav-admins"
@@ -1179,6 +1194,7 @@
                                 </nav>
                             </div>
                         </div>
+                        <?php endif; ?>
                     </nav>
             
                     <!-- Heading -->

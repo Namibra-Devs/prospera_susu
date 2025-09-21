@@ -16,7 +16,7 @@ function generateCollectorEmail($collectorId, $name) {
 }
 
 function isCollectorEmail($email) {
-	if (preg_match('/^collector_([a-zA-Z0-9]+)_([0-9]+)@susu\.com$/', $email, $matches)) {
+	if (preg_match('/^collector_([a-zA-Z0-9_]+)_([0-9]+)@susu\.com$/', $email, $matches)) {
 		$name = $matches[1];         // 'john'
 		$collectorId = $matches[2];  // '123'
 		// echo "Valid collector email. Name: $name, ID: $collectorId";
@@ -24,7 +24,6 @@ function isCollectorEmail($email) {
 	}
 	return false;
 }
-
 
 ////////////////////////////////////////////////////// FOR USER
 
@@ -295,7 +294,7 @@ function collectorLogin($collector_id) {
 	if (isset($result)) {
 		
 		$log_message = 'Collector [' . $collector_id . '] has logged in!';
-    	add_to_log($log_message, $collector_id, 'admin');
+    	add_to_log($log_message, $collector_id, 'collector');
 		
 		// get other details
 		$a = getBrowserAndOs();

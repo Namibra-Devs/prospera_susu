@@ -2,10 +2,9 @@
     require ('system/DatabaseConnector.php');
     
 	// Check if the admin or collector is logged in
-
-	if (!admin_is_logged_in() || collector_is_logged_in()) {
-		admin_login_redirect();
-	}
+    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+        redirect(PROOT . 'auth/sign-in');
+    }
 
     $body_class = '';
     include ('system/inc/head.php');

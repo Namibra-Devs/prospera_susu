@@ -2,9 +2,10 @@
     
     require ('../system/DatabaseConnector.php');
 
-    if (admin_is_logged_in()) {
+    if (admin_is_logged_in() || collector_is_logged_in()) {
         redirect(PROOT);
     }
+    
     $title = 'Account - Sign In | ';
     $body_class = 'd-flex align-items-center';
     include ('../system/inc/head.php');
@@ -21,16 +22,18 @@
         // check if person is collector or admin
         if (isCollectorEmail($emailInput)) {
             $collector_row = findCollectorByEmail($emailInput);
+
             // check if collector status is active
             if ($collector_row) {
                 if ($collector_row->collector_status == 'inactive') {
                     $error = 'This collector account is not active. Please contact admin.';
-                }
-                if (password_verify(sanitize($_POST['password']), $collector_row->collector_password)) {
-                    $collector_id = $collector_row->id;
-                    collectorLogin($collector_id);
                 } else {
-                    $error = 'This collector is unknown or password is incorrect !';
+                    if (password_verify(sanitize($_POST['password']), $collector_row->collector_password)) {
+                        $collector_id = $collector_row->collector_id;
+                        collectorLogin($collector_id);
+                    } else {
+                        $error = 'This collector is unknown or password is incorrect !';
+                    }
                 }
             } else {
                 $error = 'This collector is unknown !';
