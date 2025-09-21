@@ -88,7 +88,6 @@ function get_products() {
 /////////////////////////////////////////////////// FOR ADMIN
 
 // Sessions For login
-// Sessions For login
 function adminLogin($admin_id) {
 	$_SESSION['PRSADMIN'] = $admin_id;
 	global $dbConnection;
@@ -282,6 +281,67 @@ function findAdminById($id) {
 
 
 ////////////////// COLECTOR
+function collectorLogin($collector_id) {
+	$_SESSION['PRSCOLLECTOR'] = $collector_id;
+	global $dbConnection;
+
+	$data = array(date("Y-m-d H:i:s"), $collector_id);
+	$query = "
+		UPDATE collectors 
+		SET updated_at = ? 
+		WHERE collector_id = ?
+	";
+	$statement = $dbConnection->prepare($query);
+	$result = $statement->execute($data);
+	if (isset($result)) {
+		
+		$log_message = 'COllector [' . $collector_id . '] has logged in!';
+    	add_to_log($log_message, $collector_id, 'admin');
+		
+		// get other details
+		$a = getBrowserAndOs();
+		$a = json_decode($a);
+
+		$browser = $a->browser;
+		$operatingSystem = $a->operatingSystem;
+		$refferer = $a->refferer;
+
+		// insert into login details table
+		$SQL = "
+			INSERT INTO `susu_login_details`(`login_details_id`, `login_details_person`, `login_details_person_id`, `login_details_device`, `login_details_os`, `login_details_refferer`, `login_details_browser`, `login_details_ip`) 
+			VALUE (?, ?, ?, ?, ?, ?, ?, ?)
+		";
+		$statement = $dbConnection->prepare($SQL);
+		$statement->execute([
+			guidv4() . '-' . strtotime(date("Y-m-d H:m:s")), 
+			'collector',
+			$collector_id, 
+			getDeviceType(), 
+			$operatingSystem, 
+			$refferer, 
+			$browser, 
+			getIPAddress(),
+		]);
+
+		$_SESSION['last_activity'] = time();
+		$_SESSION['flash_success'] = 'You are now logged in!';
+		redirect(PROOT . 'index');
+	}
+}
+
+function collector_is_logged_in() {
+	if (isset($_SESSION['PRSCOLLECTOR']) && $_SESSION['PRSCOLLECTOR'] > 0) {
+		return true;
+	}
+	return false;
+}
+
+// Redirect admin if !logged in
+function collector_login_redirect($url = 'auth/sign-out') {
+	$_SESSION['flash_error'] = 'You must be logged in to access that page.';
+	redirect(PROOT . $url);
+}
+
 // get collector by email
 function findCollectorByEmail($email) {
     global $dbConnection;
