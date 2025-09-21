@@ -12,7 +12,12 @@
                     <form>
                         <div class="mb-4">
                             <label class="form-label" for="eventTitle">Select customer</label>
-                            <input class="form-control" id="eventTitle" type="text" />
+                            <select class="form-select" id="filterLocation" data-choices>
+                                <option value="San Francisco, CA">San Francisco, CA</option>
+                                <option value="Austin, TX">Austin, TX</option>
+                                <option value="Miami, FL">Miami, FL</option>
+                                <option value="Seattle, WA">Seattle, WA</option>
+                            </select>
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="eventDescription">Amount</label>
