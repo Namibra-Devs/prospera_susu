@@ -65,7 +65,24 @@
             <div class="container-lg">
                 <!-- Brand -->
                 <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="<?= PROOT; ?>index">
-                    <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">Dashbrd</span>
+                    <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">
+                        <?php 
+                            // get logged in person role
+                            if (array_key_exists('PRSADMIN', $_SESSION)) {
+                                echo 'Admin';
+                                // check if admin is a super admin or approver
+                                if (admin_has_permission()) {
+                                    echo ' (Super)';
+                                } elseif (admin_has_permission('approver')) {
+                                    echo ' (Approver)';
+                                }
+                            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+                                echo 'Collector';
+                            } else {
+                                echo 'User';
+                            }
+                        ?>
+                    </span>
                 </a>
             
                 <!-- User -->
@@ -412,7 +429,7 @@
                         <div class="nav-item">
                             <a
                             class="nav-link"
-                            href="https://themes.getbootstrap.com/product/dashbrd/"
+                            href="javascript:;"
                             target="_blank"
                             data-bs-toggle="tooltip"
                             data-bs-placement="right"
@@ -475,7 +492,24 @@
             <div class="container-lg">
                 <!-- Brand -->
                 <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="./index.html">
-                    <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">Dashbrd</span>
+                    <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">
+                        <?php 
+                            // get logged in person role
+                            if (array_key_exists('PRSADMIN', $_SESSION)) {
+                                echo 'Admin';
+                                // check if admin is a super admin or approver
+                                if (admin_has_permission()) {
+                                    echo ' (Super)';
+                                } elseif (admin_has_permission('approver')) {
+                                    echo ' (Approver)';
+                                }
+                            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+                                echo 'Collector';
+                            } else {
+                                echo 'User';
+                            }
+                        ?>
+                    </span>
                 </a>
             
                 <!-- User -->
@@ -828,7 +862,7 @@
                         <div class="nav-item">
                             <a
                             class="nav-link flex-xl-column"
-                            href="https://themes.getbootstrap.com/product/dashbrd/"
+                            href="javascript:;"
                             target="_blank"
                             data-bs-toggle="tooltip"
                             data-bs-placement="right"
@@ -897,7 +931,23 @@
             <div class="container-lg">
             <!-- Brand -->
                 <a class="navbar-brand d-flex align-items-center fs-5 fw-bold px-xl-3 mb-xl-4" href="<?= PROOT; ?>index">
-                    <i class="fs-4 text-secondary me-2" data-duoicon="box-2"></i> Dashbrd
+                    <i class="fs-4 text-secondary me-2" data-duoicon="box-2"></i> 
+                    <?php 
+                            // get logged in person role
+                            if (array_key_exists('PRSADMIN', $_SESSION)) {
+                                echo 'Admin';
+                                // check if admin is a super admin or approver
+                                if (admin_has_permission()) {
+                                    echo ' (Super)';
+                                } elseif (admin_has_permission('approver')) {
+                                    echo ' (Approver)';
+                                }
+                            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+                                echo 'Collector';
+                            } else {
+                                echo 'User';
+                            }
+                        ?>
                 </a>
             
                 <!-- User -->
