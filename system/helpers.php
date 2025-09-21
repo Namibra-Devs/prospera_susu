@@ -129,11 +129,10 @@ function adminLogin($admin_id) {
 			$browser, 
 			getIPAddress(),
 		]);
-		//login_details_id
 
 		$_SESSION['last_activity'] = time();
 		$_SESSION['flash_success'] = 'You are now logged in!';
-		// redirect(PROOT . 'index');
+		redirect(PROOT . 'index');
 	}
 }
 
@@ -336,7 +335,7 @@ function collector_is_logged_in() {
 	return false;
 }
 
-// Redirect admin if !logged in
+// Redirect collector if !logged in
 function collector_login_redirect($url = 'auth/sign-out') {
 	$_SESSION['flash_error'] = 'You must be logged in to access that page.';
 	redirect(PROOT . $url);
