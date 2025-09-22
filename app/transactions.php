@@ -20,6 +20,12 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    // check if is posted
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-transaction '])) {
+        
+    }
+
+
 
 ?>
 
@@ -302,6 +308,21 @@
             } else {
                 $('#defualt_amount').val('');
             }
+        });
+
+        // add new transaction
+        $('#add-transaction-form').on('submit', function (e) {
+            // e.preventDefault();
+
+            $('#submit-transaction').attr('disabled', true);
+            $('#submit-transaction').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+
+            // Simulate a delay (e.g., AJAX call)
+            setTimeout(function () {
+                alert('Transaction submitted!');
+                $('#submit-transaction').html('Add transaction');
+                $('#submit-transaction').attr('disabled', false);
+            }, 2000);
         });
     });
 </script>

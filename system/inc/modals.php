@@ -19,7 +19,7 @@
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="add-transaction-form" method="POST">
                         <div class="mb-4">
                             <label class="form-label" for="select_customer">Select customer</label>
                             <select class="form-select" id="select_customer" name="select_customer" data-choices>
@@ -35,7 +35,7 @@
                             <label class="form-label" for="totday_date">Date</label>
                             <input class="form-control" id="totday_date" name="today_date" type="text" data-flatpickr value="<?= date('Y-m-d'); ?>" />
                         </div>
-                        <button type="submit" class="btn btn-secondary w-100 mt-4">Add</button>
+                        <button type="submit" class="btn btn-secondary w-100 mt-4" id="submit-transaction" name="submit-transaction">Add transaction</button>
                     </form>
                 </div>
             </div>
