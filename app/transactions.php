@@ -21,8 +21,6 @@
     include ('../system/inc/topnav.php');
 
 
-
-
 ?>
 
     <!-- Main -->
@@ -274,6 +272,36 @@
 <script>
 
     $(document).ready(function() {
+        // get customer deafult amount on customer select
+        $('#select_customer').on('change', function() {
+            var selectedValue = $(this).val();
+            var parts = selectedValue.split(',');
+            if (parts.length === 2) {
+                var customerName = parts[0];
+                var accountNumber = parts[1];
 
+                // Make an AJAX request to fetch the default amount
+                $.ajax({
+                    url: 'controller/get_customer_default_amount.php',
+                    type: 'GET',
+                    data: { customer_name: customerName, account_number: accountNumber },
+                    success: function(response) {
+                        // Assuming the response is a JSON object with a 'default_amount' property
+                        var data = JSON.parse(response);
+                        if (data.default_amount) {
+                            $('#defualt_amount').val(data.default_amount);
+                        } else {
+                            $('#defualt_amount').val('');
+                        }
+                    },
+                    error: function() {
+                        console.error('Error fetching default amount');
+                        $('#defualt_amount').val('');
+                    }
+                });
+            } else {
+                $('#defualt_amount').val('');
+            }
+        });
     });
 </script>
