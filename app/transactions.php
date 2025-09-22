@@ -29,6 +29,9 @@
         $transaction_amount = sanitize($_POST['defualt_amount']);
         $transaction_date = sanitize($_POST['today_date']);
         $transaction_note = sanitize($_POST['note']);
+        $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
+
+        $find_customer_row = findCustomerByAccountNumber($customer_account_number);
 
         // validate inputs
         if (empty($customer_name) || empty($customer_account_number) || empty($transaction_amount) || empty($transaction_date)) {
@@ -47,9 +50,14 @@
             $added_by = 'collector';
             $added_by_id = $_SESSION['PRSCOLLECTOR'];
         }
-        $stmt->execute([$customer_name, $customer_account_number, $transaction_amount, $transaction_date, $transaction_note, $added_by, $added_by_id]);
+        $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note]);
 
         if ($stmt) {
+            // 
+            $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
+            add_to_log($log_message, $added_by_id, $added_by);
+
+
             $_SESSION['flash_success'] = 'Transaction added successfully.';
             redirect(PROOT . 'app/transactions.php');
         } else {

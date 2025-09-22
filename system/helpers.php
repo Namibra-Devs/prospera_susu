@@ -411,6 +411,22 @@ function collector_get_customers() {
 	return $statement;
 }
 
+// get customer by account number
+function findCustomerByAccountNumber($number) {
+    global $dbConnection;
+
+    $query = "
+        SELECT * FROM customers 
+        WHERE customer_account_number = ? 
+		AND customer_status = ? 
+		LIMIT 1
+    ";
+    $statement = $dbConnection->prepare($query);
+    $statement->execute([$number, 'active']);
+    $user = $statement->fetch(PDO::FETCH_OBJ);
+    return $user;
+}
+
 
 
 

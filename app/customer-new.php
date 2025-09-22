@@ -11,13 +11,23 @@
     }
 
     $title = 'New customer | ';
-
     $body_class = '';
     include ('../system/inc/head.php');
     include ('../system/inc/modals.php');
     include ('../system/inc/sidebar.php');
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
+
+    //
+    $added_by = null;
+    $added_by_id = null;
+    if (array_key_exists('PRSADMIN', $_SESSION)) {
+        $added_by = 'admin';
+        $added_by_id = $_SESSION['PRSADMIN'];
+    } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+        $added_by = 'collector';
+        $added_by_id = $_SESSION['PRSCOLLECTOR'];
+    }
 
     //
     function email_exist($email) {
