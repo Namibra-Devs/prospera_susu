@@ -22,7 +22,7 @@
 
     // check if is posted
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_customer'])) {
-        dnd($_POST);
+        // dnd($_POST);
         // get form data
         $customer_info = sanitize($_POST['select_customer']);
         list($customer_name, $customer_account_number) = explode(',', $customer_info);
@@ -59,10 +59,10 @@
 
 
             $_SESSION['flash_success'] = 'Transaction added successfully.';
-            redirect(PROOT . 'app/transactions.php');
+            redirect(PROOT . 'app/transactions');
         } else {
             $_SESSION['flash_error'] = 'An error occurred. Please try again.';
-            redirect(PROOT . 'app/transactions.php');
+            redirect(PROOT . 'app/transactions');
         }
     }
 
