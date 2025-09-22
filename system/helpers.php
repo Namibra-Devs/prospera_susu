@@ -364,6 +364,14 @@ function findCollectorByEmail($email) {
 
 
 
+//////////////////////////////////////// CUSTOMERS
+function collector_get_customers() {
+	global $dbConnection;
+	$statement = $dbConnection->query("SELECT * FROM customers WHERE customer_trash = 0 ORDER BY createdAt DESC")->fetchAll(PDO::FETCH_ASSOC);
+	return $statement;
+}
+
+
 
 
 
@@ -418,3 +426,4 @@ function idle_user() {
     $_SESSION['last_activity'] = time();
 	return true;
 }
+

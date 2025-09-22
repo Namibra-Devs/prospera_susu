@@ -1,6 +1,16 @@
     <!-- Modals -->
     
     <!-- Modal: New transaction modal -->
+    <?php
+        // Only show this modal if the user has permission to create transactions
+        if (collector_is_logged_in()): 
+            // get options for customer select
+            $options = '';
+            $customers = collector_get_customers();
+            foreach ($customers as $customer) {
+                $options .= '<option value="' . htmlspecialchars($customer['id']) . '">' . htmlspecialchars($customer['name']) . '</option>';
+            }
+    ?>
     <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -33,6 +43,7 @@
             </div>
         </div>
     </div>
+    <?php endif; ?>
     
     <!-- Offcanvas: Product -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="productModal" aria-labelledby="productModalLabel">
