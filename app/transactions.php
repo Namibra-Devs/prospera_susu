@@ -21,8 +21,41 @@
     include ('../system/inc/topnav.php');
 
     // check if is posted
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit-transaction '])) {
-        
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_customer'])) {
+        dnd($_POST);
+        // get form data
+        $customer_info = sanitize($_POST['select_customer']);
+        list($customer_name, $customer_account_number) = explode(',', $customer_info);
+        $transaction_amount = sanitize($_POST['defualt_amount']);
+        $transaction_date = sanitize($_POST['today_date']);
+        $transaction_note = sanitize($_POST['note']);
+
+        // validate inputs
+        if (empty($customer_name) || empty($customer_account_number) || empty($transaction_amount) || empty($transaction_date)) {
+            $_SESSION['flash_error'] = 'Please fill in all required fields.';
+            redirect(PROOT . 'app/transactions');
+        }
+
+        // insert into database
+        $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $added_by = null;
+        $added_by_id = null;
+        if (array_key_exists('PRSADMIN', $_SESSION)) {
+            $added_by = 'admin';
+            $added_by_id = $_SESSION['PRSADMIN'];
+        } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+            $added_by = 'collector';
+            $added_by_id = $_SESSION['PRSCOLLECTOR'];
+        }
+        $stmt->execute([$customer_name, $customer_account_number, $transaction_amount, $transaction_date, $transaction_note, $added_by, $added_by_id]);
+
+        if ($stmt) {
+            $_SESSION['flash_success'] = 'Transaction added successfully.';
+            redirect(PROOT . 'app/transactions.php');
+        } else {
+            $_SESSION['flash_error'] = 'An error occurred. Please try again.';
+            redirect(PROOT . 'app/transactions.php');
+        }
     }
 
 
@@ -307,6 +340,15 @@
                 });
             } else {
                 $('#defualt_amount').val('');
+            }
+        });
+
+        // limit note characters to 500
+        $('#note').on('input', function() {
+            var maxLength = 500;
+            var currentLength = $(this).val().length;
+            if (currentLength > maxLength) {
+                $(this).val($(this).val().substring(0, maxLength));
             }
         });
 

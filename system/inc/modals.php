@@ -22,18 +22,23 @@
                     <form id="add-transaction-form" method="POST">
                         <div class="mb-4">
                             <label class="form-label" for="select_customer">Select customer</label>
-                            <select class="form-select" id="select_customer" name="select_customer" data-choices>
+                            <select class="form-select" id="select_customer" name="select_customer" data-choices required>
                                 <option value="">...</option>
                                 <?php echo $options; ?>
                             </select>
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="defualt_amount">Amount</label>
-                            <input class="form-control" id="defualt_amount" name="defualt_amount" type="number" placeholder="Enter amount" />
+                            <input class="form-control" id="defualt_amount" name="defualt_amount" type="number" min="0.00" step="0.01" readonly placeholder="Enter amount" required />
                         </div>
                         <div class="mb-4">
                             <label class="form-label" for="totday_date">Date</label>
-                            <input class="form-control" id="totday_date" name="today_date" type="text" data-flatpickr value="<?= date('Y-m-d'); ?>" />
+                            <input class="form-control" id="totday_date" name="today_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="note">Note (optional)</label>
+                            <textarea class="form-control" id="note" name="note" rows="3" data-autosize></textarea>
+                            <div class="form-text">Limit 500</div>
                         </div>
                         <button type="submit" class="btn btn-secondary w-100 mt-4" id="submit-transaction" name="submit-transaction">Add transaction</button>
                     </form>
