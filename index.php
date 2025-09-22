@@ -7,6 +7,7 @@
     }
 
     $body_class = '';
+    $title = 'Dashboard |';
     include ('system/inc/head.php');
     include ('system/inc/modals.php');
     include ('system/inc/sidebar.php');

@@ -288,8 +288,8 @@
                     success: function(response) {
                         // Assuming the response is a JSON object with a 'default_amount' property
                         var data = JSON.parse(response);
-                        if (data.default_amount) {
-                            $('#defualt_amount').val(data.default_amount);
+                        if (data.customer_default_daily_amount) {
+                            $('#defualt_amount').val(data.customer_default_daily_amount);
                         } else {
                             $('#defualt_amount').val('');
                         }
