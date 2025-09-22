@@ -402,7 +402,7 @@ function generateAccountNumber($dbConnection) {
 // get list of customers
 function collector_get_customers() {
 	global $dbConnection;
-	$statement = $dbConnection->query("SELECT * FROM customers WHERE customer_trash = 0 ORDER BY createdAt DESC")->fetchAll(PDO::FETCH_ASSOC);
+	$statement = $dbConnection->query("SELECT * FROM customers WHERE customer_status = 'active' ORDER BY customer_name ASC")->fetchAll(PDO::FETCH_ASSOC);
 	return $statement;
 }
 

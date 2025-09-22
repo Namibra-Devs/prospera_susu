@@ -113,7 +113,6 @@
         }
 
         if (!$error) {
-            // Hash password
             $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
             $conn = $dbConnection;
             // Insert into database

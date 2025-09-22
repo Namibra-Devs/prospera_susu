@@ -8,7 +8,7 @@
             $options = '';
             $customers = collector_get_customers();
             foreach ($customers as $customer) {
-                $options .= '<option value="' . htmlspecialchars($customer['id']) . '">' . htmlspecialchars($customer['name']) . '</option>';
+                $options .= '<option value="' . htmlspecialchars($customer['customer_name']) . ',' . $customer['customer_account_number'] . '">' . htmlspecialchars($customer['customer_name']) . ',' . $customer['customer_account_number'] . '"</option>';
             }
     ?>
     <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
@@ -21,21 +21,19 @@
                 <div class="modal-body">
                     <form>
                         <div class="mb-4">
-                            <label class="form-label" for="eventTitle">Select customer</label>
-                            <select class="form-select" id="filterLocation" data-choices>
-                                <option value="San Francisco, CA">San Francisco, CA</option>
-                                <option value="Austin, TX">Austin, TX</option>
-                                <option value="Miami, FL">Miami, FL</option>
-                                <option value="Seattle, WA">Seattle, WA</option>
+                            <label class="form-label" for="select_customer">Select customer</label>
+                            <select class="form-select" id="select_customer" name="select_customer" data-choices>
+                                <option value="">...</option>
+                                <?php echo $options; ?>
                             </select>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="eventDescription">Amount</label>
-                            <input class="form-control" id="eventDescription">
+                            <label class="form-label" for="defualt_amount">Amount</label>
+                            <input class="form-control" id="defualt_amount" name="defualt_amount" type="number" placeholder="Enter amount" />
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="eventStart">Date</label>
-                            <input class="form-control" id="eventStart" type="text" data-flatpickr />
+                            <label class="form-label" for="totday_date">Date</label>
+                            <input class="form-control" id="totday_date" name="today_date" type="text" data-flatpickr value="<?= date('Y-m-d'); ?>" />
                         </div>
                         <button type="submit" class="btn btn-secondary w-100 mt-4">Add</button>
                     </form>
