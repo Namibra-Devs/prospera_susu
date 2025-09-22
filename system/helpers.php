@@ -365,6 +365,41 @@ function findCollectorByEmail($email) {
 
 
 //////////////////////////////////////// CUSTOMERS
+// generate unique account number for new customer
+function generateAccountNumber($dbConnection) {
+    // Get current year
+    $year = date("Y");
+    $prefix = "PRS" . $year;
+
+    // Query to find the latest account number for this year
+    $sql = "SELECT customer_account_number 
+            FROM customers 
+            WHERE customer_account_number LIKE ? 
+            ORDER BY customer_account_number DESC 
+            LIMIT 1
+	";
+    $stmt = $dbConnection->prepare($sql);
+    $likePrefix = $prefix . "%";
+    $stmt->bind_param("s", $likePrefix);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $nextNumber = 1;
+
+    if ($row = $result->fetch_assoc()) {
+        // Extract the numeric part (last 5 digits)
+        $lastAccNum = $row['customer_account_number'];
+        $lastSequence = intval(substr($lastAccNum, -5));
+        $nextNumber = $lastSequence + 1;
+    }
+
+    // Pad with leading zeros (00001, 00002, etc.)
+    $accountNumber = $prefix . str_pad($nextNumber, 5, "0", STR_PAD_LEFT);
+
+    return $accountNumber;
+}
+
+// get list of customers
 function collector_get_customers() {
 	global $dbConnection;
 	$statement = $dbConnection->query("SELECT * FROM customers WHERE customer_trash = 0 ORDER BY createdAt DESC")->fetchAll(PDO::FETCH_ASSOC);
