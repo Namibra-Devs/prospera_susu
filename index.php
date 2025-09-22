@@ -30,7 +30,15 @@
                     Ghana, Gh –&nbsp;<span datetime="20:00" id="time_span"></span>
                 </div>
                 <div class="col-12 col-md order-md-0 text-center text-md-start">
-                    <h1>Hello, John</h1>
+                    <h1>Hello, 
+                        <?php 
+                            if (admin_is_logged_in()) {
+                                echo $admin_data['first'];
+                            } elseif (collector_is_logged_in()) {
+                                echo $collector_data['first'];
+                            }
+                        ?>
+                    </h1>
                     <p class="fs-lg text-body-secondary mb-0">Here's a summary of your account activity for this week.</p>
                 </div>
             </div>

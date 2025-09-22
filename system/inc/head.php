@@ -213,6 +213,6 @@
     <link rel="stylesheet" href="<?= PROOT; ?>assets/css/susu.css" />
     
     <!-- Title -->
-    <title>Dashbrd</title>
+    <title><?= $title; ?> Prospera susu</title>
 </head>
 <body class="<?= $body_class; ?>">

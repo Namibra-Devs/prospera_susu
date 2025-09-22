@@ -19,29 +19,29 @@
     }
     session_start();
 
-    if (isset($_SESSION['PRSUser'])) {
-        $user_id = $_SESSION['PRSUser'];
-        $data = array($user_id);
+    if (isset($_SESSION['PRSCOLLECTOR'])) {
+        $collector_id = $_SESSION['PRSCOLLECTOR'];
+        $data = array($collector_id);
         $sql = "
-            SELECT * FROM levina_users 
-            WHERE user_id = ? 
+            SELECT * FROM collectors 
+            WHERE collector_id = ? 
             LIMIT 1
         ";
         $statement = $dbConnection->prepare($sql);
         $statement->execute($data);
         if ($statement->rowCount() > 0) {
-            $user_data = $statement->fetchAll();
-            $user_data = $user_data[0];
+            $collector_data = $statement->fetchAll();
+            $collector_data = $collector_data[0];
 
-            $fn = explode(' ', $user_data['user_fullname']);
-            $user_data['first'] = ucwords($fn[0]);
-            $user_data['last'] = '';
+            $fn = explode(' ', $collector_data['collector_name']);
+            $collector_data['first'] = ucwords($fn[0]);
+            $collector_data['last'] = '';
             if (count($fn) > 1) {
-                $user_data['last'] = ucwords($fn[1]);
+                $collector_data['last'] = ucwords($fn[1]);
             }
 
         } else {
-            unset($_SESSION['PRSUser']);
+            unset($_SESSION['PRSCOLLECTOR']);
             redirect(PROOT . 'app/');
         }
     }

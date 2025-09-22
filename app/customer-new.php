@@ -2,9 +2,16 @@
     require ('../system/DatabaseConnector.php');
     
 	// Check if the user is logged in
-	if (!admin_is_logged_in()) {
-		admin_login_redirect();
-	}
+	// if (!admin_is_logged_in()) {
+	// 	admin_login_redirect();
+	// }
+
+    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+        redirect(PROOT . 'auth/sign-in');
+    }
+
+    $title = 'New customer | ';
+
     $body_class = '';
     include ('../system/inc/head.php');
     include ('../system/inc/modals.php');
@@ -236,7 +243,7 @@
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="duration">Duration</label>
-                                    <input class="form-control bg-body" id="duration" name="duration" type="date" value="<?= $duration; ?>" />
+                                    <input class="form-control bg-body flatpickr-input" id="duration" name="duration" type="date" value="<?= $duration; ?>" data-flatpickr="" readonly="readonly" />
                                 </div>
                                 <div class="mb-0">
                                     <label class="form-label" for="startdate">Start date</label>

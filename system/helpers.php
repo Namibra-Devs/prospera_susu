@@ -371,6 +371,11 @@ function generateAccountNumber($dbConnection) {
     $year = date("Y");
     $prefix = "PRS" . $year;
 
+	// $stmt->execute([$account_number]);
+    //     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    //     if ($row) {
+
     // Query to find the latest account number for this year
     $sql = "SELECT customer_account_number 
             FROM customers 
@@ -380,13 +385,13 @@ function generateAccountNumber($dbConnection) {
 	";
     $stmt = $dbConnection->prepare($sql);
     $likePrefix = $prefix . "%";
-    $stmt->bind_param("s", $likePrefix);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // $stmt->bind_param("s", $likePrefix);
+    $stmt->execute([$likePrefix]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $nextNumber = 1;
 
-    if ($row = $result->fetch_assoc()) {
+    if ($row !== false) {
         // Extract the numeric part (last 5 digits)
         $lastAccNum = $row['customer_account_number'];
         $lastSequence = intval(substr($lastAccNum, -5));
