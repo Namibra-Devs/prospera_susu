@@ -2,9 +2,12 @@
     require ('../system/DatabaseConnector.php');
     
 	// Check if the user is logged in
-	if (!admin_is_logged_in()) {
-		admin_login_redirect();
-	}
+	// if (!admin_is_logged_in()) {
+	// 	admin_login_redirect();
+	// }
+    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+        redirect(PROOT . 'auth/sign-in');
+    }
 
     // get all saves from customer
     function get_all_saves($customer_id) {
@@ -51,6 +54,7 @@
     }
 
     $body_class = '';
+    $title = 'Customers | ';
     include ('../system/inc/head.php');
     include ('../system/inc/modals.php');
     include ('../system/inc/sidebar.php');

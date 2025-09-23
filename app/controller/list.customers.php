@@ -16,12 +16,18 @@ $conn = $dbConnection;
         $start = 0;
     }
 
-    $query = "SELECT * FROM customers ";
+    $query = "SELECT * FROM customers WHERE ";
+	// check if a collector is logged in, then show only their customers
+	if (collector_is_logged_in()) {
+		$query .= " customer_added_by = 'collector' AND customer_collector_id = '". $collector_id . "' ";
+	}
+
+	// search query
     $search_query = ((isset($_POST['query'])) ? sanitize($_POST['query']) : '');
     $find_query = str_replace(' ', '%', $search_query);
     if ($search_query != '') {
         $query .= '
-            WHERE customer_name LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            AND (customer_name LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR customer_phone LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR customer_email LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR customer_address LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
@@ -33,7 +39,8 @@ $conn = $dbConnection;
             OR customer_status LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR created_at LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR customer_added_by LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR customer_collector_id LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" ';
+            OR customer_collector_id LIKE "%'.str_replace(' ', '%', $_POST['query']).'%") 
+		';
 
     }
     $query .= 'ORDER BY customer_name ASC ';
@@ -104,7 +111,7 @@ if ($total_data > 0) {
                 <td>' . $row['customer_phone'] . '</td>
                 <td>' . money($row['customer_default_daily_amount']) . '</td>
                 <td>' . $row['customer_address'] . '</td>
-                <td>' . pretty_date_notime($row['customer_start_date']) . '</td>
+                <td>' . (($row['customer_start_date'] == '0000-00-00') ? '' : pretty_date_notime($row['customer_start_date'])) . '</td>
                 <td>' . pretty_date_notime($row['created_at']) . '</td>
                 <td>' . $status_badge . '</td>
                 <td>' . money($total_saved) . '</td>

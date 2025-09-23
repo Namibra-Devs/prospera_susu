@@ -153,7 +153,7 @@
                 add_to_log($log_message, $added_by_id, $added_by);
 
                 $_SESSION['flash_success'] = "Customer added successfully !";
-                redirect(PROOT . 'app/customers');
+                // redirect(PROOT . 'app/customers');
             } else {
                 $error = "Failed to add collector. Please try again !";
             }
