@@ -42,13 +42,13 @@
         if ($by == 'collector') {
             $query = "
                 SELECT * FROM collectors 
-                WHERE collectors.collector_id = (SELECT customers.customer_added_by FROM customers WHERE customers.customer_id = ? LIMIT 1) 
+                WHERE collectors.collector_id = ?
                 LIMIT 1
             ";
             $statement = $dbConnection->prepare($query);
             $statement->execute([$id]);
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            return $row['customer_name'];
+            return (($row['collector_name']) ? ucwords($row['collector_name']) . ' <span class="badge bg-warning-subtle text-warning">Collector</span>': 'Collector');
         }
         return 'Admin';
     }
@@ -268,7 +268,7 @@
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">Location</span>
-                                        <span><?= ucwords($customer_data["customer_region"] . ',' . $customer_data["customer_city"]); ?></span>
+                                        <span><?= ucwords($customer_data["customer_region"] . ', ' . $customer_data["customer_city"]); ?></span>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">ID card name</span>

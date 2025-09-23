@@ -111,7 +111,7 @@ if ($total_data > 0) {
                 <td>' . $row['customer_phone'] . '</td>
                 <td>' . money($row['customer_default_daily_amount']) . '</td>
                 <td>' . $row['customer_address'] . '</td>
-                <td>' . (($row['customer_start_date'] == '0000-00-00') ? '' : pretty_date_notime($row['customer_start_date'])) . '</td>
+                <td>' . (($row['customer_start_date'] == '0000-00-00') ? 'N/A' : pretty_date_notime($row['customer_start_date'])) . '</td>
                 <td>' . pretty_date_notime($row['created_at']) . '</td>
                 <td>' . $status_badge . '</td>
                 <td>' . money($total_saved) . '</td>
