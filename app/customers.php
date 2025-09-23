@@ -471,13 +471,13 @@
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-1">
-                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Collectors</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Collectors</li>
+                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Customers</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Customers</li>
                         </ol>
                     </nav>
 
                     <!-- Heading -->
-                    <h1 class="fs-4 mb-0">Collectors</h1>
+                    <h1 class="fs-4 mb-0">Customers</h1>
                 </div>
                     <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                         <!-- Action -->

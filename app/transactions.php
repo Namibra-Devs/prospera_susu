@@ -22,7 +22,6 @@
 
     // check if is posted
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_customer'])) {
-        // dnd($_POST);
         // get form data
         $customer_info = sanitize($_POST['select_customer']);
         list($customer_name, $customer_account_number) = explode(',', $customer_info);
@@ -262,8 +261,8 @@
                             </div>
                             <div class="col-auto">
                                 <a class="btn btn-link my-n2" href="../ecommerce/orders.html">
-                                Browse all
-                                <span class="material-symbols-outlined">arrow_right_alt</span>
+                                    Browse all
+                                    <span class="material-symbols-outlined">arrow_right_alt</span>
                                 </a>
                             </div>
                         </div>

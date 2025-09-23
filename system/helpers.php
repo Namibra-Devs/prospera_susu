@@ -371,11 +371,6 @@ function generateAccountNumber($dbConnection) {
     $year = date("Y");
     $prefix = "PRS" . $year;
 
-	// $stmt->execute([$account_number]);
-    //     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    //     if ($row) {
-
     // Query to find the latest account number for this year
     $sql = "SELECT customer_account_number 
             FROM customers 

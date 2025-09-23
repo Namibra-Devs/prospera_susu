@@ -66,7 +66,7 @@ $conn = $dbConnection;
                             <label class="form-check-label" for="tableCheckAll"></label>
                         </div>
                     </th>
-                    <th>ID</th>
+                    <th>Account number</th>
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Default amount</th>
@@ -106,7 +106,7 @@ if ($total_data > 0) {
 		$output .= '
             <tr class="align-middle">
                 <td style="width: 0px">' . $i . '</td>
-                <td class="text-body-secondary">#3456</td>
+                <td class="text-body-secondary">' . $row["customer_account_number"] . '</td>
                 <td>' . ucwords($row["customer_name"]) . '</td>
                 <td>' . $row['customer_phone'] . '</td>
                 <td>' . money($row['customer_default_daily_amount']) . '</td>

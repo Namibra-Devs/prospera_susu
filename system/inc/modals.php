@@ -8,7 +8,7 @@
             $options = '';
             $customers = collector_get_customers();
             foreach ($customers as $customer) {
-                $options .= '<option value="' . sanitize($customer['customer_name'] . ',' . $customer['customer_account_number']) . '">' . sanitize($customer['customer_name'] . ',' . $customer['customer_account_number']) . '</option>';
+                $options .= '<option value="' . sanitize(ucwords($customer['customer_name']) . ',' . $customer['customer_account_number']) . '">' . sanitize(ucwords($customer['customer_name']) . ',' . $customer['customer_account_number']) . '</option>';
             }
     ?>
     <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
