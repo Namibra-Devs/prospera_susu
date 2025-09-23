@@ -20,12 +20,24 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+//     Array
+// (
+//     [select_customer] =&gt; Brother Pole To Pole,PRS202500001
+//     [default_amount] =&gt; 20.00
+//     [payment_mode] =&gt; bank
+//     [today_date] =&gt; 2025-09-23
+//     [note] =&gt; 
+//     [is_advance_payment] =&gt; no
+//     [advance_payment] =&gt; 17
+// )
+
+
     // check if is posted
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_customer'])) {
         // get form data
         $customer_info = sanitize($_POST['select_customer']);
         list($customer_name, $customer_account_number) = explode(',', $customer_info);
-        $transaction_amount = sanitize($_POST['defualt_amount']);
+        $transaction_amount = sanitize($_POST['default_amount']);
         $transaction_date = sanitize($_POST['today_date']);
         $transaction_note = sanitize($_POST['note']);
         $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
@@ -335,18 +347,22 @@
                         // Assuming the response is a JSON object with a 'default_amount' property
                         var data = JSON.parse(response);
                         if (data.customer_default_daily_amount) {
-                            $('#defualt_amount').val(data.customer_default_daily_amount);
+                            $('#default_amount').val(data.customer_default_daily_amount);
+                            $('#label-default-amount').html('(Default amount: ' + data.customer_default_daily_amount + ')');
                         } else {
-                            $('#defualt_amount').val('');
+                            $('#default_amount').val('');
+                            $('#label-default-amount').html();
                         }
                     },
                     error: function() {
                         console.error('Error fetching default amount');
-                        $('#defualt_amount').val('');
+                        $('#default_amount').val('');
+                        $('#label-default-amount').html();
                     }
                 });
             } else {
-                $('#defualt_amount').val('');
+                $('#default_amount').val('');
+                $('#label-default-amount').html();
             }
         });
 
@@ -358,6 +374,20 @@
                 $(this).val($(this).val().substring(0, maxLength));
             }
         });
+
+        // check if check box of advance payment is checked or not
+        $('#is_advance_payment').on('change', function() {
+            if ($(this).is(':checked')) {
+                // if checked, show advance payment select
+                $('#advance_payment_div').show();
+                $('#advance_payment').prop('disabled', false);
+            } else {
+                // if not checked, hide advance payment select
+                $('#advance_payment_div').hide();
+                $('#advance_payment').prop('disabled', true);
+            }
+        });
+        
 
         // add new transaction
         $('#add-transaction-form').on('submit', function (e) {
@@ -373,5 +403,7 @@
                 $('#submit-transaction').attr('disabled', false);
             }, 2000);
         });
+
+        
     });
 </script>
