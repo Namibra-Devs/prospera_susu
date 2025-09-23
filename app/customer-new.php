@@ -65,20 +65,28 @@
     $address  = $post['address'] ?? '';
     $region   = $post['region'] ?? '';
     $city     = $post['city'] ?? '';
-    $amount   = $post['amount'] ?? '';
+    $amount   = $post['amount'] ?? 10;
     $target   = $post['target'] ?? '';
     $duration = $post['duration'] ?? '';
     $startdate = $post['startdate'] ?? '';
     $idcard    = $post['idcard'] ?? '';
     $idnumber  = $post['idnumber'] ?? '';
-    $collector = $post['collector'] ?? '';
+    // $collector = $post['collector'] ?? '';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        // Validate required fields
-        if (!$name || !$phone || !$address || !$region || !$city || !$amount || !$startdate) {
-            $error = "All fields are required.";
+        $required = array('name', 'phone', 'address', 'region', 'city', 'amount', 'startdate');
+        foreach ($required as $f) {
+            if (empty($f)) {
+                $errors = $f . ' is required !';
+                break;
+            }
         }
+
+        // Validate required fields
+        // if (!$name || !$phone || !$address || !$region || !$city || !$amount || !$startdate) {
+        //     $error = "All fields are required.";
+        // }
         
         if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Invalid email address.";
@@ -144,10 +152,10 @@
                 $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new customer ' . ucwords($name) . ' (' . $phone . ')';
                 add_to_log($log_message, $added_by_id, $added_by);
 
-                $_SESSION['flash_success'] = "Customer added successfully!";
+                $_SESSION['flash_success'] = "Customer added successfully !";
                 redirect(PROOT . 'app/customers');
             } else {
-                $error = "Failed to add collector. Please try again.";
+                $error = "Failed to add collector. Please try again !";
             }
         }
     }
@@ -244,7 +252,7 @@
                                 <hr>
                                 <div class="mb-4">
                                     <label class="form-label" for="amount">Daily amount</label>
-                                    <input class="form-control bg-body" id="amount" name="amount" type="number" min="10" value="<?= $amount; ?>" required />
+                                    <input class="form-control bg-body" id="amount" name="amount" type="number" min="10" step="0.01" value="<?= $amount; ?>" required />
                                     <small class="form-text">Mininum GHS 10.00</small>
                                 </div>
                                 <div class="mb-4">
