@@ -83,8 +83,16 @@
             $('#collectors').addClass('show');
         }
 
-        if (window.location.href.indexOf("customers") > -1 || (window.location.href.indexOf("customer-new") > -1)) {
+        // customers
+        if (window.location.href.indexOf("customers") > -1) {
             $('.nav-customers').addClass('active');
+            $('.sub-nav-customers').addClass('active');
+            $('.nav-customers').attr('aria-expanded', true);
+            $('#customers').addClass('show');
+        }
+        if (window.location.href.indexOf("customer-new") > -1) {
+            $('.nav-customers').addClass('active');
+            $('.sub-nav-new-customers').addClass('active');
             $('.nav-customers').attr('aria-expanded', true);
             $('#customers').addClass('show');
         }
@@ -95,8 +103,16 @@
             $('#admins').addClass('show');
         }
         
+        // transactions
         if (window.location.href.indexOf("transactions") > -1 || (window.location.href.indexOf("transactions-approve") > -1)) {
             $('.nav-transactions').addClass('active');
+            $('.sub-nav-transactions').addClass('active');
+            $('.nav-transactions').attr('aria-expanded', true);
+            $('#transactions').addClass('show');
+        }
+        if (window.location.href.indexOf("transactions-approved") > -1) {
+            $('.nav-transactions').addClass('active');
+            $('.sub-nav-approved-transactions').addClass('active');
             $('.nav-transactions').attr('aria-expanded', true);
             $('#transactions').addClass('show');
         }
