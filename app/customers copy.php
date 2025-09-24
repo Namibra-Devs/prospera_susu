@@ -291,46 +291,25 @@
                 </div>
             </div>
 
+
             <style>
-                .calendar {
-                    display: grid;
-                    grid-template-columns: repeat(7, 1fr);
-                    gap: 10px;
-                }
-                .calendar .day {
-                    height: 80px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 8px;
-                    font-weight: bold;
-                    font-size: 1.1rem;
-                }
-                .saved {
-                    background-color: #28a745; /* green */
-                    color: white;
-                }
-                .not-saved {
-                    background-color: #e9ecef; /* light gray */
-                    color: #6c757d; /* gray */
-                }
-                .commission {
-                    background-color: #dc3545; /* red */
-                    color: white;
-                }
+                .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+                .day { padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; }
+                .commission { background-color: #ffc107; color: #000; }
+                .saved { background-color: #28a745; color: #fff; }
+                .unsaved { background-color: #f8f9fa; border: 1px solid #dee2e6; color: #000; }
             </style>
 
             <div class="mb-8">
-                <h2 class="mb-3">Savings Calendar</h2>
+                <h3 class="mb-3">Savings Calendar</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <button class="btn btn-link" id="prevCycle">← Previous</button>
-                    <h5 id="cycleLabel" class="mb-0"></h5>
-                    <button class="btn btn-link" id="nextCycle">Next →</button>
+                    <button class="btn btn-outline-primary" id="prevCycle">← Previous 31 Days</button>
+                    <button class="btn btn-outline-primary" id="nextCycle">Next 31 Days →</button>
                 </div>
 
-                <div id="calendar" class="calendar"></div>
+                <div id="cycleInfo" class="mb-3 fw-bold"></div>
+                <div class="calendar" id="calendar"></div>
             </div>
-
 
 
 
@@ -739,64 +718,71 @@
 <?php include ('../system/inc/footer.php'); ?>
 
 <script>
-    let currentCycle = 0;
-    const customerId = "<?= $view; ?>";
+    let cycle = 0;
+    let customerId = "<?= $view; ?>"; // hardcoded example, pass dynamically in your app
 
-    function loadCalendar(cycle) {
-        $.getJSON("<?= PROOT; ?>app/controller/customer.calendar.php", { customer_id: customerId, cycle: cycle }, function (data) {
-            $("#calendar").empty();
-            if (!data.cycle_start) {
-                $("#cycleLabel").text("No savings yet");
-                return;
-            }
-
-            $("#cycleLabel").text(
-                "Cycle " + (cycle + 1) + ": " + data.cycle_start + " → " + data.cycle_end
-            );
-
-            for (let day = 1; day <= 31; day++) {
-                let cellClass = "not-saved";
-                let text = day;
-
-                if (data.saved_days[day]) {
-                    cellClass = "saved";
-                    text = day + " ✓ <br>";
-                    // Show amount saved if any
-                    text += `\nGHS ${data.saved_days[day]}`;
-                }
-
-                if (data.commission_day === day) {
-                    cellClass = "commission";
-                    text = day + " (Fee) <br>";
-                    // If there's also a saving on this day, show both
-                    if (data.saved_days[day]) {
-                        text += `\nGHS ${data.saved_days[day]}`;
-                    }
-                }
-
-                $("#calendar").append(
-                    `<div class="day ${cellClass}">${text}</div>`
-                );
-            }
-        }).fail(function (xhr) {
-            alert("Error: " + xhr.responseText);
+    // 
+    function fetchCalendar(cycleNo) {
+        $.ajax({
+            url: `<?= PROOT; ?>app/controller/customer.calendar.php?customer_id=${customerId}&cycle=${cycleNo}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                renderCalendar(data);
+            },
+            error: function(err) {
+                console.error('Error fetching calendar data:', err);
+            }, 
         });
     }
 
-    $("#prevCycle").click(function () {
-        if (currentCycle > 0) {
-            currentCycle--;
-            loadCalendar(currentCycle);
+    // function fetchCalendar(cycleNo) {
+    //     fetch(`controller/customer.calendar.php?customer_id=${customerId}&cycle=${cycleNo}`)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             renderCalendar(data);
+    //         });
+    //     }
+
+    function renderCalendar(data) {
+        const calendar = document.getElementById('calendar');
+        const cycleInfo = document.getElementById('cycleInfo');
+        calendar.innerHTML = "";
+
+        cycleInfo.innerText = `Cycle: ${data.cycle} (${data.cycle_start} → ${data.cycle_end})`;
+
+        for (let day = 1; day <= 31; day++) {
+            const div = document.createElement('div');
+            div.classList.add('day');
+
+            if (day === 1) {
+                div.classList.add('commission');
+                div.innerText = `${day}\nCommission`;
+            } else if (data.saved_days[day]) {
+                div.classList.add('saved');
+                div.innerText = `${day}\nSaved: GHS ${data.saved_days[day]}`;
+            } else {
+                div.classList.add('unsaved');
+                div.innerText = day;
+            }
+
+            calendar.appendChild(div);
         }
+    }
+
+    // Navigation
+    document.getElementById('prevCycle').addEventListener('click', () => {
+        cycle--;
+        fetchCalendar(cycle);
     });
 
-    $("#nextCycle").click(function () {
-        currentCycle++;
-        loadCalendar(currentCycle);
+    document.getElementById('nextCycle').addEventListener('click', () => {
+        cycle++;
+        fetchCalendar(cycle);
     });
 
-    // Load first cycle
-    loadCalendar(currentCycle);
+    // Initial load
+    fetchCalendar(cycle);
 </script>
 
 
