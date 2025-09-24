@@ -60,36 +60,61 @@
                 $next_unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s")) . '-' . $i;
                 $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 
-                $stmt->execute([$next_unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount / $advance_payment, $next_date, 'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1), $payment_mode]);
-                
-                // log message
+                // check if there are no existing transactions for the next date
+                $check_sql = "SELECT * FROM savings WHERE saving_customer_account_number = ? AND saving_date_collected = ? LIMIT 1";
+                $check_stmt = $dbConnection->prepare($check_sql);
+                $check_stmt->execute([$customer_account_number, $next_date]);
+                if ($check_stmt->rowCount() > 0) {
+                    continue; // skip this date if transaction already exists
+                }
+
+                // check if there are no error before inserting
+                if ($errors == null) {
+                    $stmt->execute([$next_unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount / $advance_payment, $next_date, 'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1), $payment_mode]);
+                    
+                    // log message
+                    if ($stmt) {
+                        processMonthlyCommission($find_customer_row->customer_id);
+
+                        $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account for day ' . ($i + 1);
+                        add_to_log($log_message, $added_by_id, $added_by);
+
+                        $message = 'Transaction added successfully.';
+                    } else {
+                        $errors = 'An error occurred. Please try again.';
+                    }
+                }
+            }
+        } else {
+            // check if today date or selected date already has a transaction
+            $check_sql = "SELECT * FROM savings WHERE saving_customer_account_number = ? AND saving_date_collected = ? LIMIT 1";
+            $check_stmt = $dbConnection->prepare($check_sql);
+            $check_stmt->execute([$customer_account_number, $transaction_date]);
+            if ($check_stmt->rowCount() > 0) {
+                $errors = 'A transaction for ' . $customer_name . ' (' . $customer_account_number . ') already exists for ' . date('d M, Y', strtotime($transaction_date)) . '.';
+            }
+
+            // insert into database
+            $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+
+            // check if there are no error before inserting
+            if ($errors) {
+                // do nothing
+            } else {
+            
+                $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
+
                 if ($stmt) {
                     processMonthlyCommission($find_customer_row->customer_id);
 
-                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account for day ' . ($i + 1);
+                    // 
+                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
                     add_to_log($log_message, $added_by_id, $added_by);
 
                     $message = 'Transaction added successfully.';
                 } else {
                     $errors = 'An error occurred. Please try again.';
                 }
-            }
-        } else {
-            // insert into database
-            $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            
-            $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
-
-            if ($stmt) {
-                processMonthlyCommission($find_customer_row->customer_id);
-
-                // 
-                $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
-                add_to_log($log_message, $added_by_id, $added_by);
-
-                $message = 'Transaction added successfully.';
-            } else {
-                $errors = 'An error occurred. Please try again.';
             }
         }
     } else {
