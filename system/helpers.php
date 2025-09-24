@@ -433,8 +433,34 @@ function findCustomerByAccountNumber($number) {
 
 
 
-////////////////////////////////// GENERAL
 
+////////////////////////////////// COLLECTORS
+function findCollectorByID($id) {
+    global $dbConnection;
+
+    $query = "
+        SELECT * FROM collectors 
+        WHERE collector_id = ? 
+		AND collector_status = ? 
+		LIMIT 1
+    ";
+    $statement = $dbConnection->prepare($query);
+    $statement->execute([$id, 'active']);
+    $collector = $statement->fetch(PDO::FETCH_OBJ);
+    return $collector;
+}
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////// GENERAL
 // add to logs
 function add_to_log($message, $person, $type) {
 	global $dbConnection;

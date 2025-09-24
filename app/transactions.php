@@ -42,7 +42,7 @@
             $stmt->execute([$type, $or]);
         } elseif (collector_is_logged_in()) {
             global $collector_id;
-            $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE withdrawal_collector_id = ? AND (withdrawal_status = ? OR withdrawal_status = ?)");
+            $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE withdrawal_approver_id = ? AND (withdrawal_status = ? OR withdrawal_status = ?)");
             $stmt->execute([$collector_id, $type, $or]);
         }
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -266,44 +266,9 @@
 
                         <!-- Table -->
                         <div class="card mb-7 mb-xxl-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 0px">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tableCheckAll" />
-                                                    <label class="form-check-label" for="tableCheckAll"></label>
-                                                </div>
-                                            </th>
-                                            <th class="fs-sm"></th>
-                                            <th class="fs-sm">Client</th>
-                                            <th class="fs-sm">Amount</th>
-                                            <th class="fs-sm">Collector</th>
-                                            <th class="fs-sm">Status</th>
-                                            <th class="fs-sm"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="width: 0px">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="tableCheckOne" />
-                                                    <label class="form-check-label" for="tableCheckOne"></label>
-                                                </div>
-                                            </td>
-                                            <td>1</td>
-                                            <td>Michael Johnson</td>
-                                            <td>$499.00</td>
-                                            <td>Enterprise</td>
-                                            <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-light">Approve</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+
+                            <div id="load-content"></div>
+
                         </div>
                     </section>
                 </div>
@@ -315,6 +280,35 @@
 <script>
 
     $(document).ready(function() {
+
+        // SEARCH AND PAGINATION FOR LIST
+        function load_data(page, query = '') {
+            $.ajax({
+                url : "<?= PROOT; ?>app/controller/list.transactions.php",
+                method : "POST",
+                data : {
+                    page : page, 
+                    query : query
+                },
+                success : function(data) {
+                    $("#load-content").html(data);
+                }
+            });
+        }
+
+        load_data(1);
+        $('#search').keyup(function() {
+            var query = $('#search').val();
+            load_data(1, query);
+        });
+
+        $(document).on('click', '.page-link-go', function() {
+            var page = $(this).data('page_number');
+            var query = $('#search').val();
+            load_data(page, query);
+        });
+
+
         // get customer deafult amount on customer select
         $('#select_customer').on('change', function() {
             var selectedValue = $(this).val();
