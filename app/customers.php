@@ -165,6 +165,7 @@
         <div class="container-lg">
             <?php if (isset($_GET['view'])): 
                 $view = sanitize($_GET['view']);
+
                 // fetch customer data
                 $query = "
                     SELECT * FROM customers 
@@ -288,6 +289,28 @@
                     </div>
                 </div>
             </div>
+
+
+<style>
+    .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+    .day { padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; }
+    .commission { background-color: #ffc107; color: #000; }
+    .saved { background-color: #28a745; color: #fff; }
+    .unsaved { background-color: #f8f9fa; border: 1px solid #dee2e6; color: #000; }
+  </style>
+
+                <div class="container">
+  <h3 class="mb-3">Savings Calendar</h3>
+  <div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-outline-primary" id="prevCycle">← Previous 31 Days</button>
+    <button class="btn btn-outline-primary" id="nextCycle">Next 31 Days →</button>
+  </div>
+
+  <div id="cycleInfo" class="mb-3 fw-bold"></div>
+  <div class="calendar" id="calendar"></div>
+</div>
+
+
 
             <!-- Page content -->
             <div class="row">
@@ -692,6 +715,61 @@
         </div>
 
 <?php include ('../system/inc/footer.php'); ?>
+
+<script>
+    console.log('<?= $view; ?>');
+    let cycle = 0;
+    let customerId = "<?= $view; ?>"; // hardcoded example, pass dynamically in your app
+
+    function fetchCalendar(cycleNo) {
+        fetch(`controller/customer.calendar.php?customer_id=${customerId}&cycle=${cycleNo}`)
+            .then(res => res.json())
+            .then(data => {
+            renderCalendar(data);
+        });
+    }
+
+    function renderCalendar(data) {
+        const calendar = document.getElementById('calendar');
+        const cycleInfo = document.getElementById('cycleInfo');
+        calendar.innerHTML = "";
+
+        cycleInfo.innerText = `Cycle: ${data.cycle} (${data.cycle_start} → ${data.cycle_end})`;
+
+        for (let day = 1; day <= 31; day++) {
+            const div = document.createElement('div');
+            div.classList.add('day');
+
+            if (day === 1) {
+                div.classList.add('commission');
+                div.innerText = `${day}\nCommission`;
+            } else if (data.saved_days[day]) {
+                div.classList.add('saved');
+                div.innerText = `${day}\nSaved: GHS ${data.saved_days[day]}`;
+            } else {
+                div.classList.add('unsaved');
+                div.innerText = day;
+            }
+
+            calendar.appendChild(div);
+        }
+    }
+
+    // Navigation
+    document.getElementById('prevCycle').addEventListener('click', () => {
+        cycle--;
+        fetchCalendar(cycle);
+    });
+
+    document.getElementById('nextCycle').addEventListener('click', () => {
+        cycle++;
+        fetchCalendar(cycle);
+    });
+
+    // Initial load
+    fetchCalendar(cycle);
+</script>
+
 
 <script>
 
