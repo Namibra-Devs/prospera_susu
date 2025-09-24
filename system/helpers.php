@@ -456,6 +456,7 @@ function sum_customer_withdrawals($customer_id, $status = 'Approved') {
 	return $row['total'] ?? 0;
 }
 
+// process monthly commission for a customer
 function processMonthlyCommission($customer_id) {
     global $dbConnection;
 

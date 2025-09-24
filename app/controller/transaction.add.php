@@ -64,6 +64,8 @@
                 
                 // log message
                 if ($stmt) {
+                    processMonthlyCommission($find_customer_row->customer_id);
+
                     $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account for day ' . ($i + 1);
                     add_to_log($log_message, $added_by_id, $added_by);
 
@@ -79,6 +81,8 @@
             $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
 
             if ($stmt) {
+                processMonthlyCommission($find_customer_row->customer_id);
+
                 // 
                 $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
                 add_to_log($log_message, $added_by_id, $added_by);
