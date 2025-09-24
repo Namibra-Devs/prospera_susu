@@ -28,6 +28,8 @@
         $is_advance_payment = (isset($_POST['is_advance_payment']) && $_POST['is_advance_payment'] === 'yes') ? true : false;
         $advance_payment = ($is_advance_payment && isset($_POST['advance_payment'])) ? sanitize($_POST['advance_payment']) : 0;
 
+        // dnd($advance_payment);
+
         $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
 
         $find_customer_row = findCustomerByAccountNumber($customer_account_number);
@@ -55,21 +57,21 @@
             $transaction_note .= ' (Advance payment for ' . $advance_payment . ' days)';
 
             // create a foreach loop to add multiple transactions for advance payment
-            for ($i = 1; $i < $advance_payment; $i++) {
+            for ($i = 0; $i < $advance_payment; $i++) {
                 $next_date = date('Y-m-d', strtotime($transaction_date . ' + ' . $i . ' days'));
                 $next_unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s")) . '-' . $i;
                 $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 
                 // check if there are no existing transactions for the next date
-                $check_sql = "SELECT * FROM savings WHERE saving_customer_account_number = ? AND saving_date_collected = ? LIMIT 1";
-                $check_stmt = $dbConnection->prepare($check_sql);
-                $check_stmt->execute([$customer_account_number, $next_date]);
-                if ($check_stmt->rowCount() > 0) {
-                    continue; // skip this date if transaction already exists
-                }
+                // $check_sql = "SELECT * FROM savings WHERE saving_customer_account_number = ? AND saving_date_collected = ? LIMIT 1";
+                // $check_stmt = $dbConnection->prepare($check_sql);
+                // $check_stmt->execute([$customer_account_number, $next_date]);
+                // if ($check_stmt->rowCount() > 0) {
+                //     continue; // skip this date if transaction already exists
+                // }
 
                 // check if there are no error before inserting
-                if ($errors == null) {
+                // if ($errors == null) {
                     $stmt->execute([$next_unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount / $advance_payment, $next_date, 'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1), $payment_mode]);
                     
                     // log message
@@ -83,7 +85,7 @@
                     } else {
                         $errors = 'An error occurred. Please try again.';
                     }
-                }
+                // }
             }
         } else {
             // check if today date or selected date already has a transaction

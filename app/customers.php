@@ -741,10 +741,14 @@
 <script>
     let currentCycle = 0;
     const customerId = "<?= $view; ?>";
+    let lastData = null;
 
     function loadCalendar(cycle) {
         $.getJSON("<?= PROOT; ?>app/controller/customer.calendar.php", { customer_id: customerId, cycle: cycle }, function (data) {
+            lastData = data; // Store the last fetched data
+            // Clear existing calendar
             $("#calendar").empty();
+
             if (!data.cycle_start) {
                 $("#cycleLabel").text("No savings yet");
                 return;
@@ -778,9 +782,44 @@
                     `<div class="day ${cellClass}">${text}</div>`
                 );
             }
+            // Add click handler to each cell
+            $(".day").click(function () {
+                let day = $(this).data("day");
+                showDayDetails(day);
+            });
+
         }).fail(function (xhr) {
             alert("Error: " + xhr.responseText);
         });
+    }
+
+    //
+    function showDayDetails(day) {
+        if (!lastData) return;
+
+        let body = "";
+        if (lastData.commission_day === day) {
+            body = `<p><strong>Day ${day}</strong> is the <span class="text-danger">Commission Fee</span> day for the company.</p>`;
+        } else if (lastData.saved_days[day]) {
+            body = `
+            <p><strong>Day:</strong> ${day}</p>
+            <p><strong>Amount Saved:</strong> GHS ${lastData.saved_days[day]}</p>
+            <p><strong>Date:</strong> ${calculateDate(lastData.cycle_start, day)}</p>
+            `;
+        } else {
+            body = `<p>No savings recorded for <strong>Day ${day}</strong>.</p>`;
+        }
+
+        $("#modalBody").html(body);
+        new bootstrap.Modal(document.getElementById("dayModal")).show();
+    }
+
+    //
+    // helper: calculate actual date of a given day in the cycle
+    function calculateDate(cycleStart, day) {
+        let start = new Date(cycleStart);
+        start.setDate(start.getDate() + (day - 1));
+        return start.toISOString().split("T")[0];
     }
 
     $("#prevCycle").click(function () {

@@ -143,156 +143,19 @@
     </div>
     <?php endif; ?>
     
-    <!-- Offcanvas: Product -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="productModal" aria-labelledby="productModalLabel">
-      <div class="offcanvas-body">
-        <!-- Header -->
-        <div class="row">
-          <div class="col-auto">
-            <div class="avatar avatar-xl rounded">
-              <img class="avatar-img" src="./assets/img/products/earbuds.jpg" alt="..." />
-            </div>
-          </div>
-          <div class="col">
-            <small class="text-body-secondary">Audio</small>
-            <h2 class="fs-5 mb-1">Noise-Canceling Earbuds</h2>
-            <div class="rating" aria-label="5 out of 5 stars" style="--stars: 5"></div>
-          </div>
-          <div class="col-auto">
-            <span class="fs-lg text-body-secondary">$129.99</span>
-          </div>
-          <div class="col-auto">
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
-        </div>
-    
-        <!-- Divider -->
-        <hr class="my-6" />
-    
-        <!-- Description -->
-        <p>
-          Experience unparalleled audio quality with our Noise-Canceling Earbuds, designed to block out unwanted noise and immerse you in pure sound. Featuring
-          advanced active noise cancellation (ANC), these earbuds reduce ambient distractions, letting you focus on your music, calls, or podcasts with
-          crystal-clear clarity.
-        </p>
-    
-        <!-- Divider -->
-        <hr class="my-6" />
-    
-        <!-- Header -->
-        <h3 class="fs-6 mb-5">Details</h3>
-    
-        <!-- Details -->
-        <div class="vstack gap-3">
-          <div class="row align-items-center gx-4">
-            <div class="col-auto">
-              <span class="text-body-secondary">Availability</span>
-            </div>
-            <div class="col">
-              <hr class="my-0 border-style-dotted" />
-            </div>
-            <div class="col-auto">
-              <span class="badge bg-success-subtle text-success">In Stock</span>
-            </div>
-          </div>
-          <div class="row align-items-center gx-4">
-            <div class="col-auto">
-              <span class="text-body-secondary">Shipping</span>
-            </div>
-            <div class="col">
-              <hr class="my-0 border-style-dotted" />
-            </div>
-            <div class="col-auto"><span class="material-symbols-outlined text-body-tertiary me-1">globe</span> Worldwide</div>
-          </div>
-        </div>
-    
-        <!-- Divider -->
-        <hr class="my-6" />
-    
-        <!-- Header -->
-        <div class="row align-items-center mb-5">
-          <div class="col">
-            <h3 class="fs-6 mb-0">Reviews</h3>
-          </div>
-          <div class="col-auto">
-            <small class="text-body-secondary">3 reviews</small>
-          </div>
-        </div>
-    
-        <!-- Reviews -->
-        <div class="row gx-3 mb-4">
-          <div class="col-auto">
-            <!-- Avatar -->
-            <div class="avatar avatar-sm">
-              <img class="avatar-img" src="./assets/img/photos/photo-2.jpg" alt="..." />
-            </div>
-          </div>
-          <div class="col">
-            <!-- Card -->
-            <div class="card bg-body-tertiary border-transparent mb-0">
-              <div class="card-body p-4">
-                <div class="row align-items-center mb-2">
-                  <div class="col">
-                    <h6 class="fs-sm fw-normal text-body-secondary mb-0">Michael Johnson · 1d ago</h6>
-                  </div>
-                  <div class="col-auto">
-                    <small class="rating" aria-label="5 out of 5 stars" style="--stars: 5"></small>
-                  </div>
+     <!-- Modal -->
+    <div class="modal fade" id="dayModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Day Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <p class="mb-0">Incredible noise cancellation! Crystal-clear sound and deep bass. Perfect for any environment.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row gx-3 mb-4">
-          <div class="col-auto">
-            <!-- Avatar -->
-            <div class="avatar avatar-sm">
-              <img class="avatar-img" src="./assets/img/photos/photo-1.jpg" alt="..." />
-            </div>
-          </div>
-          <div class="col">
-            <!-- Card -->
-            <div class="card bg-body-tertiary border-transparent mb-0">
-              <div class="card-body p-4">
-                <div class="row align-items-center mb-2">
-                  <div class="col">
-                    <h6 class="fs-sm fw-normal text-body-secondary mb-0">Emily Thompson · 1d ago</h6>
-                  </div>
-                  <div class="col-auto">
-                    <small class="rating" aria-label="5 out of 5 stars" style="--stars: 5"></small>
-                  </div>
+                <div class="modal-body" id="modalBody">
+                    Loading...
                 </div>
-                <p class="mb-0">Super comfy and great for travel! Blocks out noise and lasts all day.</p>
-              </div>
             </div>
-          </div>
         </div>
-        <div class="row gx-3">
-          <div class="col-auto">
-            <!-- Avatar -->
-            <div class="avatar avatar-sm">
-              <img class="avatar-img" src="./assets/img/photos/photo-3.jpg" alt="..." />
-            </div>
-          </div>
-          <div class="col">
-            <!-- Card -->
-            <div class="card bg-body-tertiary border-transparent mb-0">
-              <div class="card-body p-4">
-                <div class="row align-items-center mb-2">
-                  <div class="col">
-                    <h6 class="fs-sm fw-normal text-body-secondary mb-0">Robert Garcia · 12m ago</h6>
-                  </div>
-                  <div class="col-auto">
-                    <small class="rating" aria-label="5 out of 5 stars" style="--stars: 5"></small>
-                  </div>
-                </div>
-                <p class="mb-0">Fantastic sound quality with long battery life. Easy to use and reliable!</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
     
     <!-- Offcanvas: Order -->

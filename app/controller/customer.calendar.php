@@ -64,30 +64,30 @@
 
     $savedDays = [];
     while ($s = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $dayNumber = (new DateTime($s['saving_date_collected']))->diff($cycleStart)->days + 1; 
+        $dayNumber = (new DateTime($s['saving_date_collected']))->diff($cycleStart)->days + 2; // 1-31
         $savedDays[$dayNumber] = $s['saving_amount'];
     }
 
-// ✅ Check if commission was deducted for this cycle
-$sqlCommission = "SELECT commission_date 
-                  FROM commissions 
-                  WHERE commission_customer_id = ? 
-                  AND commission_date BETWEEN ? AND ?
-                  LIMIT 1";
-$stmt = $dbConnection->prepare($sqlCommission);
-$stmt->execute([$customer_id, $cycleStart->format("Y-m-d"), $cycleEnd->format("Y-m-d")]);
-$commission = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Check if commission was deducted for this cycle
+    $sqlCommission = "SELECT commission_date 
+                    FROM commissions 
+                    WHERE commission_customer_id = ? 
+                    AND commission_date BETWEEN ? AND ?
+                    LIMIT 1";
+    $stmt = $dbConnection->prepare($sqlCommission);
+    $stmt->execute([$customer_id, $cycleStart->format("Y-m-d"), $cycleEnd->format("Y-m-d")]);
+    $commission = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$commissionDay = null;
-if ($commission && $commission['commission_date']) {
-    $commissionDay = (new DateTime($commission['commission_date']))->diff($cycleStart)->days + 1;
-}
+    $commissionDay = null;
+    if ($commission && $commission['commission_date']) {
+        $commissionDay = (new DateTime($commission['commission_date']))->diff($cycleStart)->days + 1;
+    }
 
-// ✅ Response
-echo json_encode([
-    "cycle" => $cycle,
-    "cycle_start" => $cycleStart->format("Y-m-d"),
-    "cycle_end" => $cycleEnd->format("Y-m-d"),
-    "saved_days" => $savedDays,
-    "commission_day" => $commissionDay
-]);
+    // Response
+    echo json_encode([
+        "cycle" => $cycle,
+        "cycle_start" => $cycleStart->format("Y-m-d"),
+        "cycle_end" => $cycleEnd->format("Y-m-d"),
+        "saved_days" => $savedDays,
+        "commission_day" => $commissionDay
+    ]);
