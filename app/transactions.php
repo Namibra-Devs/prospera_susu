@@ -339,14 +339,14 @@
                 url: 'controller/transaction.add.php',
                 data: formData,
                 beforeSend: function() {
-                    $this.find('##submit-transaction').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+                    $this.find('#submit-transaction').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
                 },
                 success: function(response) {
                     // Handle the response from the server
                     // Assuming the response is a JSON object with 'status' and 'message' properties
                     var data = JSON.parse(response);
                     if (data.status === 'success') {
-                        $state.html('<div class="text-success">' + data.message + '</div>');
+                        $state.html(data.message);
                         $('.toast').toast('show');
                         return false;
                         // Optionally, you can reset the form here
@@ -368,7 +368,7 @@
                     return false;
                 },
                 complete: function() {
-                    $this.find('button').attr('disabled', false).html('Add transaction');
+                    $this.find('#submit-transaction').attr('disabled', false).html('Add transaction');
                 }
             });
         });
