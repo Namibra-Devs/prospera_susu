@@ -60,7 +60,7 @@
                                 <label class="form-label" for="advance_payment">Advance payment</label>
                                 <select class="form-select" id="advance_payment" name="advance_payment" required>
                                     <option value="1">1</option>
-                                    <?php for ($i = 2; $i <= 30; $i++) {
+                                    <?php for ($i = 2; $i <= 31; $i++) {
                                         echo '<option value="' . $i . '">' . $i . '</option>';
                                     } ?>
                                 </select>

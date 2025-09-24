@@ -456,6 +456,75 @@ function sum_customer_withdrawals($customer_id, $status = 'Approved') {
 	return $row['total'] ?? 0;
 }
 
+function processMonthlyCommission($customer_id) {
+    global $dbConnection;
+
+    // Step 1: get the very first saving date for this customer
+    $sqlStart = "SELECT MIN(saving_date_collected) AS first_date 
+                FROM savings 
+                WHERE saving_customer_id = ?";
+    $stmtStart = $dbConnection->prepare($sqlStart);
+    $stmtStart->execute([$customer_id]);
+    $rowStart = $stmtStart->fetch(PDO::FETCH_ASSOC);
+
+    if (!$rowStart || !$rowStart['first_date']) {
+        return; // no savings yet
+    }
+
+    $firstSavingDate = $rowStart['first_date'];
+
+    // Step 2: find the first saving in every 31-day cycle
+    $sql = "
+        SELECT 
+            saving_id,
+            saving_customer_id,
+            saving_amount,
+            saving_date_collected,
+            FLOOR(DATEDIFF(saving_date_collected, ?)/31) AS cycle_no
+        FROM savings
+        WHERE saving_customer_id = ?
+        ORDER BY saving_date_collected ASC
+    ";
+
+    $stmt = $dbConnection->prepare($sql);
+    $stmt->execute([$firstSavingDate, $customer_id]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Track first record per cycle
+    $firstDays = [];
+    foreach ($rows as $row) {
+        $cycle = $row['cycle_no'];
+        if (!isset($firstDays[$cycle])) {
+            $firstDays[$cycle] = $row; // first saving for this cycle
+        }
+    }
+
+    // Step 3: insert commissions
+    $insert = $dbConnection->prepare("
+        INSERT INTO commissions (commission_id, commission_customer_id, commission_amount, commission_date) 
+        VALUES (?, ?, ?, ?)
+    ");
+
+    foreach ($firstDays as $day) {
+        // prevent duplicates
+        $check = $dbConnection->prepare("
+            SELECT commission_id 
+            FROM commissions 
+            WHERE commission_customer_id = ? AND commission_date = ?
+        ");
+        $check->execute([$day['saving_customer_id'], $day['saving_date_collected']]);
+
+        if ($check->rowCount() == 0) {
+            $insert->execute([
+				guidv4() . '-' . strtotime(date("Y-m-d H:m:s")), 
+				$day['saving_customer_id'], 
+				$day['saving_amount'], 
+				$day['saving_date_collected']
+			]);
+        }
+    }
+}
+
 
 
 

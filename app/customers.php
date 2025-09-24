@@ -165,6 +165,11 @@
         <div class="container-lg">
             <?php if (isset($_GET['view'])): 
                 $view = sanitize($_GET['view']);
+
+                processMonthlyCommission($view);
+                die;
+
+
                 $query = "
                     SELECT * FROM customers 
                     WHERE customer_id = ? 
@@ -300,7 +305,7 @@
                                 <h1 class="card-title fs-5"><?= ucwords($customer_data["customer_name"]); ?></h1>
 
                                 <!-- Text -->
-                                <p class="text-body-secondary mb-6">A susu saver</p>
+                                <p class="text-body-secondary mb-6">Account number: <?= $customer_data["customer_account_number"]; ?></p>
 
                                 <!-- List -->
                                 <ul class="list-group list-group-flush mb-0">

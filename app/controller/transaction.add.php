@@ -47,8 +47,8 @@
         if ($is_advance_payment) {
             if ($advance_payment <= 1) {
                 $errors = 'Please select advance payment option.';
-            } elseif ($advance_payment > 30) {
-                $errors = 'Advance payment cannot be more than 30 days.';
+            } elseif ($advance_payment > 31) {
+                $errors = 'Advance payment cannot be more than 31 days.';
             }
             // calculate total amount
             $transaction_amount = $transaction_amount * $advance_payment;
@@ -72,21 +72,21 @@
                     $errors = 'An error occurred. Please try again.';
                 }
             }
-        }
-
-        // insert into database
-        $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        
-        $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
-
-        if ($stmt) {
-            // 
-            $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
-            add_to_log($log_message, $added_by_id, $added_by);
-
-            $message = 'Transaction added successfully.';
         } else {
-            $errors = 'An error occurred. Please try again.';
+            // insert into database
+            $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            
+            $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
+
+            if ($stmt) {
+                // 
+                $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
+                add_to_log($log_message, $added_by_id, $added_by);
+
+                $message = 'Transaction added successfully.';
+            } else {
+                $errors = 'An error occurred. Please try again.';
+            }
         }
     } else {
         $errors = 'Invalid request.';
