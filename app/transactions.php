@@ -19,6 +19,51 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    // function to get total amount of transac
+    function getTotalTransactionAmount($type = 'Approved') {
+        // global $dbConnection;
+        // $stmt = $dbConnection->prepare("SELECT SUM(saving_amount) AS total_amount FROM savings WHERE saving_status = ?");
+        // $stmt->execute([$type]);
+        // $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // return money($row['total_amount'] ? $row['total_amount'] : 0);
+
+        global $dbConnection;
+        if (admin_is_logged_in()) {
+            $stmt = $dbConnection->prepare("SELECT SUM(saving_amount) AS total_amount FROM savings WHERE saving_status = ?");
+            $stmt->execute([$type]);
+        } elseif (collector_is_logged_in()) {
+            global $collector_id;
+            $stmt = $dbConnection->prepare("SELECT SUM(saving_amount) AS total_amount FROM savings WHERE saving_collector_id = ? AND saving_status = ?");
+            $stmt->execute([$collector_id, $type]);
+        }
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return money($row['total_amount'] ? $row['total_amount'] : 0);
+    }
+
+    // function to get total amount of withdrawals
+    function getTotalWithdrawalAmount($type = 'Approved', $or = 'Paid') {
+        global $dbConnection;
+        $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE (withdrawal_status = ? OR withdrawal_status = ?)");
+        $stmt->execute([$type, $or]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return money($row['total_amount'] ? $row['total_amount'] : 0);
+    }
+
+    // function to get total number of customers and to display for admin and collector
+    function getTotalCustomers() {
+        global $dbConnection;
+        if (admin_is_logged_in()) {
+            $stmt = $dbConnection->prepare("SELECT COUNT(*) AS total_customers FROM customers WHERE customer_status = ?");
+            $stmt->execute(['active']);
+        } elseif (collector_is_logged_in()) {
+            global $collector_id;
+            $stmt = $dbConnection->prepare("SELECT COUNT(*) AS total_customers FROM customers WHERE customer_added_by = 'collector' AND customer_collector_id = ? AND customer_status = 'active'");
+            $stmt->execute([$collector_id]);
+        }
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['total_customers'] ? $row['total_customers'] : 0;
+    }
+
 ?>
 
     <!-- Main -->
@@ -62,10 +107,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Today</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Deposites</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= money(0); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= getTotalTransactionAmount(); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -83,10 +128,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">This week</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Withdrawals</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= money(0); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= getTotalWithdrawalAmount(); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -104,10 +149,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">This month</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Customers</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= money(0); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= getTotalCustomers(0); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -125,10 +170,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Pending deposites</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= money(0); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= getTotalTransactionAmount('Pending'); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -442,6 +487,26 @@
                     $this.find('#submit-transaction').attr('disabled', false).html('Add transaction');
                 }
             });
+        });
+
+        // reset form  if add transaction modal is closed
+        $('#transactionModal').on('hidden.bs.modal', function () {
+            // reset form
+            $('#add-transaction-form')[0].reset();
+            // show first step
+            $('#first_step').show();
+            // hide preview step
+            $('#preview_step').hide();
+            // change modal title
+            $('#transactionModalLabel').html('Add new transaction');
+            // change back button to next step button
+            $('#back_step').hide();
+            $('#next_step').show();
+            // hide submit button
+            $('#submit-transaction').hide();
+            // hide advance payment select
+            $('#advance_payment_div').hide();
+            $('#advance_payment').prop('disabled', true);
         });
         
     });

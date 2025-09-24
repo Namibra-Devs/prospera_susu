@@ -11,7 +11,8 @@
                 $options .= '<option value="' . sanitize(ucwords($customer['customer_name']) . ',' . $customer['customer_account_number']) . '">' . sanitize(ucwords($customer['customer_name']) . ',' . $customer['customer_account_number']) . '</option>';
             }
     ?>
-    <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true">
+
+    <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 pb-0">
@@ -44,8 +45,8 @@
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="totday_date">Date</label>
-                                <input class="form-control" id="totday_date" name="today_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required />
+                                <label class="form-label" for="today_date">Date</label>
+                                <input class="form-control" id="today_date" name="today_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required />
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="note">Note (optional)</label>
@@ -68,17 +69,72 @@
                         </div>
                         <!-- preview first step on second step -->
                         <div id="preview_step" style="display: none;">
-                            <div class="mb-4">
-                                <h5>Preview transaction</h5>
-                                <p><strong>Customer:</strong> <span id="preview_customer"></span></p>
-                                <p><strong>Amount:</strong> <span id="preview_amount"></span></p>
-                                <p><strong>Date:</strong> <span id="preview_date"></span></p>
-                                <p><strong>Note:</strong> <span id="preview_note"></span></p>
-                                <p><strong>Mode of payment:</strong> <span id="preview_payment_mode"></span></p>
-                                <p><strong>Advance payment for:</strong> <span id="preview_advance_payment"></span></p>
+                            <div class="vstack gap-3">
+                                <div class="row align-items-center gx-4">
+                                    <div class="col-auto">
+                                        <span class="text-body-secondary">Customer</span>
+                                    </div>
+                                    <div class="col">
+                                        <hr class="my-0 border-style-dotted" />
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="badge bg-success-subtle text-success" id="preview_customer"></span>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center gx-4">
+                                    <div class="col-auto">
+                                        <span class="text-body-secondary">Amount</span>
+                                    </div>
+                                    <div class="col">
+                                        <hr class="my-0 border-style-dotted" />
+                                    </div>
+                                    <div class="col-auto" id="preview_amount"></div>
+                                </div>
+                                <div class="row align-items-center gx-4">
+                                    <div class="col-auto">
+                                        <span class="text-body-secondary">Date</span>
+                                    </div>
+                                    <div class="col">
+                                        <hr class="my-0 border-style-dotted" />
+                                    </div>
+                                    <div class="col-auto" id="preview_date"></div>
+                                </div>
+                                <div class="row align-items-center gx-4">
+                                    <div class="col-auto">
+                                        <span class="text-body-secondary">Note</span>
+                                    </div>
+                                    <div class="col">
+                                        <hr class="my-0 border-style-dotted" />
+                                    </div>
+                                    <div class="col-auto" id="preview_note"></div>
+                                </div>
+                                <div class="row align-items-center gx-4">
+                                    <div class="col-auto">
+                                        <span class="text-body-secondary">Mode of payment</span>
+                                    </div>
+                                    <div class="col">
+                                        <hr class="my-0 border-style-dotted" />
+                                    </div>
+                                    <div class="col-auto" id="preview_payment_mode"></div>
+                                </div>
+                                <div class="row align-items-center gx-4">
+                                    <div class="col-auto">
+                                        <span class="text-body-secondary">Advance payment for</span>
+                                    </div>
+                                    <div class="col">
+                                        <hr class="my-0 border-style-dotted" />
+                                    </div>
+                                    <div class="col-auto" id="preview_advance_payment"></div>
+                                </div>
                             </div>
-                            <button type="button" class="btn btn-secondary w-100 mt-2" id="back_step"><< Back</button>
-                            <button type="submit" class="btn btn-secondary w-100 mt-4" id="submit-transaction" name="submit-transaction">Add transaction</button>
+                            <div class="row mt-4">
+                                <div class="col-6 col-sm-auto">
+                                    <button type="button" class="btn btn-link w-100" id="back_step"><< Back</button>
+                                </div>
+                                <div class="col-6 col-sm-auto">
+                                    <button type="submit" class="btn btn-secondary w-100" id="submit-transaction" name="submit-transaction">Add transaction</button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
