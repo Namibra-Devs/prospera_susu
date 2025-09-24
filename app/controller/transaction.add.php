@@ -3,7 +3,7 @@
 
     $errors = null;
     $message = null;
-    
+
     $added_by = null;
     $added_by_id = null;
     if (array_key_exists('PRSADMIN', $_SESSION)) {
@@ -16,6 +16,7 @@
 
     // check if is posted
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_customer'])) {
+
         // get form data
         $customer_info = sanitize($_POST['select_customer']);
         list($customer_name, $customer_account_number) = explode(',', $customer_info);

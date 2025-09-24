@@ -348,7 +348,7 @@
                     if (data.status === 'success') {
                         $state.html(data.message);
                         $('.toast').toast('show');
-                        return false;
+
                         // Optionally, you can reset the form here
                         $('#add-transaction-form')[0].reset();
                         // Close the modal after a short delay
@@ -372,22 +372,6 @@
                 }
             });
         });
-
-        // add new transaction
-        $('#add-transaction-form').on('submit', function (e) {
-            // e.preventDefault();
-
-            $('#submit-transaction').attr('disabled', true);
-            $('#submit-transaction').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
-
-            // Simulate a delay (e.g., AJAX call)
-            setTimeout(function () {
-                alert('Transaction submitted!');
-                $('#submit-transaction').html('Add transaction');
-                $('#submit-transaction').attr('disabled', false);
-            }, 2000);
-        });
-
         
     });
 </script>
