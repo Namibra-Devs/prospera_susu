@@ -8,6 +8,7 @@
     if (!admin_is_logged_in() && !collector_is_logged_in()) {
         redirect(PROOT . 'auth/sign-in');
     }
+    $view = 0;
 
     // functions to fetch all saves and withdrawals by cutomer 
     function fetchAllTransaction($customer_id) {
@@ -717,17 +718,31 @@
 <?php include ('../system/inc/footer.php'); ?>
 
 <script>
-    console.log('<?= $view; ?>');
     let cycle = 0;
     let customerId = "<?= $view; ?>"; // hardcoded example, pass dynamically in your app
 
+    // 
     function fetchCalendar(cycleNo) {
-        fetch(`controller/customer.calendar.php?customer_id=${customerId}&cycle=${cycleNo}`)
-            .then(res => res.json())
-            .then(data => {
-            renderCalendar(data);
+        $.ajax({
+            url: `<?= PROOT; ?>app/controller/customer.calendar.php?customer_id=${customerId}&cycle=${cycleNo}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                renderCalendar(data);
+            },
+            error: function(err) {
+                console.error('Error fetching calendar data:', err);
+            }, 
         });
     }
+
+    // function fetchCalendar(cycleNo) {
+    //     fetch(`controller/customer.calendar.php?customer_id=${customerId}&cycle=${cycleNo}`)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             renderCalendar(data);
+    //         });
+    //     }
 
     function renderCalendar(data) {
         const calendar = document.getElementById('calendar');

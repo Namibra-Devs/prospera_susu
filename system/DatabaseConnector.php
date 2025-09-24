@@ -88,6 +88,9 @@
     require_once ("helpers.php");
     require_once dirname(__DIR__) . "/config.php";
 
+    if (!is_dir(__DIR__ . '/cache')) mkdir(__DIR__ . '/cache', 0755, true);
+	if (!is_dir(__DIR__ . '/logs')) mkdir(__DIR__ . '/logs', 0755, true);
+
     // Display on Messages on Errors And Success for users
  	$flash_message = '';
  	if (isset($_SESSION['flash_success'])) {
