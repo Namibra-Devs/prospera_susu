@@ -21,12 +21,6 @@
 
     // function to get total amount of transac
     function getTotalTransactionAmount($type = 'Approved') {
-        // global $dbConnection;
-        // $stmt = $dbConnection->prepare("SELECT SUM(saving_amount) AS total_amount FROM savings WHERE saving_status = ?");
-        // $stmt->execute([$type]);
-        // $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        // return money($row['total_amount'] ? $row['total_amount'] : 0);
-
         global $dbConnection;
         if (admin_is_logged_in()) {
             $stmt = $dbConnection->prepare("SELECT SUM(saving_amount) AS total_amount FROM savings WHERE saving_status = ?");
@@ -43,8 +37,14 @@
     // function to get total amount of withdrawals
     function getTotalWithdrawalAmount($type = 'Approved', $or = 'Paid') {
         global $dbConnection;
-        $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE (withdrawal_status = ? OR withdrawal_status = ?)");
-        $stmt->execute([$type, $or]);
+        if (admin_is_logged_in()) {
+            $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE (withdrawal_status = ? OR withdrawal_status = ?)");
+            $stmt->execute([$type, $or]);
+        } elseif (collector_is_logged_in()) {
+            global $collector_id;
+            $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE withdrawal_collector_id = ? AND (withdrawal_status = ? OR withdrawal_status = ?)");
+            $stmt->execute([$collector_id, $type, $or]);
+        }
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return money($row['total_amount'] ? $row['total_amount'] : 0);
     }
