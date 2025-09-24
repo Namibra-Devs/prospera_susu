@@ -9,51 +9,42 @@
         redirect(PROOT . 'auth/sign-in');
     }
 
-    // functions to fetch all saves and withdrawals by customer
-    function fetchAllTransaction() {
+    // functions to fetch all saves and withdrawals by cutomer 
+    function fetchAllTransaction($customer_id) {
         global $dbConnection;
-        
-        // Fetch deposits
-        $depositQuery = "
-            SELECT 
-                saving_id AS transaction_id, 
-                saving_customer_id AS customer_id, 
-                saving_customer_account_number AS account_number,
-                saving_collector_id AS collector_id, 
-                saving_amount AS amount, 
-                saving_date_collected AS transaction_date, 
-                saving_status AS status, 
-                'saving' AS type, 
-                created_at 
-            FROM savings
-        "; 
-        $depositStmt = $dbConnection->query($depositQuery);
-        $deposits = $depositStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Fetch withdrawals
-        $withdrawalQuery = "
-            SELECT 
-                withdrawal_id AS transaction_id, 
-                withdrawal_customer_id AS customer_id, 
-                withdrawal_customer_account_number AS account_number, 
-                withdrawal_approver_id AS collector_id, 
-                withdrawal_amount_requested AS amount, 
-                withdrawal_date_requested AS transaction_date, 
-                withdrawal_status AS status, 
-                'withdrawal' AS type, 
-                created_at 
-            FROM withdrawals
+        $sql = "
+            SELECT * FROM (
+                SELECT 
+                    saving_id AS transaction_id, 
+                    saving_customer_id AS customer_id, 
+                    saving_customer_account_number AS account_number,
+                    saving_collector_id AS collector_id, 
+                    saving_amount AS amount, 
+                    saving_date_collected AS transaction_date, 
+                    saving_status AS status, 
+                    'saving' AS type, 
+                    created_at 
+                FROM savings 
+                WHERE saving_customer_id = ?
+                UNION ALL
+                SELECT 
+                    withdrawal_id AS transaction_id, 
+                    withdrawal_customer_id AS customer_id, 
+                    withdrawal_customer_account_number AS account_number, 
+                    withdrawal_approver_id AS collector_id, 
+                    withdrawal_amount_requested AS amount, 
+                    withdrawal_date_requested AS transaction_date, 
+                    withdrawal_status AS status, 
+                    'withdrawal' AS type, 
+                    created_at 
+                FROM withdrawals 
+                WHERE withdrawal_customer_id = ?
+            ) AS transactions
+            ORDER BY created_at DESC
         ";
-                            
-        $withdrawalStmt = $dbConnection->query($withdrawalQuery);
-        $withdrawals = $withdrawalStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Merge and sort by date
-        $transactions = array_merge($deposits, $withdrawals);
-        usort($transactions, function($a, $b) {
-            return strtotime($a['created_at']) - strtotime($b['created_at']);
-        });
-
+        $stmt = $dbConnection->prepare($sql);
+        $stmt->execute([$customer_id, $customer_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
@@ -390,27 +381,32 @@
                             <th>ID</th>
                             <th>Collector</th>
                             <th>Date</th>
+                            <th>Type</th>
                             <th>Status</th>
                             <th>Amount</th>
                         </thead>
                         <tbody>
                             <?php 
-                                $all_saves = get_all_saves($customer_data['customer_id']);
+                                $all_saves = fetchAllTransaction($customer_data['customer_id']);
                                 if (count($all_saves) > 0):
                                     $i = 1;
                                     foreach ($all_saves as $save): 
-                                        $collector = findCollectorById($save['saving_collector_id'])->collector_name;
+                                        $type = ($save['type'] == 'saving') ? '<span class="fs-sm text-primary">Deposit</span>' : '<span class="fs-sm text-danger">Withdrawal</span>';
+                                        
+                                        $collector = findCollectorById($save['collector_id'])->collector_name;
                                         if (!$collector) {
                                             $collector = 'Admin';
                                         }
 
                                         $status_badge = '';
-                                        if ($save['saving_status'] == 'Approved') {
+                                        if ($save['status'] == 'Approved') {
                                             $status_badge = '<span class="badge bg-success-subtle text-success">Approved</span>';
-                                        } elseif ($save['saving_status'] == 'Pending') {
+                                        } elseif ($save['status'] == 'Pending') {
                                             $status_badge = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
-                                        } elseif ($save['saving_status'] == 'Rejected') {
+                                        } elseif ($save['status'] == 'Rejected') {
                                             $status_badge = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
+                                        } elseif ($save['status'] == 'Paid') {
+                                            $status_badge = '<span class="badge bg-primary-subtle text-primary">Paid</span>';
                                         } else {
                                             $status_badge = '<span class="badge bg-secondary-subtle text-secondary">Unknown</span>';
                                         }
@@ -419,8 +415,9 @@
                                 <td class="text-body-secondary"><?= $i; ?></td>
                                 <td><?= ucwords($collector); ?></td>
                                 <td><?= pretty_date_notime($save['created_at']); ?></td>
+                                <td><?= $type; ?></td>
                                 <td><?= $status_badge; ?></td>
-                                <td><?= money($save["saving_amount"]); ?></td>
+                                <td><?= money($save["amount"]); ?></td>
                             </tr>
                             <?php 
                                         $i++;
