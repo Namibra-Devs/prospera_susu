@@ -745,9 +745,8 @@
 
     function loadCalendar(cycle) {
         $.getJSON("<?= PROOT; ?>app/controller/customer.calendar.php", { customer_id: customerId, cycle: cycle }, function (data) {
+            $("#calendar").empty(); // Clear existing calendar
             lastData = data; // Store the last fetched data
-            // Clear existing calendar
-            $("#calendar").empty();
 
             if (!data.cycle_start) {
                 $("#cycleLabel").text("No savings yet");
@@ -779,12 +778,13 @@
                 }
 
                 $("#calendar").append(
-                    `<div class="day ${cellClass}">${text}</div>`
+                    `<div class="day ${cellClass}" data-day="${day}">${text}</div>`
                 );
             }
             // Add click handler to each cell
             $(".day").click(function () {
                 let day = $(this).data("day");
+                console.log(day);
                 showDayDetails(day);
             });
 
@@ -796,7 +796,7 @@
     //
     function showDayDetails(day) {
         if (!lastData) return;
-
+        console.log(day);
         let body = "";
         if (lastData.commission_day === day) {
             body = `<p><strong>Day ${day}</strong> is the <span class="text-danger">Commission Fee</span> day for the company.</p>`;
