@@ -328,6 +328,77 @@
             }
         });
 
+        // next step button in add transaction modal
+        $('#next_step').on('click', function() {
+            // validate form
+            var customer = $('#select_customer').val();
+            var amount = $('#default_amount').val();
+            var date = $('#today_date').val();
+            var payment_mode = $('#payment_mode').val();
+
+            if (customer === '' || amount === '' || date === '' || payment_mode === '') {
+                $('.toast-body').html('Please fill all required fields.');
+                $('.toast').toast('show');
+                return false;
+            } else {
+                // hide first step
+                $('#first_step').hide();
+                // show preview step
+                $('#preview_step').show();
+
+                // set preview values
+                var customerText = $('#select_customer option:selected').text();
+                $('#preview_customer').html(customerText);
+
+                var amountText = $('#default_amount').val();
+                $('#preview_amount').html(amountText);
+
+                var dateText = $('#today_date').val();
+                $('#preview_date').html(dateText);
+
+                var paymentModeText = $('#payment_mode option:selected').text();
+                $('#preview_payment_mode').html(paymentModeText);
+
+                var noteText = $('#note').val();
+                if (noteText === '') {
+                    noteText = 'N/A';
+                }
+                $('#preview_note').html(noteText);
+
+                var isAdvancePaymentChecked = $('#is_advance_payment').is(':checked');
+                if (isAdvancePaymentChecked) {
+                    var advancePaymentDays = $('#advance_payment').val();
+                    $('#preview_advance_payment').html('Yes, for ' + advancePaymentDays + ' days');
+                } else {
+                    $('#preview_advance_payment').html('No');
+                }
+
+                // change modal title
+                $('#transactionModalLabel').html('Preview transaction');
+                // change next step button to back button
+                $('#next_step').hide();
+                $('#back_step').show();
+                // show submit button
+                $('#submit-transaction').show();
+            }
+        });
+
+        // back to first step button
+        $('#back_step').on('click', function() {
+            // hide preview step
+            $('#preview_step').hide();
+            // show first step
+            $('#first_step').show();
+
+            // change modal title
+            $('#transactionModalLabel').html('Add new transaction');
+            // change back button to next step button
+            $('#back_step').hide();
+            $('#next_step').show();
+            // hide submit button
+            $('#submit-transaction').hide();
+        });
+
         // create an ajax request to submit the add transaction form
         var $this = $('#add-transaction-form');
         var $state = $('.toast-body');

@@ -20,50 +20,66 @@
                 </div>
                 <div class="modal-body">
                     <form id="add-transaction-form" method="POST">
-                        <div class="mb-4">
-                            <label class="form-label" for="select_customer">Select customer</label>
-                            <select class="form-select" id="select_customer" name="select_customer" data-choices required>
-                                <option value="">...</option>
-                                <?php echo $options; ?>
-                            </select>
+                        <div id="first_step">
+                            <div class="mb-4">
+                                <label class="form-label" for="select_customer">Select customer</label>
+                                <select class="form-select" id="select_customer" name="select_customer" data-choices required>
+                                    <option value="">...</option>
+                                    <?php echo $options; ?>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="default_amount">Amount <span id="label-defualt-amount"></span></label>
+                                <input class="form-control" id="default_amount" name="default_amount" type="number" min="0.00" step="0.01" readonly placeholder="Enter amount" required />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="payment_mode">Mode of payment</label>
+                                <select class="form-select" id="payment_mode" name="payment_mode" data-choices required>
+                                    <option value="">Mode</option>
+                                    <option value="bank">Bank</option>
+                                    <option value="cash" selected>Cash</option>
+                                    <option value="airteltigomoney">AirtelTigo Money</option>
+                                    <option value="mtnmobilemoney">MTN Mobile Money</option>
+                                    <option value="telecelcash">Tecel Cash</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="totday_date">Date</label>
+                                <input class="form-control" id="totday_date" name="today_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="note">Note (optional)</label>
+                                <textarea class="form-control" id="note" name="note" rows="3" data-autosize></textarea>
+                                <div class="form-text">Limit 500</div>
+                            </div>
+                            <!-- check for advance payment or not -->
+                            <label class="form-label" for="note">is advance payment</label>
+                            <input type="checkbox" id="is_advance_payment" name="is_advance_payment" value="yes" />
+                            <div class="mb-4 mt-2" id="advance_payment_div" style="display: none;">
+                                <label class="form-label" for="advance_payment">Advance payment</label>
+                                <select class="form-select" id="advance_payment" name="advance_payment" required>
+                                    <option value="1">1</option>
+                                    <?php for ($i = 2; $i <= 30; $i++) {
+                                        echo '<option value="' . $i . '">' . $i . '</option>';
+                                    } ?>
+                                </select>
+                            </div>
+                            <button type="button" id="next_step" class="btn btn-link w-100 mt-4">Next step</button>
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="default_amount">Amount <span id="label-defualt-amount"></span></label>
-                            <input class="form-control" id="default_amount" name="default_amount" type="number" min="0.00" step="0.01" readonly placeholder="Enter amount" required />
+                        <!-- preview first step on second step -->
+                        <div id="preview_step" style="display: none;">
+                            <div class="mb-4">
+                                <h5>Preview transaction</h5>
+                                <p><strong>Customer:</strong> <span id="preview_customer"></span></p>
+                                <p><strong>Amount:</strong> <span id="preview_amount"></span></p>
+                                <p><strong>Date:</strong> <span id="preview_date"></span></p>
+                                <p><strong>Note:</strong> <span id="preview_note"></span></p>
+                                <p><strong>Mode of payment:</strong> <span id="preview_payment_mode"></span></p>
+                                <p><strong>Advance payment for:</strong> <span id="preview_advance_payment"></span></p>
+                            </div>
+                            <button type="button" class="btn btn-secondary w-100 mt-2" id="back_step"><< Back</button>
+                            <button type="submit" class="btn btn-secondary w-100 mt-4" id="submit-transaction" name="submit-transaction">Add transaction</button>
                         </div>
-                         <div class="mb-4">
-                            <label class="form-label" for="payment_mode">Mode of payment</label>
-                            <select class="form-select" id="payment_mode" name="payment_mode" data-choices required>
-                                <option value="">Mode</option>
-                                <option value="bank">Bank</option>
-                                <option value="cash" selected>Cash</option>
-                                <option value="airteltigomoney">AirtelTigo Money</option>
-                                <option value="mtnmobilemoney">MTN Mobile Money</option>
-                                <option value="telecelcash">Tecel Cash</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="totday_date">Date</label>
-                            <input class="form-control" id="totday_date" name="today_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required />
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label" for="note">Note (optional)</label>
-                            <textarea class="form-control" id="note" name="note" rows="3" data-autosize></textarea>
-                            <div class="form-text">Limit 500</div>
-                        </div>
-                        <!-- check for advance payment or not -->
-                        <label class="form-label" for="note">is advance payment</label>
-                        <input type="checkbox" id="is_advance_payment" name="is_advance_payment" value="yes" />
-                        <div class="mb-4 mt-2" id="advance_payment_div" style="display: none;">
-                            <label class="form-label" for="advance_payment">Advance payment</label>
-                            <select class="form-select" id="advance_payment" name="advance_payment" required>
-                                <option value="1">1</option>
-                                <?php for ($i = 2; $i <= 30; $i++) {
-                                    echo '<option value="' . $i . '">' . $i . '</option>';
-                                } ?>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-secondary w-100 mt-4" id="submit-transaction" name="submit-transaction">Add transaction</button>
                     </form>
                 </div>
             </div>
