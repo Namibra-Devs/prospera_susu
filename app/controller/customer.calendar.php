@@ -1,5 +1,7 @@
 <?php
-// db.php - your connection file
+    ini_
+
+    // Get customer savings for a specific 31-day cycle
     require ('../../system/DatabaseConnector.php');
 
     $customerId = isset($_GET['customer_id']) ? sanitize($_GET['customer_id']) : 0;
