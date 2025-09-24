@@ -329,7 +329,7 @@
         });
 
         // create an ajax request to submit the add transaction form
-        var $this = $('#buyForm');
+        var $this = $('#add-transaction-form');
         var $state = $('.toast-body');
         $('#add-transaction-form').on('submit', function(event) {
             event.preventDefault(); // Prevent the default form submission
@@ -339,7 +339,7 @@
                 url: 'controller/transaction.add.php',
                 data: formData,
                 beforeSend: function() {
-                    $this.find('button').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+                    $this.find('##submit-transaction').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
                 },
                 success: function(response) {
                     // Handle the response from the server
@@ -357,13 +357,13 @@
                             location.reload(); // Reload the page to reflect changes
                         }, 2000);
                     } else {
-                        $state.html('<div class="text-danger">' + data.message + '</div>');
+                        $state.html(data.message);
                         $('.toast').toast('show');
                         return false;
                     }
                 },
                 error: function() {
-                    $state.html('<div class="text-danger">An error occurred. Please try again.</div>');
+                    $state.html('An error occurred. Please try again.');
                     $('.toast').toast('show');
                     return false;
                 },
