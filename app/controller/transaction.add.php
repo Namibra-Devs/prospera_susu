@@ -71,7 +71,7 @@
                 // }
 
                 // check if there are no error before inserting
-                // if ($errors == null) {
+                if (empty($errors) || $errors == null) {
                     $stmt->execute([$next_unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount / $advance_payment, $next_date, 'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1), $payment_mode]);
                     
                     // log message
@@ -85,7 +85,7 @@
                     } else {
                         $errors = 'An error occurred. Please try again.';
                     }
-                // }
+                }
             }
         } else {
             // check if today date or selected date already has a transaction
