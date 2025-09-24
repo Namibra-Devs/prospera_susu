@@ -165,11 +165,7 @@
         <div class="container-lg">
             <?php if (isset($_GET['view'])): 
                 $view = sanitize($_GET['view']);
-
-                processMonthlyCommission($view);
-                die;
-
-
+                // fetch customer data
                 $query = "
                     SELECT * FROM customers 
                     WHERE customer_id = ? 
