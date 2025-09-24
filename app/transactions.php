@@ -19,102 +19,6 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
-    $added_by = null;
-    $added_by_id = null;
-    if (array_key_exists('PRSADMIN', $_SESSION)) {
-        $added_by = 'admin';
-        $added_by_id = $_SESSION['PRSADMIN'];
-    } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
-        $added_by = 'collector';
-        $added_by_id = $_SESSION['PRSCOLLECTOR'];
-    }
-
-    // check if is posted
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_customer'])) {
-        // get form data
-        $customer_info = sanitize($_POST['select_customer']);
-        list($customer_name, $customer_account_number) = explode(',', $customer_info);
-        $transaction_amount = sanitize($_POST['default_amount']);
-        $transaction_date = sanitize($_POST['today_date']);
-        $transaction_note = sanitize($_POST['note']);
-
-        $is_advance_payment = (isset($_POST['is_advance_payment']) && $_POST['is_advance_payment'] === 'yes') ? true : false;
-        $advance_payment = ($is_advance_payment && isset($_POST['advance_payment'])) ? sanitize($_POST['advance_payment']) : 0;
-
-        $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
-
-        $find_customer_row = findCustomerByAccountNumber($customer_account_number);
-        if (!$find_customer_row) {
-            $_SESSION['flash_error'] = 'Customer not found !';
-            redirect(PROOT . 'app/transactions');
-        }
-
-        $required = array('select_customer', 'default_amount', 'payment_mode', 'today_date');
-        foreach ($required as $f) {
-            if (empty($f)) {
-                $errors = $f . ' is required !';
-                break;
-            }
-        }
-
-        if ($is_advance_payment) {
-            if ($advance_payment <= 1) {
-                $errors = 'Please select advance payment option.';
-            } elseif ($advance_payment > 30) {
-                $errors = 'Advance payment cannot be more than 30 days.';
-            }
-            // calculate total amount
-            $transaction_amount = $transaction_amount * $advance_payment;
-            $transaction_note .= ' (Advance payment for ' . $advance_payment . ' days)';
-
-            // create a foreach loop to add multiple transactions for advance payment
-            for ($i = 1; $i < $advance_payment; $i++) {
-                $next_date = date('Y-m-d', strtotime($transaction_date . ' + ' . $i . ' days'));
-                $next_unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s")) . '-' . $i;
-                $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                
-                $stmt->execute([$next_unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount / $advance_payment, $next_date, 'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1)]);
-                
-                // log message
-                if ($stmt) {
-                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account for day ' . ($i + 1);
-                    add_to_log($log_message, $added_by_id, $added_by);
-
-                    $_SESSION['flash_success'] = 'Transaction added successfully.';
-                    redirect(PROOT . 'app/transactions');
-                } else {
-                    $_SESSION['flash_error'] = 'An error occurred. Please try again.';
-                    redirect(PROOT . 'app/transactions');
-                }
-        }
-
-        // validate inputs
-        // if (empty($customer_name) || empty($customer_account_number) || empty($transaction_amount) || empty($transaction_date)) {
-        //     $_SESSION['flash_error'] = 'Please fill in all required fields.';
-        //     redirect(PROOT . 'app/transactions');
-        // }
-
-        // insert into database
-        $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        
-        $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note]);
-
-        if ($stmt) {
-            // 
-            $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
-            add_to_log($log_message, $added_by_id, $added_by);
-
-
-            $_SESSION['flash_success'] = 'Transaction added successfully.';
-            redirect(PROOT . 'app/transactions');
-        } else {
-            $_SESSION['flash_error'] = 'An error occurred. Please try again.';
-            redirect(PROOT . 'app/transactions');
-        }
-    }
-
-
-
 ?>
 
     <!-- Main -->
@@ -423,7 +327,51 @@
                 $('#advance_payment').prop('disabled', true);
             }
         });
-        
+
+        // create an ajax request to submit the add transaction form
+        var $this = $('#buyForm');
+        var $state = $('.toast-body');
+        $('#add-transaction-form').on('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            var formData = $(this).serialize(); // Serialize the form data
+            $.ajax({
+                type: 'POST',
+                url: 'controller/transaction.add.php',
+                data: formData,
+                beforeSend: function() {
+                    $this.find('button').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+                },
+                success: function(response) {
+                    // Handle the response from the server
+                    // Assuming the response is a JSON object with 'status' and 'message' properties
+                    var data = JSON.parse(response);
+                    if (data.status === 'success') {
+                        $state.html('<div class="text-success">' + data.message + '</div>');
+                        $('.toast').toast('show');
+                        return false;
+                        // Optionally, you can reset the form here
+                        $('#add-transaction-form')[0].reset();
+                        // Close the modal after a short delay
+                        setTimeout(function() {
+                            $('#transactionModal').modal('hide');
+                            location.reload(); // Reload the page to reflect changes
+                        }, 2000);
+                    } else {
+                        $state.html('<div class="text-danger">' + data.message + '</div>');
+                        $('.toast').toast('show');
+                        return false;
+                    }
+                },
+                error: function() {
+                    $state.html('<div class="text-danger">An error occurred. Please try again.</div>');
+                    $('.toast').toast('show');
+                    return false;
+                },
+                complete: function() {
+                    $this.find('button').attr('disabled', false).html('Add transaction');
+                }
+            });
+        });
 
         // add new transaction
         $('#add-transaction-form').on('submit', function (e) {
