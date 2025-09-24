@@ -1,6 +1,9 @@
 <?php
     require ('../../system/DatabaseConnector.php');
 
+    $errors = null;
+    $message = null;
+    
     $added_by = null;
     $added_by_id = null;
     if (array_key_exists('PRSADMIN', $_SESSION)) {
@@ -27,8 +30,7 @@
 
         $find_customer_row = findCustomerByAccountNumber($customer_account_number);
         if (!$find_customer_row) {
-            $_SESSION['flash_error'] = 'Customer not found !';
-            redirect(PROOT . 'app/transactions');
+            $errors = 'Customer not found !';
         }
 
         // validate inputs
@@ -63,11 +65,9 @@
                     $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account for day ' . ($i + 1);
                     add_to_log($log_message, $added_by_id, $added_by);
 
-                    $_SESSION['flash_success'] = 'Transaction added successfully.';
-                    redirect(PROOT . 'app/transactions');
+                    $message = 'Transaction added successfully.';
                 } else {
-                    $_SESSION['flash_error'] = 'An error occurred. Please try again.';
-                    redirect(PROOT . 'app/transactions');
+                    $errors = 'An error occurred. Please try again.';
                 }
             }
         }
@@ -82,15 +82,17 @@
             $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
             add_to_log($log_message, $added_by_id, $added_by);
 
-
-            $_SESSION['flash_success'] = 'Transaction added successfully.';
-            redirect(PROOT . 'app/transactions');
+            $message = 'Transaction added successfully.';
         } else {
-            $_SESSION['flash_error'] = 'An error occurred. Please try again.';
-            redirect(PROOT . 'app/transactions');
+            $errors = 'An error occurred. Please try again.';
         }
     } else {
-        $_SESSION['flash_error'] = 'Invalid request.';
-        redirect(PROOT . 'app/transactions');
+        $errors = 'Invalid request.';
+    }
+
+    if ($errors) {
+        echo json_encode(['status' => 'error', 'message' => $errors]);
+    } else {
+        echo json_encode(['status' => 'success', 'message' => $message]);
     }
 ?>
