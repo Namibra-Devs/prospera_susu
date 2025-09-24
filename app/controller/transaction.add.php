@@ -23,6 +23,7 @@
         $transaction_amount = sanitize($_POST['default_amount']);
         $transaction_date = sanitize($_POST['today_date']);
         $transaction_note = sanitize($_POST['note']);
+        $payment_mode = sanitize($_POST['payment_mode']); 
 
         $is_advance_payment = (isset($_POST['is_advance_payment']) && $_POST['is_advance_payment'] === 'yes') ? true : false;
         $advance_payment = ($is_advance_payment && isset($_POST['advance_payment'])) ? sanitize($_POST['advance_payment']) : 0;
@@ -57,9 +58,9 @@
             for ($i = 1; $i < $advance_payment; $i++) {
                 $next_date = date('Y-m-d', strtotime($transaction_date . ' + ' . $i . ' days'));
                 $next_unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s")) . '-' . $i;
-                $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 
-                $stmt->execute([$next_unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount / $advance_payment, $next_date, 'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1)]);
+                $stmt->execute([$next_unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount / $advance_payment, $next_date, 'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1), $payment_mode]);
                 
                 // log message
                 if ($stmt) {
@@ -74,9 +75,9 @@
         }
 
         // insert into database
-        $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         
-        $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note]);
+        $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
 
         if ($stmt) {
             // 
