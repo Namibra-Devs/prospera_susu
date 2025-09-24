@@ -9,7 +9,56 @@
         redirect(PROOT . 'auth/sign-in');
     }
 
-    // get all saves from customer
+    // functions to fetch all saves and withdrawals by customer
+    function fetchAllTransaction() {
+        global $dbConnection;
+        
+        // Fetch deposits
+        $depositQuery = "
+            SELECT 
+                saving_id AS transaction_id, 
+                saving_customer_id AS customer_id, 
+                saving_customer_account_number AS account_number,
+                saving_collector_id AS collector_id, 
+                saving_amount AS amount, 
+                saving_date_collected AS transaction_date, 
+                saving_status AS status, 
+                'saving' AS type, 
+                created_at 
+            FROM savings
+        "; 
+        $depositStmt = $dbConnection->query($depositQuery);
+        $deposits = $depositStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Fetch withdrawals
+        $withdrawalQuery = "
+            SELECT 
+                withdrawal_id AS transaction_id, 
+                withdrawal_customer_id AS customer_id, 
+                withdrawal_customer_account_number AS account_number, 
+                withdrawal_approver_id AS collector_id, 
+                withdrawal_amount_requested AS amount, 
+                withdrawal_date_requested AS transaction_date, 
+                withdrawal_status AS status, 
+                'withdrawal' AS type, 
+                created_at 
+            FROM withdrawals
+        ";
+                            
+        $withdrawalStmt = $dbConnection->query($withdrawalQuery);
+        $withdrawals = $withdrawalStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Merge and sort by date
+        $transactions = array_merge($deposits, $withdrawals);
+        usort($transactions, function($a, $b) {
+            return strtotime($a['created_at']) - strtotime($b['created_at']);
+        });
+
+    }
+
+
+
+    //
     function get_all_saves($customer_id) {
         global $dbConnection;
         $query = "
@@ -21,19 +70,6 @@
         $statement = $dbConnection->prepare($query);
         $statement->execute([$customer_id]);
         return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // get collector by id
-    function get_collector_by_id($collector_id) {
-        global $dbConnection;
-        $query = "
-            SELECT * FROM collectors 
-            WHERE collectors.collector_id = ? 
-            LIMIT 1
-        ";
-        $statement = $dbConnection->prepare($query);
-        $statement->execute([$collector_id]);
-        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     // get customer added by
@@ -167,6 +203,9 @@
 
                     // get total withdrawals by customer with status type
                     $total_approved_withdrawals = sum_customer_withdrawals($customer_data['customer_id'], 'Approved');
+
+                    // get total saved amount (subtract withdrawals from saves)
+                    $total_saved_amount = $total_approved_saves - $total_approved_withdrawals;
                 }
             ?>
 
@@ -199,10 +238,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Default</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total saved</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= money($customer_data['customer_default_daily_amount']); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= money($total_saved_amount); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -322,7 +361,7 @@
                     <section class="mb-8">
                         <!-- Header -->
                         <div class="d-flex align-items-center justify-content-between mb-5">
-                            <h2 class="fs-5 mb-0">Saves history</h2>
+                            <h2 class="fs-5 mb-0">Transaction history</h2>
                             <div class="d-flex">
                                 <div class="dropdown">
                                     <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -359,9 +398,12 @@
                                 $all_saves = get_all_saves($customer_data['customer_id']);
                                 if (count($all_saves) > 0):
                                     $i = 1;
-                                    foreach ($all_saves as $save):
-                                        $collector = get_collector_by_id($save['saving_customer_id']) ?? null;
-                                        $collector = $collector ? ucwords($collector['collector_name']) : 'N/A';
+                                    foreach ($all_saves as $save): 
+                                        $collector = findCollectorById($save['saving_collector_id'])->collector_name;
+                                        if (!$collector) {
+                                            $collector = 'Admin';
+                                        }
+
                                         $status_badge = '';
                                         if ($save['saving_status'] == 'Approved') {
                                             $status_badge = '<span class="badge bg-success-subtle text-success">Approved</span>';
