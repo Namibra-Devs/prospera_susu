@@ -12,7 +12,6 @@
     }
 
     $title = 'Transactions | ';
-
     $body_class = '';
     include ('../system/inc/head.php');
     include ('../system/inc/modals.php');
@@ -20,17 +19,15 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
-//     Array
-// (
-//     [select_customer] =&gt; Brother Pole To Pole,PRS202500001
-//     [default_amount] =&gt; 20.00
-//     [payment_mode] =&gt; bank
-//     [today_date] =&gt; 2025-09-23
-//     [note] =&gt; 
-//     [is_advance_payment] =&gt; no
-//     [advance_payment] =&gt; 17
-// )
-
+    $added_by = null;
+    $added_by_id = null;
+    if (array_key_exists('PRSADMIN', $_SESSION)) {
+        $added_by = 'admin';
+        $added_by_id = $_SESSION['PRSADMIN'];
+    } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+        $added_by = 'collector';
+        $added_by_id = $_SESSION['PRSCOLLECTOR'];
+    }
 
     // check if is posted
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_customer'])) {
@@ -40,27 +37,66 @@
         $transaction_amount = sanitize($_POST['default_amount']);
         $transaction_date = sanitize($_POST['today_date']);
         $transaction_note = sanitize($_POST['note']);
+
+        $is_advance_payment = (isset($_POST['is_advance_payment']) && $_POST['is_advance_payment'] === 'yes') ? true : false;
+        $advance_payment = ($is_advance_payment && isset($_POST['advance_payment'])) ? sanitize($_POST['advance_payment']) : 0;
+
         $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
 
         $find_customer_row = findCustomerByAccountNumber($customer_account_number);
-
-        // validate inputs
-        if (empty($customer_name) || empty($customer_account_number) || empty($transaction_amount) || empty($transaction_date)) {
-            $_SESSION['flash_error'] = 'Please fill in all required fields.';
+        if (!$find_customer_row) {
+            $_SESSION['flash_error'] = 'Customer not found !';
             redirect(PROOT . 'app/transactions');
         }
 
+        $required = array('select_customer', 'default_amount', 'payment_mode', 'today_date');
+        foreach ($required as $f) {
+            if (empty($f)) {
+                $errors = $f . ' is required !';
+                break;
+            }
+        }
+
+        if ($is_advance_payment) {
+            if ($advance_payment <= 1) {
+                $errors = 'Please select advance payment option.';
+            } elseif ($advance_payment > 30) {
+                $errors = 'Advance payment cannot be more than 30 days.';
+            }
+            // calculate total amount
+            $transaction_amount = $transaction_amount * $advance_payment;
+            $transaction_note .= ' (Advance payment for ' . $advance_payment . ' days)';
+
+            // create a foreach loop to add multiple transactions for advance payment
+            for ($i = 1; $i < $advance_payment; $i++) {
+                $next_date = date('Y-m-d', strtotime($transaction_date . ' + ' . $i . ' days'));
+                $next_unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s")) . '-' . $i;
+                $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                
+                $stmt->execute([$next_unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount / $advance_payment, $next_date, 'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1)]);
+                
+                // log message
+                if ($stmt) {
+                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account for day ' . ($i + 1);
+                    add_to_log($log_message, $added_by_id, $added_by);
+
+                    $_SESSION['flash_success'] = 'Transaction added successfully.';
+                    redirect(PROOT . 'app/transactions');
+                } else {
+                    $_SESSION['flash_error'] = 'An error occurred. Please try again.';
+                    redirect(PROOT . 'app/transactions');
+                }
+        }
+
+        // validate inputs
+        // if (empty($customer_name) || empty($customer_account_number) || empty($transaction_amount) || empty($transaction_date)) {
+        //     $_SESSION['flash_error'] = 'Please fill in all required fields.';
+        //     redirect(PROOT . 'app/transactions');
+        // }
+
         // insert into database
         $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $added_by = null;
-        $added_by_id = null;
-        if (array_key_exists('PRSADMIN', $_SESSION)) {
-            $added_by = 'admin';
-            $added_by_id = $_SESSION['PRSADMIN'];
-        } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
-            $added_by = 'collector';
-            $added_by_id = $_SESSION['PRSCOLLECTOR'];
-        }
+        
         $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note]);
 
         if ($stmt) {

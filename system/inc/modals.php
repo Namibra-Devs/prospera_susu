@@ -53,7 +53,7 @@
                         </div>
                         <!-- check for advance payment or not -->
                         <label class="form-label" for="note">is advance payment</label>
-                        <input type="checkbox" id="is_advance_payment" name="is_advance_payment" value="no" />
+                        <input type="checkbox" id="is_advance_payment" name="is_advance_payment" value="yes" />
                         <div class="mb-4 mt-2" id="advance_payment_div" style="display: none;">
                             <label class="form-label" for="advance_payment">Advance payment</label>
                             <select class="form-select" id="advance_payment" name="advance_payment" required>
