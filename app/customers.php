@@ -141,16 +141,32 @@
                 $query = "
                     SELECT * FROM customers 
                     WHERE customer_id = ? 
-                    -- AND customers.customer_status = 'active'
+                    AND customers.customer_status = 'active'
                     LIMIT 1
                 ";
+                if (collector_is_logged_in()) {
+                    $query = "
+                        SELECT * FROM customers 
+                        WHERE customer_id = ? 
+                        AND customer_added_by = 'collector' 
+                        AND customer_collector_id = '$collector_id'
+                        AND customers.customer_status = 'active'
+                        LIMIT 1
+                    ";
+                }
                 $statement = $dbConnection->prepare($query);
                 $statement->execute([$view]);
                 if ($statement->rowCount() < 1) {
                     $_SESSION['flash_error'] = 'Customer not found!';
-                   // redirect(PROOT . 'app/customers');
+                   redirect(PROOT . 'app/customers');
                 } else {
                     $customer_data = $statement->fetch(PDO::FETCH_ASSOC);
+
+                    // get total saves by customer with status type
+                    $total_approved_saves = sum_customer_saves($customer_data['customer_id'], 'Approved');
+
+                    // get total withdrawals by customer with status type
+                    $total_approved_withdrawals = sum_customer_withdrawals($customer_data['customer_id'], 'Approved');
                 }
             ?>
 
@@ -204,10 +220,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Target</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Deposits</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= money($customer_data['customer_target']); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= money($total_approved_saves); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -225,10 +241,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Withdrawals</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= money(0); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= money($total_approved_withdrawals); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->

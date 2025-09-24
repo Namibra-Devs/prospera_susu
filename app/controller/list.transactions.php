@@ -116,10 +116,13 @@ if ($total_data > 0) {
             $handler = 'Admin';
         }
 
+        $options = '';
+
         // get type of transaction
         $type = 'Unknown';
         if ($row['type'] == 'saving') {
-            $type = 'Deposit';
+            $type = '<span class="fs-sm text-info">Deposit</span>';
+
             // check status of deposite transactions
             if ($row['status'] == 'Pending') {
                 $row['status'] = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
@@ -128,8 +131,14 @@ if ($total_data > 0) {
             } elseif ($row['status'] == 'Rejected') {
                 $row['status'] = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
             }
+
+            // show approve button if status is pending
+            if ($row['status'] == '<span class="badge bg-warning-subtle text-warning">Pending</span>') {
+                $options .= ' <button class="btn btn-sm btn-light">Approve</button>';
+            }
         } elseif ($row['type'] == 'withdrawal') {
-            $type = 'Withdrawal';
+            $type = '<span class="fs-sm text-warning">Withdrawal</span>';
+
             // check status of withdrawal transactions
             if ($row['status'] == 'Pending') {
                 $row['status'] = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
@@ -139,6 +148,17 @@ if ($total_data > 0) {
                 $row['status'] = '<span class="badge bg-danger-subtle text-danger">Paid</span>';
             } elseif ($row['status'] == 'Rejected') {
                 $row['status'] = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
+            }
+
+            // show approve button if status is pending
+            if ($row['status'] == '<span class="badge bg-warning-subtle text-warning">Pending</span>') {
+                $options .= ' <button class="btn btn-sm btn-warning">Approve</button>';
+                $options .= ' <button class="btn btn-sm btn-danger">Reject</button>';
+            }
+
+            // show paid button if status is approved
+            if ($row['status'] == '<span class="badge bg-success-subtle text-success">Approved</span>') {
+                $options .= ' <button class="btn btn-sm btn-success">Mark as Paid</button>';
             }
         }
 
@@ -151,14 +171,12 @@ if ($total_data > 0) {
                     </div>
                 </td>
                 <td>' . $i . '</td>
-                <td>' . ucwords($client_name) . '</td>
+                <td>' . ucwords($client_name) . ' (' . $row['account_number'] . ')</td>
                 <td>' . money($row["amount"]) . '</td>
                 <td>' .  ucwords($handler) . '</td>
                 <td>' . $type . '</td>
                 <td>' . $row['status'] . '</td>
-                <td>
-                    <button class="btn btn-sm btn-light">Approve</button>
-                </td>
+                <td>' . $options . '</td>
             </tr>
 		';
 		$i++;

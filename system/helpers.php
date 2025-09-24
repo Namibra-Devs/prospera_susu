@@ -422,6 +422,40 @@ function findCustomerByAccountNumber($number) {
     return $user;
 }
 
+// sum customer saves by status
+function sum_customer_saves($customer_id, $status = 'Approved') {
+	global $dbConnection;
+
+	$query = "
+		SELECT SUM(saving_amount) AS total 
+		FROM savings 
+		WHERE saving_customer_id = ? 
+		AND saving_status = ?
+	";
+	$statement = $dbConnection->prepare($query);
+	$statement->execute([$customer_id, $status]);
+	$row = $statement->fetch(PDO::FETCH_ASSOC);
+
+	return $row['total'] ?? 0;
+}
+
+// sum customer withdrawals by status
+function sum_customer_withdrawals($customer_id, $status = 'Approved') {
+	global $dbConnection;
+
+	$query = "
+		SELECT SUM(withdrawal_amount_requested) AS total 
+		FROM withdrawals 
+		WHERE withdrawal_customer_id = ? 
+		AND withdrawal_status = ?
+	";
+	$statement = $dbConnection->prepare($query);
+	$statement->execute([$customer_id, $status]);
+	$row = $statement->fetch(PDO::FETCH_ASSOC);
+
+	return $row['total'] ?? 0;
+}
+
 
 
 
