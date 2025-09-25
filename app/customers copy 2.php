@@ -201,6 +201,44 @@
                     // get total saved amount (subtract withdrawals from saves)
                     $total_saved_amount = $total_approved_saves - $total_approved_withdrawals;
                 }
+
+
+
+                //
+                function getCustomerSavingsByWindow($customer_id, $window = 1) {
+                    global $dbConnection;
+
+                    // each window = 31 days
+                    $limit = 31;
+                    $offset = ($window - 1) * $limit;
+
+                    // fetch savings ordered by saving_date_collected
+                    $sql = "SELECT saving_date_collected, saving_amount
+                            FROM savings 
+                            WHERE saving_customer_id = ?
+                            ORDER BY saving_date_collected ASC
+                            LIMIT $limit OFFSET $offset";
+                    $stmt = $dbConnection->prepare($sql);
+                    $stmt->execute([$customer_id]);
+
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+
+
+
+                $window = isset($_GET['window']) ? (int)$_GET['window'] : 1;
+                $savings = getCustomerSavingsByWindow($view, $window);
+
+                // put savings dates in array for quick lookup
+                $savedDays = [];
+                foreach ($savings as $row) {
+                    $day = date('j', strtotime($row['saving_date_collected'])); // day number
+                    $savedDays[$day] = true;
+                }
+
+
+
+                
             ?>
 
             <!-- Stats -->
@@ -214,7 +252,7 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Start date</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= (($customer_data['customer_start_date'] == null || $customer_data['customer_start_date'] == '0000-00-00') ? 'N/A' : pretty_date_notime($customer_data['customer_start_date'])); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= pretty_date_notime($customer_data['customer_start_date']); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -305,7 +343,6 @@
                     border-radius: 8px;
                     font-weight: bold;
                     font-size: 1.1rem;
-                    cursor: pointer;
                 }
                 .saved {
                     background-color: #28a745; /* green */
@@ -322,16 +359,52 @@
             </style>
 
             <div class="mb-8">
-                <h2 class="mb-3">Savings Calendar</h2>
+                <h2 class="mb-3">Savings Calendar (Window <?= $window ?>)</h2>
                 <div class="d-flex justify-content-between mb-3">
-                    <button class="btn btn-link" id="prevCycle">← Previous</button>
+
+                    <?php if ($window > 1): ?>
+                        <a href="?window=<?= $window - 1 ?>" class="btn btn-outline-link">Previous 31 Days</a>
+                    <?php endif; ?>
+                    <a href="?window=<?= $window + 1 ?>" class="btn btn-outline-link">Next 31 Days</a>
+
+                    <div class="row row-cols-7 g-2">
+                        <?php for ($day = 1; $day <= 31; $day++): ?>
+                            <?php
+                                $classes = "p-3 border text-center";
+                                $label = $day;
+
+                                // Commission = first day of window
+                                if ($day == 1) {
+                                    $classes .= " bg-warning text-dark fw-bold"; 
+                                    $label .= "<br><small>(Commission)</small>";
+                                } 
+                                // Saved = green
+                                elseif (isset($savedDays[$day])) {
+                                    $classes .= " bg-success text-white";
+                                } 
+                                // Not saved yet = gray
+                                else {
+                                    $classes .= " bg-light";
+                                }
+                            ?>
+                            <div class="col">
+                                <div class="<?= $classes ?>" style="border-radius:8px;">
+                                    <?= $label ?>
+                                </div>
+                            </div>
+                        <?php endfor; ?>
+                </div>
+
+
+
+
+                    <!-- <button class="btn btn-link" id="prevCycle">← Previous</button>
                     <h5 id="cycleLabel" class="mb-0"></h5>
-                    <button class="btn btn-link" id="nextCycle">Next →</button>
+                    <button class="btn btn-link" id="nextCycle">Next →</button> -->
                 </div>
 
                 <div id="calendar" class="calendar"></div>
             </div>
-
 
 
 
@@ -461,7 +534,7 @@
                             <tr>
                                 <td class="text-body-secondary"><?= $i; ?></td>
                                 <td><?= ucwords($collector); ?></td>
-                                <td><?= pretty_date_notime($save['transaction_date']); ?></td>
+                                <td><?= pretty_date_notime($save['created_at']); ?></td>
                                 <td><?= $type; ?></td>
                                 <td><?= $status_badge; ?></td>
                                 <td><?= money($save["amount"]); ?></td>
@@ -740,43 +813,33 @@
 <?php include ('../system/inc/footer.php'); ?>
 
 <script>
-    
-    let currentCycle = null;
+    let currentCycle = 0;
     const customerId = "<?= $view; ?>";
     let lastData = null;
 
-    function loadCalendar(cycle = null) {
+    function loadCalendar(cycle) {
         $.getJSON("<?= PROOT; ?>app/controller/customer.calendar.php", { customer_id: customerId, cycle: cycle }, function (data) {
             $("#calendar").empty(); // Clear existing calendar
             lastData = data; // Store the last fetched data
-            
+
             if (!data.cycle_start) {
                 $("#cycleLabel").text("No savings yet");
                 return;
             }
 
-            // auto-detect if cycle not set
-            if (currentCycle === null) {
-                currentCycle = data.active_cycle;
-            } else {
-                currentCycle = data.cycle;
-            }
-
             $("#cycleLabel").text(
-                "Cycle " + (currentCycle + 0) + ": " + data.cycle_start + " → " + data.cycle_end
+                "Cycle " + (cycle + 1) + ": " + data.cycle_start + " → " + data.cycle_end
             );
 
             for (let day = 1; day <= 31; day++) {
                 let cellClass = "not-saved";
                 let text = day;
-                let extra = "";
 
                 if (data.saved_days[day]) {
                     cellClass = "saved";
                     text = day + " ✓ <br>";
                     // Show amount saved if any
-                    text += `\nGHS ${data.saved_days[day]['amount']}`;
-                    extra = JSON.stringify(data.saved_days[day]);
+                    text += `\nGHS ${data.saved_days[day]}`;
                 }
 
                 if (data.commission_day === day) {
@@ -784,19 +847,18 @@
                     text = day + " (Fee) <br>";
                     // If there's also a saving on this day, show both
                     if (data.saved_days[day]) {
-                        text += `\nGHS ${data.saved_days[day]['amount']}`;
+                        text += `\nGHS ${data.saved_days[day]}`;
                     }
                 }
 
                 $("#calendar").append(
-                    // `<div class="day ${cellClass}" data-day="${day}">${text}</div>`
-                    `<div class="day ${cellClass}" data-day="${day}" data-extra='${extra}'>${text}</div>`
-
+                    `<div class="day ${cellClass}" data-day="${day}">${text}</div>`
                 );
             }
             // Add click handler to each cell
             $(".day").click(function () {
                 let day = $(this).data("day");
+                console.log(day);
                 showDayDetails(day);
             });
 
@@ -808,6 +870,7 @@
     //
     function showDayDetails(day) {
         if (!lastData) return;
+        console.log(day);
         let body = "";
         if (lastData.commission_day === day) {
             body = `<p><strong>Day ${day}</strong> is the <span class="text-danger">Commission Fee</span> day for the company.</p>`;
@@ -846,7 +909,7 @@
     });
 
     // Load first cycle
-    loadCalendar();
+    loadCalendar(currentCycle);
 </script>
 
 

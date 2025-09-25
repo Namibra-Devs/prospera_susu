@@ -462,8 +462,9 @@
                         // Optionally, you can reset the form here
                         $('#add-transaction-form')[0].reset();
                         // Close the modal after a short delay
+                        $('#transactionModal').modal('hide');
+                        
                         setTimeout(function() {
-                            $('#transactionModal').modal('hide');
                             location.reload(); // Reload the page to reflect changes
                         }, 2000);
                     } else {
