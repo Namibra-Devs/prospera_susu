@@ -69,6 +69,9 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_date'])) {
         $uploadDate = $_POST['upload_date'] ?? null;
 
+        // check if today date is already uploaded
+        
+
         if (!isset($_FILES['collection_file']) || $_FILES['collection_file']['error'] !== UPLOAD_ERR_OK) {
             $collection_file_error = "No file uploaded.";
             
@@ -108,7 +111,14 @@
                 redirect(PROOT . 'app/transactions');
             }
         } else {
-            echo "File upload failed.";
+            $collection_file_error = "File upload failed.";
+        }
+
+        if ($collection_file_error) {
+            $_SESSION['error_flash'] = $collection_file_error;
+            redirect(PROOT . 'app/transactions');
+        } else {
+            redirect(PROOT . 'app/transactions');
         }
     }
 
