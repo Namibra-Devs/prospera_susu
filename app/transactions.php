@@ -64,6 +64,54 @@
         return $row['total_customers'] ? $row['total_customers'] : 0;
     }
 
+    // upload today collection file
+    $collection_file_error = '';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_date'])) {
+        $uploadDate = $_POST['upload_date'] ?? null;
+
+        if (!isset($_FILES['collection_file']) || $_FILES['collection_file']['error'] !== UPLOAD_ERR_OK) {
+            $collection_file_error = "No file uploaded.";
+            
+        }
+
+        $file = $_FILES['collection_file'];
+        $allowedTypes = ['image/png', 'image/jpeg'];
+        $maxSize = 6 * 1024 * 1024; // 6MB
+
+        if (!in_array($file['type'], $allowedTypes)) {
+            $collection_file_error = "Only PNG and JPG files are allowed.";
+        }
+
+        if ($file['size'] > $maxSize) {
+            $collection_file_error = "File size exceeds 6MB.";
+        }
+
+        $uploadDir = 'uploads/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $filename = basename($file['name']);
+        $targetPath = $uploadDir . $filename;
+
+        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+            // insert into daily_collections
+            $sql = "INSERT INTO daily_collections (collection_file_path, collection_date, uploaded_by, upload_date) VALUES (?, ?, ?, NOW())";
+            $stmt = $dbConnection->prepare($sql);
+            $uploaded_by = admin_is_logged_in() ? 'admin' : (collector_is_logged_in() ? 'collector' : 'unknown');
+            $result = $stmt->execute([$targetPath, $uploadDate, $uploaded_by]);
+            if ($result) {
+                $_SESSION['success_flash'] = "File uploaded successfully on date: " . sanitize($uploadDate);
+                $collection_file_error = "Database error: Could not save file info.";
+            } else {
+                $_SESSION['error_flash'] = "Database error: Could not save file info.";
+                redirect(PROOT . 'app/transactions');
+            }
+        } else {
+            echo "File upload failed.";
+        }
+    }
+
 ?>
 
     <!-- Main -->
@@ -216,14 +264,11 @@
                                                 </div>
                                             </div>
                                             <div class="col-auto">
-                                                <div class="dropdown">
-                                                    <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                                        <span class="material-symbols-outlined">filter_list</span>
+                                                <div class="">
+                                                    <!-- upload today collection file -->
+                                                    <button class="btn btn-dark px-3" type="button" data-bs-toggle="modal" data-bs-target="#todayUploadModal">
+                                                        <span class="material-symbols-outlined">add_a_photo</span> Today collection
                                                     </button>
-                                                    <div class="dropdown-menu rounded-3 p-6">
-                                                        <h4 class="fs-lg mb-4">Filter</h4>
-                                                        
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-auto ms-n2">
@@ -463,7 +508,7 @@
                         $('#add-transaction-form')[0].reset();
                         // Close the modal after a short delay
                         $('#transactionModal').modal('hide');
-                        
+
                         setTimeout(function() {
                             location.reload(); // Reload the page to reflect changes
                         }, 2000);
@@ -504,5 +549,27 @@
             $('#advance_payment').prop('disabled', true);
         });
         
+    });
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+<script>
+    Dropzone.autoDiscover = false;
+
+    const myDropzone = new Dropzone("#upload-collection-form", {
+        url: "transactions.php",
+        paramName: "collection_file", // file name
+        dictDefaultMessage: "Drag and drop file here or click to upload", // default message
+        dictFallbackMessage: "Your browser does not support drag and drop file uploads.",
+        autoProcessQueue: false,
+        maxFiles: 1,
+        maxFilesize: 6, // MB
+        acceptedFiles: "image/png,image/jpeg",
+        addRemoveLinks: true
+    });
+
+    document.getElementById("uploadButton").addEventListener("click", function () {
+        myDropzone.processQueue();
     });
 </script>

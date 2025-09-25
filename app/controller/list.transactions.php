@@ -169,7 +169,6 @@ if ($total_data > 0) {
         }
 
 		$output .= '
-            
                 <td style="width: 0px">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="tableCheckOne" />

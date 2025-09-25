@@ -143,7 +143,7 @@
     </div>
     <?php endif; ?>
     
-     <!-- Modal -->
+    <!-- Modal -->
     <div class="modal fade" id="dayModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -157,6 +157,32 @@
             </div>
         </div>
     </div>
+
+     <!-- Modal: Upload todays collection -->
+    <?php
+        // Only show this modal if the user has permission to upload todays collections
+        if (collector_is_logged_in()): 
+    ?>
+        <div class="modal fade" id="todayUploadModal" tabindex="-1" aria-labelledby="todayUploadModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h1 class="modal-title fs-5" id="todayUploadModalLabel">Upload todays collection file</h1>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="transactions.php" method="post" enctype="multipart/form-data" id="upload-collection-form" class="dropzone">
+                        <div class="dz-message">Drop your image here or click to select</div>
+                        <div class="mb-4 mt-2">
+                            <input class="form-control" id="upload_date" name="upload_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required>
+                        </div>
+                        <button type="button" id="uploadButton">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
     
     <!-- Offcanvas: Order -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="orderModal" aria-labelledby="orderModalLabel">
