@@ -161,9 +161,15 @@ if ($total_data > 0) {
                 $options .= ' <button class="btn btn-sm btn-success">Mark as Paid</button>';
             }
         }
+        // set background color for all today transactions
+        if (date('Y-m-d', strtotime($row['transaction_date'])) == date('Y-m-d')) {
+            $output .= '<tr class="table-success">';
+        } else {
+            $output .= '<tr>';
+        }
 
 		$output .= '
-            <tr>
+            
                 <td style="width: 0px">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="tableCheckOne" />
