@@ -168,7 +168,7 @@
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 pb-0">
                     <h1 class="modal-title fs-5" id="todayUploadModalLabel">Upload todays collection file</h1>
-                    <button class="btn-close closeUploadModal" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button class="btn-close" id="closeUploadModal" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="controller/upload.collection.file.php" method="post" enctype="multipart/form-data" id="upload-collection-form" class="dropzone">

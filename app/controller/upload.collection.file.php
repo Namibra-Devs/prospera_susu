@@ -15,8 +15,6 @@
         $check_stmt->execute([$uploadDate]);
         if ($check_stmt->rowCount() > 0) {
             $message = "Collection for this date is already uploaded.";
-        } else{
-            // dnd('good to go | ' . $uploadDate);
         }
 
         // Validate file upload

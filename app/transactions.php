@@ -375,6 +375,8 @@
             if (customer === '' || amount === '' || date === '' || payment_mode === '') {
                 $('.toast-body').html('Please fill all required fields.');
                 $('.toast').toast('show');
+                $('.toast').removeClass('bg-success').addClass('bg-danger');
+
                 return false;
             } else {
                 // hide first step
@@ -467,12 +469,16 @@
                     } else {
                         $state.html(data.message);
                         $('.toast').toast('show');
+                        $('.toast').removeClass('bg-success').addClass('bg-danger');
+
                         return false;
                     }
                 },
                 error: function() {
                     $state.html('An error occurred. Please try again.');
                     $('.toast').toast('show');
+                    $('.toast').removeClass('bg-success').addClass('bg-danger');
+
                     return false;
                 },
                 complete: function() {
@@ -524,6 +530,8 @@
         if (myDropzone.getAcceptedFiles().length === 0) {
             $('.toast-body').html('Please select a file to upload.');
             $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger');
+
             return false;
         }
 
@@ -532,6 +540,8 @@
         if (uploadDate === '') {
             $('.toast-body').html('Please select a date to upload.');
             $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger');
+
             return false;
         }
 
@@ -540,6 +550,8 @@
         if (totalCollected === '' || isNaN(totalCollected) || Number(totalCollected) < 0) {
             $('.toast-body').html('Please enter a valid total amount collected.');
             $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger');
+
             return false;
         } 
 
@@ -551,14 +563,18 @@
         // disable close button
         $('#closeUploadModal').attr('disabled', true);
     
+        // on error
         myDropzone.on("error", function(file, response) {
             // show error message
             $('.toast-body').html(response);
             $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger'); // change toast color to red
+
             // enable button
-            $('#uploadButton').attr('disabled', false).html('Upload file');
+            $('#uploadButton').attr('disabled', false).html('Upload');
             // enable close button
             $('#closeUploadModal').attr('disabled', false);
+
             // remove file
             myDropzone.removeAllFiles(true);
         });
@@ -568,15 +584,19 @@
             if (data.status === 'error') {
                 $('.toast-body').html(data.message);
                 $('.toast').toast('show');
+                $('.toast').removeClass('bg-success').addClass('bg-danger'); // change toast color to red
+                // remove file
+                myDropzone.removeAllFiles(true);
+
                 // enable button
-                $('#uploadButton').attr('disabled', false).html('Upload file');
+                $('#uploadButton').attr('disabled', false).html('Upload');
                 // enable close button
                 $('#closeUploadModal').attr('disabled', false);
             } else {
                 // success message will be shown on complete event
             }
         });
-
+        // on complete
         myDropzone.on("complete", function(file) {
             var data = JSON.parse(file.xhr.response);
             if (data.status === 'success') {
@@ -594,12 +614,23 @@
                 }, 2500);
             }
             // enable button
-            $('#uploadButton').attr('disabled', false).html('Upload file');
+            $('#uploadButton').attr('disabled', false).html('Upload');
             // enable close button
             $('#closeUploadModal').attr('disabled', false);
             // remove file
             myDropzone.removeAllFiles(true);
         });
 
+    });
+
+    // reset form if upload modal is closed
+    $('#todayUploadModal').on('hidden.bs.modal', function () {
+        // reset form
+        $('#upload-collection-form')[0].reset();
+        myDropzone.removeAllFiles(true);
+        // enable button
+        $('#uploadButton').attr('disabled', false).html('Upload');
+        // enable close button
+        $('#closeUploadModal').attr('disabled', false);
     });
 </script>
