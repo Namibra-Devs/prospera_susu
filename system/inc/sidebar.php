@@ -1098,37 +1098,6 @@
                                 </nav>
                             </div>
                         </div>
-                        <div class="nav-item">
-                            <a
-                            class="nav-link nav-transactions"
-                            href="#"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#transactions"
-                            role="button"
-                            aria-expanded="false"
-                            aria-controls="transactions"
-                            >
-                                <span class="material-symbols-outlined me-3">receipt</span> Transactions
-                            </a>
-                            <div class="collapse " id="transactions">
-                                <nav class="nav nav-pills">
-                                    <?php
-                                        // show transactions menu only to admins and approvers
-                                        if ((admin_is_logged_in() && admin_has_permission('approver')) || collector_is_logged_in()):
-                                    ?>
-                                    <a class="nav-link sub-nav-transactions" href="<?= PROOT; ?>app/transactions">Transactions</a>
-                                    <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
-                                    <?php endif; ?>
-                                    <?php
-                                        // show not approved transactions menu only to admins and approvers
-                                        if ((admin_is_logged_in() && admin_has_permission('approver'))):
-                                    ?>
-                                    <a class="nav-link sub-nav-not-approved-transactions" href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
-                                    <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a>
-                                    <?php endif; ?>
-                                </nav>
-                            </div>
-                        </div>
                         <?php if ((admin_is_logged_in() && admin_has_permission('approver'))): ?>
                         <div class="nav-item">
                             <a
@@ -1170,6 +1139,56 @@
                                     <a class="nav-link sub-nav-archived-customers" href="<?= PROOT; ?>app/archived-customers">Archived customers</a>
                                     <?php endif; ?>
                                     <a class="nav-link sub-nav-new-customers" href="<?= PROOT; ?>app/customer-new">New customer</a>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="nav-item">
+                            <a
+                            class="nav-link nav-transactions"
+                            href="#"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#transactions"
+                            role="button"
+                            aria-expanded="false"
+                            aria-controls="transactions"
+                            >
+                                <span class="material-symbols-outlined me-3">receipt</span> Transactions
+                            </a>
+                            <div class="collapse " id="transactions">
+                                <nav class="nav nav-pills">
+                                    <?php
+                                        // show transactions menu only to admins and approvers
+                                        if ((admin_is_logged_in() && admin_has_permission('approver')) || collector_is_logged_in()):
+                                    ?>
+                                    <a class="nav-link sub-nav-transactions" href="<?= PROOT; ?>app/transactions">Transactions</a>
+                                    <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
+                                    <?php endif; ?>
+                                    <?php
+                                        // show not approved transactions menu only to admins and approvers
+                                        if ((admin_is_logged_in() && admin_has_permission('approver'))):
+                                    ?>
+                                    <a class="nav-link sub-nav-not-approved-transactions" href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
+                                    <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a>
+                                    <?php endif; ?>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="nav-item">
+                            <a
+                            class="nav-link nav-collections"
+                            href="#"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collections"
+                            role="button"
+                            aria-expanded="false"
+                            aria-controls="collections"
+                            >
+                                <span class="material-symbols-outlined me-3">collections_bookmark</span> Collections
+                            </a>
+                            <div class="collapse " id="collections">
+                                <nav class="nav nav-pills">
+                                    <a class="nav-link sub-nav-collections" href="<?= PROOT; ?>app/collections">Collections </a>
+                                    <a class="nav-link sub-nav-archived-collections" href="<?= PROOT; ?>app/collections-archive">Archive collections</a>
                                 </nav>
                             </div>
                         </div>

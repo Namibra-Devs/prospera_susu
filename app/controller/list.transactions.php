@@ -94,7 +94,7 @@ require ('../../system/DatabaseConnector.php');
                         <th class="fs-sm">Handler</th>
                         <th class="fs-sm">Type</th>
                         <th class="fs-sm">Status</th>
-                        <th class="fs-sm"></th>
+                        '. ((admin_is_logged_in()) ? '<th class="fs-sm"></th>' : '') .'
                     </tr>
                 </thead>
                 <tbody>
@@ -181,7 +181,7 @@ if ($total_data > 0) {
                 <td>' .  ucwords($handler) . '</td>
                 <td>' . $type . '</td>
                 <td>' . $row['status'] . '</td>
-                <td>' . $options . '</td>
+                '. ((admin_is_logged_in()) ? '<td>' . $options . '</td>' : '') .' 
             </tr>
 		';
 		$i++;
