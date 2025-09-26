@@ -7,7 +7,8 @@
     $status = null;
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_date'])) {
         $uploadDate = $_POST['upload_date'] ?? null;
-        $totalcollected = $_POST['total_collected'] ?? 0;
+        $totalcollected = $_POST['totalcollected'] ?? 0;
+        $note = sanitize($_POST['not']); // 
 
         // check if today date is already uploaded
         $check_sql = "SELECT * FROM daily_collections WHERE daily_collection_date = ? LIMIT 1";
@@ -35,7 +36,7 @@
             $message = "File size exceeds 6MB.";
         }
 
-        $uploadDir = BASEURL . 'assets/media/uploads/collection-files/';
+        $uploadDir =  '../../assets/media/uploads/collection-files/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
@@ -50,9 +51,9 @@
         if ($message == null || $message == '') {
             if (move_uploaded_file($file['tmp_name'], $targetPath)) {
                 // insert into daily_collections
-                $sql = "INSERT INTO daily_collections (daily_id, daily_collector_id, daily_collection_date, daily_total_collected, daily_proof_image) VALUES (?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO daily_collections (daily_id, daily_collector_id, daily_collection_date, daily_total_collected, daily_proof_image, daily_note) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt = $dbConnection->prepare($sql);
-                $result = $stmt->execute([$uniqueid, $collector_id, $uploadDate, $totalcollected, $targetPath]);
+                $result = $stmt->execute([$uniqueid, $collector_id, $uploadDate, $totalcollected, $targetPath, $note]);
                 if (!$result) {
                     $message = "Database error: Could not save file info.";
                 }

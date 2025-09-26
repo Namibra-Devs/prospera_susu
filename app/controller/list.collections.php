@@ -108,14 +108,20 @@ if ($total_data > 0) {
 		// options for collector and admin
 		if (collector_is_logged_in() || admin_is_logged_in()) {
 			$options .= '
-				<li><a class="dropdown-item" href="'. PROOT .'app/collection-view?id='. $row['daily_id'] .'">View details</a></li>
+				<li><a class="dropdown-item" href="#viewModal_'. $row['id'] .'" data-bs-toggle="modal">View details</a></li>
 				<li><hr class="dropdown-divider" /></li>
 				<li><a class="dropdown-item text-danger" href="'. PROOT .'app/collection-delete?id='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to delete this collection record?\');">Delete collection</a></li>
 			';
 		}
 
+		// set background color for all today transactions
+        if (date('Y-m-d', strtotime($row['daily_collection_date'])) == date('Y-m-d')) {
+            $output .= '<tr class="table-success">';
+        } else {
+            $output .= '<tr>';
+        }
+
 		$output .= '
-            <tr tabindex="0">
 				<td style="width: 0px">
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" id="tableCheckOne" />
@@ -125,7 +131,7 @@ if ($total_data > 0) {
 				<td>
 					<div class="d-flex align-items-center">
 						<div class="avatar">
-							<img class="avatar-img" src="'.$row["daily_proof_image"].'" alt="..." />
+							<img class="avatar-img" src="' . PROOT . 'assets/media/uploads/collection-files/'. basename($row['daily_proof_image']) . '" alt="..." />
 						</div>
 						<div class="ms-4">
 							<div>' . $row["daily_id"] . '</div>
@@ -143,11 +149,86 @@ if ($total_data > 0) {
 						</button>
 						
 						<ul class="dropdown-menu">
-						' . $options . '
+							' . $options . '
 						</ul>
 					</div>
 				</td>
             </tr>
+
+			<!-- View modal -->
+			<div class="modal fade" id="viewModal_' . $row["id"] . '" tabindex="-1" aria-labelledby="viewModalLabel_' . $row["id"] . '" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header border-bottom-0 pb-0">
+                            <h1 class="modal-title fs-5" id="viewModalLabel_' . $row["id"] . '">View colection details</h1>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+							<img src="' . PROOT . 'assets/media/uploads/collection-files/'. basename($row['daily_proof_image']) . '" class="img-thumbnail" />
+							<small><a href="' . PROOT . 'assets/media/uploads/collection-files/'. basename($row['daily_proof_image']) . '" target="_blank"">view image in new tab</a></small>
+
+							<!-- Header -->
+							<h3 class="fs-6 mt-4 mb-2">Details</h3>
+						
+							<!-- Details -->
+							<div class="vstack gap-3 card bg-body">
+								<div class="card-body py-3">
+									<div class="row align-items-center gx-4">
+										<div class="col-auto">
+											<span class="text-body-secondary">Date</span>
+										</div>
+										<div class="col">
+											<hr class="my-0 border-style-dotted" />
+										</div>
+										<div class="col-auto">
+											<span class="material-symbols-outlined text-body-tertiary me-1">date_range</span> ' . pretty_date_notime($row["daily_collection_date"]) . '
+										</div>
+									</div>
+									<div class="row align-items-center gx-4">
+										<div class="col-auto">
+										<span class="text-body-secondary">Satus</span>
+										</div>
+										<div class="col">
+										<hr class="my-0 border-style-dotted" />
+										</div>
+										<div class="col-auto">
+											' . $status_badge . '
+										</div>
+									</div>
+									<div class="row align-items-center gx-4">
+										<div class="col-auto">
+										<span class="text-body-secondary">Uploader</span>
+										</div>
+										<div class="col">
+										<hr class="my-0 border-style-dotted" />
+										</div>
+										<div class="col-auto"><span class="material-symbols-outlined text-body-tertiary me-1">face</span> ' . $uploader . '</div>
+									</div>
+									<div class="row align-items-center gx-4">
+										<div class="col-auto">
+										<span class="text-body-secondary">Handler</span>
+										</div>
+										<div class="col">
+										<hr class="my-0 border-style-dotted" />
+										</div>
+										<div class="col-auto"><span class="material-symbols-outlined text-body-tertiary me-1">man</span> ' . $handler . '</div>
+									</div>
+								</div>
+							</div>
+    
+                            <!-- <div class="row gx-3">
+								<div class="col">
+									<button class="btn btn-light w-100" type="button">Approve</button>
+								</div>
+								<div class="col">
+									<button class="btn btn-light w-100" type="button">Message</button>
+								</div>
+							</div> -->
+                            <a href="'. PROOT .'app/collections?approve='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to VERIFY this collection record?\');" class="btn btn-secondary w-100 mt-4">Verify</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		';
 		$i++;
 	}

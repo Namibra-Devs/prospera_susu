@@ -177,8 +177,13 @@
                             <label class="form-label" for="totalcollected">Total amount collected</label>
                             <input class="form-control" id="totalcollected" name="totalcollected" type="number" min="0.00" step="0.01" placeholder="Enter total amount collected" required />
                         </div>
-                        <div class="mb-4 mt-2">
+                        <div class="mb-4">
                             <input class="form-control" id="upload_date" name="upload_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required>
+                        </div>
+                         <div class="mb-4">
+                            <label class="form-label" for="note">Note (optional)</label>
+                            <textarea class="form-control" id="note" name="note" rows="3" data-autosize></textarea>
+                            <div class="form-text">Limit 500</div>
                         </div>
                         <button type="button" id="uploadButton" class="btn btn-secondary w-100">Upload</button>
                     </form>
