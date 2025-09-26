@@ -168,15 +168,19 @@
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 pb-0">
                     <h1 class="modal-title fs-5" id="todayUploadModalLabel">Upload todays collection file</h1>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button class="btn-close closeUploadModal" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="transactions.php" method="post" enctype="multipart/form-data" id="upload-collection-form" class="dropzone">
+                    <form action="controller/upload.collection.file.php" method="post" enctype="multipart/form-data" id="upload-collection-form" class="dropzone">
                         <div class="dz-message">Drop your image here or click to select</div>
+                        <div class="mb-4 mt-2">
+                            <label class="form-label" for="totalcollected">Total amount collected</label>
+                            <input class="form-control" id="totalcollected" name="totalcollected" type="number" min="0.00" step="0.01" placeholder="Enter total amount collected" required />
+                        </div>
                         <div class="mb-4 mt-2">
                             <input class="form-control" id="upload_date" name="upload_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required>
                         </div>
-                        <button type="button" id="uploadButton">Upload</button>
+                        <button type="button" id="uploadButton" class="btn btn-secondary w-100">Upload</button>
                     </form>
                 </div>
             </div>

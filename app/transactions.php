@@ -64,64 +64,6 @@
         return $row['total_customers'] ? $row['total_customers'] : 0;
     }
 
-    // upload today collection file
-    $collection_file_error = '';
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_date'])) {
-        $uploadDate = $_POST['upload_date'] ?? null;
-
-        // check if today date is already uploaded
-        
-
-        if (!isset($_FILES['collection_file']) || $_FILES['collection_file']['error'] !== UPLOAD_ERR_OK) {
-            $collection_file_error = "No file uploaded.";
-            
-        }
-
-        $file = $_FILES['collection_file'];
-        $allowedTypes = ['image/png', 'image/jpeg'];
-        $maxSize = 6 * 1024 * 1024; // 6MB
-
-        if (!in_array($file['type'], $allowedTypes)) {
-            $collection_file_error = "Only PNG and JPG files are allowed.";
-        }
-
-        if ($file['size'] > $maxSize) {
-            $collection_file_error = "File size exceeds 6MB.";
-        }
-
-        $uploadDir = 'uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-
-        $filename = basename($file['name']);
-        $targetPath = $uploadDir . $filename;
-
-        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-            // insert into daily_collections
-            $sql = "INSERT INTO daily_collections (collection_file_path, collection_date, uploaded_by, upload_date) VALUES (?, ?, ?, NOW())";
-            $stmt = $dbConnection->prepare($sql);
-            $uploaded_by = admin_is_logged_in() ? 'admin' : (collector_is_logged_in() ? 'collector' : 'unknown');
-            $result = $stmt->execute([$targetPath, $uploadDate, $uploaded_by]);
-            if ($result) {
-                $_SESSION['success_flash'] = "File uploaded successfully on date: " . sanitize($uploadDate);
-                $collection_file_error = "Database error: Could not save file info.";
-            } else {
-                $_SESSION['error_flash'] = "Database error: Could not save file info.";
-                redirect(PROOT . 'app/transactions');
-            }
-        } else {
-            $collection_file_error = "File upload failed.";
-        }
-
-        if ($collection_file_error) {
-            $_SESSION['error_flash'] = $collection_file_error;
-            redirect(PROOT . 'app/transactions');
-        } else {
-            redirect(PROOT . 'app/transactions');
-        }
-    }
-
 ?>
 
     <!-- Main -->
@@ -568,7 +510,7 @@
     Dropzone.autoDiscover = false;
 
     const myDropzone = new Dropzone("#upload-collection-form", {
-        url: "transactions.php",
+        url: "controller/upload.collection.file.php",
         paramName: "collection_file", // file name
         dictDefaultMessage: "Drag and drop file here or click to upload", // default message
         dictFallbackMessage: "Your browser does not support drag and drop file uploads.",
@@ -580,6 +522,77 @@
     });
 
     document.getElementById("uploadButton").addEventListener("click", function () {
+        // validate if file is selected
+        if (myDropzone.getAcceptedFiles().length === 0) {
+            $('.toast-body').html('Please select a file to upload.');
+            $('.toast').toast('show');
+            return false;
+        }
+
+        // validate if upload date is selected
+        var uploadDate = document.getElementById("upload_date").value;
+        if (uploadDate === '') {
+            $('.toast-body').html('Please select a date to upload.');
+            $('.toast').toast('show');
+            return false;
+        }
+
+        // validate if total collected is entered
+        var totalCollected = document.getElementById("total_collected").value;
+        if (totalCollected === '' || isNaN(totalCollected) || Number(totalCollected) < 0) {
+            $('.toast-body').html('Please enter a valid total amount collected.');
+            $('.toast').toast('show');
+            return false;
+        }
+
+        // process the queue
         myDropzone.processQueue();
+        // show loading on button
+        $('#uploadButton').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Uploading ...</span>');
+        // disable close button
+        $('#closeUploadModal').attr('disabled', true);
+    
+        // after processing
+        myDropzone.on("complete", function () {
+            // show success message
+            $('.toast-body').html('File uploaded successfully.');
+            $('.toast').toast('show');
+
+            // enable button
+            $('#uploadButton').attr('disabled', false).html('Upload file');
+            // enable close button
+            $('#closeUploadModal').attr('disabled', false);
+            // close modal
+            $('#todayUploadModal').modal('hide');
+            // reload page after 2 seconds
+            setTimeout(function() {
+                location.reload();
+            }, 2000);
+        });
+        myDropzone.on("error", function(file, response) {
+            // show error message
+            $('.toast-body').html(response);
+            $('.toast').toast('show');
+            // enable button
+            $('#uploadButton').attr('disabled', false).html('Upload file');
+            // enable close button
+            $('#closeUploadModal').attr('disabled', false);
+            // remove file
+            myDropzone.removeAllFiles(true);
+        });
+        // check if there are any error messages from server
+        myDropzone.on("success", function(file, response) {
+            var data = JSON.parse(response);
+            if (data.status === 'error') {
+                $('.toast-body').html(data.message);
+                $('.toast').toast('show');
+                // enable button
+                $('#uploadButton').attr('disabled', false).html('Upload file');
+                // enable close button
+                $('#closeUploadModal').attr('disabled', false);
+            } else {
+                // success message will be shown on complete event
+            }
+        });
     });
 </script>
