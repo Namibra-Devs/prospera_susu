@@ -435,21 +435,22 @@
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-1">
-                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Customers</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Customers</li>
+                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Collections</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Collections</li>
                         </ol>
                     </nav>
 
                     <!-- Heading -->
-                    <h1 class="fs-4 mb-0">Customers</h1>
+                    <h1 class="fs-4 mb-0">Collections</h1>
                 </div>
-                    <div class="col-12 col-sm-auto mt-4 mt-sm-0">
-                        <!-- Action -->
-                        <a class="btn btn-secondary d-block" href="<?= PROOT; ?>app/customer-new">
-                        <span class="material-symbols-outlined me-1">add</span> New customer
-                    </a>
+                <div class="col-12 col-sm-auto mt-4 mt-sm-0">
+                    <!-- Action -->
+                    <button class="btn btn-secondary d-block" href="javascript:;" type="button" data-bs-toggle="modal" data-bs-target="#todayUploadModal">
+                        <span class="material-symbols-outlined me-1">add_a_photo</span> Upload new collection file
+                    </button>
                 </div>
             </div>
+
 
             <!-- Page content -->
             <div class="row">
@@ -461,7 +462,7 @@
                                 <div class="col-12 col-lg-auto mb-3 mb-lg-0">
                                     <div class="row align-items-center">
                                         <div class="col-auto">
-                                            <div class="text-body-secondary">No customers selected</div>
+                                            <div class="text-body-secondary">No collection selected</div>
                                         </div>
                                     </div>
                                 </div>
@@ -473,119 +474,6 @@
                                                 <span class="input-group-text">
                                                     <span class="material-symbols-outlined">search</span>
                                                 </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="dropdown">
-                                                <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                                    <span class="material-symbols-outlined">filter_list</span>
-                                                </button>
-                                                <div class="dropdown-menu rounded-3 p-6">
-                                                    <h4 class="fs-lg mb-4">Filter</h4>
-                                                    <form style="width: 350px" id="filterForm">
-                                                        <div class="row align-items-center mb-3">
-                                                            <div class="col-3">
-                                                                <label class="form-label mb-0" for="filterUser">User</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <select
-                                                                    class="form-select"
-                                                                    id="filterUser"
-                                                                    data-choices='{"searchEnabled": false, "choices": [
-                                                                        {
-                                                                        "value": "Emily Thompson",
-                                                                        "label": "Emily Thompson",
-                                                                        "customProperties": {
-                                                                        "avatarSrc": "../assets/img/photos/photo-1.jpg"
-                                                                        }
-                                                                    },
-                                                                    {
-                                                                        "value": "Michael Johnson",
-                                                                        "label": "Michael Johnson",
-                                                                        "customProperties": {
-                                                                        "avatarSrc": "../assets/img/photos/photo-2.jpg"
-                                                                        }
-                                                                    },
-                                                                    {
-                                                                        "value": "Robert Garcia",
-                                                                        "label": "Robert Garcia",
-                                                                        "customProperties": {
-                                                                        "avatarSrc": "../assets/img/photos/photo-3.jpg"
-                                                                        }
-                                                                    },
-                                                                    {
-                                                                        "value": "Jessica Miller",
-                                                                        "label": "Jessica Miller",
-                                                                        "customProperties": {
-                                                                        "avatarSrc": "../assets/img/photos/photo-4.jpg"
-                                                                        }
-                                                                    }
-                                                                    ]}'
-                                                                ></select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-items-center mb-3">
-                                                            <div class="col-3">
-                                                                <label class="form-label mb-0" for="filterCompany">Company</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <select class="form-select" id="filterCompany" data-choices='{"placeholder": "some"}'>
-                                                                    <option value="TechPinnacle Solutions">TechPinnacle Solutions</option>
-                                                                    <option value="Quantum Dynamics">Quantum Dynamics</option>
-                                                                    <option value="Pinnacle Technologies">Pinnacle Technologies</option>
-                                                                    <option value="Apex Innovations">Apex Innovations</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="form-label mb-0" for="filterLocation">Location</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <select class="form-select" id="filterLocation" data-choices>
-                                                                    <option value="San Francisco, CA">San Francisco, CA</option>
-                                                                    <option value="Austin, TX">Austin, TX</option>
-                                                                    <option value="Miami, FL">Miami, FL</option>
-                                                                    <option value="Seattle, WA">Seattle, WA</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto ms-n2">
-                                            <div class="dropdown">
-                                                <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                                    <span class="material-symbols-outlined">sort_by_alpha</span>
-                                                </button>
-                                                <div class="dropdown-menu rounded-3 p-6">
-                                                    <h4 class="fs-lg mb-4">Sort</h4>
-                                                    <form style="width: 350px" id="filterForm">
-                                                        <div class="row gx-3">
-                                                            <div class="col">
-                                                                <select class="form-select" id="sort" data-choices='{"searchEnabled": false}'>
-                                                                    <option value="user">User</option>
-                                                                    <option value="company">Company</option>
-                                                                    <option value="phone">Phone</option>
-                                                                    <option value="location">Location</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                                                    <input type="radio" class="btn-check" name="sortRadio" id="sortAsc" autocomplete="off" checked />
-                                                                    <label class="btn btn-light" for="sortAsc" data-bs-toggle="tooltip" data-bs-title="Ascending">
-                                                                        <span class="material-symbols-outlined">arrow_upward</span>
-                                                                    </label>
-                                                                    <input type="radio" class="btn-check" name="sortRadio" id="sortDesc" autocomplete="off" />
-                                                                        <label class="btn btn-light" for="sortDesc" data-bs-toggle="tooltip" data-bs-title="Descending">
-                                                                        <span class="material-symbols-outlined">arrow_downward</span>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -608,7 +496,7 @@
         // SEARCH AND PAGINATION FOR LIST
         function load_data(page, query = '') {
             $.ajax({
-                url : "<?= PROOT; ?>app/controller/list.customers.php",
+                url : "<?= PROOT; ?>app/controller/list.collections.php",
                 method : "POST",
                 data : {
                     page : page, 
