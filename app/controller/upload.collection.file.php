@@ -3,23 +3,25 @@
 
     require ('../../system/DatabaseConnector.php');
     
-    $collection_message = null;
+    $message = null;
     $status = null;
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_date'])) {
         $uploadDate = $_POST['upload_date'] ?? null;
         $totalcollected = $_POST['total_collected'] ?? 0;
 
         // check if today date is already uploaded
-        $check_sql = "SELECT * FROM daily_collections WHERE daily_total_collected = ? LIMIT 1";
+        $check_sql = "SELECT * FROM daily_collections WHERE daily_collection_date = ? LIMIT 1";
         $check_stmt = $dbConnection->prepare($check_sql);
         $check_stmt->execute([$uploadDate]);
         if ($check_stmt->rowCount() > 0) {
-            $collection_message = "Collection for this date is already uploaded.";
+            $message = "Collection for this date is already uploaded.";
+        } else{
+            // dnd('good to go | ' . $uploadDate);
         }
 
         // Validate file upload
         if (!isset($_FILES['collection_file']) || $_FILES['collection_file']['error'] !== UPLOAD_ERR_OK) {
-            $collection_message = "No file uploaded.";
+            $message = "No file uploaded.";
             
         }
 
@@ -28,11 +30,11 @@
         $maxSize = 6 * 1024 * 1024; // 6MB
 
         if (!in_array($file['type'], $allowedTypes)) {
-            $collection_message = "Only PNG and JPG files are allowed.";
+            $message = "Only PNG and JPG files are allowed.";
         }
 
         if ($file['size'] > $maxSize) {
-            $collection_message = "File size exceeds 6MB.";
+            $message = "File size exceeds 6MB.";
         }
 
         $uploadDir = BASEURL . 'assets/media/uploads/collection-files/';
@@ -47,26 +49,25 @@
 
         $uniqueid = guidv4() . '-' . strtotime(date('Y-m-d H:i:s'));
 
-        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-            // insert into daily_collections
-            $sql = "INSERT INTO daily_collections (daily_id, daily_collector_id, daily_collection_date, daily_total_collected, daily_proof_image) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $dbConnection->prepare($sql);
-            $result = $stmt->execute([$uniqueid, $collector_id, $uploadDate, $totalcollected, $targetPath]);
-            if ($result) {
-                $_SESSION['success_flash'] = "File uploaded successfully on date: " . sanitize($uploadDate);
-                $collection_message = "Database error: Could not save file info.";
+        if ($message == null || $message == '') {
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                // insert into daily_collections
+                $sql = "INSERT INTO daily_collections (daily_id, daily_collector_id, daily_collection_date, daily_total_collected, daily_proof_image) VALUES (?, ?, ?, ?, ?)";
+                $stmt = $dbConnection->prepare($sql);
+                $result = $stmt->execute([$uniqueid, $collector_id, $uploadDate, $totalcollected, $targetPath]);
+                if (!$result) {
+                    $message = "Database error: Could not save file info.";
+                }
             } else {
-                $collection_message = "Database error: Could not save file info.";
+                $message = "File upload failed.";
             }
-        } else {
-            $collection_message = "File upload failed.";
         }
 
-        if ($collection_message) {
+        if ($message) {
             $status = 'error';
         } else {
             $status = 'success';
-            $collection_message = "File uploaded successfully for date: " . sanitize($uploadDate);
+            $message = "File uploaded successfully for date: " . sanitize($uploadDate);
         }
-        echo json_encode(['status' => $status, 'message' => $collection_message]);
+        echo json_encode(['status' => $status, 'message' => $message]);
     }

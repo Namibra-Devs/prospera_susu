@@ -504,8 +504,6 @@
     });
 </script>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
 <script>
     Dropzone.autoDiscover = false;
 
@@ -538,37 +536,21 @@
         }
 
         // validate if total collected is entered
-        var totalCollected = document.getElementById("total_collected").value;
+        var totalCollected = document.getElementById("totalcollected").value;
         if (totalCollected === '' || isNaN(totalCollected) || Number(totalCollected) < 0) {
             $('.toast-body').html('Please enter a valid total amount collected.');
             $('.toast').toast('show');
             return false;
-        }
+        } 
 
         // process the queue
         myDropzone.processQueue();
+
         // show loading on button
         $('#uploadButton').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Uploading ...</span>');
         // disable close button
         $('#closeUploadModal').attr('disabled', true);
     
-        // after processing
-        myDropzone.on("complete", function () {
-            // show success message
-            $('.toast-body').html('File uploaded successfully.');
-            $('.toast').toast('show');
-
-            // enable button
-            $('#uploadButton').attr('disabled', false).html('Upload file');
-            // enable close button
-            $('#closeUploadModal').attr('disabled', false);
-            // close modal
-            $('#todayUploadModal').modal('hide');
-            // reload page after 2 seconds
-            setTimeout(function() {
-                location.reload();
-            }, 2000);
-        });
         myDropzone.on("error", function(file, response) {
             // show error message
             $('.toast-body').html(response);
@@ -594,5 +576,30 @@
                 // success message will be shown on complete event
             }
         });
+
+        myDropzone.on("complete", function(file) {
+            var data = JSON.parse(file.xhr.response);
+            if (data.status === 'success') {
+                $('.toast-body').html(data.message);
+                $('.toast').toast('show');
+                // reset form
+                $('#upload-collection-form')[0].reset();
+                // close modal after short delay
+                setTimeout(function() {
+                    $('#todayUploadModal').modal('hide');
+                }, 2000);
+                // reload page after short delay
+                setTimeout(function() {
+                    location.reload();
+                }, 2500);
+            }
+            // enable button
+            $('#uploadButton').attr('disabled', false).html('Upload file');
+            // enable close button
+            $('#closeUploadModal').attr('disabled', false);
+            // remove file
+            myDropzone.removeAllFiles(true);
+        });
+
     });
 </script>
