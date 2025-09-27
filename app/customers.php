@@ -740,7 +740,7 @@
         </div>
 
 <?php include ('../system/inc/footer.php'); ?>
-
+<?php if (isset($_GET['view']) && !empty($_GET['view'])): ?>
 <script>
     
     let currentCycle = null; // track current shown cycle
@@ -810,10 +810,7 @@
             try { msg = xhr.responseText || msg; } catch(e) {}
             alert(msg);
         });
-    }
-
-    
-									
+    }				
 
     function openDayModal(day) {
         const modal = new bootstrap.Modal(document.getElementById('dayModal'));
@@ -937,7 +934,7 @@
     // initial load (auto-detect)
     loadCalendar();
 </script>
-
+<?php endif; ?>
 
 <script>
 
