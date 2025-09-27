@@ -326,6 +326,19 @@
 
             <div class="mb-8">
                 <h2 class="mb-3">Savings Calendar</h2>
+
+                <div class="mb-3">
+                    <h5>Legend:</h5>
+                    <div class="d-flex flex-wrap gap-3">
+                        <span class="badge bg-success">Approved Savings</span>
+                        <span class="badge bg-warning text-dark">Pending Savings</span>
+                        <span class="badge bg-light text-dark border">Not Saved</span>
+                        <span class="badge bg-danger">Commission</span>
+                    </div>
+                </div>
+
+
+
                 <div class="d-flex justify-content-between mb-3">
                     <button class="btn btn-link" id="prevCycle">← Previous</button>
                     <h5 id="cycleLabel" class="mb-0"></h5>
