@@ -324,11 +324,11 @@
                     <nav class="navbar-nav nav-pills mt-auto">
                         <div class="nav-item">
                             <a
-                            class="nav-link"
-                            href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="right"
-                            data-bs-title="Add new deposit"
+                                class="nav-link"
+                                href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                data-bs-title="Add new deposit"
                             >
                                 <span class="material-symbols-outlined">send_money</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
