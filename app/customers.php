@@ -312,15 +312,25 @@
                     background-color: #28a745; /* green */
                     color: white;
                 }
-                  .pending { background:#fd7e14; color:#fff; } /* orange pending */
+                .pending { 
+                    background: #fd7e14; 
+                    color: #fff; 
+                } /* orange pending */
 
-                  .not-saved { background:#f8f9fa; border:1px solid #dee2e6; }
+                .not-saved { 
+                    background: #f8f9fa; 
+                    border: 1px solid #dee2e6; 
+                }
 
                 .commission {
                     background-color: #dc3545; /* red */
                     color: white;
                 }
-                    .muted-small { font-weight:400; font-size:0.8rem; display:block;}
+                .muted-small { 
+                    font-weight: 400; 
+                    font-size: 0.8rem; 
+                    display: block;
+                }
 
             </style>
 
@@ -336,9 +346,7 @@
                         <span class="badge bg-danger">Commission</span>
                     </div>
                 </div>
-
-
-
+                
                 <div class="d-flex justify-content-between mb-3">
                     <button class="btn btn-link" id="prevCycle">← Previous</button>
                     <h5 id="cycleLabel" class="mb-0"></h5>
@@ -404,9 +412,11 @@
                             <div class="col">
                                 <a class="btn btn-light w-100" href="<?= PROOT; ?>app/customers/edit=<?= $customer_data['customer_id']; ?>">Update</a>
                             </div>
+                            <?php if (admin_is_logged_in()): ?>
                             <div class="col">
                                 <button class="btn btn-danger w-100" type="button">Deactivate</button>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

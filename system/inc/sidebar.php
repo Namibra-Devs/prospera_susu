@@ -5,9 +5,9 @@
             <div class="container-fluid">
                 <!-- Nav -->
                 <nav class="navbar-nav nav-pills h-100">
-                    <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Go to product page">
-                        <a class="nav-link" href="javascript:;" target="_blank">
-                            <span class="material-symbols-outlined">local_mall</span>
+                    <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Add new deposit">
+                        <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
+                            <span class="material-symbols-outlined">send_money</span>
                         </a>
                     </div>
                     <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
@@ -92,7 +92,7 @@
                             <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
                                 <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
                             </span>
-                            <span class="d-none d-xl-block">John Williams</span>
+                            <span class="d-none d-xl-block"><?= ((admin_is_logged_in()) ? ucwords($admin_data['admin_name']): ucwords($collector_data['collector_name'])); ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
@@ -292,111 +292,7 @@
                                         <a class="dropdown-item " href="./projects/project-new.html">New project</a>
                                     </div>
                                 </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        Account <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                    <a class="dropdown-item " href="<?= PROOT; ?>account-overview">Account overview</a>
-                                    <a class="dropdown-item " href="<?= PROOT; ?>account-settings.html">Account settings</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        E-commerce <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item " href="./ecommerce/products.html">Products</a>
-                                        <a class="dropdown-item " href="./ecommerce/orders.html">Orders</a>
-                                        <a class="dropdown-item " href="./ecommerce/invoice.html">Invoice</a>
-                                        <a class="dropdown-item " href="./ecommerce/pricing.html">Pricing</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        Posts <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item " href="./posts/categories.html">Categories</a>
-                                        <a class="dropdown-item " href="./posts/posts.html">Posts</a>
-                                        <a class="dropdown-item " href="./posts/post-new.html">New post</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a class="dropdown-item d-flex" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                        Authentication <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="./auth/sign-in.html" target="_blank">Sign in</a>
-                                        <a class="dropdown-item" href="./auth/sign-up.html" target="_blank">Sign up</a>
-                                        <a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Password reset</a>
-                                        <a class="dropdown-item" href="./auth/verification-code.html" target="_blank">Verification code</a>
-                                        <a class="dropdown-item" href="./auth/error.html" target="_blank">Error</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        Misc <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item " href="./other/calendar.html">Calendar</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="nav-item dropend">
-                            <a class="nav-link flex-xl-column" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="material-symbols-outlined">email</span>
-                                <span class="ms-3 d-xl-none">Emails</span>
-                            </a>
-                            <div class="dropdown-menu ms-xl-3">
-                                <h6 class="dropdown-header d-none d-xl-block">Emails</h6>
-                                <a class="dropdown-item" href="./emails/account-confirmation.html" target="_blank">Account confirmation</a>
-                                <a class="dropdown-item" href="./emails/new-post.html" target="_blank">New post</a>
-                                <a class="dropdown-item" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
-                                <a class="dropdown-item" href="./emails/password-reset.html" target="_blank">Password reset</a>
-                                <a class="dropdown-item" href="./emails/product-update.html" target="_blank">Product update</a>
-                            </div>
-                        </div>
-                        <div class="nav-item dropend">
-                            <a class="nav-link flex-xl-column" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="material-symbols-outlined">tooltip</span>
-                                <span class="ms-3 d-xl-none">Modals</span>
-                            </a>
-                            <div class="dropdown-menu ms-xl-3">
-                                <h6 class="dropdown-header d-none d-xl-block">Modals</h6>
-                                <a class="dropdown-item" href="#productModal" data-bs-toggle="offcanvas" aria-controls="productModal">Product</a>
-                                <a class="dropdown-item" href="#orderModal" data-bs-toggle="offcanvas" aria-controls="orderModal">Order</a>
-                                <a class="dropdown-item" href="#eventModal" data-bs-toggle="modal" aria-controls="eventModal">Event</a>
-                            </div>
+                             </ul>
                         </div>
                     </nav>
                 
@@ -429,17 +325,16 @@
                         <div class="nav-item">
                             <a
                             class="nav-link"
-                            href="javascript:;"
-                            target="_blank"
+                            href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
                             data-bs-toggle="tooltip"
                             data-bs-placement="right"
-                            data-bs-title="Go to product page"
+                            data-bs-title="Add new deposit"
                             >
-                                <span class="material-symbols-outlined">local_mall</span> <span class="d-xl-none ms-3">Go to product page</span>
+                                <span class="material-symbols-outlined">send_money</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
                         </div>
                         <div class="nav-item">
-                            <a class="nav-link" href="mailto:yevgenysim+simpleqode@gmail.com" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
+                            <a class="nav-link" href="mailto:info@namibra.io" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
                                 <span class="material-symbols-outlined">alternate_email</span> <span class="d-xl-none ms-3">Contact us</span>
                             </a>
                         </div>
@@ -491,7 +386,7 @@
         <nav class="navbar navbar-expand-xl navbar-vertical">
             <div class="container-lg">
                 <!-- Brand -->
-                <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="./index.html">
+                <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="<?= PROOT; ?>index">
                     <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">
                         <?php 
                             // get logged in person role
@@ -519,10 +414,10 @@
                             <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
                                 <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
                             </span>
-                            <span class="d-none d-xl-block">John Williams</span>
+                            <span class="d-none d-xl-block"><?= ((admin_is_logged_in()) ? ucwords($admin_data['admin_name']): ucwords($collector_data['collector_name'])); ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="<?= PROOT; ?>account-overview">Account</a></li>
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
                             <li><a class="dropdown-item" href="<?= PROOT; ?>auth/password-reset" target="_blank">Change password</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
@@ -704,126 +599,8 @@
                                         <a class="dropdown-item " href="<?= PROOT; ?>customer-new">New customer</a>
                                     </div>
                                 </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        Projects <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item " href="./projects/projects.html">Projects</a>
-                                        <a class="dropdown-item " href="./projects/project.html">Project overview</a>
-                                        <a class="dropdown-item " href="./projects/project-new.html">New project</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        Account <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item " href="./account/account.html">Account overview</a>
-                                        <a class="dropdown-item " href="./account/account-settings.html">Account settings</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        E-commerce <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item " href="./ecommerce/products.html">Products</a>
-                                        <a class="dropdown-item " href="./ecommerce/orders.html">Orders</a>
-                                        <a class="dropdown-item " href="./ecommerce/invoice.html">Invoice</a>
-                                        <a class="dropdown-item " href="./ecommerce/pricing.html">Pricing</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        Posts <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item " href="./posts/categories.html">Categories</a>
-                                        <a class="dropdown-item " href="./posts/posts.html">Posts</a>
-                                        <a class="dropdown-item " href="./posts/post-new.html">New post</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a class="dropdown-item d-flex" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                        Authentication <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="./auth/sign-in.html" target="_blank">Sign in</a>
-                                        <a class="dropdown-item" href="./auth/sign-up.html" target="_blank">Sign up</a>
-                                        <a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Password reset</a>
-                                        <a class="dropdown-item" href="./auth/verification-code.html" target="_blank">Verification code</a>
-                                        <a class="dropdown-item" href="./auth/error.html" target="_blank">Error</a>
-                                    </div>
-                                </li>
-                                <li class="dropend">
-                                    <a
-                                    class="dropdown-item d-flex "
-                                    href="#"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    data-bs-auto-close="outside"
-                                    aria-expanded="false"
-                                    >
-                                        Misc <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item " href="./other/calendar.html">Calendar</a>
-                                    </div>
-                                </li>
+                                
                             </ul>
-                        </div>
-                        <div class="nav-item dropend">
-                            <a class="nav-link flex-xl-column" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="material-symbols-outlined">email</span>
-                                <span class="ms-3 ms-xl-0 mt-xl-1 d-xl-block align-self-stretch fs-xl-sm text-xl-center text-truncate">Emails</span>
-                            </a>
-                            <div class="dropdown-menu ms-xl-3">
-                                <a class="dropdown-item" href="./emails/account-confirmation.html" target="_blank">Account confirmation</a>
-                                <a class="dropdown-item" href="./emails/new-post.html" target="_blank">New post</a>
-                                <a class="dropdown-item" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
-                                <a class="dropdown-item" href="./emails/password-reset.html" target="_blank">Password reset</a>
-                                <a class="dropdown-item" href="./emails/product-update.html" target="_blank">Product update</a>
-                            </div>
-                        </div>
-                        <div class="nav-item dropend">
-                            <a class="nav-link flex-xl-column" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="material-symbols-outlined">tooltip</span>
-                                <span class="ms-3 ms-xl-0 mt-xl-1 d-xl-block align-self-stretch fs-xl-sm text-xl-center text-truncate">Modals</span>
-                            </a>
-                            <div class="dropdown-menu ms-xl-3">
-                                <a class="dropdown-item" href="#productModal" data-bs-toggle="offcanvas" aria-controls="productModal">Product</a>
-                                <a class="dropdown-item" href="#orderModal" data-bs-toggle="offcanvas" aria-controls="orderModal">Order</a>
-                                <a class="dropdown-item" href="#eventModal" data-bs-toggle="modal" aria-controls="eventModal">Event</a>
-                            </div>
                         </div>
                     </nav>
     
@@ -862,19 +639,18 @@
                         <div class="nav-item">
                             <a
                             class="nav-link flex-xl-column"
-                            href="javascript:;"
-                            target="_blank"
+                            href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
                             data-bs-toggle="tooltip"
                             data-bs-placement="right"
-                            data-bs-title="Go to product page"
+                            data-bs-title="Add new deposit"
                             >
-                                <span class="material-symbols-outlined">local_mall</span> <span class="d-xl-none ms-3">Go to product page</span>
+                                <span class="material-symbols-outlined">local_mall</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
                         </div>
                         <div class="nav-item">
                             <a
                             class="nav-link flex-xl-column"
-                            href="mailto:yevgenysim+simpleqode@gmail.com"
+                            href="mailto:info@namibra.com"
                             data-bs-toggle="tooltip"
                             data-bs-placement="right"
                             data-bs-title="Contact us"
@@ -957,10 +733,10 @@
                             <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
                             <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
                             </span>
-                            <span class="d-none d-xl-block">John Williams</span>
+                            <span class="d-none d-xl-block"><?= ((admin_is_logged_in()) ? ucwords($admin_data['admin_name']): ucwords($collector_data['collector_name'])); ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="<?= PROOT; ?>account-overview">Account</a></li>
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
                             <li><a class="dropdown-item" href="<?= PROOT; ?>auth/password-reset" target="_blank">Change password</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
@@ -1161,6 +937,7 @@
                                         if ((admin_is_logged_in() && admin_has_permission('approver')) || collector_is_logged_in()):
                                     ?>
                                     <a class="nav-link sub-nav-transactions" href="<?= PROOT; ?>app/transactions">Transactions</a>
+                                    <a class="nav-link" href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal">Add new deposit</a>
                                     <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
                                     <?php endif; ?>
                                     <?php
@@ -1222,19 +999,19 @@
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills mb-xl-7">
                         <div class="nav-item">
-                            <a class="nav-link " href="./docs/getting-started.html">
+                            <a class="nav-link " href="<?= PROOT; ?>documentation">
                             <span class="material-symbols-outlined me-3">sticky_note_2</span> Getting started
                             </a>
                         </div>
                         <div class="nav-item">
-                            <a class="nav-link " href="./docs/components.html">
+                            <a class="nav-link " href="javascript:;">
                             <span class="material-symbols-outlined me-3">deployed_code</span> Components
                             </a>
                         </div>
                         <div class="nav-item">
-                            <a class="nav-link " href="./docs/changelog.html">
-                            <span class="material-symbols-outlined me-3">list_alt</span> Changelog
-                            <span class="badge text-bg-primary ms-auto">1.0.6</span>
+                            <a class="nav-link " href="javascript:;">
+                            <span class="material-symbols-outlined me-3">list_alt</span> Version
+                            <span class="badge text-bg-primary ms-auto">0.0.1</span>
                             </a>
                         </div>
                     </nav>
@@ -1245,12 +1022,12 @@
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills d-xl-none mb-7">
                         <div class="nav-item">
-                            <a class="nav-link" href="https://themes.getbootstrap.com/product/dashbrd/" target="_blank">
-                                <span class="material-symbols-outlined me-3">local_mall</span> Go to product page
+                            <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
+                                <span class="material-symbols-outlined me-3">send_money</span> Add new deposit
                             </a>
                         </div>
                         <div class="nav-item">
-                            <a class="nav-link" href="mailto:yevgenysim+simpleqode@gmail.com">
+                            <a class="nav-link" href="mailto:info@namibra.io">
                                 <span class="material-symbols-outlined me-3">alternate_email</span> Contact us
                             </a>
                         </div>

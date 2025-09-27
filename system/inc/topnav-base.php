@@ -1,32 +1,57 @@
 <!-- Topnav -->
     <!-- Topnav (base) -->
     <nav class="navbar navbar-expand-xl topnav-base">
-      <div class="container-lg">
-        <!-- Brand -->
-        <a class="navbar-brand d-flex align-items-center fs-5 fw-bold" href="./index.html"
-          ><i class="fs-4 text-secondary me-2" data-duoicon="box-2"></i>Dashbrd</a
-        >
-    
-        <!-- User -->
-        <div class="d-flex ms-auto d-xl-none">
-          <div class="dropdown my-n2">
-            <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
-              </span>
-              <span class="d-none d-xl-block">John Williams</span>
+        <div class="container-lg">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center fs-5 fw-bold" href="<?= PROOT; ?>index"
+            >
+                <i class="fs-4 text-secondary me-2" data-duoicon="box-2"></i>
+                 <?php 
+                    // get logged in person role
+                    if (array_key_exists('PRSADMIN', $_SESSION)) {
+                        echo 'Admin';
+                        // check if admin is a super admin or approver
+                        if (admin_has_permission()) {
+                            echo ' (Super)';
+                        } elseif (admin_has_permission('approver')) {
+                            echo ' (Approver)';
+                        }
+                    } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+                        echo 'Collector';
+                    } else {
+                        echo 'User';
+                    }
+                ?>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
-              <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
-            </ul>
-          </div>
-    
-          <!-- Divider -->
-          <div class="vr align-self-center bg-dark mx-2"></div>
-    
+        
+            <!-- User -->
+            <div class="d-flex ms-auto d-xl-none">
+            <div class="dropdown my-n2">
+                <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
+                    <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
+                </span>
+                <span class="d-none d-xl-block">
+                    <?php 
+                        if (admin_has_permission()) {
+                            echo ucwords($admin_data['admin_name']);
+                        } elseif (collector_is_logged_in()) {
+                            echo ucwords($collector_data['collector_name']);
+                        }
+                    ?>
+                </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
+                <li><a class="dropdown-item" href="<?= PROOT; ?>auth/password-reset">Change password</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
+                </ul>
+            </div>
+        
+            <!-- Divider -->
+            <div class="vr align-self-center bg-dark mx-2"></div>
+        
           <!-- Notifications -->
           <div class="dropdown ">
             <button class="btn btn-link" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -191,103 +216,8 @@
                     <a class="dropdown-item " href="./projects/project-new.html">New project</a>
                   </div>
                 </li>
-                <li class="dropend">
-                  <a
-                    class="dropdown-item d-flex "
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
-                    aria-expanded="false"
-                  >
-                    Account <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                  </a>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item " href="./account/account.html">Account overview</a>
-                    <a class="dropdown-item " href="./account/account-settings.html">Account settings</a>
-                  </div>
-                </li>
-                <li class="dropend">
-                  <a
-                    class="dropdown-item d-flex "
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
-                    aria-expanded="false"
-                  >
-                    E-commerce <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                  </a>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item " href="./ecommerce/products.html">Products</a>
-                    <a class="dropdown-item " href="./ecommerce/orders.html">Orders</a>
-                    <a class="dropdown-item " href="./ecommerce/invoice.html">Invoice</a>
-                    <a class="dropdown-item " href="./ecommerce/pricing.html">Pricing</a>
-                  </div>
-                </li>
-                <li class="dropend">
-                  <a
-                    class="dropdown-item d-flex "
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
-                    aria-expanded="false"
-                  >
-                    Posts <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                  </a>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item " href="./posts/categories.html">Categories</a>
-                    <a class="dropdown-item " href="./posts/posts.html">Posts</a>
-                    <a class="dropdown-item " href="./posts/post-new.html">New post</a>
-                  </div>
-                </li>
-                <li class="dropend">
-                  <a class="dropdown-item d-flex" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                    Authentication <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                  </a>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="./auth/sign-in.html" target="_blank">Sign in</a>
-                    <a class="dropdown-item" href="./auth/sign-up.html" target="_blank">Sign up</a>
-                    <a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Password reset</a>
-                    <a class="dropdown-item" href="./auth/verification-code.html" target="_blank">Verification code</a>
-                    <a class="dropdown-item" href="./auth/error.html" target="_blank">Error</a>
-                  </div>
-                </li>
-                <li class="dropend">
-                  <a
-                    class="dropdown-item d-flex "
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
-                    aria-expanded="false"
-                  >
-                    Misc <span class="material-symbols-outlined ms-auto">chevron_right</span>
-                  </a>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item " href="./other/calendar.html">Calendar</a>
-                  </div>
-                </li>
+                
               </ul>
-            </div>
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Emails</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="./emails/account-confirmation.html" target="_blank">Account confirmation</a>
-                <a class="dropdown-item" href="./emails/new-post.html" target="_blank">New post</a>
-                <a class="dropdown-item" href="./emails/order-confirmation.html" target="_blank">Order confirmation</a>
-                <a class="dropdown-item" href="./emails/password-reset.html" target="_blank">Password reset</a>
-                <a class="dropdown-item" href="./emails/product-update.html" target="_blank">Product update</a>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Modals</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="#productModal" data-bs-toggle="offcanvas" aria-controls="productModal">Product</a>
-                <a class="dropdown-item" href="#orderModal" data-bs-toggle="offcanvas" aria-controls="orderModal">Order</a>
-                <a class="dropdown-item" href="#eventModal" data-bs-toggle="modal" aria-controls="eventModal">Event</a>
-              </div>
             </div>
             <div class="nav-item dropdown">
               <a
