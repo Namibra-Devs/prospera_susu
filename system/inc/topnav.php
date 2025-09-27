@@ -5,29 +5,39 @@
                 <div class="col">
                     <!-- Search -->
                     <div class="input-group" style="max-width: 400px">
-                    <input class="form-control" id="topnavSearchInput" type="search" placeholder="Search" aria-label="Search" aria-describedby="navbarSearch" />
-                    <span class="input-group-text" id="navbarSearch">
-                        <kbd class="badge bg-body-secondary text-body">⌘</kbd>
-                        <kbd class="badge bg-body-secondary text-body ms-1">K</kbd>
-                    </span>
+                        <input class="form-control" id="topnavSearchInput" type="search" placeholder="Search" aria-label="Search" aria-describedby="navbarSearch" />
+                        <span class="input-group-text" id="navbarSearch">
+                            <kbd class="badge bg-body-secondary text-body">⌘</kbd>
+                            <kbd class="badge bg-body-secondary text-body ms-1">K</kbd>
+                        </span>
                     </div>
                 </div>
                 <div class="col-auto d-flex">
                     <!-- User -->
-            <div class="dropdown my-n2">
-              <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                  <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
-                </span>
-                <span class="d-none d-xl-block">John Williams</span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="./account/account.html">Account</a></li>
-                <li><a class="dropdown-item" href="./auth/password-reset.html" target="_blank">Change password</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
-              </ul>
-            </div>
+                    <div class="dropdown my-n2">
+                        <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
+                                <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
+                            </span>
+                            <span class="d-none d-xl-block">
+                                <?php 
+                                    if (admin_is_logged_in()) {
+                                        echo ucwords($admin_data['admin_name']);
+                                    } elseif (collector_is_logged_in()) {
+                                        echo ucwords($collector_data['collector_name']);
+                                    } else {
+                                        echo 'Unknown';
+                                    }
+                                ?>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>password-reset">Change password</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
+                        </ul>
+                    </div>
     
             <!-- Divider -->
             <div class="vr align-self-center bg-dark mx-2"></div>
