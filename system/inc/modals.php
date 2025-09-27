@@ -145,7 +145,7 @@
     
     <!-- Modal -->
     <div class="modal fade" id="dayModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 pb-0">
                     <h1 class="modal-title fs-5" id="transactionModalLabel">Day Details</h1>

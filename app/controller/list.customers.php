@@ -93,15 +93,8 @@ if ($total_data > 0) {
             $status_badge = '<span class="badge bg-secondary-subtle text-secondary">Unknown</span>';
         }
 
-        // get total saved by customer
-        $total_saved = 0;
-        // $query_total = "SELECT SUM(payment_amount) AS total FROM payments WHERE payment_customer_id = ? AND payment_status = 'completed'";
-        // $statement_total = $conn->prepare($query_total);
-        // $statement_total->execute([$row['customer_id']]);
-        // $result_total = $statement_total->fetchAll();
-        // if ($statement_total->rowCount() > 0) {
-        //     $total_saved = $result_total[0]['total'];
-        // }
+        $total_saved = sum_customer_saves($row["customer_id"], $status = 'Approved');
+       
 
 		$output .= '
             <tr class="align-middle">

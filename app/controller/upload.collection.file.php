@@ -8,7 +8,7 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_date'])) {
         $uploadDate = $_POST['upload_date'] ?? null;
         $totalcollected = $_POST['totalcollected'] ?? 0;
-        $note = sanitize($_POST['not']); // 
+        $note = sanitize($_POST['note']); // 
 
         // check if today date is already uploaded
         $check_sql = "SELECT * FROM daily_collections WHERE daily_collection_date = ? LIMIT 1";

@@ -319,6 +319,8 @@
                     background-color: #dc3545; /* red */
                     color: white;
                 }
+                    .muted-small { font-weight:400; font-size:0.85rem; display:block; margin-top:6px; }
+
             </style>
 
             <div class="mb-8">
@@ -741,111 +743,115 @@
 
 <script>
     
-    let currentCycle = null;
-    const customerId = "<?= $view; ?>";
-    let lastData = null;
+    let currentCycle = null; // track current shown cycle
+    const customerId = "<?= $view; ?>"; // set the customer id here
 
-    function loadCalendar(cycle = null) {
-        $.getJSON("<?= PROOT; ?>app/controller/customer.calendar.php", { customer_id: customerId, cycle: cycle }, function (data) {
-            $("#calendar").empty(); // Clear existing calendar
-            lastData = data; // Store the last fetched data
-            
-            if (!data.cycle_start) {
-                $("#cycleLabel").text("No savings yet");
+    // savedDays global for modal access: { dayNumber: { date, amount, entries: [...] } ... }
+    let savedDaysGlobal = {};
+    let commissionDayGlobal = null;
+    let commissionAmountGlobal = null;
+
+    function loadCalendar(cycle = undefined) {
+        // build params
+        const params = { customer_id: customerId };
+        if (typeof cycle !== 'undefined') params.cycle = cycle;
+
+        $.getJSON('<?= PROOT; ?>app/controller/customer.calendar.php', params)
+            .done(function (data) {
+            // sanity check
+            if (!data || !data.cycle_start) {
+                $('#cycleLabel').text('No savings yet');
+                $('#calendar').empty();
+                savedDaysGlobal = {};
+                commissionDayGlobal = null;
                 return;
             }
 
-            // auto-detect if cycle not set
-            if (currentCycle === null) {
-                currentCycle = data.active_cycle;
-            } else {
-                currentCycle = data.cycle;
-            }
+            // determine currentCycle (API tells us the cycle it used)
+            currentCycle = data.current_cycle;
+            savedDaysGlobal = data.saved_days || {};
+            commissionDayGlobal = data.commission_day || null;
+            commissionAmountGlobal = data.commission_amount || null;
 
-            $("#cycleLabel").text(
-                "Cycle " + (currentCycle + 0) + ": " + data.cycle_start + " → " + data.cycle_end
-            );
+            // render label
+            $('#cycleLabel').text(`Cycle ${currentCycle + 1}: ${data.cycle_start} → ${data.cycle_end}`);
 
-            for (let day = 1; day <= 31; day++) {
-                let cellClass = "not-saved";
-                let text = day;
-                let extra = "";
+            // render 31 cells
+            const $cal = $('#calendar').empty();
+            for (let d = 1; d <= 31; d++) {
+                let cls = 'not-saved';
+                let innerHTML = `<div>${d}</div>`;
 
-                if (data.saved_days[day]) {
-                    cellClass = "saved";
-                    text = day + " ✓ <br>";
-                    // Show amount saved if any
-                    text += `\nGHS ${data.saved_days[day]['amount']}`;
-                    extra = JSON.stringify(data.saved_days[day]);
+                if (commissionDayGlobal === d) {
+                    cls = 'commission';
+                    innerHTML = `<div>${d}<span class="muted-small">(Fee)</span></div>`;
+                } else if (savedDaysGlobal[d]) {
+                    cls = 'saved';
+                    const amt = parseFloat(savedDaysGlobal[d].amount).toFixed(2);
+                    innerHTML = `<div>${d}<span class="muted-small">GHS ${amt}</span></div>`;
                 }
 
-                if (data.commission_day === day) {
-                    cellClass = "commission";
-                    text = day + " (Fee) <br>";
-                    // If there's also a saving on this day, show both
-                    if (data.saved_days[day]) {
-                        text += `\nGHS ${data.saved_days[day]['amount']}`;
-                    }
-                }
-
-                $("#calendar").append(
-                    // `<div class="day ${cellClass}" data-day="${day}">${text}</div>`
-                    `<div class="day ${cellClass}" data-day="${day}" data-extra='${extra}'>${text}</div>`
-
-                );
+                // attach day element
+                const $cell = $(`<div class="day ${cls}" data-day="${d}">${innerHTML}</div>`);
+                $cal.append($cell);
             }
-            // Add click handler to each cell
-            $(".day").click(function () {
-                let day = $(this).data("day");
-                showDayDetails(day);
+
+            // enable/disable prev button
+            $('#prevCycle').prop('disabled', currentCycle <= 0);
+
+            // attach click handlers
+            $('.day').off('click').on('click', function () {
+                const day = parseInt($(this).data('day'), 10);
+                openDayModal(day);
             });
-
-        }).fail(function (xhr) {
-            alert("Error: " + xhr.responseText);
+        })
+        .fail(function (xhr, status, err) {
+            let msg = 'Failed to load calendar.';
+            try { msg = xhr.responseText || msg; } catch(e) {}
+            alert(msg);
         });
     }
 
-    //
-    function showDayDetails(day) {
-        if (!lastData) return;
-        let body = "";
-        if (lastData.commission_day === day) {
-            body = `<p><strong>Day ${day}</strong> is the <span class="text-danger">Commission Fee</span> day for the company.</p>`;
-        } else if (lastData.saved_days[day]) {
-            body = `
-            <p><strong>Day:</strong> ${day}</p>
-            <p><strong>Amount Saved:</strong> GHS ${lastData.saved_days[day]}</p>
-            <p><strong>Date:</strong> ${calculateDate(lastData.cycle_start, day)}</p>
-            `;
+    function openDayModal(day) {
+        const modal = new bootstrap.Modal(document.getElementById('dayModal'));
+        let html = `<p><strong>Day:</strong> ${day}</p>`;
+
+        // if commission day
+        if (commissionDayGlobal === day) {
+            html += `<p><strong>Commission deducted:</strong> GHS ${parseFloat(commissionAmountGlobal).toFixed(2)}</p>`;
+        }
+
+        // saved entries
+        const dayData = savedDaysGlobal[day];
+        if (!dayData) {
+            html += `<p>No savings recorded for this day.</p>`;
         } else {
-            body = `<p>No savings recorded for <strong>Day ${day}</strong>.</p>`;
+            html += `<p><strong>Date:</strong> ${dayData.date}</p>`;
+            html += `<p><strong>Total saved:</strong> GHS ${parseFloat(dayData.amount).toFixed(2)}</p>`;
+            html += `<hr/><div><strong>Entries:</strong></div>`;
+            html += `<ul>`;
+            dayData.entries.forEach(en => {
+            html += `<li>Saving ID: ${en.saving_id} — GHS ${parseFloat(en.amount).toFixed(2)} — Collector ID: ${en.collector_id}</li>`;
+            });
+            html += `</ul>`;
         }
 
-        $("#modalBody").html(body);
-        new bootstrap.Modal(document.getElementById("dayModal")).show();
+        $('#modalTitle').text(`Day ${day} details`);
+        $('#modalBody').html(html);
+        modal.show();
     }
 
-    //
-    // helper: calculate actual date of a given day in the cycle
-    function calculateDate(cycleStart, day) {
-        let start = new Date(cycleStart);
-        start.setDate(start.getDate() + (day - 1));
-        return start.toISOString().split("T")[0];
-    }
-
-    $("#prevCycle").click(function () {
+    // navigation
+    $('#prevCycle').on('click', function () {
         if (currentCycle > 0) {
-            currentCycle--;
-            loadCalendar(currentCycle);
+            loadCalendar(currentCycle - 1);
         }
     });
-
-    $("#nextCycle").click(function () {
-        currentCycle++;
-        loadCalendar(currentCycle);
+    $('#nextCycle').on('click', function () {
+        loadCalendar(currentCycle + 1);
     });
 
-    // Load first cycle
+    // initial load (auto-detect)
     loadCalendar();
 </script>
 

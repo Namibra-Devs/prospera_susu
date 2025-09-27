@@ -114,6 +114,15 @@ if ($total_data > 0) {
 			';
 		}
 
+		// show verify button for only admin
+		$verify_option = '';
+		if (admin_is_logged_in()) {
+			if ($row['daily_status'] == 'Pending') {
+				$verify_option .= '<a href="'. PROOT .'app/collections?approve='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to VERIFY this collection record?\');" class="btn btn-secondary w-100 mt-4">Verify</a>
+				';
+			}
+		}
+
 		// set background color for all today transactions
         if (date('Y-m-d', strtotime($row['daily_collection_date'])) == date('Y-m-d')) {
             $output .= '<tr class="table-success">';
@@ -224,7 +233,7 @@ if ($total_data > 0) {
 									<button class="btn btn-light w-100" type="button">Message</button>
 								</div>
 							</div> -->
-                            <a href="'. PROOT .'app/collections?approve='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to VERIFY this collection record?\');" class="btn btn-secondary w-100 mt-4">Verify</a>
+                            ' . $verify_option . '
                         </div>
                     </div>
                 </div>
