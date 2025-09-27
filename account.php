@@ -1,13 +1,12 @@
-<?php
+<?php 
 
-    require ('system/DatabaseConnector.php');
-
-    // Check if the admin or collector is logged in
+     require ('system/DatabaseConnector.php');
+    
+	// Check if the admin or collector is logged in
     if (!admin_is_logged_in() && !collector_is_logged_in()) {
         redirect(PROOT . 'auth/sign-in');
     }
-    
-    // REQUIREMENT OF EXTERNAL FILES
+
     $body_class = '';
     $title = 'Account | ';
     include ('system/inc/head.php');
@@ -16,106 +15,124 @@
     include ('system/inc/topnav-base.php');
     include ('system/inc/topnav.php');
 
-
-      // OUTPUT ERRORS
-    $message = '';
-
-
-
 ?>
-    <!-- Main -->
     <main class="main px-lg-6">
+
         <!-- Content -->
         <div class="container-lg">
             <!-- Page header -->
             <div class="row align-items-center mb-7">
                 <div class="col-auto">
                     <!-- Avatar -->
-                    <div class="avatar avatar-xl rounded text-primary">
-                        <i class="fs-2" data-duoicon="app"></i>
+                    <div class="avatar avatar-xl rounded text-warning">
+                        <i class="fs-2" data-duoicon="user"></i>
                     </div>
                 </div>
                 <div class="col">
                     <!-- Breadcrumb -->
                     <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb mb-1">
-                            <li class="breadcrumb-item"><a class="text-body-secondary" href="javascript:;"><?= get_person_role(); ?></a></li>
-                            <li class="breadcrumb-item active" aria-current="page"><?= get_person_role(); ?></li>
+                        <ol class="breadcrumb mb-2">
+                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Account</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Account</li>
                         </ol>
                     </nav>
 
                     <!-- Heading -->
-                    <h1 class="fs-4 mb-0"><?= get_person_role(); ?></h1>
+                    <h1 class="fs-5 mb-0">Account</h1>
                 </div>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                     <!-- Action -->
-                    <a class="btn btn-secondary d-block" href="<?= goBack(); ?>">
-                        <span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back
-                    </a>
+                    <div class="row gx-2">
+                        <div class="col-6 col-sm-auto">
+                            <a class="btn btn-danger d-block" href="<?= PROOT; ?>account/settings"> Edit </a>
+                        </div>
+                        <div class="col-6 col-sm-auto">
+                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"> Go back </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-        <!-- Page content -->
-        <div class="row">
-            <div class="col-12">
-                <!-- Filters -->
-                <div class="card card-line bg-body-tertiary border-transparent mb-7">
-                    <div class="card-body p-4">
-                        <div class="row align-items-center">
-                            <div class="col-12 col-lg-auto mb-3 mb-lg-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <div class="text-body-secondary">Documentation to guide you.</div>
-                                    </div>
-                                </div>
-                            </div>
+            <!-- Page content -->
+            <div class="row">
+                <div class="col-12 col-lg-3">
+                    <!-- Nav -->
+                    <nav class="nav nav-pills position-sticky flex-column mb-8" id="accountNav" style="top: 2rem">
+                        <a class="nav-link" href="<?= PROOT; ?>account">General</a>
+                        <a class="nav-link" href="<?= PROOT; ?>account-settings">Update account</a>
+                        <a class="nav-link" href="#security">Security</a>
+                        <a class="nav-link" href="<?= PROOT; ?>account-change-password">Change password</a>
+                        <a class="nav-link text-danger" href="<?= PROOT; ?>auth/logout">Logout</a>
+                    </nav>
+                </div>
+                <div class="col-12 col-lg-9" data-bs-spy="scroll" data-bs-target="#accountNav" data-bs-smooth-scroll="true" tabindex="0">
+
+                    <!-- General -->
+                    <section class="card bg-body-tertiary border-transparent mb-5" id="general">
+                        <div class="card-body">
+
+                            <?php 
+                                if (admin_is_logged_in()) {
+                                    echo get_admin_profile($collector_id); 
+                                } elseif (collector_is_logged_in()) {
+                                    echo get_collector_profile($collector_id); 
+                                }
                             
-                            <div class="col-12 col-lg">
-                                <div class="row gx-3  ">
-                                    <div class="col col-lg-auto ms-auto">
-                                        <!-- <div class="input-group bg-body">
-                                            <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search" />
-                                            <span class="input-group-text" id="search">
-                                                <span class="material-symbols-outlined">search</span>
-                                            </span>
-                                        </div> -->
-                                    </div>
+                            ?>
 
-                                    <div class="col-auto">
-                                        <a class="btn btn-dark px-3" href="<?= ADROOT; ?>settings?cp=1">
-                                            Change password
-                                        </a>
-                                    </div>
+                        </div>
+                    </section>
 
-                                    <div class="col-auto ms-n2">
-                                        <a class="btn btn-dark px-3" href="<?= goBack(); ?>">
-                                            Go back
-                                        </a>
-                                    </div>
+                    <!-- Security -->
+                    <section class="card bg-body-tertiary border-transparent" id="security">
+                        <div class="card-body">
+                            <h2 class="fs-5 mb-1">Security</h2>
+                            <p class="text-body-secondary">Secure your account with a strong password and two-factor authentication.</p>
+                            <div class="card border-transparent mb-4">
+                                <div class="card-body py-0">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="material-symbols-outlined text-body-tertiary">bring_your_own_ip</span>
+                                                </div>
+                                                <div class="col"><?= ((isset($admin_data['admin_ip'])) ? $admin_data['admin_ip'] : ''); ?> <small class="text-body-secondary ms-1">I.P</small></div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="material-symbols-outlined text-body-tertiary">important_devices</span>
+                                                </div>
+                                                <div class="col"><?= ((isset($admin_data['admin_device'])) ? $admin_data["admin_device"] : ''); ?> <small class="text-body-secondary ms-1">Device</small></div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="material-symbols-outlined text-body-tertiary">device_hub</span>
+                                                </div>
+                                                <div class="col"><?= ((isset($admin_data['admin_os'])) ?  $admin_data["admin_os"] : ''); ?> <small class="text-body-secondary ms-1">O.S</small></div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <span class="material-symbols-outlined text-body-tertiary">web</span>
+                                                </div>
+                                                <div class="col"><?= ((isset($admin_data['admin_browser'])) ? $admin_data["admin_browser"] : ''); ?> <small class="text-body-secondary ms-1">Browser</small></div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
+                            <a href="<?= PROOT . 'auth/sign-out'; ?>" class="btn btn-dark">Sign out from this devices</a>
                         </div>
-                    </div>
-                </div>
-            <div>
+                    </section>
 
-            <div class="card mb-6 mb-xxl-0">
-                <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="fs-6 mb-0">Profile</h3>
-                        </div>
-                        <div class="col-auto my-n3 me-n3">
-                            <a class="btn btn-sm btn-link" href="<?= ADROOT; ?>settings">
-                                Update
-                                <span class="material-symbols-outlined">arrow_right_alt</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body py-3">
-                    <?= get_admin_profile($admin_id); ?>
                 </div>
             </div>
-        
-<?php include ('includes/footer.inc.php');?>
+        </div>
+
+
+<?php include ('system/inc/footer.php'); ?>

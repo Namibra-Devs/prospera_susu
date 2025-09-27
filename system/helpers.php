@@ -554,6 +554,80 @@ function findCollectorByID($id) {
     return $collector;
 }
 
+// GET ADMIN PROFILE DETAILS
+function get_collector_profile($id) {
+	global $dbConnection;
+	$output = '';
+
+	$query = "
+		SELECT * FROM collectors 
+		WHERE collector_id = ? 
+		AND collector_status = ? 
+		LIMIT 1
+	";
+	$statement = $dbConnection->prepare($query);
+	$statement->execute([$id, 'active']);
+	$rows = $statement->fetchAll();
+	$row = $rows[0];
+
+	$output = '
+		<div class="row align-items-center">
+			<div class="col-auto">
+				<div class="avatar avatar-xl">
+					<img class="avatar-img" src="' . (($row["collector_photo"] == NULL) ? 'assets/media/avatar.png' : PROOT . '/'.$row["collector_photo"]) . '" alt="..." />
+				</div>
+			</div>
+			<div class="col">
+				<h2 class="fs-5 mb-0"> ' . ucwords($row["collector_name"]) . ' </h2>
+				<div class="text-body-secondary"> Collector (Agent) </div>
+			</div>
+		</div>
+		<hr />
+		<div class="mb-4">
+			<div class="form-label">Bio</div>
+			<div>
+				Hi! I\'m an agent/collector
+			</div>
+		</div>
+		<div class="mb-4">
+			<div class="form-label">Email</div>
+			<a href="javascript:;" class="text-body"> ' . $row["collector_email"] . ' </a>
+		</div>
+		<div class="mb-4">
+			<div class="form-label">Phone</div>
+			<a href="tel:+1234567890" class="text-body"> ' . $row["collector_phone"] . ' </a>
+		</div>
+
+		<div class="card border-transparent">
+			<div class="card-body py-0">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item px-0">
+						<div class="row align-items-center">
+							<div class="col-auto">
+								<span class="material-symbols-outlined text-body-tertiary">credit_card</span>
+							</div>
+							<div class="col">Joined at <small class="text-body-secondary ms-1">(' . pretty_date($row["created_at"]) . ')</small></div>
+						</div>
+					</li>
+					<li class="list-group-item px-0">
+						<div class="row align-items-center">
+							<div class="col-auto">
+								<span class="material-symbols-outlined text-body-tertiary">credit_card</span>
+							</div>
+							<div class="col">Last login <small class="text-body-secondary ms-1">(' . pretty_date($row["updated_at"]) . ')</small></div>
+							<div class="col-auto">
+								<span class="badge bg-success-subtle text-success">' . date("F j, Y, g:i a") . '</span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	';
+
+	return $output;
+}
+
 
 
 
