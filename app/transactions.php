@@ -93,9 +93,18 @@
                 </div>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                     <!-- Action -->
-                    <button class="btn btn-secondary w-100" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
-                        <span class="material-symbols-outlined me-1">add</span> New transaction
-                    </button>
+                    <div class="row gx-2">
+                        <?php if ( collector_is_logged_in()): ?>
+                        <div class="col-6 col-sm-auto">
+                            <button class="btn btn-secondary w-100" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
+                                <span class="material-symbols-outlined me-1">add</span> New transaction
+                            </button>
+                        </div>
+                        <?php endif; ?>
+                        <div class="col-6 col-sm-auto">
+                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -107,7 +116,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Deposites</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Deposits</h4>
 
                                     <!-- Text -->
                                     <div class="fs-4 fw-semibold"><?= getTotalTransactionAmount(); ?></div>
@@ -170,7 +179,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Pending deposites</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Pending deposits</h4>
 
                                     <!-- Text -->
                                     <div class="fs-4 fw-semibold"><?= getTotalTransactionAmount('Pending'); ?></div>
@@ -188,8 +197,6 @@
             </div>
 
             <!-- Page content -->
-            
-
             <div class="row">
                 <div class="col-12 col-xxl">
                     <section class="mb-8">
@@ -215,6 +222,7 @@
                                                     </span>
                                                 </div>
                                             </div>
+                                            <?php if ( collector_is_logged_in()): ?>
                                             <div class="col-auto">
                                                 <div class="">
                                                     <!-- upload today collection file -->
@@ -223,6 +231,7 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <?php endif; ?>
                                             <div class="col-auto ms-n2">
                                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                                     <input type="radio" class="btn-check" name="sortRadio" id="sortAsc" autocomplete="off" checked />
