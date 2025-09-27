@@ -306,20 +306,21 @@
                     font-weight: bold;
                     font-size: 1.1rem;
                     cursor: pointer;
+                    user-select: none;
                 }
                 .saved {
                     background-color: #28a745; /* green */
                     color: white;
                 }
-                .not-saved {
-                    background-color: #e9ecef; /* light gray */
-                    color: #6c757d; /* gray */
-                }
+                  .pending { background:#fd7e14; color:#fff; } /* orange pending */
+
+                  .not-saved { background:#f8f9fa; border:1px solid #dee2e6; }
+
                 .commission {
                     background-color: #dc3545; /* red */
                     color: white;
                 }
-                    .muted-small { font-weight:400; font-size:0.85rem; display:block; margin-top:6px; }
+                    .muted-small { font-weight:400; font-size:0.8rem; display:block;}
 
             </style>
 
@@ -750,6 +751,7 @@
     let savedDaysGlobal = {};
     let commissionDayGlobal = null;
     let commissionAmountGlobal = null;
+    let withdrawalsGlobal = [];
 
     function loadCalendar(cycle = undefined) {
         // build params
@@ -770,6 +772,7 @@
             // determine currentCycle (API tells us the cycle it used)
             currentCycle = data.current_cycle;
             savedDaysGlobal = data.saved_days || {};
+            withdrawalsGlobal = data.withdrawals || [];
             commissionDayGlobal = data.commission_day || null;
             commissionAmountGlobal = data.commission_amount || null;
 
@@ -786,7 +789,9 @@
                     cls = 'commission';
                     innerHTML = `<div>${d}<span class="muted-small">(Fee)</span></div>`;
                 } else if (savedDaysGlobal[d]) {
-                    cls = 'saved';
+                    // check if any entry pending
+                    const hasPending = savedDaysGlobal[d].entries.some(en => en.status === 'Pending');
+                    cls = hasPending ? 'pending' : 'saved';
                     const amt = parseFloat(savedDaysGlobal[d].amount).toFixed(2);
                     innerHTML = `<div>${d}<span class="muted-small">GHS ${amt}</span></div>`;
                 }
@@ -884,6 +889,32 @@
             dayData.entries.forEach(en => {
                 html += `
                     <div class="row align-items-center gx-4">
+                    <div class="col-auto">
+                        <span class="text-body-secondary">Satus</span>
+                    </div>
+                    <div class="col">
+                        <hr class="my-0 border-style-dotted" />
+                    </div>
+                    <div class="col-auto">
+                        <span class="badge bg-secondary-subtle text-secondary">${en.status}</span>'
+                    </div>
+                </div>
+                `;
+                html += `
+                    <div class="row align-items-center gx-4">
+                        <div class="col-auto">
+                            <span class="text-body-secondary">Collector Name</span>
+                        </div>
+                        <div class="col">
+                            <hr class="my-0 border-style-dotted" />
+                        </div>
+                        <div class="col-auto">
+                            <span class="material-symbols-outlined text-body-tertiary me-1">barcode_reader</span> ${en.collector_name.toUpperCase()}
+                        </div>
+                    </div>
+                `;
+                html += `
+                    <div class="row align-items-center gx-4">
                         <div class="col-auto">
                             <span class="text-body-secondary">Saving ID</span>
                         </div>
@@ -895,19 +926,6 @@
                         </div>
                     </div>
                 `;
-                html += `
-                    <div class="row align-items-center gx-4">
-                        <div class="col-auto">
-                            <span class="text-body-secondary">Collector ID</span>
-                        </div>
-                        <div class="col">
-                            <hr class="my-0 border-style-dotted" />
-                        </div>
-                        <div class="col-auto">
-                            <span class="material-symbols-outlined text-body-tertiary me-1">barcode_reader</span> ${en.collector_id}
-                        </div>
-                    </div>
-                `;
             });
             
         }
@@ -915,6 +933,16 @@
                 </div>
             </div>
         `;
+
+        const dayWithdrawals = withdrawalsGlobal.filter(w => w.day === day);
+        if (dayWithdrawals.length) {
+            html += `<hr><strong>Withdrawals:</strong><ul>`;
+            dayWithdrawals.forEach(w => {
+            html += `<li>Withdrawal ID ${w.id} — GHS ${w.amount.toFixed(2)} — <em>${w.status}</em></li>`;
+            });
+            html += `</ul>`;
+        }
+
 
         $('#modalTitle').text(`Day ${day} details`);
         $('#modalBody').html(html);

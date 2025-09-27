@@ -195,10 +195,10 @@ if ($total_data > 0) {
 									</div>
 									<div class="row align-items-center gx-4">
 										<div class="col-auto">
-										<span class="text-body-secondary">Satus</span>
+											<span class="text-body-secondary">Satus</span>
 										</div>
 										<div class="col">
-										<hr class="my-0 border-style-dotted" />
+											<hr class="my-0 border-style-dotted" />
 										</div>
 										<div class="col-auto">
 											' . $status_badge . '

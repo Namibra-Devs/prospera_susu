@@ -76,11 +76,19 @@
 
         // --- 5) fetch savings in this cycle (ordered by date)
     $sql = "
-        SELECT saving_id, saving_amount, saving_date_collected, saving_collector_id
-        FROM savings
-        WHERE saving_customer_id = ?
-        AND saving_date_collected BETWEEN ? AND ?
-        ORDER BY saving_date_collected ASC, saving_id ASC
+       -- SELECT saving_id, saving_amount, saving_date_collected, saving_collector_id
+        -- FROM savings
+        -- WHERE saving_customer_id = ?
+        -- AND saving_date_collected BETWEEN ? AND ?
+        -- ORDER BY saving_date_collected ASC, saving_id ASC
+
+        SELECT s.saving_id, s.saving_amount, s.saving_date_collected, s.saving_status,
+               c.collector_name
+        FROM savings s
+        LEFT JOIN collectors c ON c.collector_id = s.saving_collector_id
+        WHERE s.saving_customer_id = ?
+          AND s.saving_date_collected BETWEEN ? AND ?
+        ORDER BY s.saving_date_collected ASC, s.saving_id ASC
     ";
     $stmt = $dbConnection->prepare($sql);
     $stmt->execute([$customer_id, $cycleStart->format('Y-m-d'), $cycleEnd->format('Y-m-d')]);
@@ -90,7 +98,7 @@
     while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $date = $r['saving_date_collected'];
         // dayNumber relative to cycle start: diff in days + 1
-        $dayNumber = (int)( (new DateTime($date))->diff($cycleStart)->days ) + 1;
+        $dayNumber = (int)((new DateTime($date))->diff($cycleStart)->days ) + 1;
         if ($dayNumber < 1 || $dayNumber > 31) continue; // safety
 
         if (!isset($saved_days[$dayNumber])) {
@@ -106,7 +114,9 @@
         $saved_days[$dayNumber]['entries'][] = [
             'saving_id' => $r['saving_id'],
             'amount' => (float)$r['saving_amount'],
-            'collector_id' => $r['saving_collector_id']
+            // 'collector_id' => $r['saving_collector_id']
+            'status' => $r['saving_status'],
+            'collector_name' => $r['collector_name'] ?: "N/A"
         ];
     }
 
@@ -135,6 +145,28 @@
         }
     }
 
+    // 7. withdrawals in this cycle
+    $sqlW = "
+        SELECT withdrawal_id, withdrawal_amount_requested, withdrawal_date_requested, withdrawal_status
+        FROM withdrawals
+        WHERE withdrawal_customer_id = ?
+        AND withdrawal_date_requested BETWEEN ? AND ?
+        ORDER BY withdrawal_date_requested ASC
+    ";
+    $stmt = $dbConnection->prepare($sqlW);
+    $stmt->execute([$customer_id, $cycleStart->format('Y-m-d'), $cycleEnd->format('Y-m-d')]);
+
+    $withdrawals = [];
+    while ($w = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $dayNumber = (int)((new DateTime($w['withdrawal_date_requested']))->diff($cycleStart)->days) + 1;
+        $withdrawals[] = [
+            'day' => $dayNumber,
+            'id' => $w['withdrawal_id'],
+            'amount' => (float)$w['withdrawal_amount_requested'],
+            'status' => $w['withdrawal_status']
+        ];
+    }
+
     // --- 7) response
     echo json_encode([
         'current_cycle' => $use_cycle,
@@ -143,5 +175,6 @@
         'cycle_end' => $cycleEnd->format('Y-m-d'),
         'saved_days' => $saved_days,
         'commission_day' => $commission_day,
-        'commission_amount' => $commission_amount
+        'commission_amount' => $commission_amount, 
+        'withdrawals' => $withdrawals
     ]);
