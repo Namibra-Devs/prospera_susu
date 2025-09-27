@@ -1,21 +1,20 @@
 <?php 
 
     // change admin password
-    require_once ("../db_connection/conn.php");
-
-    if (!admin_is_logged_in()) {
-        admin_login_redirect();
+    require ('system/DatabaseConnector.php');
+    
+	// Check if the admin or collector is logged in
+    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+        redirect(PROOT . 'auth/sign-in');
     }
 
-    //
-	if (is_array(capital_mover($admin_id)) && capital_mover($admin_id)["msg"] == "touched") {
-		redirect(PROOT . 'auth/end-trade-checker');
-	}
-
-    include ("../includes/header.inc.php");
-    include ("../includes/aside.inc.php");
-    include ("../includes/left.nav.inc.php");
-    include ("../includes/top.nav.inc.php");
+    $body_class = '';
+    $title = 'Change Password | ';
+    include ('system/inc/head.php');
+    include ('system/inc/modals.php');
+    include ('system/inc/sidebar.php');
+    include ('system/inc/topnav-base.php');
+    include ('system/inc/topnav.php');
 
 
     $errors = '';
@@ -123,106 +122,107 @@
 
 
 ?>
+    <main class="main px-lg-6">
 
-     <!-- Content -->
-     <div class="container-lg">
-        <!-- Page header -->
-        <div class="row align-items-center mb-7">
-            <div class="col-auto">
-                <!-- Avatar -->
-                <div class="avatar avatar-xl rounded text-warning">
-                    <i class="fs-2" data-duoicon="user"></i>
+        <!-- Content -->
+        <div class="container-lg">
+            <!-- Page header -->
+            <div class="row align-items-center mb-7">
+                <div class="col-auto">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-xl rounded text-warning">
+                        <i class="fs-2" data-duoicon="user"></i>
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-2">
+                            <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Account</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit Logins</li>
+                        </ol>
+                    </nav>
+
+                    <!-- Heading -->
+                    <h1 class="fs-5 mb-0">Account</h1>
+                </div>
+                <div class="col-12 col-sm-auto mt-4 mt-sm-0">
+                    <!-- Action -->
+                    <button class="btn btn-warning d-block" id="submitForm"> Save </button>
                 </div>
             </div>
-            <div class="col">
-                <!-- Breadcrumb -->
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-2">
-                        <li class="breadcrumb-item"><a class="text-body-secondary" href="#">Account</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit Logins</li>
-                    </ol>
-                </nav>
 
-                <!-- Heading -->
-                <h1 class="fs-5 mb-0">Account</h1>
-            </div>
-            <div class="col-12 col-sm-auto mt-4 mt-sm-0">
-                <!-- Action -->
-                <button class="btn btn-warning d-block" id="submitForm"> Save </button>
+            <!-- Page content -->
+            <div class="row">
+                <div class="col-12 col-lg-3">
+                    <!-- Nav -->
+                    <nav class="nav nav-pills position-sticky flex-column mb-8" id="accountNav" style="top: 2rem">
+                        <a class="nav-link" href="<?= PROOT; ?>account/profile">General</a>
+                        <a class="nav-link" href="<?= PROOT; ?>account/settings">Update account</a>
+                        <a class="nav-link" data-bs-target="#pinModal" data-bs-toggle="modal" href="javascript:;">Change PIN</a>
+                        <a class="nav-link" href="<?= PROOT; ?>account/change-password">Change password</a>
+                        <a class="nav-link text-danger" href="<?= PROOT; ?>auth/logout">Logout</a>
+                    </nav>
+                </div>
+
+                <div class="col-12 col-lg-9" data-bs-spy="scroll" data-bs-target="#accountNav" data-bs-smooth-scroll="true" tabindex="0">
+                    <!-- General -->
+                    <section class="card bg-body-tertiary border-transparent mb-5" id="general">
+                        <div class="card-body">
+                            <h2 class="fs-5 mb-1">Password</h2>
+                            <p class="text-body-secondary">Change your login information.</p>
+                            <hr>
+                            <form method="POST" id="changePasswordForm">
+                                <div class="text-danger mb-3"><?= $errors; ?></div>
+                                <div class="mb-4">
+                                    <label for="old_password" class="form-label">Old password</label>
+                                    <input type="password" class="form-control bg-body" name="old_password" id="old_password" value="<?= $old_password; ?>" required>
+                                    <div class="text-sm text-muted">Enter old password in this field</div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="new_password" class="form-label">New password</label>
+                                    <input type="password" class="form-control bg-body" name="password" id="password" value="<?= $password; ?>" required>
+                                    <div class="text-sm text-muted">Enter new password in this field</div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="confirm" class="form-label">Confirm new password</label>
+                                    <input type="password" class="form-control bg-body" name="confirm" id="confirm" value="<?= $confirm; ?>" required>
+                                    <div class="text-sm text-muted">Enter confirm new password in this field</div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
 
-        <!-- Page content -->
-        <div class="row">
-            <div class="col-12 col-lg-3">
-                <!-- Nav -->
-                <nav class="nav nav-pills position-sticky flex-column mb-8" id="accountNav" style="top: 2rem">
-                    <a class="nav-link" href="<?= PROOT; ?>account/profile">General</a>
-                    <a class="nav-link" href="<?= PROOT; ?>account/settings">Update account</a>
-                    <a class="nav-link" data-bs-target="#pinModal" data-bs-toggle="modal" href="javascript:;">Change PIN</a>
-                    <a class="nav-link" href="<?= PROOT; ?>account/change-password">Change password</a>
-                    <a class="nav-link text-danger" href="<?= PROOT; ?>auth/logout">Logout</a>
-                </nav>
-            </div>
-
-            <div class="col-12 col-lg-9" data-bs-spy="scroll" data-bs-target="#accountNav" data-bs-smooth-scroll="true" tabindex="0">
-                <!-- General -->
-                <section class="card bg-body-tertiary border-transparent mb-5" id="general">
-                    <div class="card-body">
-                        <h2 class="fs-5 mb-1">Password</h2>
-                        <p class="text-body-secondary">Change your login information.</p>
-                        <hr>
-                        <form method="POST" id="changePasswordForm">
-                            <div class="text-danger mb-3"><?= $errors; ?></div>
-                            <div class="mb-4">
-                                <label for="old_password" class="form-label">Old password</label>
-                                <input type="password" class="form-control bg-body" name="old_password" id="old_password" value="<?= $old_password; ?>" required>
-                                <div class="text-sm text-muted">Enter old password in this field</div>
+        <!-- CHANGE PIN -->
+        <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true" style="backdrop-filter: blur(5px);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content overflow-hidden">
+                    <div class="modal-header pb-0 border-0">
+                        <h1 class="modal-title h4" id="pinModalLabel">Change PIN</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <form method="POST" action="<?= PROOT; ?>account/change-password?pin=1">
+                            <div class="px-6 py-5">
+                                <input type="number" inputmode="numeric" data-maxlength="4" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" class="form-control" name="oldpin" placeholder="Old PIN" required>
+                                <br>
+                                <input type="number" inputmode="numeric" min="0" data-maxlength="4" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" class="form-control" name="newpin" placeholder="New PIN" required>
+                                <br>
+                                <input type="number" inputmode="numeric" min="0" data-maxlength="4" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" class="form-control" name="confirmpin" placeholder="Confirm new PIN" required>
                             </div>
-                            <div class="mb-4">
-                                <label for="new_password" class="form-label">New password</label>
-                                <input type="password" class="form-control bg-body" name="password" id="password" value="<?= $password; ?>" required>
-                                <div class="text-sm text-muted">Enter new password in this field</div>
-                            </div>
-                            <div class="mb-4">
-                                <label for="confirm" class="form-label">Confirm new password</label>
-                                <input type="password" class="form-control bg-body" name="confirm" id="confirm" value="<?= $confirm; ?>" required>
-                                <div class="text-sm text-muted">Enter confirm new password in this field</div>
+                            <div class="px-6 py-5 d-flex justify-content-center">
+                                <button name="pin_submit" class="btn btn-warning"><i data-duoicon="user-card" class="me-2 fs-2"></i>Change pin</button>
                             </div>
                         </form>
                     </div>
-                </section>
-             </div>
-        </div>
-    </div>
-
-    <!-- CHANGE PIN -->
-    <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true" style="backdrop-filter: blur(5px);">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content overflow-hidden">
-                <div class="modal-header pb-0 border-0">
-                    <h1 class="modal-title h4" id="pinModalLabel">Change PIN</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-0">
-                    <form method="POST" action="<?= PROOT; ?>account/change-password?pin=1">
-                        <div class="px-6 py-5">
-                            <input type="number" inputmode="numeric" data-maxlength="4" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" class="form-control" name="oldpin" placeholder="Old PIN" required>
-                            <br>
-                            <input type="number" inputmode="numeric" min="0" data-maxlength="4" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" class="form-control" name="newpin" placeholder="New PIN" required>
-                            <br>
-                            <input type="number" inputmode="numeric" min="0" data-maxlength="4" oninput="this.value=this.value.slice(0,this.dataset.maxlength)" class="form-control" name="confirmpin" placeholder="Confirm new PIN" required>
-                        </div>
-                        <div class="px-6 py-5 d-flex justify-content-center">
-                            <button name="pin_submit" class="btn btn-warning"><i data-duoicon="user-card" class="me-2 fs-2"></i>Change pin</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>
 
-<?php include ("../includes/footer.inc.php"); ?>
+<?php include ('system/inc/footer.php'); ?>
 
 <script type="text/javascript">
     $(document).ready(function() {
