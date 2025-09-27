@@ -104,9 +104,9 @@
         // accumulate amount and push entry
         $saved_days[$dayNumber]['amount'] = round($saved_days[$dayNumber]['amount'] + (float)$r['saving_amount'], 2);
         $saved_days[$dayNumber]['entries'][] = [
-            'saving_id' => (int)$r['saving_id'],
+            'saving_id' => $r['saving_id'],
             'amount' => (float)$r['saving_amount'],
-            'collector_id' => (int)$r['saving_collector_id']
+            'collector_id' => $r['saving_collector_id']
         ];
     }
 

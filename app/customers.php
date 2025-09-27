@@ -812,13 +812,42 @@
         });
     }
 
+    
+									
+
     function openDayModal(day) {
         const modal = new bootstrap.Modal(document.getElementById('dayModal'));
-        let html = `<p><strong>Day:</strong> ${day}</p>`;
+        let html = `
+            <div class="vstack gap-3 card bg-body">
+				<div class="card-body py-3">
+                    <div class="row align-items-center gx-4">
+                        <div class="col-auto">
+                            <span class="text-body-secondary">Day</span>
+                        </div>
+                        <div class="col">
+                            <hr class="my-0 border-style-dotted" />
+                        </div>
+                        <div class="col-auto">
+                            <span class="material-symbols-outlined text-body-tertiary me-1">event</span> ${day}
+                        </div>
+                    </div>
+        `;
 
         // if commission day
         if (commissionDayGlobal === day) {
-            html += `<p><strong>Commission deducted:</strong> GHS ${parseFloat(commissionAmountGlobal).toFixed(2)}</p>`;
+            html += `
+                <div class="row align-items-center gx-4">
+                    <div class="col-auto">
+                        <span class="text-body-secondary">Commission deducted</span>
+                    </div>
+                    <div class="col">
+                        <hr class="my-0 border-style-dotted" />
+                    </div>
+                    <div class="col-auto">
+                        <span class="material-symbols-outlined text-body-tertiary me-1">mintmark</span> GHS ${parseFloat(commissionAmountGlobal).toFixed(2)}
+                    </div>
+                </div>
+            `;
         }
 
         // saved entries
@@ -826,15 +855,69 @@
         if (!dayData) {
             html += `<p>No savings recorded for this day.</p>`;
         } else {
-            html += `<p><strong>Date:</strong> ${dayData.date}</p>`;
-            html += `<p><strong>Total saved:</strong> GHS ${parseFloat(dayData.amount).toFixed(2)}</p>`;
+            html += `
+                <div class="row align-items-center gx-4">
+                    <div class="col-auto">
+                        <span class="text-body-secondary">Date</span>
+                    </div>
+                    <div class="col">
+                        <hr class="my-0 border-style-dotted" />
+                    </div>
+                    <div class="col-auto">
+                        <span class="material-symbols-outlined text-body-tertiary me-1">date_range</span> ${dayData.date}
+                    </div>
+                </div>
+            `;
+            html += `
+                <div class="row align-items-center gx-4">
+                    <div class="col-auto">
+                        <span class="text-body-secondary">Total saved</span>
+                    </div>
+                    <div class="col">
+                        <hr class="my-0 border-style-dotted" />
+                    </div>
+                    <div class="col-auto">
+                        <span class="material-symbols-outlined text-body-tertiary me-1">savings</span> GHS ${parseFloat(dayData.amount).toFixed(2)}
+                    </div>
+                </div>
+            `;
+
             html += `<hr/><div><strong>Entries:</strong></div>`;
-            html += `<ul>`;
+            // html += `<ul>`;
             dayData.entries.forEach(en => {
-            html += `<li>Saving ID: ${en.saving_id} — GHS ${parseFloat(en.amount).toFixed(2)} — Collector ID: ${en.collector_id}</li>`;
+                html += `
+                    <div class="row align-items-center gx-4">
+                        <div class="col-auto">
+                            <span class="text-body-secondary">Saving ID</span>
+                        </div>
+                        <div class="col">
+                            <hr class="my-0 border-style-dotted" />
+                        </div>
+                        <div class="col-auto">
+                            <span class="material-symbols-outlined text-body-tertiary me-1">barcode</span> ${en.saving_id} — GHS ${parseFloat(en.amount).toFixed(2)}
+                        </div>
+                    </div>
+                `;
+                html += `
+                    <div class="row align-items-center gx-4">
+                        <div class="col-auto">
+                            <span class="text-body-secondary">Collector ID</span>
+                        </div>
+                        <div class="col">
+                            <hr class="my-0 border-style-dotted" />
+                        </div>
+                        <div class="col-auto">
+                            <span class="material-symbols-outlined text-body-tertiary me-1">barcode_reader</span> ${en.collector_id}
+                        </div>
+                    </div>
+                `;
             });
-            html += `</ul>`;
+            
         }
+        html += `
+                </div>
+            </div>
+        `;
 
         $('#modalTitle').text(`Day ${day} details`);
         $('#modalBody').html(html);
