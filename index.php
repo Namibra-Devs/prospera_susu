@@ -7,7 +7,7 @@
     }
 
     $body_class = '';
-    $title = 'Dashboard |';
+    $title = 'Dashboard | ';
     include ('system/inc/head.php');
     include ('system/inc/modals.php');
     include ('system/inc/sidebar.php');
@@ -55,7 +55,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Earned</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Commisions</h4>
 
                                     <!-- Text -->
                                     <div class="fs-4 fw-semibold">$1,250</div>
@@ -77,7 +77,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Customers</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Deposits</h4>
 
                                     <!-- Text -->
                                     <div class="fs-4 fw-semibold">35.5 hrs</div>
@@ -98,7 +98,7 @@
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <!-- Heading -->
-                                        <h4 class="fs-sm fw-normal text-body-secondary mb-1">Collectors</h4>
+                                        <h4 class="fs-sm fw-normal text-body-secondary mb-1">Withdrawals</h4>
 
                                         <!-- Text -->
                                         <div class="fs-4 fw-semibold">2:55 hrs</div>

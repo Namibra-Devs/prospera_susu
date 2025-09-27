@@ -608,3 +608,20 @@ function idle_user() {
 	return true;
 }
 
+function get_person_role() {
+	$out = 'User';
+	// get logged in person role
+	if (array_key_exists('PRSADMIN', $_SESSION)) {
+		$out = 'Admin';
+		// check if admin is a super admin or approver
+		if (admin_has_permission()) {
+			$out = ' (Super)';
+		} elseif (admin_has_permission('approver')) {
+			$out = ' (Approver)';
+		}
+	} elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+		$out = 'Collector';
+	}
+	
+	return $out;
+}
