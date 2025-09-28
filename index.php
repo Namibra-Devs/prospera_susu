@@ -1,8 +1,8 @@
 <?php 
     require ('system/DatabaseConnector.php');
     
-	// Check if the admin or collector is logged in
-    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+	// Check if the admin is logged in
+    if (!admin_is_logged_in()) {
         redirect(PROOT . 'auth/sign-in');
     }
 
@@ -32,13 +32,7 @@
                 </div>
                 <div class="col-12 col-md order-md-0 text-center text-md-start">
                     <h1>Hello, 
-                        <?php 
-                            if (admin_is_logged_in()) {
-                                echo $admin_data['first'];
-                            } elseif (collector_is_logged_in()) {
-                                echo $collector_data['first'];
-                            }
-                        ?>
+                        <?php echo $admin_data['first']; ?>
                     </h1>
                     <p class="fs-lg text-body-secondary mb-0">Here's a summary of your account activity for this week.</p>
                 </div>

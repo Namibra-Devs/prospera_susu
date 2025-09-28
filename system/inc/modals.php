@@ -3,7 +3,7 @@
     <!-- Modal: New transaction modal -->
     <?php
         // Only show this modal if the user has permission to create transactions
-        if (collector_is_logged_in()): 
+        if (admin_has_permission('collector') && !admin_has_permission('admin')): 
             // get options for customer select
             $options = '';
             $customers = collector_get_customers();
@@ -145,7 +145,7 @@
     
     <!-- Modal -->
     <div class="modal fade" id="dayModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 pb-0">
                     <h1 class="modal-title fs-5" id="transactionModalLabel">Day Details</h1>
@@ -161,7 +161,7 @@
      <!-- Modal: Upload todays collection -->
     <?php
         // Only show this modal if the user has permission to upload todays collections
-        if (collector_is_logged_in()): 
+        if (admin_has_permission('collector') && !admin_has_permission('admin')): 
     ?>
         <div class="modal fade" id="todayUploadModal" tabindex="-1" aria-labelledby="todayUploadModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);">
         <div class="modal-dialog modal-dialog-centered">

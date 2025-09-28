@@ -7,7 +7,7 @@
 	// }
 
     // Check if the admin or collector is logged in
-    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+    if (!admin_is_logged_in()) {
         redirect(PROOT . 'auth/sign-in');
     }
 
@@ -25,10 +25,10 @@
         if (admin_is_logged_in()) {
             $stmt = $dbConnection->prepare("SELECT SUM(saving_amount) AS total_amount FROM savings WHERE saving_status = ?");
             $stmt->execute([$type]);
-        } elseif (collector_is_logged_in()) {
-            global $collector_id;
+        } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
+            global $admin_id;
             $stmt = $dbConnection->prepare("SELECT SUM(saving_amount) AS total_amount FROM savings WHERE saving_collector_id = ? AND saving_status = ?");
-            $stmt->execute([$collector_id, $type]);
+            $stmt->execute([$admin_id, $type]);
         }
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return money($row['total_amount'] ? $row['total_amount'] : 0);
@@ -40,7 +40,7 @@
         if (admin_is_logged_in()) {
             $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE (withdrawal_status = ? OR withdrawal_status = ?)");
             $stmt->execute([$type, $or]);
-        } elseif (collector_is_logged_in()) {
+        } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
             global $collector_id;
             $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE withdrawal_approver_id = ? AND (withdrawal_status = ? OR withdrawal_status = ?)");
             $stmt->execute([$collector_id, $type, $or]);
@@ -55,10 +55,10 @@
         if (admin_is_logged_in()) {
             $stmt = $dbConnection->prepare("SELECT COUNT(*) AS total_customers FROM customers WHERE customer_status = ?");
             $stmt->execute(['active']);
-        } elseif (collector_is_logged_in()) {
-            global $collector_id;
+        } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
+            global $admin_id;
             $stmt = $dbConnection->prepare("SELECT COUNT(*) AS total_customers FROM customers WHERE customer_added_by = 'collector' AND customer_collector_id = ? AND customer_status = 'active'");
-            $stmt->execute([$collector_id]);
+            $stmt->execute([$admin_id]);
         }
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row['total_customers'] ? $row['total_customers'] : 0;
@@ -94,7 +94,7 @@
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                     <!-- Action -->
                     <div class="row gx-2">
-                        <?php if ( collector_is_logged_in()): ?>
+                        <?php if ( admin_has_permission('collector') && !admin_has_permission('admin')): ?>
                         <div class="col-6 col-sm-auto">
                             <button class="btn btn-secondary w-100" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                                 <span class="material-symbols-outlined me-1">add</span> New transaction
@@ -222,7 +222,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <?php if ( collector_is_logged_in()): ?>
+                                            <?php if ( admin_has_permission('collector') && !admin_has_permission('admin')): ?>
                                             <div class="col-auto">
                                                 <div class="">
                                                     <!-- upload today collection file -->

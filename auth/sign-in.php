@@ -2,7 +2,7 @@
     
     require ('../system/DatabaseConnector.php');
 
-    if (admin_is_logged_in() || collector_is_logged_in()) {
+    if (admin_is_logged_in()) {
         redirect(PROOT);
     }
     
@@ -18,78 +18,58 @@
         if (empty($emailInput) || empty($_POST['password'])) {
             $error = 'You must provide email and password !';
         }
+        $row = findAdminByEmail($emailInput);
 
-        // check if person is collector or admin
-        if (isCollectorEmail($emailInput)) {
-            $collector_row = findCollectorByEmail($emailInput);
-
-            // check if collector status is active
-            if ($collector_row) {
-                if ($collector_row->collector_status == 'inactive') {
-                    $error = 'This collector account is not active. Please contact admin.';
-                } else {
-                    if (password_verify(sanitize($_POST['password']), $collector_row->collector_password)) {
-                        $collector_id = $collector_row->collector_id;
-                        collectorLogin($collector_id);
-                    } else {
-                        $error = 'This collector is unknown or password is incorrect !';
-                    }
-                }
-            } else {
-                $error = 'This collector is unknown !';
-            }
+        if (!$row) {
+            $error = 'This admin is unknown !';
         } else {
-            //
-            $row = findAdminByEmail($emailInput);
+            if ($collector_row->collector_status == 'inactive') {
+                $error = 'This admin account is not active. Please contact admin.';
+            }
 
-            if (!$row) {
-                $error = 'This admin is unknown !';
+            if (!password_verify(sanitize($_POST['password']), $row->admin_password)) {
+                $error = 'This admin is unknown or password is incorrect !';
+            }
+
+            if (!empty($error) || $error != '') {
+                $_SESSION['flash_error'] = $error;
+                redirect(PROOT . 'auth/sign-in');
             } else {
-                if (!password_verify(sanitize($_POST['password']), $row->admin_password)) {
-                    $error = 'This admin is unknown or password is incorrect !';
-                }
-
                 $admin_id = $row->admin_id;
                 adminLogin($admin_id);
             }
         }
-
-        if (!empty($error) || $error != '') {
-            $_SESSION['flash_error'] = $error;
-            redirect(PROOT . 'auth/sign-in');
-        }
-        
     }
 ?>
-
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12" style="max-width: 25rem">
-                <!-- Heading -->
-                <h1 class="fs-1 text-center">Sign in</h1>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12" style="max-width: 25rem">
+                    <!-- Heading -->
+                    <h1 class="fs-1 text-center">Sign in</h1>
 
-                <!-- Subheading -->
-                <p class="lead text-center text-body-warning">Access our dashboard and start tracking your tasks.</p>
+                    <!-- Subheading -->
+                    <p class="lead text-center text-body-warning">Access our dashboard and start tracking your tasks.</p>
 
-                <!-- Form -->
-                <form class="mb-5" id="sigin-form" method="POST">
-                    <div class="mb-4 email">
-                        <label class="visually-hidden" for="email">Email Address</label>
-                        <input class="form-control" id="email" type="email" name="email" placeholder="Enter your email address..." autocomplete="off" autofocus required />
-                    </div>
-                    <div class="mb-4 password">
-                        <label class="visually-hidden" for="email">Password</label>
-                        <input class="form-control" id="password" name="password" type="password" placeholder="******" autocomplete="off" required />
-                    </div>
-                    <button class="btn btn-warning w-100" id="signin-button" type="button">Sign in</button>
-                </form>
+                    <!-- Form -->
+                    <form class="mb-5" id="sigin-form" method="POST">
+                        <div class="mb-4 email">
+                            <label class="visually-hidden" for="email">Email Address</label>
+                            <input class="form-control" id="email" type="email" name="email" placeholder="Enter your email address..." autocomplete="off" autofocus required />
+                        </div>
+                        <div class="mb-4 password">
+                            <label class="visually-hidden" for="email">Password</label>
+                            <input class="form-control" id="password" name="password" type="password" placeholder="******" autocomplete="off" required />
+                        </div>
+                        <button class="btn btn-warning w-100" id="signin-button" type="button">Sign in</button>
+                    </form>
 
-                <!-- Text -->
-                <p class="text-center text-body-warning mb-0">Don't remember account details? <a href="<?= PROOT; ?>auth/forget-password">Forget password</a>.</p>
+                    <!-- Text -->
+                    <p class="text-center text-body-warning mb-0">Don't remember account details? <a href="<?= PROOT; ?>auth/forget-password">Forget password</a>.</p>
+                </div>
             </div>
         </div>
-    </div>
-    
+    </div> 
 <?php include ('../system/inc/footer.php'); ?>
 
 <script>

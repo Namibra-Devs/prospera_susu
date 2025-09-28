@@ -253,7 +253,7 @@ function findAdminByEmail($email) {
 		LIMIT 1
     ";
     $statement = $dbConnection->prepare($query);
-    $statement->execute([$email, 0]);
+    $statement->execute([$email, 'active']);
     $user = $statement->fetch(PDO::FETCH_OBJ);
     return $user;
 }
@@ -269,7 +269,7 @@ function findAdminById($id) {
 		LIMIT 1
     ";
     $statement = $dbConnection->prepare($query);
-    $statement->execute([$id, 0]);
+    $statement->execute([$id, 'active']);
     $user = $statement->fetch(PDO::FETCH_OBJ);
     return $user;
 }
@@ -683,6 +683,7 @@ function idle_user() {
 }
 
 function get_person_role() {
+	global $admin_data;
 	$out = 'User';
 	// get logged in person role
 	if (array_key_exists('PRSADMIN', $_SESSION)) {
@@ -690,11 +691,11 @@ function get_person_role() {
 		// check if admin is a super admin or approver
 		if (admin_has_permission()) {
 			$out = ' (Super)';
-		} elseif (admin_has_permission('approver')) {
+		} elseif (admin_has_permission('approver') && !admin_has_permission('admin')) {
 			$out = ' (Approver)';
+		} elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
+			$out = ' (Collector)';
 		}
-	} elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
-		$out = 'Collector';
 	}
 	
 	return $out;

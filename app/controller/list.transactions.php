@@ -42,9 +42,8 @@ require ('../../system/DatabaseConnector.php');
             ) 
         AS transactions WHERE ";
     // check if a collector is logged in, then show only their transactions
-    if (collector_is_logged_in()) {
-        global $collector_id;
-        $query .= " collector_id = '". $collector_id . "' ";
+    if (admin_has_permission('collector') && !admin_has_permission('admin')) {
+        $query .= " collector_id = '". $admin_id . "' ";
     } else {
         $query .= " 1=1 ";
     }
@@ -94,7 +93,7 @@ require ('../../system/DatabaseConnector.php');
                         <th class="fs-sm">Handler</th>
                         <th class="fs-sm">Type</th>
                         <th class="fs-sm">Status</th>
-                        '. ((admin_is_logged_in()) ? '<th class="fs-sm"></th>' : '') .'
+                        '. ((admin_has_permission()) ? '<th class="fs-sm"></th>' : '') .'
                     </tr>
                 </thead>
                 <tbody>
@@ -111,7 +110,7 @@ if ($total_data > 0) {
         }
 
         // get handler name
-        $handler = findCollectorById($row['collector_id'])->collector_name;
+        $handler = findAdminById($row['collector_id'])->admin_name;
         if (!$handler) {
             $handler = 'Admin';
         }
@@ -181,7 +180,7 @@ if ($total_data > 0) {
                 <td>' .  ucwords($handler) . '</td>
                 <td>' . $type . '</td>
                 <td>' . $row['status'] . '</td>
-                '. ((admin_is_logged_in()) ? '<td>' . $options . '</td>' : '') .' 
+                '. ((admin_has_permission()) ? '<td>' . $options . '</td>' : '') .' 
             </tr>
 		';
 		$i++;

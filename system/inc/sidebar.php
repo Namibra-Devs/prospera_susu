@@ -66,7 +66,7 @@
                 <!-- Brand -->
                 <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="<?= PROOT; ?>index">
                     <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">
-                        <?php get_person_role(); ?>
+                        Admin<?= get_person_role(); ?>
                     </span>
                 </a>
             
@@ -373,22 +373,7 @@
                 <!-- Brand -->
                 <a class="navbar-brand fs-5 fw-bold text-xl-center mb-xl-4" href="<?= PROOT; ?>index">
                     <i class="fs-4 text-secondary" data-duoicon="box-2"></i> <span class="d-xl-none ms-1">
-                        <?php 
-                            // get logged in person role
-                            if (array_key_exists('PRSADMIN', $_SESSION)) {
-                                echo 'Admin';
-                                // check if admin is a super admin or approver
-                                if (admin_has_permission()) {
-                                    echo ' (Super)';
-                                } elseif (admin_has_permission('approver')) {
-                                    echo ' (Approver)';
-                                }
-                            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
-                                echo 'Collector';
-                            } else {
-                                echo 'User';
-                            }
-                        ?>
+                        Admin<?= get_person_role(); ?>
                     </span>
                 </a>
             
@@ -693,22 +678,7 @@
             <!-- Brand -->
                 <a class="navbar-brand d-flex align-items-center fs-5 fw-bold px-xl-3 mb-xl-4" href="<?= PROOT; ?>index">
                     <i class="fs-4 text-secondary me-2" data-duoicon="box-2"></i> 
-                    <?php 
-                            // get logged in person role
-                            if (array_key_exists('PRSADMIN', $_SESSION)) {
-                                echo 'Admin';
-                                // check if admin is a super admin or approver
-                                if (admin_has_permission()) {
-                                    echo ' (Super)';
-                                } elseif (admin_has_permission('approver')) {
-                                    echo ' (Approver)';
-                                }
-                            } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
-                                echo 'Collector';
-                            } else {
-                                echo 'User';
-                            }
-                        ?>
+                    Admin<?= get_person_role(); ?>
                 </a>
             
                 <!-- User -->
@@ -917,21 +887,11 @@
                             </a>
                             <div class="collapse " id="transactions">
                                 <nav class="nav nav-pills">
-                                    <?php
-                                        // show transactions menu only to admins and approvers
-                                        if ((admin_is_logged_in() && admin_has_permission('approver')) || collector_is_logged_in()):
-                                    ?>
                                     <a class="nav-link sub-nav-transactions" href="<?= PROOT; ?>app/transactions">Transactions</a>
                                     <a class="nav-link" href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal">Add new deposit</a>
                                     <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
-                                    <?php endif; ?>
-                                    <?php
-                                        // show not approved transactions menu only to admins and approvers
-                                        if ((admin_is_logged_in() && admin_has_permission('approver'))):
-                                    ?>
                                     <a class="nav-link sub-nav-not-approved-transactions" href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
                                     <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a>
-                                    <?php endif; ?>
                                 </nav>
                             </div>
                         </div>

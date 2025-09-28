@@ -18,9 +18,8 @@ $conn = $dbConnection;
 
     $query = "SELECT * FROM daily_collections WHERE ";
 	// check if a collector is logged in, then show only their transactions
-    if (collector_is_logged_in()) {
-        global $collector_id;
-        $query .= " daily_collector_id = '". $collector_id . "' ";
+    if (admin_has_permission('collector') && !admin_has_permission('admin')) {
+        $query .= " daily_collector_id = '". $admin_id . "' ";
     } else {
         $query .= " 1=1 ";
     }
@@ -83,9 +82,9 @@ if ($total_data > 0) {
 
 		// find uploader name
 		$uploader = 'Unknown';
-		$uploader_row = findCollectorById($row['daily_collector_id']);
+		$uploader_row = findAdminById($row['daily_collector_id']);
 		if ($uploader_row) {
-			$uploader = $uploader_row->collector_name;
+			$uploader = $uploader_row->admin_name;
 		}
 
 		// find handler/verifier name
@@ -99,14 +98,14 @@ if ($total_data > 0) {
 
 		// options for admin only
 		$options = '';
-		if (admin_is_logged_in()) {
+		if (admin_has_permission()) {
 			if ($row['daily_status'] == 'Pending') {
 				$options .= '<li><a class="dropdown-item" href="'. PROOT .'app/collection-verify?id='. $row['daily_id'] .'">Verify collection</a></li>';
 			}
 		}
 
 		// options for collector and admin
-		if (collector_is_logged_in() || admin_is_logged_in()) {
+		if (admin_is_logged_in()) {
 			$options .= '
 				<li><a class="dropdown-item" href="#viewModal_'. $row['id'] .'" data-bs-toggle="modal">View details</a></li>
 				<li><hr class="dropdown-divider" /></li>
@@ -116,7 +115,7 @@ if ($total_data > 0) {
 
 		// show verify button for only admin
 		$verify_option = '';
-		if (admin_is_logged_in()) {
+		if (admin_has_permission()) {
 			if ($row['daily_status'] == 'Pending') {
 				$verify_option .= '<a href="'. PROOT .'app/collections?approve='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to VERIFY this collection record?\');" class="btn btn-secondary w-100 mt-4">Verify</a>
 				';

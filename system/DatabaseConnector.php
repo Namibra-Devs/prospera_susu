@@ -1,4 +1,6 @@
 <?php 
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
     require dirname(__DIR__)  . '/bootstrap.php';
 	
@@ -19,32 +21,38 @@
     }
     session_start();
 
-    if (isset($_SESSION['PRSCOLLECTOR'])) {
-        $collector_id = $_SESSION['PRSCOLLECTOR'];
-        $data = array($collector_id);
-        $sql = "
-            SELECT * FROM collectors 
-            WHERE collector_id = ? 
-            LIMIT 1
-        ";
-        $statement = $dbConnection->prepare($sql);
-        $statement->execute($data);
-        if ($statement->rowCount() > 0) {
-            $collector_data = $statement->fetchAll();
-            $collector_data = $collector_data[0];
+    // if (isset($_SESSION['PRSCOLLECTOR'])) {
+    //     $collector_id = $_SESSION['PRSCOLLECTOR'];
+    //     $data = array($collector_id);
+    //     $sql = "
+    //         SELECT * FROM collectors 
+    //         WHERE collector_id = ? 
+    //         LIMIT 1
+    //     ";
+    //     $statement = $dbConnection->prepare($sql);
+    //     $statement->execute($data);
+    //     if ($statement->rowCount() > 0) {
+    //         $collector_data = $statement->fetchAll();
+    //         $collector_data = $collector_data[0];
 
-            $fn = explode(' ', $collector_data['collector_name']);
-            $collector_data['first'] = ucwords($fn[0]);
-            $collector_data['last'] = '';
-            if (count($fn) > 1) {
-                $collector_data['last'] = ucwords($fn[1]);
-            }
+    //         $details_data = $dbConnection->query("SELECT * FROM susu_login_details WHERE susu_login_details.login_details_person_id = '" . $collector_id . "' ORDER BY id DESC LIMIT 1")->fetchAll();
 
-        } else {
-            unset($_SESSION['PRSCOLLECTOR']);
-            redirect(PROOT . 'app/');
-        }
-    }
+    //         if (is_array($details_data) && count($details_data) > 0) {
+	// 			$collector_data = array_merge($collector_data, $details_data[0]);
+	// 		}
+
+    //         $fn = explode(' ', $collector_data['collector_name']);
+    //         $collector_data['first'] = ucwords($fn[0]);
+    //         $collector_data['last'] = '';
+    //         if (count($fn) > 1) {
+    //             $collector_data['last'] = ucwords($fn[1]);
+    //         }
+
+    //     } else {
+    //         unset($_SESSION['PRSCOLLECTOR']);
+    //         redirect(PROOT . 'app/');
+    //     }
+    // }
 
     if (isset($_SESSION['PRSADMIN'])) {
  		$admin_id = $_SESSION['PRSADMIN'];

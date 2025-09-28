@@ -53,7 +53,7 @@
                 // insert into daily_collections
                 $sql = "INSERT INTO daily_collections (daily_id, daily_collector_id, daily_collection_date, daily_total_collected, daily_proof_image, daily_note) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt = $dbConnection->prepare($sql);
-                $result = $stmt->execute([$uniqueid, $collector_id, $uploadDate, $totalcollected, $targetPath, $note]);
+                $result = $stmt->execute([$uniqueid, $admin_id, $uploadDate, $totalcollected, $targetPath, $note]);
                 if (!$result) {
                     $message = "Database error: Could not save file info.";
                 }

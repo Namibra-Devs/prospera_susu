@@ -5,7 +5,7 @@
 	// if (!admin_is_logged_in()) {
 	// 	admin_login_redirect();
 	// }
-    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+    if (admin_has_permission('admin')) {
         redirect(PROOT . 'auth/sign-in');
     }
     $view = 0;
@@ -36,12 +36,12 @@
                     AND customers.customer_status = 'active'
                     LIMIT 1
                 ";
-                if (collector_is_logged_in()) {
+                if (admin_has_permission('collector') && !admin_has_permission('admin')) {
                     $query = "
                         SELECT * FROM customers 
                         WHERE customer_id = ? 
                         AND customer_added_by = 'collector' 
-                        AND customer_collector_id = '$collector_id'
+                        AND customer_collector_id = '$admin_id'
                         AND customers.customer_status = 'active'
                         LIMIT 1
                     ";
@@ -302,7 +302,7 @@
                                     foreach ($all_saves as $save): 
                                         $type = ($save['type'] == 'saving') ? '<span class="fs-sm text-primary">Deposit</span>' : '<span class="fs-sm text-danger">Withdrawal</span>';
                                         
-                                        $collector = findCollectorById($save['collector_id'])->collector_name;
+                                        $collector = findAdminById($save['collector_id'])->collector_name;
                                         if (!$collector) {
                                             $collector = 'Admin';
                                         }
