@@ -444,12 +444,21 @@
                     <h1 class="fs-4 mb-0">Collections</h1>
                 </div>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
-                    <!-- Action -->
-                    <button class="btn btn-secondary d-block" href="javascript:;" type="button" data-bs-toggle="modal" data-bs-target="#todayUploadModal">
-                        <span class="material-symbols-outlined me-1">add_a_photo</span> Upload new collection file
-                    </button>
+                    <div class="row gx-2">
+                        <div class="col-6 col-sm-auto">
+                            <!-- Action -->
+                            <button class="btn btn-secondary d-block" href="javascript:;" type="button" data-bs-toggle="modal" data-bs-target="#todayUploadModal">
+                                <span class="material-symbols-outlined me-1">add_a_photo</span> Upload new collection file
+                            </button>
+                        </div>
+                        <div class="col-6 col-sm-auto">
+                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            
 
 
             <!-- Page content -->
