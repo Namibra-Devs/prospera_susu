@@ -2,12 +2,12 @@
     require ('../system/DatabaseConnector.php');
     
 	// Check if the user is logged in
-	// if (!admin_is_logged_in()) {
-	// 	admin_login_redirect();
-	// }
-    if (admin_has_permission('admin')) {
-        redirect(PROOT . 'auth/sign-in');
-    }
+	if (!admin_is_logged_in()) {
+		admin_login_redirect();
+	}
+    // if (admin_has_permission('admin')) {
+    //     redirect(PROOT . 'auth/sign-in');
+    // }
     $view = 0;
 
 
