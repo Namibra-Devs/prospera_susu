@@ -740,7 +740,7 @@
         const deposits = Array(12).fill(0);
         const withdrawals = Array(12).fill(0);
         const commissions = Array(12).fill(0);
-
+        
         for (let m in data.deposits) deposits[m-1] = parseFloat(data.deposits[m]);
         for (let m in data.withdrawals) withdrawals[m-1] = parseFloat(data.withdrawals[m]);
         for (let m in data.commissions) commissions[m-1] = parseFloat(data.commissions[m]);
@@ -816,4 +816,4 @@
 
     // Reload on year change
     yearSelect.addEventListener("change", e => loadChart(e.target.value));
-  </script>
+</script>
