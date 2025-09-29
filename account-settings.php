@@ -18,7 +18,7 @@
 
 
     $errors = '';
-    $admin_fullname = ((isset($_POST['admin_name'])) ? sanitize($_POST['admin_name']) : $admin_data['admin_name']);
+    $admin_fullname = ((isset($_POST['admin_fullname'])) ? sanitize($_POST['admin_fullname']) : $admin_data['admin_name']);
     $admin_email = ((isset($_POST['admin_email'])) ? sanitize($_POST['admin_email']) : $admin_data['admin_email']);
     $admin_phone = ((isset($_POST['admin_phone'])) ? sanitize($_POST['admin_phone']) : $admin_data['admin_phone']);
 
@@ -40,18 +40,18 @@
                 SET admin_name = ?, admin_email = ?, admin_phone = ?  
                 WHERE admin_id = ?
             ";
-            $statement = $conn->prepare($query);
+            $statement = $dbConnection->prepare($query);
             $result = $statement->execute($data);
             if (isset($result)) {
 
                 $log_message = 'Admin [' . $admin_id . '] has updated profile details!';
-                add_to_log($message, $admin_data['admin_id'], 'admin');
+                add_to_log($log_message, $admin_data['admin_id'], 'admin');
 
                 $_SESSION['flash_success'] = 'Admin has been updated!';
-                redirect(PROOT . "account/profile");
+               redirect(PROOT . "account");
             } else {
-                echo js_alert("Something went wrong!");
-                redirect(PROOT . "account/profile");
+                $_SESSION['flash_error'] = "Something went wrong!";
+                redirect(PROOT . "account");
             }
         }
     }
@@ -102,8 +102,8 @@
                 <div class="col-12 col-lg-3">
                     <!-- Nav -->
                     <nav class="nav nav-pills position-sticky flex-column mb-8" id="accountNav" style="top: 2rem">
-                        <a class="nav-link" href="<?= PROOT; ?>account/profile">General</a>
-                        <a class="nav-link active" aria-current="page" href="<?= PROOT; ?>account/settings">Update account</a>
+                        <a class="nav-link" href="<?= PROOT; ?>account">General</a>
+                        <a class="nav-link active" aria-current="page" href="<?= PROOT; ?>account-settings">Update account</a>
                         <a class="nav-link" href="<?= PROOT; ?>account-change-password">Change password</a>
                         <a class="nav-link text-danger" href="<?= PROOT; ?>auth/logout">Logout</a>
                     </nav>
@@ -232,8 +232,8 @@
                     tempuploded_file_id : tempuploded_file_id
                 },
                 success: function(data) {
-                    alert(data);
-                    // location.reload();
+                    // alert(data);
+                    location.reload();
                 }
             });
         });

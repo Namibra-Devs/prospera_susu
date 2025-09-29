@@ -8,7 +8,7 @@
 
 		$tempuploded_img_id_filePath = BASEURL . $_POST['tempuploded_file_id'];
 		$filename = basename($tempuploded_img_id_filePath);
-		$filepath = BASEURL . 'assets/media/uploads/collectors-media/' . $filename;
+		$filepath = BASEURL . 'assets/media/uploads/admin-media/' . $filename;
 		$unlink = unlink($filepath);
 		if ($unlink) {
 			$sql = "
