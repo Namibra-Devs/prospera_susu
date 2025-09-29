@@ -289,7 +289,7 @@ function get_admin_profile($id) {
 		<div class="row align-items-center">
 			<div class="col-auto">
 				<div class="avatar avatar-xl">
-					<img class="avatar-img" src="' . (($row["admin_profile"] == NULL) ? 'assets/media/avatar.png' : PROOT . '/'.$row["admin_profile"]) . '" alt="..." />
+					<img class="avatar-img" src="' . (($row["admin_profile"] == NULL) ? 'assets/media/avatar.png' : PROOT . 'assets/media/uploads/admin-media/' . basename($row["admin_profile"])) . '" alt="..." />
 				</div>
 			</div>
 			<div class="col">

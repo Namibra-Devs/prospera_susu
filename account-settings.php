@@ -84,13 +84,14 @@
                 </div>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                     <div class="row gx-2">
-                    <!-- Action -->
-                    <div class="col-6 col-sm-auto">
-                        <button class="btn btn-warning d-block" id="submitForm"> Save </button>
-                    </div>
-                    <div class="col-6 col-sm-auto">
+                        <!-- Action -->
                         <div class="col-6 col-sm-auto">
-                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
+                            <button class="btn btn-warning d-block" id="submitForm"> Save </button>
+                        </div>
+                        <div class="col-6 col-sm-auto">
+                            <div class="col-6 col-sm-auto">
+                                <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -103,7 +104,7 @@
                     <nav class="nav nav-pills position-sticky flex-column mb-8" id="accountNav" style="top: 2rem">
                         <a class="nav-link" href="<?= PROOT; ?>account/profile">General</a>
                         <a class="nav-link active" aria-current="page" href="<?= PROOT; ?>account/settings">Update account</a>
-                        <a class="nav-link" href="<?= PROOT; ?>account/change-password">Change password</a>
+                        <a class="nav-link" href="<?= PROOT; ?>account-change-password">Change password</a>
                         <a class="nav-link text-danger" href="<?= PROOT; ?>auth/logout">Logout</a>
                     </nav>
                 </div>
@@ -118,11 +119,12 @@
                                 <div class="col-md-2">
                                     <label class="form-label">Avatar</label>
                                 </div>
+
                                 <div class="col-md-8 col-xl-5">
                                     <div class="" id="upload_profile">
                                         <div class="d-flex align-items-center">
                                             <a href="<?= (($admin_data['admin_profile'] != NULL) ? PROOT . $admin_data['admin_profile'] : 'javascript:;'); ?>" class="avatar avatar-lg bg-warning rounded-circle text-white">
-                                                <img src="<?= PROOT . (($admin_data['admin_profile'] == NULL) ? 'assets/media/avatar.png' : 'assets/media/uploads/admin-media/' . basename($admin_data['admin_profile'])); ?>" style="object-fit: cover; object-position: center; width: 35px; height: 35px" alt="<?=ucwords($admin_data['admin_name']); ?>'s profile.">
+                                                <img src="<?= PROOT . (($admin_data['admin_profile'] == NULL) ? 'assets/media/avatar.png' : 'assets/media/uploads/admin-media/' . basename($admin_data['admin_profile'])); ?>" style="object-fit: cover; object-position: center; width: 35px; height: 35px" alt="<?=ucwords($admin_data['admin_name']); ?>'s profile." />
                                             </a>
                                             <div class="hstack gap-2 ms-5">
                                                 <?php if ($admin_data['admin_profile'] == NULL): ?>

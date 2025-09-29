@@ -159,9 +159,9 @@
                     <!-- Nav -->
                     <nav class="nav nav-pills position-sticky flex-column mb-8" id="accountNav" style="top: 2rem">
                         <a class="nav-link" href="<?= PROOT; ?>account">General</a>
-                        <a class="nav-link" href="<?= PROOT; ?>settings">Update account</a>
+                        <a class="nav-link" href="<?= PROOT; ?>account-settings">Update account</a>
                         <a class="nav-link" data-bs-target="#pinModal" data-bs-toggle="modal" href="javascript:;">Change PIN</a>
-                        <a class="nav-link" href="<?= PROOT; ?>account/change-password">Change password</a>
+                        <a class="nav-link active" aria-current="page" href="<?= PROOT; ?>account/change-password">Change password</a>
                         <a class="nav-link text-danger" href="<?= PROOT; ?>auth/logout">Logout</a>
                     </nav>
                 </div>
