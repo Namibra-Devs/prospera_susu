@@ -23,8 +23,8 @@
         if (!$row) {
             $error = 'This admin is unknown !';
         } else {
-            if ($collector_row->collector_status == 'inactive') {
-                $error = 'This admin account is not active. Please contact admin.';
+            if ($row->admin_status == 'inactive' || $row->admin_status == NULL) {
+                $error = 'This admin account is not active. Please contact admin !';
             }
 
             if (!password_verify(sanitize($_POST['password']), $row->admin_password)) {
@@ -41,7 +41,6 @@
         }
     }
 ?>
-    <div class="container">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12" style="max-width: 25rem">

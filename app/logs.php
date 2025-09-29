@@ -67,7 +67,8 @@
                 <?php if (!admin_has_permission()): ?>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                     <!-- Action -->
-                    <a class="btn btn-secondary d-block" href="javascript:;" data-bs-target="#buyModal" data-bs-toggle="modal"> <span class="material-symbols-outlined me-1">add</span> New Trade </a>
+                    <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
+
                 </div>
                 <?php endif; ?>
             </div>
