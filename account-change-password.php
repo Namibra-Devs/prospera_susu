@@ -4,7 +4,7 @@
     require ('system/DatabaseConnector.php');
     
 	// Check if the admin or collector is logged in
-    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+    if (!admin_is_logged_in()) {
         redirect(PROOT . 'auth/sign-in');
     }
 
@@ -15,7 +15,6 @@
     include ('system/inc/sidebar.php');
     include ('system/inc/topnav-base.php');
     include ('system/inc/topnav.php');
-
 
     $errors = '';
     $hashed = $admin_data['admin_password'];
@@ -47,25 +46,26 @@
         }
 
         if (!empty($errors)) {
-            $errors;
+            $_SESSION['flash_error'] = $errors;
+            redirect(PROOT . 'account-change-password');
         } else {
             $query = '
-                UPDATE giltmarket_admin 
+                UPDATE susu_admins 
                 SET admin_password = ? 
                 WHERE admin_id = ?
             ';
-            $satement = $conn->prepare($query);
+            $satement = $dbConnection->prepare($query);
             $result = $satement->execute(array($new_hashed, $admin_id));
             if (isset($result)) {
 
-                $message = "changed password";
-                add_to_log($message, $admin_id);
+                $log_message = 'Admin [' . $admin_id . '] has changed password"!';
+    	        add_to_log($log_message, $admin_id, 'admin');
 
                 $_SESSION['flash_success'] = 'Password successfully updated!';
-                redirect(PROOT . "account/profile");
+                redirect(PROOT . "account");
             } else {
-                echo js_alert('Something went wrong');
-                redirect(PROOT . "account/change-password");
+                $_SESSION['flash_error'] = 'Something went wrong';
+                redirect(PROOT . "account-change-password");
             }
         }
     }
@@ -94,22 +94,23 @@
 
                 if ($msg != '') {
                     // code...
-                    echo js_alert($msg);
+                    $_SESSION['flash_error'] = $msg;
+                    redirect(PROOT . 'account-change-password');
                 } else {
                     $query = '
-                        UPDATE giltmarket_admin 
+                        UPDATE susu_admins 
                         SET admin_pin = ? 
                         WHERE admin_id = ?
                     ';
-                    $satement = $conn->prepare($query);
+                    $satement = $dbConnection->prepare($query);
                     $result = $satement->execute(array(sanitize($_POST['newpin']), $admin_id));
                     if (isset($result)) {
-
-                        $message = "changed PIN";
-                        add_to_log($message, $admin_id);
+                        
+                        $log_message = 'Admin [' . $admin_id . '] has changed PIN!';
+    	                add_to_log($log_message, $admin_id, 'admin');
 
                         $_SESSION['flash_success'] = 'New PIN successfully set!';
-                        redirect(PROOT . "account/profile");
+                        redirect(PROOT . "account");
                     } else {
                         echo js_alert('Something went wrong');
                     }
@@ -157,8 +158,8 @@
                 <div class="col-12 col-lg-3">
                     <!-- Nav -->
                     <nav class="nav nav-pills position-sticky flex-column mb-8" id="accountNav" style="top: 2rem">
-                        <a class="nav-link" href="<?= PROOT; ?>account/profile">General</a>
-                        <a class="nav-link" href="<?= PROOT; ?>account/settings">Update account</a>
+                        <a class="nav-link" href="<?= PROOT; ?>account">General</a>
+                        <a class="nav-link" href="<?= PROOT; ?>settings">Update account</a>
                         <a class="nav-link" data-bs-target="#pinModal" data-bs-toggle="modal" href="javascript:;">Change PIN</a>
                         <a class="nav-link" href="<?= PROOT; ?>account/change-password">Change password</a>
                         <a class="nav-link text-danger" href="<?= PROOT; ?>auth/logout">Logout</a>

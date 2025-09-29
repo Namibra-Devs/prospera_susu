@@ -4,7 +4,7 @@
     require ('system/DatabaseConnector.php');
     
 	// Check if the admin or collector is logged in
-    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+    if (!admin_is_logged_in()) {
         redirect(PROOT . 'auth/sign-in');
     }
 
@@ -18,7 +18,7 @@
 
 
     $errors = '';
-    $admin_fullname = ((isset($_POST['admin_fullname'])) ? sanitize($_POST['admin_fullname']) : $admin_data['admin_fullname']);
+    $admin_fullname = ((isset($_POST['admin_name'])) ? sanitize($_POST['admin_name']) : $admin_data['admin_name']);
     $admin_email = ((isset($_POST['admin_email'])) ? sanitize($_POST['admin_email']) : $admin_data['admin_email']);
     $admin_phone = ((isset($_POST['admin_phone'])) ? sanitize($_POST['admin_phone']) : $admin_data['admin_phone']);
 
@@ -114,7 +114,7 @@
                                     <div class="" id="upload_profile">
                                         <div class="d-flex align-items-center">
                                             <a href="<?= (($admin_data['admin_profile'] != NULL) ? PROOT . $admin_data['admin_profile'] : 'javascript:;'); ?>" class="avatar avatar-lg bg-warning rounded-circle text-white">
-                                                <img src="<?= PROOT . (($admin_data['admin_profile'] == NULL) ? 'assets/media/avatar.png' : $admin_data['admin_profile']); ?>" style="object-fit: cover; object-position: center; width: 35px; height: 35px" alt="<?=ucwords($admin_data['admin_fullname']); ?>'s profile.">
+                                                <img src="<?= PROOT . (($admin_data['admin_profile'] == NULL) ? 'assets/media/avatar.png' : $admin_data['admin_profile']); ?>" style="object-fit: cover; object-position: center; width: 35px; height: 35px" alt="<?=ucwords($admin_data['admin_name']); ?>'s profile.">
                                             </a>
                                             <div class="hstack gap-2 ms-5">
                                                 <?php if ($admin_data['admin_profile'] == NULL): ?>
