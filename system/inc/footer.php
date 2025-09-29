@@ -435,6 +435,160 @@
                 $('#customer_balance').val('');
             }
         });
+
+        // limit note characters to 500
+        $('#withdrawal_note').on('input', function() {
+            var maxLength = 500;
+            var currentLength = $(this).val().length;
+            if (currentLength > maxLength) {
+                $(this).val($(this).val().substring(0, maxLength));
+            }
+        });
+
+        // next step button in add transaction modal
+        $('#w_next_step').on('click', function() {
+            // validate form
+            var customer = $('#withdrawal_select_customer').val();
+            var balance = $('#customer_balance').val();
+            var amount = $('#amount-to-withdraw').val();
+            var date = $('#withdrawal_today_date').val();
+            var payment_mode = $('#withdrawal_payment_mode').val();
+
+            // check if withdrawal amount is greater than balance
+            if (+amount > +balance) {
+                $('.toast-body').html('Withdrawal amount cannot be greater than balance.');
+                $('.toast').toast('show');
+                $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+                return false;
+            } else {
+                if (customer === '' || amount === '' || date === '' || payment_mode === '') {
+                    $('.toast-body').html('Please fill all required fields.');
+                    $('.toast').toast('show');
+                    $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+                    return false;
+                } else {
+                    // hide first step
+                    $('#w_first_step').hide();
+                    // show preview step
+                    $('#w_preview_step').show();
+
+                    // set preview values
+                    var customerText = $('#withdrawal_select_customer option:selected').text();
+                    $('#w_preview_customer').html(customerText);
+
+                    var amountText = $('#amount-to-withdraw').val();
+                    $('#w_preview_amount').html(amountText);
+
+                    var balanceText = $('#customer_balance').val();
+                    $('#w_balance').html(balanceText);
+                    
+                    var dateText = $('#withdrawal_today_date').val();
+                    $('#w_preview_date').html(dateText);
+
+                    var paymentModeText = $('#withdrawal_payment_mode option:selected').text();
+                    $('#w_preview_payment_mode').html(paymentModeText);
+
+                    var noteText = $('#withdrawal_note').val();
+                    if (noteText === '') {
+                        noteText = 'N/A';
+                    }
+                    $('#w_preview_note').html(noteText);
+
+                    // change modal title
+                    $('#withdrawalModalLabel').html('Preview withdrawal transaction');
+                    // change next step button to back button
+                    $('#w_next_step').hide();
+                    $('#w_back_step').show();
+                    // show submit button
+                    $('#w-submit-transaction').show();
+                }
+            }
+        });
+
+        // back to first step button
+        $('#w_back_step').on('click', function() {
+            // hide preview step
+            $('#w_preview_step').hide();
+            // show first step
+            $('#w_first_step').show();
+
+            // change modal title
+            $('#withdrawalModalLabel').html('Make new withdrawal');
+            // change back button to next step button
+            $('#back_step').hide();
+            $('#w_next_step').show();
+            // hide submit button
+            $('#w-submit-transaction').hide();
+        });
+
+        // create an ajax request to submit the add transaction form
+        var $this = $('#add-withdrawal-form');
+        var $state = $('.toast-body');
+        $('#add-withdrawal-form').on('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            var formData = $(this).serialize(); // Serialize the form data
+            $.ajax({
+                type: 'POST',
+                url: 'controller/transaction.withdraw.php',
+                data: formData,
+                beforeSend: function() {
+                    $this.find('#w-submit-transaction').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+                },
+                success: function(response) {
+                    // Handle the response from the server
+                    // Assuming the response is a JSON object with 'status' and 'message' properties
+                    var data = JSON.parse(response);
+                    if (data.status === 'success') {
+                        $state.html(data.message);
+                        $('.toast').toast('show');
+
+                        // Optionally, you can reset the form here
+                        $('#add-withdrawal-form')[0].reset();
+                        // Close the modal after a short delay
+                        $('#withdrawalModal').modal('hide');
+
+                        setTimeout(function() {
+                            location.reload(); // Reload the page to reflect changes
+                        }, 2000);
+                    } else {
+                        $state.html(data.message);
+                        $('.toast').toast('show');
+                        $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+                        return false;
+                    }
+                },
+                error: function() {
+                    $state.html('An error occurred. Please try again.');
+                    $('.toast').toast('show');
+                    $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+                    return false;
+                },
+                complete: function() {
+                    $this.find('#w-submit-transaction').attr('disabled', false).html('Withdraw now');
+                }
+            });
+        });
+
+        // reset form  if add transaction modal is closed
+        $('#transactionModal').on('hidden.bs.modal', function () {
+            // reset form
+            $('#add-withdrawal-form')[0].reset();
+            // show first step
+            $('#w_first_step').show();
+            // hide preview step
+            $('#w_preview_step').hide();
+            // change modal title
+            $('#withdrawalModalLabel').html('Make new withdrawal');
+            // change back button to next step button
+            $('#w_back_step').hide();
+            $('#w_next_step').show();
+            // hide submit button
+            $('#w-submit-transaction').hide();
+        });
     
     </script>
 </body>

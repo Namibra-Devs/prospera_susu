@@ -165,7 +165,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="add-withdrawal-form" method="POST">
-                        <div id="first_step">
+                        <div id="w_first_step">
                             <div class="mb-4">
                                 <label class="form-label" for="withdrawal_select_customer">Select customer</label>
                                 <select class="form-select" id="withdrawal_select_customer" name="withdrawal_select_customer" data-choices required>
@@ -178,12 +178,12 @@
                                 <input class="form-control" id="customer_balance" name="customer_balance" type="number" readonly placeholder="0.00" value="0.00" />
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="default_amount">Amount to withdraw <span id="label-defualt-amount"></span></label>
-                                <input class="form-control" type="number" min="0.00" step="0.01" placeholder="Enter amount" required />
+                                <label class="form-label" for="amount-to-withdraw">Amount to withdraw <span id="label-defualt-amount"></span></label>
+                                <input class="form-control" type="number" min="0.00" step="0.01" placeholder="Enter amount" id="amount-to-withdraw" name="amount-to-withdraw" required />
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="payment_mode">Mode of withdrawal</label>
-                                <select class="form-select" id="payment_mode" name="payment_mode" data-choices required>
+                                <label class="form-label" for="withdrawal_payment_mode">Mode of withdrawal</label>
+                                <select class="form-select" id="withdrawal_payment_mode" name="withdrawal_payment_mode" data-choices required>
                                     <option value="">Mode</option>
                                     <option value="bank">Bank</option>
                                     <option value="cash" selected>Cash</option>
@@ -193,18 +193,18 @@
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="today_date">Date</label>
-                                <input class="form-control" id="today_date" name="today_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required />
+                                <label class="form-label" for="withdrawal_today_date">Date</label>
+                                <input class="form-control" id="withdrawal_today_date" name="withdrawal_today_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required />
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="note">Note (optional)</label>
-                                <textarea class="form-control" id="note" name="note" rows="3" data-autosize></textarea>
+                                <label class="form-label" for="withdrawal_note">Note (optional)</label>
+                                <textarea class="form-control" id="withdrawal_note" name="withdrawal_note" rows="3" data-autosize></textarea>
                                 <div class="form-text">Limit 500</div>
                             </div>
-                            <button type="button" id="next_step" class="btn btn-link w-100 mt-4">Next step</button>
+                            <button type="button" id="w_next_step" class="btn btn-link w-100 mt-4">Next step</button>
                         </div>
                         <!-- preview first step on second step -->
-                        <div id="preview_step" style="display: none;">
+                        <div id="w_preview_step" style="display: none;">
                             <div class="vstack gap-3">
                                 <div class="row align-items-center gx-4">
                                     <div class="col-auto">
@@ -214,17 +214,28 @@
                                         <hr class="my-0 border-style-dotted" />
                                     </div>
                                     <div class="col-auto">
-                                        <span class="badge bg-success-subtle text-success" id="preview_customer"></span>
+                                        <span class="badge bg-success-subtle text-success" id="w_preview_customer"></span>
                                     </div>
                                 </div>
                                 <div class="row align-items-center gx-4">
                                     <div class="col-auto">
-                                        <span class="text-body-secondary">Amount</span>
+                                        <span class="text-body-secondary">Account balance</span>
                                     </div>
                                     <div class="col">
                                         <hr class="my-0 border-style-dotted" />
                                     </div>
-                                    <div class="col-auto" id="preview_amount"></div>
+                                    <div class="col-auto">
+                                        <span class="badge bg-warning-subtle text-warning" id="w_balance"></span>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center gx-4">
+                                    <div class="col-auto">
+                                        <span class="text-body-secondary">Withdrawal amount</span>
+                                    </div>
+                                    <div class="col">
+                                        <hr class="my-0 border-style-dotted" />
+                                    </div>
+                                    <div class="col-auto" id="w_preview_amount"></div>
                                 </div>
                                 <div class="row align-items-center gx-4">
                                     <div class="col-auto">
@@ -233,7 +244,7 @@
                                     <div class="col">
                                         <hr class="my-0 border-style-dotted" />
                                     </div>
-                                    <div class="col-auto" id="preview_date"></div>
+                                    <div class="col-auto" id="w_preview_date"></div>
                                 </div>
                                 <div class="row align-items-center gx-4">
                                     <div class="col-auto">
@@ -242,7 +253,7 @@
                                     <div class="col">
                                         <hr class="my-0 border-style-dotted" />
                                     </div>
-                                    <div class="col-auto" id="preview_note"></div>
+                                    <div class="col-auto" id="w_preview_note"></div>
                                 </div>
                                 <div class="row align-items-center gx-4">
                                     <div class="col-auto">
@@ -251,24 +262,15 @@
                                     <div class="col">
                                         <hr class="my-0 border-style-dotted" />
                                     </div>
-                                    <div class="col-auto" id="preview_payment_mode"></div>
-                                </div>
-                                <div class="row align-items-center gx-4">
-                                    <div class="col-auto">
-                                        <span class="text-body-secondary">Advance payment for</span>
-                                    </div>
-                                    <div class="col">
-                                        <hr class="my-0 border-style-dotted" />
-                                    </div>
-                                    <div class="col-auto" id="preview_advance_payment"></div>
+                                    <div class="col-auto" id="w_preview_payment_mode"></div>
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-6 col-sm-auto">
-                                    <button type="button" class="btn btn-link w-100" id="back_step"><< Back</button>
+                                    <button type="button" class="btn btn-link w-100" id="w_back_step"><< Back</button>
                                 </div>
                                 <div class="col-6 col-sm-auto">
-                                    <button type="submit" class="btn btn-secondary w-100" id="submit-transaction" name="submit-transaction">Add transaction</button>
+                                    <button type="submit" class="btn btn-info w-100" id="w-submit-transaction" name="w-submit-transaction">Withdraw now</button>
                                 </div>
                             </div>
                         </div>
