@@ -144,7 +144,7 @@
     <?php endif; ?>
     
     
-    <!-- Modal: New transaction modal -->
+    <!-- Modal: New withdrawal modal -->
     <?php
         // Only show this modal if the user has permission to create transactions
         if (admin_has_permission('admin')): 
@@ -167,18 +167,22 @@
                     <form id="add-transaction-form" method="POST">
                         <div id="first_step">
                             <div class="mb-4">
-                                <label class="form-label" for="select_customer">Select customer</label>
-                                <select class="form-select" id="select_customer" name="select_customer" data-choices required>
+                                <label class="form-label" for="withdrawal_select_customer">Select customer</label>
+                                <select class="form-select" id="withdrawal_select_customer" name="withdrawal_select_customer" data-choices required>
                                     <option value="">...</option>
                                     <?php echo $options; ?>
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="default_amount">Amount <span id="label-defualt-amount"></span></label>
-                                <input class="form-control" id="default_amount" name="default_amount" type="number" min="0.00" step="0.01" readonly placeholder="Enter amount" required />
+                                <label class="form-label" for="customer_balance">Customer balance <span id="label-defualt-amount"></span></label>
+                                <input class="form-control" id="customer_balance" name="customer_balance" type="number" readonly placeholder="0.00" value="0.00" />
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="payment_mode">Mode of payment</label>
+                                <label class="form-label" for="default_amount">Amount to withdraw <span id="label-defualt-amount"></span></label>
+                                <input class="form-control" type="number" disabled min="0.00" step="0.01" readonly placeholder="Enter amount" required />
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="payment_mode">Mode of withdrawal</label>
                                 <select class="form-select" id="payment_mode" name="payment_mode" data-choices required>
                                     <option value="">Mode</option>
                                     <option value="bank">Bank</option>

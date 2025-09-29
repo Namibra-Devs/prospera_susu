@@ -521,6 +521,45 @@
             $('#advance_payment_div').hide();
             $('#advance_payment').prop('disabled', true);
         });
+
+
+
+
+
+
+
+        // WITHDRWAL
+        // get customer balance if customer is selectd
+        $('#withdrawal_select_customer').on('change', function() {
+            var selectedValue = $(this).val();
+            var parts = selectedValue.split(',');
+            if (parts.length === 2) {
+               //  var customerName = parts[0];
+                var accountNumber = parts[1];
+
+                // Make an AJAX request to fetch the default amount
+                $.ajax({
+                    url: 'controller/get_customer_balance.php',
+                    type: 'GET',
+                    data: { account_number: accountNumber },
+                    success: function(response) {
+                        // Assuming the response is a JSON object with a 'balance_amount' property
+                        var data = JSON.parse(response);
+                        if (data.customer_balance_amount) {
+                            $('#customer_balance').val(data.customer_balance_amount);
+                        } else {
+                            $('#customer_balance').val('');
+                        }
+                    },
+                    error: function() {
+                        console.error('Error fetching default amount');
+                        $('#customer_balance').val('');
+                    }
+                });
+            } else {
+                $('#customer_balance').val('');
+            }
+        });
     
     </script>
 </body>
