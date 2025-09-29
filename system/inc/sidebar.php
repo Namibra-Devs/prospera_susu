@@ -5,11 +5,19 @@
             <div class="container-fluid">
                 <!-- Nav -->
                 <nav class="navbar-nav nav-pills h-100">
+                    <?php if (admin_has_permission()): ?>
+                    <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Make new withdrawal">
+                        <a class="nav-link" href="#withdrawalModal" type="button" data-bs-toggle="modal" data-bs-target="#withdrawalModal">
+                            <span class="material-symbols-outlined">payment_arrow_down</span>
+                        </a>
+                    </div>
+                    <?php else: ?>
                     <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Add new deposit">
                         <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                             <span class="material-symbols-outlined">send_money</span>
                         </a>
                     </div>
+                    <?php endif; ?>
                     <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
                         <a class="nav-link" href="mailto:yevgenysim+simpleqode@gmail.com">
                             <span class="material-symbols-outlined">support</span>
@@ -308,6 +316,17 @@
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills mt-auto">
                         <div class="nav-item">
+                            <?php if (admin_has_permission()): ?>
+                            <a
+                                class="nav-link"
+                                href="#withdrawalModal" data-bs-toggle="modal" data-bs-target="#withdrawalModal"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                data-bs-title="Make new withdrawal"
+                            >
+                                <span class="material-symbols-outlined">payment_arrow_down</span> <span class="d-xl-none ms-3">Make new withdrawal</span>
+                            </a>
+                            <?php ese: ?>
                             <a
                                 class="nav-link"
                                 href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
@@ -317,6 +336,7 @@
                             >
                                 <span class="material-symbols-outlined">send_money</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
+                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a class="nav-link" href="mailto:info@namibra.io" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
@@ -607,15 +627,27 @@
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills mt-auto">
                         <div class="nav-item">
+                            <?php if (admin_has_permission()): ?>
                             <a
-                            class="nav-link flex-xl-column"
-                            href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="right"
-                            data-bs-title="Add new deposit"
+                                class="nav-link flex-xl-column"
+                                href="#withdrawalModal" data-bs-toggle="modal" data-bs-target="#withdrawalModal"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                data-bs-title="Make new withdrawal"
+                            >
+                                <span class="material-symbols-outlined">payment_arrow_down</span> <span class="d-xl-none ms-3">Make new withdrawal</span>
+                            </a>
+                            <?php else: ?>
+                            <a
+                                class="nav-link flex-xl-column"
+                                href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                data-bs-title="Add new deposit"
                             >
                                 <span class="material-symbols-outlined">local_mall</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
+                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a
@@ -888,7 +920,11 @@
                             <div class="collapse " id="transactions">
                                 <nav class="nav nav-pills">
                                     <a class="nav-link sub-nav-transactions" href="<?= PROOT; ?>app/transactions">Transactions</a>
+                                    <?php if (admin_has_permission()): ?>
+                                    <a class="nav-link" href="#withdrawalModal" data-bs-toggle="modal" data-bs-target="#withdrawalModal">Make new withdrawal</a>
+                                    <?php else: ?>
                                     <a class="nav-link" href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal">Add new deposit</a>
+                                    <?php endif; ?>
                                     <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
                                     <a class="nav-link sub-nav-not-approved-transactions" href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
                                     <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a>
@@ -987,7 +1023,7 @@
                         <div class="nav-item">
                             <?php if (admin_has_permission()): ?>
                             <a class="nav-link" href="#withdrawalModal" type="button" data-bs-toggle="modal" data-bs-target="#withdrawalModal">
-                                <span class="material-symbols-outlined me-3">send_money</span> Make new withdrawal
+                                <span class="material-symbols-outlined me-3">payment_arrow_down</span> Make new withdrawal
                             </a>
                             <?php else: ?>
                             <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">

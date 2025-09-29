@@ -156,15 +156,15 @@
             }
     ?>
 
-    <div class="modal fade" id="transactionModal" tabindex="-1" aria-labelledby="transactionModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);">
+    <div class="modal fade" id="withdrawalModal" tabindex="-1" aria-labelledby="withdrawalModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content bg-secondary">
                 <div class="modal-header border-bottom-0 pb-0">
-                    <h1 class="modal-title fs-5" id="transactionModalLabel">New withdrawal</h1>
+                    <h1 class="modal-title fs-5" id="withdrawalModalLabel">New withdrawal</h1>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="add-transaction-form" method="POST">
+                    <form id="add-withdrawal-form" method="POST">
                         <div id="first_step">
                             <div class="mb-4">
                                 <label class="form-label" for="withdrawal_select_customer">Select customer</label>
@@ -179,7 +179,7 @@
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="default_amount">Amount to withdraw <span id="label-defualt-amount"></span></label>
-                                <input class="form-control" type="number" disabled min="0.00" step="0.01" readonly placeholder="Enter amount" required />
+                                <input class="form-control" type="number" min="0.00" step="0.01" placeholder="Enter amount" required />
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="payment_mode">Mode of withdrawal</label>
@@ -200,18 +200,6 @@
                                 <label class="form-label" for="note">Note (optional)</label>
                                 <textarea class="form-control" id="note" name="note" rows="3" data-autosize></textarea>
                                 <div class="form-text">Limit 500</div>
-                            </div>
-                            <!-- check for advance payment or not -->
-                            <label class="form-label" for="note">is advance payment</label>
-                            <input type="checkbox" id="is_advance_payment" name="is_advance_payment" value="yes" />
-                            <div class="mb-4 mt-2" id="advance_payment_div" style="display: none;">
-                                <label class="form-label" for="advance_payment">Advance payment</label>
-                                <select class="form-select" id="advance_payment" name="advance_payment" required>
-                                    <option value="1">1</option>
-                                    <?php for ($i = 2; $i <= 31; $i++) {
-                                        echo '<option value="' . $i . '">' . $i . '</option>';
-                                    } ?>
-                                </select>
                             </div>
                             <button type="button" id="next_step" class="btn btn-link w-100 mt-4">Next step</button>
                         </div>
