@@ -138,7 +138,14 @@
                         <h2 class="fs-3 mb-0">Performance</h2>
                     </div>
                     <div class="col-auto my-n2">
-                        <button id="toggleChartType" class="btn btn-primary">Switch to Bar</button>
+                        <select id="chartTypeSelect" class="form-select w-auto">
+                            <option value="line" selected>Line</option>
+                            <option value="bar">Bar</option>
+                            <option value="pie">Pie</option>
+                            <option value="doughnut">Doughnut</option>
+                        </select>
+
+
                     </div>
                     <div class="col-auto my-n2">
                         <!-- Select -->
@@ -678,11 +685,9 @@
     let financeChart;
     let chartType = 'line'; // default
 
-    document.getElementById("toggleChartType").addEventListener("click", () => {
-        chartType = (chartType === 'line') ? 'bar' : 'line';
-        document.getElementById("toggleChartType").innerText =
-            (chartType === 'line') ? "Switch to Bar" : "Switch to Line";
-        loadChart(currentYear); // re-render chart with new type
+    document.getElementById("chartTypeSelect").addEventListener("change", (e) => {
+        chartType = e.target.value;
+        loadChart(currentYear); // redraw chart with selected type
     });
 
     // Months labels

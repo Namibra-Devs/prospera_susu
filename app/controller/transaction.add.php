@@ -5,13 +5,11 @@
     $message = null;
 
     $added_by = null;
-    $added_by_id = null;
-    if (array_key_exists('PRSADMIN', $_SESSION)) {
+    $added_by_id = $admin_id;
+    if (admin_has_permission()) {
         $added_by = 'admin';
-        $added_by_id = $_SESSION['PRSADMIN'];
-    } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+    } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
         $added_by = 'collector';
-        $added_by_id = $_SESSION['PRSCOLLECTOR'];
     }
 
     // check if is posted
@@ -98,7 +96,7 @@
                         $next_unique_id, 
                         $find_customer_row->customer_id, 
                         $customer_account_number, 
-                        $collector_id, 
+                        $admin_id, 
                         $transaction_amount / $advance_payment, 
                         $next_date, 
                         'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1), 
@@ -159,7 +157,7 @@
                 // do nothing
             } else {
             
-                $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $collector_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
+                $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $admin_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
 
                 if ($stmt) {
                     processMonthlyCommission($find_customer_row->customer_id);

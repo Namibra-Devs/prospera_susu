@@ -531,6 +531,46 @@ function processMonthlyCommission($customer_id) {
     }
 }
 
+// get customer amount {s}
+function getCustomerBalance($customer_id, $account_number) {
+    global $dbConnection;
+	
+	$sql = "
+        SELECT 
+			c.customer_id,
+			c.customer_account_number,
+			COALESCE(s.total_saves, 0) AS total_saves,
+			COALESCE(w.total_withdrawals, 0) AS total_withdrawals,
+			COALESCE(cm.total_commissions, 0) AS total_commissions,
+			(COALESCE(s.total_saves, 0) 
+			- COALESCE(w.total_withdrawals, 0) 
+			- COALESCE(cm.total_commissions, 0)) AS balance
+		FROM customers c
+		LEFT JOIN (
+			SELECT saving_customer_id, SUM(saving_amount) AS total_saves
+			FROM savings
+			WHERE saving_status = 'Approved'
+			GROUP BY saving_customer_id
+		) AS s ON c.customer_id = s.saving_customer_id
+		LEFT JOIN (
+			SELECT withdrawal_customer_id, SUM(withdrawal_amount_requested) AS total_withdrawals
+			FROM withdrawals
+			WHERE withdrawal_status = 'Approved'
+			GROUP BY withdrawal_customer_id
+		) AS w ON c.customer_id = w.withdrawal_customer_id
+		LEFT JOIN (
+			SELECT commission_customer_id, SUM(commission_amount) AS total_commissions
+			FROM commissions
+			GROUP BY commission_customer_id
+		) AS cm ON c.customer_id = cm.commission_customer_id
+		WHERE (c.customer_id = ? OR c.customer_account_number = ?)
+    ";
+    $stmt = $dbConnection->prepare($sql);
+    $stmt->execute([$customer_id, $account_number]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
 
 
 
