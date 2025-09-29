@@ -412,7 +412,7 @@
                             <div class="col">
                                 <a class="btn btn-light w-100" href="<?= PROOT; ?>app/customers/edit=<?= $customer_data['customer_id']; ?>">Update</a>
                             </div>
-                            <?php if (admin_is_logged_in()): ?>
+                            <?php if (admin_is_logged_in() && admin_has_permission()): ?>
                             <div class="col">
                                 <button class="btn btn-danger w-100" type="button">Deactivate</button>
                             </div>

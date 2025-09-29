@@ -234,13 +234,6 @@ function get_number_of_users() {
 	return $statement;
 }
 
-// get number of products
-function get_number_of_products() {
-	global $dbConnection;
-	$statement = $dbConnection->query("SELECT * FROM levina_products WHERE product_trash = 0")->rowCount();
-	return $statement;
-}
-
 
 // get admin by email
 function findAdminByEmail($email) {
@@ -276,85 +269,161 @@ function findAdminById($id) {
 
 
 
+// GET ADMIN PROFILE DETAILS
+function get_admin_profile($id) {
+	global $dbConnection;
+	$output = '';
+
+	$query = "
+		SELECT * FROM susu_admins 
+		WHERE admin_id = ? 
+		AND admin_status = ? 
+		LIMIT 1
+	";
+	$statement = $dbConnection->prepare($query);
+	$statement->execute([$id, 'active']);
+	$rows = $statement->fetchAll();
+	$row = $rows[0];
+
+	$output = '
+		<div class="row align-items-center">
+			<div class="col-auto">
+				<div class="avatar avatar-xl">
+					<img class="avatar-img" src="' . (($row["admin_profile"] == NULL) ? 'assets/media/avatar.png' : PROOT . '/'.$row["admin_profile"]) . '" alt="..." />
+				</div>
+			</div>
+			<div class="col">
+				<h2 class="fs-5 mb-0"> ' . ucwords($row["admin_name"]) . ' </h2>
+				<div class="text-body-secondary"> Admin ' . get_person_role() . ' </div>
+			</div>
+		</div>
+		<hr />
+		<div class="mb-4">
+			<div class="form-label">Bio</div>
+			<div>
+				Hi! I\'m an agent/collector
+			</div>
+		</div>
+		<div class="mb-4">
+			<div class="form-label">Email</div>
+			<a href="javascript:;" class="text-body"> ' . $row["admin_email"] . ' </a>
+		</div>
+		<div class="mb-4">
+			<div class="form-label">Phone</div>
+			<a href="tel:+1234567890" class="text-body"> ' . $row["admin_phone"] . ' </a>
+		</div>
+
+		<div class="card border-transparent">
+			<div class="card-body py-0">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item px-0">
+						<div class="row align-items-center">
+							<div class="col-auto">
+								<span class="material-symbols-outlined text-body-tertiary">credit_card</span>
+							</div>
+							<div class="col">Joined at <small class="text-body-secondary ms-1">(' . pretty_date($row["created_at"]) . ')</small></div>
+						</div>
+					</li>
+					<li class="list-group-item px-0">
+						<div class="row align-items-center">
+							<div class="col-auto">
+								<span class="material-symbols-outlined text-body-tertiary">credit_card</span>
+							</div>
+							<div class="col">Last login <small class="text-body-secondary ms-1">(' . pretty_date($row["updated_at"]) . ')</small></div>
+							<div class="col-auto">
+								<span class="badge bg-success-subtle text-success">' . date("F j, Y, g:i a") . '</span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	';
+
+	return $output;
+}
+
+
+
 
 
 ////////////////// COLECTOR
-function collectorLogin($collector_id) {
-	$_SESSION['PRSCOLLECTOR'] = $collector_id;
-	global $dbConnection;
+// function collectorLogin($collector_id) {
+// 	$_SESSION['PRSCOLLECTOR'] = $collector_id;
+// 	global $dbConnection;
 
-	$data = array(date("Y-m-d H:i:s"), $collector_id);
-	$query = "
-		UPDATE collectors 
-		SET updated_at = ? 
-		WHERE collector_id = ?
-	";
-	$statement = $dbConnection->prepare($query);
-	$result = $statement->execute($data);
-	if (isset($result)) {
+// 	$data = array(date("Y-m-d H:i:s"), $collector_id);
+// 	$query = "
+// 		UPDATE collectors 
+// 		SET updated_at = ? 
+// 		WHERE collector_id = ?
+// 	";
+// 	$statement = $dbConnection->prepare($query);
+// 	$result = $statement->execute($data);
+// 	if (isset($result)) {
 		
-		$log_message = 'Collector [' . $collector_id . '] has logged in!';
-    	add_to_log($log_message, $collector_id, 'collector');
+// 		$log_message = 'Collector [' . $collector_id . '] has logged in!';
+//     	add_to_log($log_message, $collector_id, 'collector');
 		
-		// get other details
-		$a = getBrowserAndOs();
-		$a = json_decode($a);
+// 		// get other details
+// 		$a = getBrowserAndOs();
+// 		$a = json_decode($a);
 
-		$browser = $a->browser;
-		$operatingSystem = $a->operatingSystem;
-		$refferer = $a->refferer;
+// 		$browser = $a->browser;
+// 		$operatingSystem = $a->operatingSystem;
+// 		$refferer = $a->refferer;
 
-		// insert into login details table
-		$SQL = "
-			INSERT INTO `susu_login_details`(`login_details_id`, `login_details_person`, `login_details_person_id`, `login_details_device`, `login_details_os`, `login_details_refferer`, `login_details_browser`, `login_details_ip`) 
-			VALUE (?, ?, ?, ?, ?, ?, ?, ?)
-		";
-		$statement = $dbConnection->prepare($SQL);
-		$statement->execute([
-			guidv4() . '-' . strtotime(date("Y-m-d H:m:s")), 
-			'collector',
-			$collector_id, 
-			getDeviceType(), 
-			$operatingSystem, 
-			$refferer, 
-			$browser, 
-			getIPAddress(),
-		]);
+// 		// insert into login details table
+// 		$SQL = "
+// 			INSERT INTO `susu_login_details`(`login_details_id`, `login_details_person`, `login_details_person_id`, `login_details_device`, `login_details_os`, `login_details_refferer`, `login_details_browser`, `login_details_ip`) 
+// 			VALUE (?, ?, ?, ?, ?, ?, ?, ?)
+// 		";
+// 		$statement = $dbConnection->prepare($SQL);
+// 		$statement->execute([
+// 			guidv4() . '-' . strtotime(date("Y-m-d H:m:s")), 
+// 			'collector',
+// 			$collector_id, 
+// 			getDeviceType(), 
+// 			$operatingSystem, 
+// 			$refferer, 
+// 			$browser, 
+// 			getIPAddress(),
+// 		]);
 
-		$_SESSION['last_activity'] = time();
-		$_SESSION['flash_success'] = 'You are now logged in!';
-		redirect(PROOT . 'index');
-	}
-}
+// 		$_SESSION['last_activity'] = time();
+// 		$_SESSION['flash_success'] = 'You are now logged in!';
+// 		redirect(PROOT . 'index');
+// 	}
+// }
 
-function collector_is_logged_in() {
-	if (isset($_SESSION['PRSCOLLECTOR']) && $_SESSION['PRSCOLLECTOR'] > 0) {
-		return true;
-	}
-	return false;
-}
+// function collector_is_logged_in() {
+// 	if (isset($_SESSION['PRSCOLLECTOR']) && $_SESSION['PRSCOLLECTOR'] > 0) {
+// 		return true;
+// 	}
+// 	return false;
+// }
 
-// Redirect collector if !logged in
-function collector_login_redirect($url = 'auth/sign-out') {
-	$_SESSION['flash_error'] = 'You must be logged in to access that page.';
-	redirect(PROOT . $url);
-}
+// // Redirect collector if !logged in
+// function collector_login_redirect($url = 'auth/sign-out') {
+// 	$_SESSION['flash_error'] = 'You must be logged in to access that page.';
+// 	redirect(PROOT . $url);
+// }
 
-// get collector by email
-function findCollectorByEmail($email) {
-    global $dbConnection;
+// // get collector by email
+// function findCollectorByEmail($email) {
+//     global $dbConnection;
 
-    $query = "
-        SELECT * FROM collectors 
-        WHERE collector_email = ? 
-		-- AND admin_status = ? 
-		LIMIT 1
-    ";
-    $statement = $dbConnection->prepare($query);
-    $statement->execute([$email]);
-    $user = $statement->fetch(PDO::FETCH_OBJ);
-    return $user;
-}
+//     $query = "
+//         SELECT * FROM collectors 
+//         WHERE collector_email = ? 
+// 		-- AND admin_status = ? 
+// 		LIMIT 1
+//     ";
+//     $statement = $dbConnection->prepare($query);
+//     $statement->execute([$email]);
+//     $user = $statement->fetch(PDO::FETCH_OBJ);
+//     return $user;
+// }
 
 
 
@@ -539,94 +608,94 @@ function processMonthlyCommission($customer_id) {
 
 
 ////////////////////////////////// COLLECTORS
-function findCollectorByID($id) {
-    global $dbConnection;
+// function findCollectorByID($id) {
+//     global $dbConnection;
 
-    $query = "
-        SELECT * FROM collectors 
-        WHERE collector_id = ? 
-		AND collector_status = ? 
-		LIMIT 1
-    ";
-    $statement = $dbConnection->prepare($query);
-    $statement->execute([$id, 'active']);
-    $collector = $statement->fetch(PDO::FETCH_OBJ);
-    return $collector;
-}
+//     $query = "
+//         SELECT * FROM collectors 
+//         WHERE collector_id = ? 
+// 		AND collector_status = ? 
+// 		LIMIT 1
+//     ";
+//     $statement = $dbConnection->prepare($query);
+//     $statement->execute([$id, 'active']);
+//     $collector = $statement->fetch(PDO::FETCH_OBJ);
+//     return $collector;
+// }
 
-// GET ADMIN PROFILE DETAILS
-function get_collector_profile($id) {
-	global $dbConnection;
-	$output = '';
+// // GET ADMIN PROFILE DETAILS
+// function get_collector_profile($id) {
+// 	global $dbConnection;
+// 	$output = '';
 
-	$query = "
-		SELECT * FROM collectors 
-		WHERE collector_id = ? 
-		AND collector_status = ? 
-		LIMIT 1
-	";
-	$statement = $dbConnection->prepare($query);
-	$statement->execute([$id, 'active']);
-	$rows = $statement->fetchAll();
-	$row = $rows[0];
+// 	$query = "
+// 		SELECT * FROM collectors 
+// 		WHERE collector_id = ? 
+// 		AND collector_status = ? 
+// 		LIMIT 1
+// 	";
+// 	$statement = $dbConnection->prepare($query);
+// 	$statement->execute([$id, 'active']);
+// 	$rows = $statement->fetchAll();
+// 	$row = $rows[0];
 
-	$output = '
-		<div class="row align-items-center">
-			<div class="col-auto">
-				<div class="avatar avatar-xl">
-					<img class="avatar-img" src="' . (($row["collector_photo"] == NULL) ? 'assets/media/avatar.png' : PROOT . '/'.$row["collector_photo"]) . '" alt="..." />
-				</div>
-			</div>
-			<div class="col">
-				<h2 class="fs-5 mb-0"> ' . ucwords($row["collector_name"]) . ' </h2>
-				<div class="text-body-secondary"> Collector (Agent) </div>
-			</div>
-		</div>
-		<hr />
-		<div class="mb-4">
-			<div class="form-label">Bio</div>
-			<div>
-				Hi! I\'m an agent/collector
-			</div>
-		</div>
-		<div class="mb-4">
-			<div class="form-label">Email</div>
-			<a href="javascript:;" class="text-body"> ' . $row["collector_email"] . ' </a>
-		</div>
-		<div class="mb-4">
-			<div class="form-label">Phone</div>
-			<a href="tel:+1234567890" class="text-body"> ' . $row["collector_phone"] . ' </a>
-		</div>
+// 	$output = '
+// 		<div class="row align-items-center">
+// 			<div class="col-auto">
+// 				<div class="avatar avatar-xl">
+// 					<img class="avatar-img" src="' . (($row["collector_photo"] == NULL) ? 'assets/media/avatar.png' : PROOT . '/'.$row["collector_photo"]) . '" alt="..." />
+// 				</div>
+// 			</div>
+// 			<div class="col">
+// 				<h2 class="fs-5 mb-0"> ' . ucwords($row["collector_name"]) . ' </h2>
+// 				<div class="text-body-secondary"> Collector (Agent) </div>
+// 			</div>
+// 		</div>
+// 		<hr />
+// 		<div class="mb-4">
+// 			<div class="form-label">Bio</div>
+// 			<div>
+// 				Hi! I\'m an agent/collector
+// 			</div>
+// 		</div>
+// 		<div class="mb-4">
+// 			<div class="form-label">Email</div>
+// 			<a href="javascript:;" class="text-body"> ' . $row["collector_email"] . ' </a>
+// 		</div>
+// 		<div class="mb-4">
+// 			<div class="form-label">Phone</div>
+// 			<a href="tel:+1234567890" class="text-body"> ' . $row["collector_phone"] . ' </a>
+// 		</div>
 
-		<div class="card border-transparent">
-			<div class="card-body py-0">
-				<ul class="list-group list-group-flush">
-					<li class="list-group-item px-0">
-						<div class="row align-items-center">
-							<div class="col-auto">
-								<span class="material-symbols-outlined text-body-tertiary">credit_card</span>
-							</div>
-							<div class="col">Joined at <small class="text-body-secondary ms-1">(' . pretty_date($row["created_at"]) . ')</small></div>
-						</div>
-					</li>
-					<li class="list-group-item px-0">
-						<div class="row align-items-center">
-							<div class="col-auto">
-								<span class="material-symbols-outlined text-body-tertiary">credit_card</span>
-							</div>
-							<div class="col">Last login <small class="text-body-secondary ms-1">(' . pretty_date($row["updated_at"]) . ')</small></div>
-							<div class="col-auto">
-								<span class="badge bg-success-subtle text-success">' . date("F j, Y, g:i a") . '</span>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
-	';
+// 		<div class="card border-transparent">
+// 			<div class="card-body py-0">
+// 				<ul class="list-group list-group-flush">
+// 					<li class="list-group-item px-0">
+// 						<div class="row align-items-center">
+// 							<div class="col-auto">
+// 								<span class="material-symbols-outlined text-body-tertiary">credit_card</span>
+// 							</div>
+// 							<div class="col">Joined at <small class="text-body-secondary ms-1">(' . pretty_date($row["created_at"]) . ')</small></div>
+// 						</div>
+// 					</li>
+// 					<li class="list-group-item px-0">
+// 						<div class="row align-items-center">
+// 							<div class="col-auto">
+// 								<span class="material-symbols-outlined text-body-tertiary">credit_card</span>
+// 							</div>
+// 							<div class="col">Last login <small class="text-body-secondary ms-1">(' . pretty_date($row["updated_at"]) . ')</small></div>
+// 							<div class="col-auto">
+// 								<span class="badge bg-success-subtle text-success">' . date("F j, Y, g:i a") . '</span>
+// 							</div>
+// 						</div>
+// 					</li>
+// 				</ul>
+// 			</div>
+// 		</div>
+// 	';
 
-	return $output;
-}
+// 	return $output;
+// }
 
 
 

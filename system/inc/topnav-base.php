@@ -17,13 +17,7 @@
                             <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
                         </span>
                         <span class="d-none d-xl-block">
-                            <?php 
-                                if (admin_has_permission()) {
-                                    echo ucwords($admin_data['admin_name']);
-                                } elseif (collector_is_logged_in()) {
-                                    echo ucwords($collector_data['collector_name']);
-                                }
-                            ?>
+                            <?= ucwords($admin_data['admin_name']); ?>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">

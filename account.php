@@ -73,11 +73,8 @@
 
                             <?php 
                                 if (admin_is_logged_in()) {
-                                    echo get_admin_profile($collector_id); 
-                                } elseif (collector_is_logged_in()) {
-                                    echo get_collector_profile($collector_id); 
+                                    echo get_admin_profile($admin_id); 
                                 }
-                            
                             ?>
 
                         </div>
