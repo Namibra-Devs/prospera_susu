@@ -167,22 +167,22 @@
                 <hr class="mt-0 mb-8" />
 
                 <!-- Year Filter -->
-  <div class="mb-3">
-    <label for="yearSelect" class="form-label">Select Year:</label>
-    <select id="yearSelect" class="form-select w-auto d-inline-block">
-      <!-- Years will be inserted dynamically -->
-    </select>
-  </div>
+                <div class="mb-3">
+                    <label for="yearSelect" class="form-label">Select Year:</label>
+                    <select id="yearSelect" class="form-select w-auto d-inline-block">
+                    <!-- Years will be inserted dynamically -->
+                    </select>
+                </div>
 
-  <!-- Chart -->
-  <canvas id="financeChart" height="100"></canvas>
+                <!-- Chart -->
+                <canvas id="financeChart" height="100"></canvas>
 
 
 
                 <!-- Chart -->
-                <div class="chart">
+                <!-- <div class="chart">
                     <canvas class="chart-canvas" id="saasPerformanceChart"></canvas>
-                </div>
+                </div> -->
 
 
 
@@ -741,70 +741,74 @@
         const withdrawals = Array(12).fill(0);
         const commissions = Array(12).fill(0);
 
-      for (let m in data.deposits) deposits[m-1] = parseFloat(data.deposits[m]);
-      for (let m in data.withdrawals) withdrawals[m-1] = parseFloat(data.withdrawals[m]);
-      for (let m in data.commissions) commissions[m-1] = parseFloat(data.commissions[m]);
+        for (let m in data.deposits) deposits[m-1] = parseFloat(data.deposits[m]);
+        for (let m in data.withdrawals) withdrawals[m-1] = parseFloat(data.withdrawals[m]);
+        for (let m in data.commissions) commissions[m-1] = parseFloat(data.commissions[m]);
 
-      if (financeChart) financeChart.destroy(); // Destroy old chart
+        console.log("Deposits:", deposits);
+        console.log("Withdrawals:", withdrawals);
+        console.log("Commissions:", commissions);
 
-      financeChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: months,
-          datasets: [
-            {
-              label: "Deposits",
-              data: deposits,
-              borderColor: "green",
-              backgroundColor: "rgba(0,128,0,0.2)",
-              fill: true,
-              tension: 0.3
+        if (financeChart) financeChart.destroy(); // Destroy old chart
+
+        financeChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+            labels: months,
+            datasets: [
+                {
+                    label: "Deposits",
+                    data: deposits,
+                    borderColor: "green",
+                    backgroundColor: "rgba(0,128,0,0.2)",
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: "Withdrawals",
+                    data: withdrawals,
+                    borderColor: "red",
+                    backgroundColor: "rgba(255,0,0,0.2)",
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: "Commissions",
+                    data: commissions,
+                    borderColor: "blue",
+                    backgroundColor: "rgba(0,0,255,0.2)",
+                    fill: true,
+                    tension: 0.3
+                }
+            ]
             },
-            {
-              label: "Withdrawals",
-              data: withdrawals,
-              borderColor: "red",
-              backgroundColor: "rgba(255,0,0,0.2)",
-              fill: true,
-              tension: 0.3
-            },
-            {
-              label: "Commissions",
-              data: commissions,
-              borderColor: "blue",
-              backgroundColor: "rgba(0,0,255,0.2)",
-              fill: true,
-              tension: 0.3
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `Financial Summary for ${year}`
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: "Amount (GHS)" }
+                    }
+                }
             }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            title: {
-              display: true,
-              text: `Financial Summary for ${year}`
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: { display: true, text: "Amount (GHS)" }
-            }
-          }
-        }
-      });
+        });
     }
 
     // Populate year selector
     const currentYear = new Date().getFullYear();
     const yearSelect = document.getElementById("yearSelect");
     for (let y = currentYear; y >= currentYear - 5; y--) {
-      const opt = document.createElement("option");
-      opt.value = y;
-      opt.text = y;
-      if (y === currentYear) opt.selected = true;
-      yearSelect.appendChild(opt);
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.text = y;
+        if (y === currentYear) opt.selected = true;
+        yearSelect.appendChild(opt);
     }
 
     // Load initial chart
