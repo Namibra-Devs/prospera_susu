@@ -146,30 +146,64 @@
                     </div>
                 </div>
 
-            <!-- Tabs -->
-            <ul class="nav nav-underline">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link py-5 active" data-bs-toggle="tab" data-saas-performance-chart-type="revenue" type="button" aria-selected="true">
-                    Revenue
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="users" type="button" aria-selected="false">
-                    Active users
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="churn" type="button" aria-selected="false">Churn rate</button>
-                </li>
-            </ul>
+                <!-- Tabs -->
+                <ul class="nav nav-underline">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-5 active" data-bs-toggle="tab" data-saas-performance-chart-type="revenue" type="button" aria-selected="true">
+                        Revenue
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="users" type="button" aria-selected="false">
+                        Active users
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="churn" type="button" aria-selected="false">Churn rate</button>
+                    </li>
+                </ul>
 
-            <!-- Divider -->
-            <hr class="mt-0 mb-8" />
+                <!-- Divider -->
+                <hr class="mt-0 mb-8" />
 
-            <!-- Chart -->
-            <div class="chart">
-                <canvas class="chart-canvas" id="saasPerformanceChart"></canvas>
-            </div>
+                <!-- Year Filter -->
+  <div class="mb-3">
+    <label for="yearSelect" class="form-label">Select Year:</label>
+    <select id="yearSelect" class="form-select w-auto d-inline-block">
+      <!-- Years will be inserted dynamically -->
+    </select>
+  </div>
+
+  <!-- Chart -->
+  <canvas id="financeChart" height="100"></canvas>
+
+
+
+                <!-- Chart -->
+                <div class="chart">
+                    <canvas class="chart-canvas" id="saasPerformanceChart"></canvas>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <!-- Divider -->
         <hr class="my-8" />
@@ -690,3 +724,92 @@
 
     });
 </script>
+
+<script>
+    const ctx = document.getElementById('financeChart').getContext('2d');
+    let financeChart;
+
+    // Months labels
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+    // Function to load data
+    async function loadChart(year) {
+        const res = await fetch(`app/controller/analytics.php?year=${year}`);
+        const data = await res.json();
+
+        const deposits = Array(12).fill(0);
+        const withdrawals = Array(12).fill(0);
+        const commissions = Array(12).fill(0);
+
+      for (let m in data.deposits) deposits[m-1] = parseFloat(data.deposits[m]);
+      for (let m in data.withdrawals) withdrawals[m-1] = parseFloat(data.withdrawals[m]);
+      for (let m in data.commissions) commissions[m-1] = parseFloat(data.commissions[m]);
+
+      if (financeChart) financeChart.destroy(); // Destroy old chart
+
+      financeChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: "Deposits",
+              data: deposits,
+              borderColor: "green",
+              backgroundColor: "rgba(0,128,0,0.2)",
+              fill: true,
+              tension: 0.3
+            },
+            {
+              label: "Withdrawals",
+              data: withdrawals,
+              borderColor: "red",
+              backgroundColor: "rgba(255,0,0,0.2)",
+              fill: true,
+              tension: 0.3
+            },
+            {
+              label: "Commissions",
+              data: commissions,
+              borderColor: "blue",
+              backgroundColor: "rgba(0,0,255,0.2)",
+              fill: true,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: `Financial Summary for ${year}`
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: "Amount (GHS)" }
+            }
+          }
+        }
+      });
+    }
+
+    // Populate year selector
+    const currentYear = new Date().getFullYear();
+    const yearSelect = document.getElementById("yearSelect");
+    for (let y = currentYear; y >= currentYear - 5; y--) {
+      const opt = document.createElement("option");
+      opt.value = y;
+      opt.text = y;
+      if (y === currentYear) opt.selected = true;
+      yearSelect.appendChild(opt);
+    }
+
+    // Load initial chart
+    loadChart(currentYear);
+
+    // Reload on year change
+    yearSelect.addEventListener("change", e => loadChart(e.target.value));
+  </script>
