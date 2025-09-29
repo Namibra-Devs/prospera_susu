@@ -2,3 +2,19 @@
     border-color: tomato !important;
     box-shadow: 0 0 transparent, 0 0 0 .25rem #d22d2d1c !important;
 }
+
+.w-rem-40 {
+    width: 10rem !important;
+}
+
+.w-rem-50 {
+    width: 15rem !important;
+}
+
+.h-rem-6 {
+    height: 1.5rem !important;
+}
+
+.w-rem-6 {
+    width: 1.5rem !important;
+}
