@@ -60,10 +60,29 @@
         return $row['total_customers'] ? $row['total_customers'] : 0;
     }
 
+    //
+    // Deposite status
+    if (isset($_GET['d']) && !empty($_GET['d'])) {
+        if (isset($_GET['approved']) && !empty($_GET['approved'])) {
+            $approved_id = sanitize($_GET['approved']);
+
+            $sql = $dbConnection->query("UPDATE savings SET saving_status = 'Approved' WHERE saving_id = '".$approved_id."'")->execute();
+            if ($sql) {
+                $log_message =  'Admin [' . $admin_id . '] has set deposit [' . $approved_id . '] status to Approved!';
+                add_to_log($log_message, $admin_id, 'admin');
+                $_SESSION['flash_success'] = $log_message;
+                redirect(PROOT . 'app/transactions');
+            } else {
+                $_SESSION['flash_success'] = 'Could\'nt update deposit status to Approved!';
+                redirect(PROOT . 'app/transactions');
+            }
+        }
+    }
+
 
     //
     // withdrawal paid
-    if(isset($_GET['w']) && !empty($_GET['w'])) {
+    if (isset($_GET['w']) && !empty($_GET['w'])) {
 
         // set withdrawal status to paid
         if (isset($_GET['paid']) && !empty($_GET['paid'])) {
