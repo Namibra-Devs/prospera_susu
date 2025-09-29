@@ -102,7 +102,7 @@
                     <!-- Nav -->
                     <nav class="nav nav-pills position-sticky flex-column mb-8" id="accountNav" style="top: 2rem">
                         <a class="nav-link" href="<?= PROOT; ?>account/profile">General</a>
-                        <a class="nav-link" href="<?= PROOT; ?>account/settings">Update account</a>
+                        <a class="nav-link active" aria-current="page" href="<?= PROOT; ?>account/settings">Update account</a>
                         <a class="nav-link" href="<?= PROOT; ?>account/change-password">Change password</a>
                         <a class="nav-link text-danger" href="<?= PROOT; ?>auth/logout">Logout</a>
                     </nav>
@@ -230,7 +230,8 @@
                     tempuploded_file_id : tempuploded_file_id
                 },
                 success: function(data) {
-                    location.reload();
+                    alert(data);
+                    // location.reload();
                 }
             });
         });

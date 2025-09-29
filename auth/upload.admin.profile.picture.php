@@ -1,6 +1,6 @@
 <?php 
 
-	// Upload user profile
+	// Upload admin profile
 
     require ('../system/DatabaseConnector.php');
 
@@ -12,24 +12,29 @@
 
 		$name = md5(microtime()) . '.' . $extention;
 
-		$name = 'assets/media/users-profile/' . $name;
+		$uploadDir =  '../../assets/media/uploads/admin-media/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+		$name = $uploadDir . $name;
 
 		$location = BASEURL . $name;
 
-		//check if user dexist
+		//check if admin dexist
 		$move = move_uploaded_file($_FILES["file_upload"]["tmp_name"], $location);
 		if ($move) {
 			$sql = "
-				UPDATE levina_users 
-				SET user_profile = ?
-				WHERE user_id  = ? 
+				UPDATE susu_admin 
+				SET admin_profile = ?
+				WHERE admin_id  = ? 
 			";
 			$statement = $dbConnection->prepare($sql);
-			$result = $statement->execute([$name, $user_data['user_id']]);
+			$result = $statement->execute([$name, $admin_data['admin_id']]);
 
 			if (isset($result)) {
-				$message = "updated profile picture";
-                // add_to_log($message, $user_data['user_id']);
+				$log_message = 'Admin [' . $admin_id . '] has updated profile picture!';
+                add_to_log($message, $admin_data['admin_id'], 'admin');
 
 				echo '';
 			}
