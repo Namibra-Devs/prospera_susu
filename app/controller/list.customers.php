@@ -18,8 +18,8 @@ $conn = $dbConnection;
 
     $query = "SELECT * FROM customers WHERE ";
 	// check if a collector is logged in, then show only their customers
-	if (collector_is_logged_in()) {
-		$query .= " customer_added_by = 'collector' AND customer_collector_id = '". $collector_id . "' ";
+	if (admin_has_permission('collector') && !admin_has_permission('admin')) {
+		$query .= " customer_added_by = 'collector' AND customer_collector_id = '". $admin_id . "' ";
 	}
 
 	// search query

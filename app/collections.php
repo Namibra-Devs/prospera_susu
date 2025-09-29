@@ -457,10 +457,7 @@
                     </div>
                 </div>
             </div>
-
             
-
-
             <!-- Page content -->
             <div class="row">
                 <div class="col-12">

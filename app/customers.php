@@ -346,7 +346,7 @@
                         <span class="badge bg-danger">Commission</span>
                     </div>
                 </div>
-                
+
                 <div class="d-flex justify-content-between mb-3">
                     <button class="btn btn-link" id="prevCycle">← Previous</button>
                     <h5 id="cycleLabel" class="mb-0"></h5>
@@ -607,11 +607,18 @@
                     <!-- Heading -->
                     <h1 class="fs-4 mb-0">Customers</h1>
                 </div>
-                    <div class="col-12 col-sm-auto mt-4 mt-sm-0">
-                        <!-- Action -->
-                        <a class="btn btn-secondary d-block" href="<?= PROOT; ?>app/customer-new">
-                        <span class="material-symbols-outlined me-1">add</span> New customer
-                    </a>
+                <div class="col-12 col-sm-auto mt-4 mt-sm-0">
+                    <!-- Action -->
+                    <div class="row gx-2">
+                        <div class="col-6 col-sm-auto">
+                            <a class="btn btn-secondary d-block" href="<?= PROOT; ?>app/customer-new">
+                                <span class="material-symbols-outlined me-1">add</span> New customer
+                            </a>
+                        </div>
+                        <div class="col-6 col-sm-auto">
+                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
