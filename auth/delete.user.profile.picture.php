@@ -11,16 +11,16 @@
 		$unlink = unlink($tempuploded_img_id_filePath);
 		if ($unlink) {
 			$sql = "
-				UPDATE levina_users 
+				UPDATE susu_admins 
 				SET user_profile = ? 
-				WHERE user_id = ?
+				WHERE admin_id = ?
 			";
 			$statement = $dbConnection->prepare($sql);
-			$result = $statement->execute([NULL, $user_data['user_id']]);
+			$result = $statement->execute([NULL, $admin_data['admin_id']]);
 			if (isset($result)) {
 				
-				$message = "deleted profile picture";
-                // add_to_log($message, $user_data['user_id']);
+				$log_message = 'Admin [' . $admin_id . '] has deleted profile picture!';
+                add_to_log($message, $user_data['user_id'], 'admin');
 
 				echo '';
 			}

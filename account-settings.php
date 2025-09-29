@@ -83,8 +83,16 @@
                     <h1 class="fs-5 mb-0">Account</h1>
                 </div>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
+                    <div class="row gx-2">
                     <!-- Action -->
-                    <button class="btn btn-warning d-block" id="submitForm"> Save </button>
+                    <div class="col-6 col-sm-auto">
+                        <button class="btn btn-warning d-block" id="submitForm"> Save </button>
+                    </div>
+                    <div class="col-6 col-sm-auto">
+                        <div class="col-6 col-sm-auto">
+                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
