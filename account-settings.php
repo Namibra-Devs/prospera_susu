@@ -122,7 +122,7 @@
                                     <div class="" id="upload_profile">
                                         <div class="d-flex align-items-center">
                                             <a href="<?= (($admin_data['admin_profile'] != NULL) ? PROOT . $admin_data['admin_profile'] : 'javascript:;'); ?>" class="avatar avatar-lg bg-warning rounded-circle text-white">
-                                                <img src="<?= PROOT . (($admin_data['admin_profile'] == NULL) ? 'assets/media/avatar.png' : 'assets/media/uploads/collectors-media/' . basename($admin_data['admin_profile'])); ?>" style="object-fit: cover; object-position: center; width: 35px; height: 35px" alt="<?=ucwords($admin_data['admin_name']); ?>'s profile.">
+                                                <img src="<?= PROOT . (($admin_data['admin_profile'] == NULL) ? 'assets/media/avatar.png' : 'assets/media/uploads/admin-media/' . basename($admin_data['admin_profile'])); ?>" style="object-fit: cover; object-position: center; width: 35px; height: 35px" alt="<?=ucwords($admin_data['admin_name']); ?>'s profile.">
                                             </a>
                                             <div class="hstack gap-2 ms-5">
                                                 <?php if ($admin_data['admin_profile'] == NULL): ?>
