@@ -531,7 +531,7 @@
             var formData = $(this).serialize(); // Serialize the form data
             $.ajax({
                 type: 'POST',
-                url: 'controller/transaction.withdraw.php',
+                url: '<?= PROOT; ?>app/controller/transaction.withdraw.php',
                 data: formData,
                 beforeSend: function() {
                     $this.find('#w-submit-transaction').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
@@ -574,7 +574,7 @@
         });
 
         // reset form  if add transaction modal is closed
-        $('#transactionModal').on('hidden.bs.modal', function () {
+        $('#withdrawalModal').on('hidden.bs.modal', function () {
             // reset form
             $('#add-withdrawal-form')[0].reset();
             // show first step
@@ -586,8 +586,9 @@
             // change back button to next step button
             $('#w_back_step').hide();
             $('#w_next_step').show();
-            // hide submit button
-            $('#w-submit-transaction').hide();
+            
+            $('#w-submit-transaction').attr('disabled', false).html('Withdraw now');
+            $('#w-submit-transaction').hide(); // hide submit button
         });
     
     </script>

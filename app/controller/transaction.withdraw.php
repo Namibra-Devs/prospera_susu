@@ -30,7 +30,7 @@
         }
 
         // account balance
-        $a = getCustomerBalance(0, $account_number);
+        $a = getCustomerBalance(0, $customer_account_number);
         $b = $a['balance'];
 
         if ((float)$transaction_balance !== (float)$b) {
@@ -40,6 +40,7 @@
         if ((float)$transaction_amount > (float)$b) {
             $errors = 'Amount to withdraw is greater that balance available !';
         }
+        $new_balance = (float)($b - $transaction_amount);
 
         // validate inputs
         $required = array('withdrawal_select_customer', 'amount-to-withdraw', 'withdrawal_payment_mode', 'withdrawal_today_date');
@@ -60,7 +61,7 @@
                 // do nothing
             } else {
             
-                $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $admin_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
+                $stmt->execute([$unique_id, $find_customer_row->customer_id, $customer_account_number, $new_balance, $admin_id, $transaction_amount, $transaction_date, $transaction_note, $payment_mode]);
 
                 if ($stmt) {
                     // 
