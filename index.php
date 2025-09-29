@@ -148,19 +148,19 @@
 
             <!-- Tabs -->
             <ul class="nav nav-underline">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link py-5 active" data-bs-toggle="tab" data-saas-performance-chart-type="revenue" type="button" aria-selected="true">
-                Revenue
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="users" type="button" aria-selected="false">
-                Active users
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="churn" type="button" aria-selected="false">Churn rate</button>
-            </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link py-5 active" data-bs-toggle="tab" data-saas-performance-chart-type="revenue" type="button" aria-selected="true">
+                    Revenue
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="users" type="button" aria-selected="false">
+                    Active users
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="churn" type="button" aria-selected="false">Churn rate</button>
+                </li>
             </ul>
 
             <!-- Divider -->
@@ -168,7 +168,7 @@
 
             <!-- Chart -->
             <div class="chart">
-            <canvas class="chart-canvas" id="saasPerformanceChart"></canvas>
+                <canvas class="chart-canvas" id="saasPerformanceChart"></canvas>
             </div>
 
         <!-- Divider -->
