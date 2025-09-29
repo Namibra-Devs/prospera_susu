@@ -1,14 +1,10 @@
 <?php 
     require ('../system/DatabaseConnector.php');
-    
-	// Check if the user is logged in
-	// if (!admin_is_logged_in()) {
-	// 	admin_login_redirect();
-	// }
-
-    // Check if the admin or collector is logged in
+        
+        // Check if the admin or collector is logged in
     if (!admin_is_logged_in()) {
-        redirect(PROOT . 'auth/sign-in');
+        admin_login_redirect();
+        //redirect(PROOT . 'auth/sign-in');
     }
 
     $title = 'Transactions | ';

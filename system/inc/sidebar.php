@@ -936,6 +936,24 @@
                             </div>
                         </div>
                         <?php endif; ?>
+                        <div class="nav-item">
+                            <a
+                            class="nav-link nav-logs"
+                            href="#"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#logs"
+                            role="button"
+                            aria-expanded="false"
+                            aria-controls="logs"
+                            >
+                                <span class="material-symbols-outlined me-3">list_alt</span> Logs
+                            </a>
+                            <div class="collapse " id="logs">
+                                <nav class="nav nav-pills">
+                                    <a class="nav-link sub-nav-logs" href="<?= PROOT; ?>app/logs">Logs </a>
+                                </nav>
+                            </div>
+                        </div>
                     </nav>
             
                     <!-- Heading -->

@@ -123,6 +123,20 @@
             $('.nav-collections').attr('aria-expanded', true);
             $('#collections').addClass('show');
         }
+
+        // logs
+        if (window.location.href.indexOf("logs") > -1) {
+            $('.nav-logs').addClass('active');
+            $('.sub-nav-logs').addClass('active');
+            $('.nav-logs').attr('aria-expanded', true);
+            $('#logs').addClass('show');
+        }
+        // if (window.location.href.indexOf("collection-archive") > -1) {
+        //     $('.nav-collections').addClass('active');
+        //     $('.sub-nav-archived-collections').addClass('active');
+        //     $('.nav-collections').attr('aria-expanded', true);
+        //     $('#collections').addClass('show');
+        // }
         
         // admins
         if (window.location.href.indexOf("admins") > -1 || (window.location.href.indexOf("admin-new") > -1)) {
