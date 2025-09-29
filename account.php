@@ -44,10 +44,10 @@
                     <!-- Action -->
                     <div class="row gx-2">
                         <div class="col-6 col-sm-auto">
-                            <a class="btn btn-danger d-block" href="<?= PROOT; ?>account/settings"> Edit </a>
+                            <a class="btn btn-danger d-block" href="<?= PROOT; ?>account-settings"> Edit </a>
                         </div>
                         <div class="col-6 col-sm-auto">
-                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"> Go back </a>
+                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
                         </div>
                     </div>
                 </div>
@@ -71,11 +71,7 @@
                     <section class="card bg-body-tertiary border-transparent mb-5" id="general">
                         <div class="card-body">
 
-                            <?php 
-                                if (admin_is_logged_in()) {
-                                    echo get_admin_profile($admin_id); 
-                                }
-                            ?>
+                            <?= get_admin_profile($admin_id); ?>
 
                         </div>
                     </section>

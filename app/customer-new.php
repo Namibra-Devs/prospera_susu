@@ -6,7 +6,7 @@
 	// 	admin_login_redirect();
 	// }
 
-    if (!admin_is_logged_in() && !collector_is_logged_in()) {
+    if (!admin_is_logged_in()) {
         redirect(PROOT . 'auth/sign-in');
     }
 
@@ -197,7 +197,7 @@
 
                     <!-- Action -->
                     <a class="btn btn-light w-100" href="<?= goBack(); ?>">
-                        Go back
+                        <span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back
                     </a>
 
                 </div>
@@ -221,8 +221,7 @@
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="phone">Phone</label>
-                                    <input type="text" class="form-control bg-body mb-3" name="phone" id="phone" placeholder="(___)___-____"
-                                    data-inputmask="'mask': '(999)999-9999'" value="<?= $phone; ?>" required>
+                                    <input type="text" class="form-control bg-body mb-3" name="phone" id="phone" placeholder="(___)___-____" data-inputmask="'mask': '(999)999-9999'" value="<?= $phone; ?>" required>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="email">Email</label>

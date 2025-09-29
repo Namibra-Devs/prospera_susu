@@ -36,16 +36,16 @@
         } else {
             $data = [$admin_fullname, $admin_email, $admin_phone, $admin_data['admin_id']];
             $query = "
-                UPDATE giltmarket_admin 
-                SET admin_fullname = ?, admin_email = ?, admin_phone = ?  
+                UPDATE susu_admins 
+                SET admin_name = ?, admin_email = ?, admin_phone = ?  
                 WHERE admin_id = ?
             ";
             $statement = $conn->prepare($query);
             $result = $statement->execute($data);
             if (isset($result)) {
 
-                $message = "updated profile details";
-                add_to_log($message, $admin_data['admin_id']);
+                $log_message = 'Admin [' . $admin_id . '] has updated profile details!';
+                add_to_log($message, $admin_data['admin_id'], 'admin');
 
                 $_SESSION['flash_success'] = 'Admin has been updated!';
                 redirect(PROOT . "account/profile");
@@ -114,7 +114,7 @@
                                     <div class="" id="upload_profile">
                                         <div class="d-flex align-items-center">
                                             <a href="<?= (($admin_data['admin_profile'] != NULL) ? PROOT . $admin_data['admin_profile'] : 'javascript:;'); ?>" class="avatar avatar-lg bg-warning rounded-circle text-white">
-                                                <img src="<?= PROOT . (($admin_data['admin_profile'] == NULL) ? 'assets/media/avatar.png' : $admin_data['admin_profile']); ?>" style="object-fit: cover; object-position: center; width: 35px; height: 35px" alt="<?=ucwords($admin_data['admin_name']); ?>'s profile.">
+                                                <img src="<?= PROOT . (($admin_data['admin_profile'] == NULL) ? 'assets/media/avatar.png' : 'assets/media/uploads/collectors-media/' . basename($admin_data['admin_profile'])); ?>" style="object-fit: cover; object-position: center; width: 35px; height: 35px" alt="<?=ucwords($admin_data['admin_name']); ?>'s profile.">
                                             </a>
                                             <div class="hstack gap-2 ms-5">
                                                 <?php if ($admin_data['admin_profile'] == NULL): ?>
@@ -143,7 +143,7 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="" class="form-label">Position / Title</label>
-                                    <input type="text" class="form-control bg-body" disabled value="<?= strtoupper(_admin_position($admin_data['admin_permissions'])); ?>">
+                                    <input type="text" class="form-control bg-body" disabled value="<?= strtoupper($admin_data['admin_permissions']); ?>">
                                 </div>
                                 <div class="mb-4">
                                     <label for="admin_email" class="form-label">Email</label>
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="admin_phone" class="form-label">Phone number</label>
-                                    <input type="text" class="form-control bg-body" name="admin_phone" id="admin_phone" value="<?= $admin_phone; ?>" required>
+                                    <input type="text" class="form-control bg-body" name="admin_phone" id="admin_phone" value="<?= $admin_phone; ?>" data-inputmask="'mask': '(999)999-9999'" required>
                                     <div class="text-sm text-muted">Change your phone number in this field</div>
                                 </div>
                             </form>
@@ -160,6 +160,7 @@
                     </section>
 
                 </div>
+
             </div>
         </div>
 

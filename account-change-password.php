@@ -58,7 +58,7 @@
             $result = $satement->execute(array($new_hashed, $admin_id));
             if (isset($result)) {
 
-                $log_message = 'Admin [' . $admin_id . '] has changed password"!';
+                $log_message = 'Admin [' . $admin_id . '] has changed password!';
     	        add_to_log($log_message, $admin_id, 'admin');
 
                 $_SESSION['flash_success'] = 'Password successfully updated!';
