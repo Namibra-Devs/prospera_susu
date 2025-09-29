@@ -555,7 +555,7 @@ function getCustomerBalance($customer_id, $account_number) {
 		LEFT JOIN (
 			SELECT withdrawal_customer_id, SUM(withdrawal_amount_requested) AS total_withdrawals
 			FROM withdrawals
-			WHERE withdrawal_status = 'Approved'
+			WHERE (withdrawal_status = 'Approved' OR withdrawal_status = 'Paid')
 			GROUP BY withdrawal_customer_id
 		) AS w ON c.customer_id = w.withdrawal_customer_id
 		LEFT JOIN (

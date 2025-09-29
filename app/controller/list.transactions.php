@@ -144,20 +144,20 @@ if ($total_data > 0) {
             } elseif ($row['status'] == 'Approved') {
                 $row['status'] = '<span class="badge bg-success-subtle text-success">Approved</span>';
             } elseif ($row['status'] == 'Paid') {
-                $row['status'] = '<span class="badge bg-danger-subtle text-danger">Paid</span>';
+                $row['status'] = '<span class="badge bg-primary-subtle text-primary">Paid</span>';
             } elseif ($row['status'] == 'Rejected') {
                 $row['status'] = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
             }
 
             // show approve button if status is pending
             if ($row['status'] == '<span class="badge bg-warning-subtle text-warning">Pending</span>') {
-                $options .= ' <button class="btn btn-sm btn-warning">Approve</button>';
-                $options .= ' <button class="btn btn-sm btn-danger">Reject</button>';
+                $options .= ' <a href="' . PROOT . 'app/transactions?w=1&approved=' . $row["transaction_id"] . '" class="btn btn-sm btn-warning" onclick="return confirm(\'Are you sure you want to APPROVE this Withdrawal Transaction?\');">Approve</a>';
+                $options .= ' <a href="' . PROOT . 'app/transactions?w=1&reject=' . $row["transaction_id"] . '" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure you want to REJECT this Withdrawal Transaction?\');">Reject</a>';
             }
 
             // show paid button if status is approved
             if ($row['status'] == '<span class="badge bg-success-subtle text-success">Approved</span>') {
-                $options .= ' <button class="btn btn-sm btn-success">Mark as Paid</button>';
+                $options .= ' <a href="'.PROOT.'app/transactions?w=1&paid='.$row["transaction_id"].'" class="btn btn-sm btn-success" onclick="return confirm(\'Are you sure you want to set this Withdrawal Transaction as PAID?\');">Mark as Paid</a>';
             }
         }
         // set background color for all today transactions

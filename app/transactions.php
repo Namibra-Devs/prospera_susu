@@ -4,7 +4,6 @@
         // Check if the admin or collector is logged in
     if (!admin_is_logged_in()) {
         admin_login_redirect();
-        //redirect(PROOT . 'auth/sign-in');
     }
 
     $title = 'Transactions | ';
@@ -15,7 +14,7 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
-    // function to get total amount of transac
+    // function to get total amount of transactions
     function getTotalTransactionAmount($type = 'Approved') {
         global $dbConnection;
         if (admin_is_logged_in()) {
@@ -33,14 +32,15 @@
     // function to get total amount of withdrawals
     function getTotalWithdrawalAmount($type = 'Approved', $or = 'Paid') {
         global $dbConnection;
-        if (admin_is_logged_in()) {
+        // if (admin_is_logged_in()) {
             $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE (withdrawal_status = ? OR withdrawal_status = ?)");
             $stmt->execute([$type, $or]);
-        } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
-            global $collector_id;
-            $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE withdrawal_approver_id = ? AND (withdrawal_status = ? OR withdrawal_status = ?)");
-            $stmt->execute([$collector_id, $type, $or]);
-        }
+        // }
+        // elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
+        //     global $collector_id;
+        //     $stmt = $dbConnection->prepare("SELECT SUM(withdrawal_amount_requested) AS total_amount FROM withdrawals WHERE withdrawal_approver_id = ? AND (withdrawal_status = ? OR withdrawal_status = ?)");
+        //     $stmt->execute([$collector_id, $type, $or]);
+        // }
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return money($row['total_amount'] ? $row['total_amount'] : 0);
     }
@@ -58,6 +58,60 @@
         }
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row['total_customers'] ? $row['total_customers'] : 0;
+    }
+
+
+    //
+    // withdrawal paid
+    if(isset($_GET['w']) && !empty($_GET['w'])) {
+
+        // set withdrawal status to paid
+        if (isset($_GET['paid']) && !empty($_GET['paid'])) {
+            $paid_id = sanitize($_GET['paid']);
+
+            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Paid' WHERE withdrawal_id = '".$paid_id."'")->execute();
+            if ($sql) {
+                $log_message =  'Admin [' . $admin_id . '] set withdrawal [' . $paid_id . '] status to Paid!';
+                add_to_log($log_message, $admin_id, 'admin');
+                $_SESSION['flash_success'] = $log_message;
+                redirect(PROOT . 'app/transactions');
+            } else {
+                $_SESSION['flash_success'] = 'Could\'nt update withdrawal status to Paid!';
+                redirect(PROOT . 'app/transactions');
+            }
+        }
+
+        // set withdrawal status to approved
+        if (isset($_GET['approved']) && !empty($_GET['approved'])) {
+            $approved_id = sanitize($_GET['approved']);
+
+            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Approved' WHERE withdrawal_id = '".$approved_id."'")->execute();
+            if ($sql) {
+                $log_message =  'Admin [' . $admin_id . '] set withdrawal [' . $approved_id . '] status to Approved!';
+                add_to_log($log_message, $admin_id, 'admin');
+                $_SESSION['flash_success'] = $log_message;
+                redirect(PROOT . 'app/transactions');
+            } else {
+                $_SESSION['flash_success'] = 'Could\'nt update withdrawal status to Approved!';
+                redirect(PROOT . 'app/transactions');
+            }
+        }
+        
+        // set withdrawal status to reject
+        if (isset($_GET['reject']) && !empty($_GET['reject'])) {
+            $reject_id = sanitize($_GET['reject']);
+
+            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Rejected' WHERE withdrawal_id = '".$reject_id."'")->execute();
+            if ($sql) {
+                $log_message =  'Admin [' . $admin_id . '] set withdrawal [' . $reject_id . '] status to Rejected!';
+                add_to_log($log_message, $admin_id, 'admin');
+                $_SESSION['flash_success'] = $log_message;
+                //redirect(PROOT . 'app/transactions');
+            } else {
+                $_SESSION['flash_success'] = 'Could\'nt update withdrawal status to Rejected!';
+                //redirect(PROOT . 'app/transactions');
+            }
+        }
     }
 
 ?>
@@ -90,13 +144,17 @@
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                     <!-- Action -->
                     <div class="row gx-2">
-                        <?php if ( admin_has_permission('collector') && !admin_has_permission('admin')): ?>
                         <div class="col-6 col-sm-auto">
+                            <?php if (admin_has_permission('collector') && !admin_has_permission('admin')): ?>
                             <button class="btn btn-secondary w-100" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                                 <span class="material-symbols-outlined me-1">add</span> New transaction
                             </button>
+                            <?php else: ?>
+                                <button class="btn btn-secondary w-100" type="button" data-bs-toggle="modal" data-bs-target="#withdrawalModal">
+                                <span class="material-symbols-outlined me-1">payment_arrow_down</span> Make new withdrawal
+                            </button>
+                            <?php endif; ?>
                         </div>
-                        <?php endif; ?>
                         <div class="col-6 col-sm-auto">
                             <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
                         </div>
