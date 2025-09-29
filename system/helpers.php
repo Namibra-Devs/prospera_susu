@@ -301,7 +301,7 @@ function get_admin_profile($id) {
 		<div class="mb-4">
 			<div class="form-label">Bio</div>
 			<div>
-				Hi! I\'m an agent/collector
+				Hi! I\'m an ....
 			</div>
 		</div>
 		<div class="mb-4">
@@ -339,7 +339,6 @@ function get_admin_profile($id) {
 			</div>
 		</div>
 	';
-
 	return $output;
 }
 
