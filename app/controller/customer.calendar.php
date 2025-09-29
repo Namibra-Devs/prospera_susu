@@ -83,11 +83,12 @@
         -- ORDER BY saving_date_collected ASC, saving_id ASC
 
         SELECT s.saving_id, s.saving_amount, s.saving_date_collected, s.saving_status,
-               c.collector_name
+               c.admin_name
         FROM savings s
-        LEFT JOIN collectors c ON c.collector_id = s.saving_collector_id
+        LEFT JOIN susu_admins c ON c.admin_id = s.saving_collector_id
         WHERE s.saving_customer_id = ?
-          AND s.saving_date_collected BETWEEN ? AND ?
+          AND s.saving_date_collected BETWEEN ? AND ? 
+          AND c.admin_permissions = 'collector'
         ORDER BY s.saving_date_collected ASC, s.saving_id ASC
     ";
     $stmt = $dbConnection->prepare($sql);
@@ -116,7 +117,7 @@
             'amount' => (float)$r['saving_amount'],
             // 'collector_id' => $r['saving_collector_id']
             'status' => $r['saving_status'],
-            'collector_name' => $r['collector_name'] ?: "N/A"
+            'admin_name' => $r['admin_name'] ?: "N/A"
         ];
     }
 

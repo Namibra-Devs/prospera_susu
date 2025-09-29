@@ -199,7 +199,7 @@
                             <?php foreach ($rows as $row): ?>
                             <div class="list-group-item bg-body">
                                 <div class="row">
-                                    <div class="col fst-italic"><?= (($row["log_person"] == $admin_data['admin_id']) ? 'You' : ucwords($row['admin_fullname'])); ?> - <?= $row['log_message']; ?></div>
+                                    <div class="col fst-italic"><?= (($row["log_person"] == $admin_data['admin_id']) ? 'You' : ucwords($row['admin_name'])); ?> - <?= $row['log_message']; ?></div>
                                     <div class="col-auto fst-italic"><?= pretty_date($row['created_at']); ?></div>
                                 </div>
                             </div>

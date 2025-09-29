@@ -52,7 +52,7 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Commisions</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold">$1,250</div>
+                                    <div class="fs-4 fw-semibold"><?= money(get_total_commission_amount()); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -74,7 +74,7 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Deposits</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold">35.5 hrs</div>
+                                    <div class="fs-4 fw-semibold"><?= money(get_total_deposits_amount()); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -95,7 +95,7 @@
                                         <h4 class="fs-sm fw-normal text-body-secondary mb-1">Withdrawals</h4>
 
                                         <!-- Text -->
-                                        <div class="fs-4 fw-semibold">2:55 hrs</div>
+                                        <div class="fs-4 fw-semibold"><?= money(get_total_withdrawal_amount()); ?></div>
                                     </div>
                                     <div class="col-auto">
                                         <!-- Avatar -->

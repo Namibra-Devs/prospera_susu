@@ -16,10 +16,10 @@ $conn = $dbConnection;
         $start = 0;
     }
 
-    $query = "SELECT * FROM customers WHERE ";
+    $query = "SELECT * FROM customers ";
 	// check if a collector is logged in, then show only their customers
 	if (admin_has_permission('collector') && !admin_has_permission('admin')) {
-		$query .= " customer_added_by = 'collector' AND customer_collector_id = '". $admin_id . "' ";
+		$query .= " WHERE customer_added_by = 'collector' AND customer_collector_id = '". $admin_id . "' ";
 	}
 
 	// search query
@@ -43,7 +43,7 @@ $conn = $dbConnection;
 		';
 
     }
-    $query .= 'ORDER BY customer_name ASC ';
+    $query .= ' ORDER BY customer_name ASC ';
 
     $filter_query = $query . 'LIMIT ' . $start . ', ' . $limit . '';
 

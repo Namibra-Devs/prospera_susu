@@ -16,20 +16,20 @@ $conn = $dbConnection;
         $start = 0;
     }
 
-    $query = "SELECT * FROM collectors ";
+    $query = "SELECT * FROM susu_admins WHERE admin_permissions = 'collector' ";
     $search_query = ((isset($_POST['query'])) ? sanitize($_POST['query']) : '');
     $find_query = str_replace(' ', '%', $search_query);
     if ($search_query != '') {
         $query .= '
-            WHERE collector_name LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_email LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_phone LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_address LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_state LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_city LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_status LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            AND admin_name LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR admin_email LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR admin_phone LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR admin_address LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR admin_state LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR admin_city LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
+            OR admin_status LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR created_at LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR collector_id LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" ';
+            OR admin_id LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" ';
 
     }
     $query .= 'ORDER BY id ASC ';
@@ -68,8 +68,8 @@ if ($total_data > 0) {
 	$i = 1;
 	foreach ($result as $row) {
         // check if collector has photo
-        if ($row['collector_photo'] != '') {
-            $photo = $row['collector_photo'];
+        if ($row['admin_profile'] != '') {
+            $photo = $row['admin_profile'];
         } else {
             $photo = PROOT . 'assets/media/avatar.png';
         }
@@ -83,18 +83,18 @@ if ($total_data > 0) {
                             <img class="avatar-img" src="' . $photo . '" alt="..." />
                         </div>
                         <div class="ms-4">
-                            <div>'. ucwords($row["collector_name"]) .'</div>
+                            <div>'. ucwords($row["admin_name"]) .'</div>
                             <div class="fs-sm text-body-secondary">
-                                <a class="text-reset" href="mailto:'. ($row['collector_email']) .'">'. ($row['collector_email']) .'</a>
+                                <a class="text-reset" href="mailto:'. ($row['admin_email']) .'">'. ($row['admin_email']) .'</a>
                             </div>
                         </div>
                     </div>
                 </td>
                 <td>
-                    <a class="text-muted" href="tel:'. ($row["collector_phone"]) .'">'. ($row["collector_phone"]) .'</a>
+                    <a class="text-muted" href="tel:'. ($row["admin_phone"]) .'">'. ($row["admin_phone"]) .'</a>
                 </td>
-                <td>'. ($row["collector_address"]) .'</td>
-                <td>'. $row["collector_state"] .', ' . $row["collector_city"] . '</td>
+                <td>'. ($row["admin_address"]) .'</td>
+                <td>'. $row["admin_state"] .', ' . $row["admin_city"] . '</td>
                 <td>'. pretty_date_notime($row["created_at"]) . '</td>
                 <td style="width: 0px">
                     <div class="dropdown">
@@ -102,8 +102,8 @@ if ($total_data > 0) {
                             <span class="material-symbols-outlined scale-125">more_horiz</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="'. PROOT . 'app/collector/' . $row["collector_id"] .'">View</a></li>
-                            <li><a class="dropdown-item" href="' . PROOT . 'app/collectors?edit=' . $row["collector_id"] . '">Update</a></li>
+                            <li><a class="dropdown-item" href="'. PROOT . 'app/collector/' . $row["admin_id"] .'">View</a></li>
+                            <li><a class="dropdown-item" href="' . PROOT . 'app/collectors?edit=' . $row["admin_id"] . '">Update</a></li>
                             <li><a class="dropdown-item" href="#deleteModal_'. $row["id"] . '" data-bs-toggle="modal">Delete</a></li>
                         </ul>
                     </div>
@@ -120,10 +120,10 @@ if ($total_data > 0) {
                         </div>
                         <div class="modal-body">
                             <p>
-                                Collector with name '. strtoupper($row['collector_name']) . ' will be deleted.
+                                Collector with name '. strtoupper($row['admin_name']) . ' will be deleted.
                                 <br>Are you sure you want to proceed to this action.
                             </p>
-                            <a href="' . PROOT . 'app/collectors?delete=' . $row["collector_id"] . '" class="btn btn-secondary w-100 mt-4">Delete</a>
+                            <a href="' . PROOT . 'app/collectors?delete=' . $row["admin_id"] . '" class="btn btn-secondary w-100 mt-4">Delete</a>
                         </div>
                     </div>
                 </div>

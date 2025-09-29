@@ -66,14 +66,14 @@
         global $dbConnection;
         if ($by == 'collector') {
             $query = "
-                SELECT * FROM collectors 
-                WHERE collectors.collector_id = ?
+                SELECT * FROM susu_admins 
+                WHERE susu_admins.admin_id = ?
                 LIMIT 1
             ";
             $statement = $dbConnection->prepare($query);
             $statement->execute([$id]);
             $row = $statement->fetch(PDO::FETCH_ASSOC);
-            return (($row['collector_name']) ? ucwords($row['collector_name']) . ' <span class="badge bg-warning-subtle text-warning">Collector</span>': 'Collector');
+            return (($row['admin_name']) ? ucwords($row['admin_name']) . ' <span class="badge bg-warning-subtle text-warning">Collector</span>': 'Collector');
         }
         return 'Admin';
     }
@@ -463,7 +463,7 @@
                                     foreach ($all_saves as $save): 
                                         $type = ($save['type'] == 'saving') ? '<span class="fs-sm text-primary">Deposit</span>' : '<span class="fs-sm text-danger">Withdrawal</span>';
                                         
-                                        $collector = findAdminById($save['collector_id'])->collector_name;
+                                        $collector = findAdminById($save['collector_id'])->admin_name;
                                         if (!$collector) {
                                             $collector = 'Admin';
                                         }
@@ -936,7 +936,7 @@
                             <hr class="my-0 border-style-dotted" />
                         </div>
                         <div class="col-auto">
-                            <span class="material-symbols-outlined text-body-tertiary me-1">barcode_reader</span> ${en.collector_name.toUpperCase()}
+                            <span class="material-symbols-outlined text-body-tertiary me-1">barcode_reader</span> ${en.admin_name.toUpperCase()}
                         </div>
                     </div>
                 `;
