@@ -175,7 +175,11 @@
                 </div>
 
                 <!-- Chart -->
-                <canvas id="financeChart" height="100"></canvas>
+                <div style="height:400px;">
+  <canvas id="financeChart"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
 
 
 
@@ -750,6 +754,7 @@
         console.log("Commissions:", commissions);
 
         if (financeChart) financeChart.destroy(); // Destroy old chart
+        const ctx = document.getElementById('financeChart').getContext('2d');
 
         financeChart = new Chart(ctx, {
             type: 'line',
