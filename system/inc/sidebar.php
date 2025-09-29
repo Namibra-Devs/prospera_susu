@@ -985,9 +985,15 @@
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills d-xl-none mb-7">
                         <div class="nav-item">
+                            <?php if (admin_has_permission()): ?>
+                            <a class="nav-link" href="#withdrawalModal" type="button" data-bs-toggle="modal" data-bs-target="#withdrawalModal">
+                                <span class="material-symbols-outlined me-3">send_money</span> Make new withdrawal
+                            </a>
+                            <?php else: ?>
                             <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                                 <span class="material-symbols-outlined me-3">send_money</span> Add new deposit
                             </a>
+                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a class="nav-link" href="mailto:info@namibra.io">

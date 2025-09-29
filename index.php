@@ -135,128 +135,72 @@
                 <div class="row align-items-center mb-2">
                     <div class="col">
                         <!-- Heading -->
-                        <h2 class="fs-3 mb-0">Trends</h2>
+                        <h2 class="fs-3 mb-0">Performance</h2>
+                    </div>
+                    <div class="col-auto my-n2">
+                        <button id="toggleChartType" class="btn btn-primary">Switch to Bar</button>
                     </div>
                     <div class="col-auto my-n2">
                         <!-- Select -->
-                        <select
-                        class="form-select"
-                        data-choices='{ "searchEnabled": false, "choices": [{ "value": "month", "label": "Last month" }, { "value": "week", "label": "Last week" }, { "value": "day", "label": "Today" }] }'
-                        ></select>
+                        <select class="form-select" id="yearSelect"></select>
                     </div>
                 </div>
 
-                <!-- Tabs -->
-                <ul class="nav nav-underline">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-5 active" data-bs-toggle="tab" data-saas-performance-chart-type="revenue" type="button" aria-selected="true">
-                        Revenue
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="users" type="button" aria-selected="false">
-                        Active users
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-5" data-bs-toggle="tab" data-saas-performance-chart-type="churn" type="button" aria-selected="false">Churn rate</button>
-                    </li>
-                </ul>
+                <!-- Chart -->
+                <div style="height:500px;">
+                    <canvas id="financeChart"></canvas>
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
 
                 <!-- Divider -->
-                <hr class="mt-0 mb-8" />
+                <hr class="my-8" />
 
-                <!-- Year Filter -->
-                <div class="mb-3">
-                    <label for="yearSelect" class="form-label">Select Year:</label>
-                    <select id="yearSelect" class="form-select w-auto d-inline-block">
-                    <!-- Years will be inserted dynamically -->
-                    </select>
-                </div>
-
-                <!-- Chart -->
-                <div style="height:400px;">
-  <canvas id="financeChart"></canvas>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
-
-
-
-                <!-- Chart -->
-                <!-- <div class="chart">
-                    <canvas class="chart-canvas" id="saasPerformanceChart"></canvas>
-                </div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- Divider -->
-        <hr class="my-8" />
-
-        <div class="row">
-          <div class="col-12 col-xxl-8">
-            <!-- Header -->
-            <div class="row align-items-center mb-5">
-              <div class="col">
-                <!-- Heading -->
-                <h2 class="fs-5 mb-0">Latest transactions</h2>
-              </div>
-              <div class="col-auto">
-                <a class="btn btn-link my-n2" href="../ecommerce/orders.html">
-                  Browse all
-                  <span class="material-symbols-outlined">arrow_right_alt</span>
-                </a>
-              </div>
-            </div>
-
-            <!-- Table -->
-            <div class="card mb-7 mb-xxl-0">
-              <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                  <thead>
-                    <tr>
-                      <th class="fs-sm">ID</th>
-                      <th class="fs-sm">Client</th>
-                      <th class="fs-sm">Amount</th>
-                      <th class="fs-sm">Subscription Plan</th>
-                      <th class="fs-sm">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#001</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
-                          </div>
-                          Michael Johnson
+                <div class="row">
+                    <div class="col-12 col-xxl-8">
+                        <!-- Header -->
+                        <div class="row align-items-center mb-5">
+                        <div class="col">
+                            <!-- Heading -->
+                            <h2 class="fs-5 mb-0">Latest transactions</h2>
                         </div>
-                      </td>
-                      <td>$499.00</td>
-                      <td>Enterprise</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
+                        <div class="col-auto">
+                            <a class="btn btn-link my-n2" href="../ecommerce/orders.html">
+                            Browse all
+                            <span class="material-symbols-outlined">arrow_right_alt</span>
+                            </a>
+                        </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="card mb-7 mb-xxl-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                    <th class="fs-sm">ID</th>
+                                    <th class="fs-sm">Client</th>
+                                    <th class="fs-sm">Amount</th>
+                                    <th class="fs-sm">Subscription Plan</th>
+                                    <th class="fs-sm">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
+                            <td>#001</td>
+                            <td>
+                                <div class="d-flex align-items-center text-nowrap">
+                                <div class="avatar avatar-xs me-2">
+                                    <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
+                                </div>
+                                Michael Johnson
+                                </div>
+                            </td>
+                            <td>$499.00</td>
+                            <td>Enterprise</td>
+                            <td><span class="badge bg-success-subtle text-success">Completed</span></td>
+                            </tr>
+                            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
                       <td>#002</td>
                       <td>
                         <div class="d-flex align-items-center text-nowrap">
@@ -732,6 +676,14 @@
 <script>
     const ctx = document.getElementById('financeChart').getContext('2d');
     let financeChart;
+    let chartType = 'line'; // default
+
+    document.getElementById("toggleChartType").addEventListener("click", () => {
+        chartType = (chartType === 'line') ? 'bar' : 'line';
+        document.getElementById("toggleChartType").innerText =
+            (chartType === 'line') ? "Switch to Bar" : "Switch to Line";
+        loadChart(currentYear); // re-render chart with new type
+    });
 
     // Months labels
     const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -757,7 +709,7 @@
         const ctx = document.getElementById('financeChart').getContext('2d');
 
         financeChart = new Chart(ctx, {
-            type: 'line',
+            type: chartType,
             data: {
             labels: months,
             datasets: [
