@@ -171,7 +171,7 @@
         }
     }
 
-        //
+    //
     // Deposite status
     if (isset($_GET['c']) && !empty($_GET['c'])) {
         if (isset($_GET['deactivate']) && !empty($_GET['deactivate'])) {

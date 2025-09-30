@@ -6,6 +6,7 @@
 		admin_login_redirect();
 	}
 
+    $title = 'Add new collector | ';
     $body_class = '';
     include ('../system/inc/head.php');
     include ('../system/inc/modals.php');
@@ -92,23 +93,18 @@
                 // Hash password
                 $password_hash = password_hash($password, PASSWORD_BCRYPT);
                 $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
-                $conn = $dbConnection;
                 // Insert into database
-                $stmt = $conn->prepare("
-                    INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_address, collector_state, collector_city, collector_photo, collector_password) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                $stmt = $dbConnection->prepare("
+                    INSERT INTO susu_admins (admin_id, admin_name, admin_phone, admin_address, admin_state, admin_city, admin_password, admin_permissions, admin_profile) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ");
-                // $stmt = $conn->prepare("
-                //     INSERT INTO collectors (collector_id, collector_name, collector_phone, collector_email, collector_address, collector_state, collector_city, collector_photo, collector_password) 
-                //     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                // ");
                 $result = $stmt->execute([
-                    $unique_id, $name, $phone, $address, $region, $city, $photo_path, $password_hash
+                    $unique_id, $name, $phone, $address, $region, $city, $password_hash, 'collector', $photo_path
                 ]);
-                $collectorId = $conn->lastInsertId();
-                $generated_email = generateCollectorEmail($collectorId, $name);
+                $adminId = $dbConnection->lastInsertId();
+                $generated_email = generateCollectorEmail($adminId, $name);
                 if ($result) {
-                    $updateQuery = $conn->query("UPDATE collectors SET collector_email = '".$generated_email."' WHERE id = '".$collectorId."'")->execute();
+                    $updateQuery = $dbConnection->query("UPDATE susu_admins SET admin_email = '" . $generated_email . "' WHERE id = '".$adminId."'")->execute();
                     $_SESSION['flash_success'] = "Collector added successfully!";
                     redirect(PROOT . 'app/collectors');
                 } else {

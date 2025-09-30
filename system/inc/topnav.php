@@ -17,7 +17,7 @@
                     <div class="dropdown my-n2">
                         <a class="btn btn-link d-inline-flex align-items-center dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="avatar avatar-sm avatar-status avatar-status-success me-3">
-                                <img class="avatar-img" src="<?= PROOT; ?>assets/media/avatar.png" alt="..." />
+                                <img class="avatar-img" src="<?= (($admin_data['admin_profile'] != NULL) ? $admin_data['admin_profile'] : PROOT . 'assets/media/avatar.png'); ?>" alt="..." />
                             </span>
                             <span class="d-none d-xl-block">
                                 <?= ucwords($admin_data['admin_name']); ?>
@@ -55,7 +55,7 @@
                             </div>
             
                             <!-- Items -->
-                            <div class="list-group list-group-flush px-4">
+                            <!-- <div class="list-group list-group-flush px-4">
                                 <div class="list-group-item border-style-dashed px-0">
                                     <div class="row gx-3">
                                     <div class="col-auto">
@@ -111,7 +111,7 @@
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

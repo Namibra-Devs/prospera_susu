@@ -76,7 +76,7 @@
         // var x = "Is the browser online? " + navigator.onLine
         // alert(x);
 
-        // activate left nav link upon url
+        // activate left nav link upon url //
 
         if (window.location.href.indexOf("index") > -1) {
             $('.nav-dashboards').addClass('active');
@@ -90,8 +90,22 @@
             $('#dashboards').addClass('show');
         }
 
-        if ((window.location.href.indexOf("collectors") > -1) || (window.location.href.indexOf("collector-new") > -1)) {
+        // collectors
+        if (window.location.href.indexOf("collectors") > -1) {
             $('.nav-collectors').addClass('active');
+            $('.sub-nav-collectors').addClass('active');
+            $('.nav-collectors').attr('aria-expanded', true);
+            $('#collectors').addClass('show');
+        }
+        if (window.location.href.indexOf("archived-collectors") > -1) {
+            $('.nav-collectors').addClass('active');
+            $('.sub-nav-archived-collectors').addClass('active');
+            $('.nav-collectors').attr('aria-expanded', true);
+            $('#collectors').addClass('show');
+        }
+        if ((window.location.href.indexOf("collector-new") > -1)) {
+            $('.nav-collectors').addClass('active');
+            $('.sub-nav-new-collectors').addClass('active');
             $('.nav-collectors').attr('aria-expanded', true);
             $('#collectors').addClass('show');
         }

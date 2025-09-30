@@ -6,6 +6,7 @@
 		admin_login_redirect();
 	}
 
+    $title = 'Collectors | ';
     $body_class = '';
     include ('../system/inc/head.php');
     include ('../system/inc/modals.php');
@@ -79,6 +80,22 @@
         }
     }
 
+    //
+    // inactivate collector
+    if (isset($_GET['delete']) && !empty($_GET['delete'])) {
+        $delete_id = sanitize($_GET['delete']);
+
+        $sql = $dbConnection->query("UPDATE susu_admins SET admin_status = 'inactive' WHERE admin_id = '" . $delete_id . "'")->execute();
+        if ($sql) {
+            $log_message =  'Admin [' . $admin_id . '] has set collector [' . $delete_id . '] status to Inactive!';
+            add_to_log($log_message, $admin_id, 'admin');
+            $_SESSION['flash_success'] = $log_message;
+            redirect(PROOT . 'app/collectors');
+        } else {
+            $_SESSION['flash_success'] = 'Could\'nt update collector status to Inactive!';
+            redirect(PROOT . 'app/collectors');
+        }
+    }
 
 
 
@@ -109,10 +126,17 @@
                     <h1 class="fs-4 mb-0">Collectors</h1>
                 </div>
                     <div class="col-12 col-sm-auto mt-4 mt-sm-0">
-                        <!-- Action -->
-                        <a class="btn btn-secondary d-block" href="<?= PROOT; ?>app/collector-new">
-                        <span class="material-symbols-outlined me-1">add</span> New collector
-                    </a>
+                        <div class="row gx-2">
+                            <div class="col-6 col-sm-auto">
+                                <!-- Action -->
+                                <a class="btn btn-secondary d-block" href="<?= PROOT; ?>app/collector-new">
+                                    <span class="material-symbols-outlined me-1">add</span> New collector
+                                </a>
+                            </div>
+                        <div class="col-6 col-sm-auto">
+                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -140,7 +164,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="col-auto">
+                                        <!-- <div class="col-auto">
                                             <div class="dropdown">
                                                 <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                                     <span class="material-symbols-outlined">filter_list</span>
@@ -218,8 +242,8 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-auto ms-n2">
+                                        </div> -->
+                                        <!-- <div class="col-auto ms-n2">
                                             <div class="dropdown">
                                                 <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                                     <span class="material-symbols-outlined">sort_by_alpha</span>
@@ -252,7 +276,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

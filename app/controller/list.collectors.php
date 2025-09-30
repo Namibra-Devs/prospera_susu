@@ -16,7 +16,7 @@ $conn = $dbConnection;
         $start = 0;
     }
 
-    $query = "SELECT * FROM susu_admins WHERE admin_permissions = 'collector' ";
+    $query = "SELECT * FROM susu_admins WHERE admin_permissions = 'collector' AND admin_status = 'active' ";
     $search_query = ((isset($_POST['query'])) ? sanitize($_POST['query']) : '');
     $find_query = str_replace(' ', '%', $search_query);
     if ($search_query != '') {
@@ -103,7 +103,7 @@ if ($total_data > 0) {
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="'. PROOT . 'app/collector/' . $row["admin_id"] .'">View</a></li>
-                            <li><a class="dropdown-item" href="' . PROOT . 'app/collectors?edit=' . $row["admin_id"] . '">Update</a></li>
+                            <!-- <li><a class="dropdown-item" href="' . PROOT . 'app/collectors?edit=' . $row["admin_id"] . '">Update</a></li> -->
                             <li><a class="dropdown-item" href="#deleteModal_'. $row["id"] . '" data-bs-toggle="modal">Delete</a></li>
                         </ul>
                     </div>
