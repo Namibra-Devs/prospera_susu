@@ -65,8 +65,13 @@
         if ($message) {
             $status = 'error';
         } else {
+
             $status = 'success';
             $message = "File uploaded successfully for date: " . sanitize($uploadDate);
+            // 
+            $added_by = (admin_has_permission() ? 'admin' : 'collector');
+            $log_message = ucwords($added_by) . ' [' . $admin_id . '] has uploaded new daily collection file !';
+            add_to_log($log_message, $admin_id, $added_by);
         }
         echo json_encode(['status' => $status, 'message' => $message]);
     }

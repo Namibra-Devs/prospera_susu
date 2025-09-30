@@ -4,11 +4,15 @@
     if (!admin_is_logged_in()) {
         admin_login_redirect();
     }
+require '../../vendor/autoload.php';
 
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
     use PhpOffice\PhpSpreadsheet\Writer\Xls;
     use PhpOffice\PhpSpreadsheet\Writer\Csv;
+    use PhpOffice\PhpSpreadsheet\IOFactory;
+
+
 
     // Dompdf, Mpdf or Tcpdf (as appropriate)
     // $className = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf::class;
@@ -24,25 +28,25 @@
         $exp_type = (isset($_GET['export-type']) && !empty($_GET['export-type']) ? sanitize($_GET['export-type']) : '');
         $get_out_from_date = null;        
         
-        $query = "SELECT * FROM giltmarket_logs INNER JOIN giltmarket_admin ON giltmarket_admin.admin_id = giltmarket_logs.log_admin ";
+        $query = "SELECT * FROM susu_logs INNER JOIN susu_admins ON susu_admins.admin_id = susu_logs.log_person ";
         if ($exp_with == 'month') {
             $get_out_from_date = (isset($_GET['export-month']) && !empty($_GET['export-month']) ? sanitize($_GET['export-month']) : '');
-            $query .= "WHERE MONTH(giltmarket_logs.createdAt) = '" . $get_out_from_date . "'";
+            $query .= "WHERE MONTH(susu_logs.created_at) = '" . $get_out_from_date . "'";
         } else if ($exp_with == 'year') {
             $get_out_from_date = (isset($_GET['export-year']) && !empty($_GET['export-year']) ? sanitize($_GET['export-year']) : '');
-            $query .= "WHERE YEAR(giltmarket_logs.createdAt) = '" . $get_out_from_date . "'";
+            $query .= "WHERE YEAR(susu_logs.created_at) = '" . $get_out_from_date . "'";
         } else if ($exp_with == 'date') {
             $get_out_from_date = (isset($_GET['export-date']) && !empty($_GET['export-date']) ? sanitize($_GET['export-date']) : '');
-            $query .= "WHERE CAST(giltmarket_logs.createdAt AS date) = '" . $get_out_from_date . "'";
+            $query .= "WHERE CAST(susu_logs.created_at AS date) = '" . $get_out_from_date . "'";
         }
 
         if (!admin_has_permission()) {
-            $query .= ' AND giltmarket_logs.log_admin = "' . $admin_data['admin_id'] . '" ';
+            $query .= ' AND susu_logs.log_person = "' . $admin_data['admin_id'] . '" ';
         }
-        $query .= " AND giltmarket_logs.log_status = 0";
+        $query .= " AND susu_logs.log_status = 0";
         
 
-        $statement = $conn->prepare($query);
+        $statement = $dbConnection->prepare($query);
         $statement->execute();
         $rows = $statement->fetchAll();
         $count_row = $statement->rowCount();
@@ -61,13 +65,13 @@
             foreach ($rows as $row) {
                 $sheet->setCellValue('A' . $rowCount, $row['log_id']);
                 $sheet->setCellValue('B' . $rowCount, $row['log_message']);
-                $sheet->setCellValue('C' . $rowCount, ucwords($row['admin_fullname']));
-                $sheet->setCellValue('D' . $rowCount, $row['createdAt']);
+                $sheet->setCellValue('C' . $rowCount, ucwords($row['admin_name']));
+                $sheet->setCellValue('D' . $rowCount, $row['created_at']);
                 $rowCount++;
             }
 
             $FileExtType = $exp_type;
-            $fileName = "Giltmarket-Logs-" . $exp_status . "-sheet";
+            $fileName = "Prospera-susu-Logs-" . $exp_status . "-sheet";
 
             if ($FileExtType == 'xlsx') {
                 $writer = new Xlsx($spreadsheet);
@@ -88,7 +92,10 @@
             }
 
             $message = "exported " . strtoupper($FileExtType) . " trades data";
-            add_to_log($message, $_SESSION['JSAdmin']);
+            // 
+            $added_by = (admin_has_permission() ? 'admin' : 'collector');
+            $log_message = ucwords($added_by) . ' [' . $admin_id . '] ' . $message;
+            add_to_log($log_message, $admin_id, $added_by);
 
             // $writer->save($NewFileName);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -99,5 +106,5 @@
         } else {
             $_SESSION['flash_error'] = "No Record Found!";
         }
-        redirect(PROOT . "account/logs");
+        redirect(PROOT . "app/logs");
     }

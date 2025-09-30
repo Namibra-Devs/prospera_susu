@@ -15,6 +15,21 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    //
+    // clear logs table
+    if (isset($_GET['clear']) && !empty($_GET['clear'])) {
+
+        $sql = $dbConnection->query("TRUNCATE TABLE susu_logs")->execute();
+        if ($sql) {
+            $_SESSION['flash_success'] = 'Logs truncated !';
+            redirect(PROOT . 'app/logs');
+        } else {
+            $_SESSION['flash_success'] = 'Could\'nt truncate logs !';
+            redirect(PROOT . 'app/logs');
+        }
+    }
+    
+
     $today = date("Y-m-d");
     $where = '';
     if (!admin_has_permission()) {
@@ -104,7 +119,7 @@
                                             </button>
                                             <div class="dropdown-menu rounded-3 p-6">
                                                 <h4 class="fs-lg mb-4">Export trades</h4>
-                                                <form style="width: 350px" id="exportForm" action="<?= PROOT; ?>auth/export.logs.php">
+                                                <form style="width: 350px" id="exportForm" action="<?= PROOT; ?>app/controller/export.logs.php">
                                                     <div class="row gx-3">
                                                     <div class="col-sm-12 mb-3">
                                                             <div class="form-check form-check-inline">
@@ -192,7 +207,17 @@
                 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="fs-6 mb-0">Activities</h3>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="fs-6 mb-0">Activities</h3>
+                            </div>
+                            <?php if (admin_has_permission()): ?>
+                            <div class="col-auto fs-sm">
+                                <a href="<?= PROOT; ?>app/logs?clear=1" onclick="return confirm('Are you sure you want to set this Withdrawal Transaction as PAID?');" ><span class="material-symbols-outlined text-dark me-1">clear_all</span>
+                                Clear logs</a>
+                            </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="list-group mb-7">
