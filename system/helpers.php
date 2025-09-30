@@ -428,6 +428,23 @@ function findCustomerByAccountNumber($number) {
     return $user;
 }
 
+
+// get customer by account number
+function findCustomerByID($id) {
+    global $dbConnection;
+
+    $query = "
+        SELECT * FROM customers 
+        WHERE customer_id = ? 
+		AND customer_status = ? 
+		LIMIT 1
+    ";
+    $statement = $dbConnection->prepare($query);
+    $statement->execute([$id, 'active']);
+    $user = $statement->fetch(PDO::FETCH_OBJ);
+    return $user;
+}
+
 // sum customer saves by status
 function sum_customer_saves($customer_id, $status = 'Approved') {
 	global $dbConnection;

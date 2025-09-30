@@ -8,7 +8,12 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idcard = $_POST['idcard'] ?? null;
         $idnumber = $_POST['idnumber'] ?? 0;
+        $customer_id = sanitize($_POST['customerid']);
 
+        $customer = findCustomerByID($customer_id);
+        if (!$customer) {
+            $message = "Unknown customer to update !";
+        }
 
         // Validate file upload
         if (!isset($_FILES['front_card']) || $_FILES['front_card']['error'] !== UPLOAD_ERR_OK) {
@@ -51,19 +56,34 @@
         $backFilename = basename($backFile['name']);
         
         $front_targetPath = $uploadDir . $frontFilename;
-        $front_targetPath = $uploadDir . time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $frontFilename); // prevent overwriting and sanitize filename
+        $f_name =  time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $frontFilename); // prevent overwriting and sanitize filename
+        $front_targetPath = $uploadDir . $f_name;
+        $f_move = move_uploaded_file($frontFile['tmp_name'], $front_targetPath);
 
         $back_targetPath = $uploadDir . $backFilename;
-        $back_targetPath = $uploadDir . time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $backFilename); // prevent overwriting and sanitize filename
+        $b_name = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $backFilename); // prevent overwriting and sanitize filename
+        $back_targetPath = $uploadDir . $b_name;
+        $b_move = move_uploaded_file($backFile['tmp_name'], $back_targetPath);
+ 
+        if ($message == null || $message == '' || empty($message)) {
+            if ($f_move && $b_move) {
 
-        if ($message == null || $message == '') {
-            if (move_uploaded_file($frontFile['tmp_name'], $front_targetPath)) {
+                if ($customer->customer_id_photo_front != NULL || $customer->customer_id_photo_front != '') {
+                    $filepath = BASEURL . 'assets/media/uploads/customers-media/' . $customer->customer_id_photo_front;
+                    unlink($filepath); 
+                }
+                
+                if ($customer->customer_id_photo_back != NULL || $customer->customer_id_photo_back != '') {
+                    $filepath = BASEURL . 'assets/media/uploads/customers-media/' . $customer->customer_id_photo_back;
+                    unlink($filepath);
+                }
+
                 // insert into daily_collections
-                $sql = "INSERT INTO daily_collections (daily_id, daily_collector_id, daily_collection_date, daily_total_collected, daily_proof_image, daily_note) VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "UPDATE customers SET customer_id_type = ?, customer_id_number = ?, customer_id_photo_front = ?, customer_id_photo_back = ? WHERE customer_id = ?";
                 $stmt = $dbConnection->prepare($sql);
-                $result = $stmt->execute([$uniqueid, $admin_id, $uploadDate, $totalcollected, $front_targetPath, $note]);
+                $result = $stmt->execute([$idcard, $idnumber, $f_name, $b_name, $customer_id]);
                 if (!$result) {
-                    $message = "Database error: Could not save file info.";
+                    $message = "Database error: Could not update file info.";
                 }
             } else {
                 $message = "File upload failed.";
@@ -74,7 +94,7 @@
             $status = 'error';
         } else {
             $status = 'success';
-            $message = "File uploaded successfully for date: " . sanitize($uploadDate);
+            $message = "File uploaded successfully";
         }
         echo json_encode(['status' => $status, 'message' => $message]);
     }

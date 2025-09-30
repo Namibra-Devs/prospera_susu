@@ -510,7 +510,7 @@
                                 else:
                                     echo '
                                         <tr>
-                                            <td colspan="5">
+                                            <td colspan="7">
                                                 <div class="alert alert-info">No saves found!</div>
                                             </td>
                                         </tr>
@@ -537,23 +537,25 @@
                     <table class="table align-middle mb-0">
                         <tbody>
                             <?php if ($customer_data['customer_id_photo_front'] != ''): 
+                                $front_file = PROOT . 'assets/media/uploads/customers-media/' . $customer_data['customer_id_photo_front'];
                                 // get the file name
                                 $file_name = basename($customer_data['customer_id_photo_front']);
                                 
                                 // get file size
-                                $file_size = filesize($customer_data['customer_id_photo_front']);
+                                $file_size = (file_exists($front_file) && is_file($front_file)) ? filesize($front_file) : 0;
 
                                 // get file extension
-                                $file_ext = pathinfo($customer_data['customer_id_photo_front'], PATHINFO_EXTENSION);
+                                $file_ext = pathinfo($front_file, PATHINFO_EXTENSION);
+                                
                             ?>
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar rounded text-primary">
-                                            <img class="img-fluid" src="../<?= $customer_data["customer_id_photo_front"]; ?>" />
+                                            <img class="img-fluid" src="<?= $front_file; ?>" />
                                         </div>
                                         <div class="ms-4">
-                                            <div class="fw-normal"><a class="" href="../<?= $customer_data['customer_id_photo_front']; ?>" target="_blank"><?= $file_name; ?></a></div>
+                                            <div class="fw-normal"><a class="" href="<?= $front_file; ?>" target="_blank"><?= $file_name; ?></a></div>
                                             <div class="fs-sm text-body-secondary"><?= $file_size; ?>kb · <?= strtoupper($file_ext); ?></div>
                                         </div>
                                     </div>
@@ -564,24 +566,27 @@
                                 </td>
                             </tr>
                             <?php endif; ?>
-                            <?php if ($customer_data['customer_id_photo_back'] != ''): 
-                                // get the file name
-                                $file_name = basename($customer_data['customer_id_photo_back']);
-                                
-                                // get file size
-                                $file_size = filesize($customer_data['customer_id_photo_back']);
+                            <?php 
+                                if ($customer_data['customer_id_photo_back'] != ''): 
+                                    $back_file = PROOT . 'assets/media/uploads/customers-media/' . $customer_data['customer_id_photo_back'];
 
-                                // get file extension
-                                $file_ext = pathinfo($customer_data['customer_id_photo_back'], PATHINFO_EXTENSION);
+                                    // get the file name
+                                    $file_name = basename($back_file);
+                                    
+                                    // get file size
+                                    $file_size = (file_exists($back_file) && is_file($back_file)) ? filesize($back_file) : 0;
+
+                                    // get file extension
+                                    $file_ext = pathinfo($back_file, PATHINFO_EXTENSION);
                             ?>
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="avatar rounded text-primary">
-                                            <img class="img-fluid" src="../<?= $customer_data["customer_id_photo_back"]; ?>" />
+                                            <img class="img-fluid" src="<?= $back_file; ?>" />
                                         </div>
                                         <div class="ms-4">
-                                            <div class="fw-normal"><a class="" href="../<?= $customer_data['customer_id_photo_back']; ?>" target="_blank"><?= $file_name; ?></a></div>
+                                            <div class="fw-normal"><a class="" href="<?= $back_file; ?>" target="_blank"><?= $file_name; ?></a></div>
                                             <div class="fs-sm text-body-secondary"><?= $file_size; ?>kb · <?= strtoupper($file_ext); ?></div>
                                         </div>
                                     </div>
@@ -607,7 +612,10 @@
                         </div>
                         <div class="modal-body">
                             <form action="controller/upload.customer.documents.php" method="post" enctype="multipart/form-data" id="customer-upload-form" class="dropzone">
-                                                                
+                                <div class="mb-4">
+                                    <label class="form-label" for="idnumber">Customer Id Code</label>
+                                    <input class="form-control" id="customerid" name="customerid" type="text" readonly disabled value="<?= $customer_data['customer_id']; ?>" />
+                                </div>                      
                                 <div class="mb-4 mt-2">
                                     <label class="form-label" for="idcard">ID</label>
                                     <select class="form-control" id="idcard" name="idcard" type="text">
@@ -1117,6 +1125,7 @@
         // Add regular form fields
         formData.append("idcard", document.getElementById("idcard").value);
         formData.append("idnumber", document.getElementById("idnumber").value);
+        formData.append("customerid", document.getElementById("customerid").value);
 
         // validate if front file is selected
         if (frontDropzone.getAcceptedFiles().length === 0) {
@@ -1176,6 +1185,7 @@
             console.log(data);
             frontDropzone.removeAllFiles(true);
             backDropzone.removeAllFiles(true);
+            window.location.reload();
         })
         .catch(error => {
             alert("Upload failed.");
