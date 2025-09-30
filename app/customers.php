@@ -353,9 +353,6 @@
                 <div id="calendar" class="calendar"></div>
             </div>
 
-
-
-
             <!-- Page content -->
             <div class="row">
                 <div class="col-12 col-xxl-4">
@@ -386,7 +383,7 @@
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">ID card name</span>
-                                        <span><?= $customer_data["customer_id_type"] ?? 'N/A'; ?></span>
+                                        <span><?= $customer_data["customer_id_type"] == '' ?? 'N/A'; ?></span>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">ID card number</span>
@@ -409,9 +406,9 @@
                             <div class="col">
                                 <a class="btn btn-light w-100" href="<?= PROOT; ?>app/customers/edit=<?= $customer_data['customer_id']; ?>">Update</a>
                             </div>
-                            <?php if (admin_is_logged_in() && admin_has_permission()): ?>
+                            <?php if (admin_has_permission()): ?>
                             <div class="col">
-                                <button class="btn btn-danger w-100" type="button">Deactivate</button>
+                                <a href="<?= PROOT; ?>app/customers?c=1&deactivate=<?= $customer_data["customer_id"]; ?>" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to DEACTIVATE this customer ?');">Deactivate</a>
                             </div>
                             <?php endif; ?>
                         </div>

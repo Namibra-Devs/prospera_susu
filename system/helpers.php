@@ -170,11 +170,12 @@ function get_all_admins() {
 	$output = '';
 
 	$query = "
-		SELECT * FROM susu_Admins 
-		WHERE admin_status = ?
+		SELECT * FROM susu_admins 
+		WHERE admin_status = ? 
+		AND admin_permissions != ?
 	";
 	$statement = $dbConnection->prepare($query);
-	$statement->execute([0]);
+	$statement->execute(['active', 'collector']);
 	$result = $statement->fetchAll();
 
 	foreach ($result as $row) {
@@ -191,7 +192,7 @@ function get_all_admins() {
 					
 		if ($row['admin_id'] != $admin_data['admin_id']) {
 			$output .= '
-				<a href="' . PROOT . 'app/admins?delete='.$row["admin_id"].'" class="btn btn-sm btn-light"><span class="material-symbols-outlined">delete</span></a>
+				<a href="' . PROOT . 'app/admins?delete='.$row["admin_id"].'" class="btn btn-light"><span class="material-symbols-outlined">delete</span></a>
 			';
 		}
 

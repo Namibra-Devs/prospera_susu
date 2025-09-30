@@ -13,6 +13,8 @@ if (!admin_is_logged_in()) {
 if (!admin_has_permission()) {
     admin_permission_redirect('index');
 }
+
+$title = 'Admins | ';
 $body_class = '';
 include ('../system/inc/head.php');
 include ('../system/inc/modals.php');
@@ -20,7 +22,7 @@ include ('../system/inc/sidebar.php');
 include ('../system/inc/topnav-base.php');
 include ('../system/inc/topnav.php');
 
-$total_admins = $dbConnection->query("SELECT * FROM susu_admins WHERE admin_status = 0")->rowCount();
+$total_admins = $dbConnection->query("SELECT * FROM susu_admins WHERE admin_status = 'active' AND admin_permissions != 'collector'")->rowCount();
 $admin_count = '';
 if ($total_admins > 0) {
     $admin_count = '(' . $total_admins . ')';
@@ -40,13 +42,13 @@ if (isset($_GET['delete'])) {
     $result = $statement->execute([1, $admin_id]);
     if (isset($result)) {
 
-        $message = "admin with id " . $admin_id . " has been deleted!";
+        $message = "admin with id [" . $admin_id . "] has been deleted!";
         add_to_log($message, $admin_data['admin_id'], 'admin');
 
         $_SESSION['flash_success'] = 'Admin has been deleted!';
         redirect(PROOT . "app/admins");
     } else {
-        echo js_alert("Something went wrong!");
+        $_SESSION['flash_success'] = "Something went wrong!";
         redirect(PROOT . "app/admins");
     }
 }
@@ -97,7 +99,7 @@ if (isset($_GET['add'])) {
                 $_SESSION['flash_success'] = 'Admin has been Added!';
                 redirect(PROOT . "app/admins");
             } else {
-                echo js_alert("Something went wrong!");
+                $_SESSION['flash_success'] = "Something went wrong!";
                 redirect(PROOT . "app/admins?add=1");
             }
         }
