@@ -16,13 +16,12 @@
 
     // fetch all inactive collectors
     $sql = "
-        SELECT * FROM susu_admins 
-        WHERE admin_permissions = ? 
-        AND admin_status = ? 
-        ORDER BY admin_name ASC
+        SELECT * FROM customers 
+        WHERE customer_status = ? 
+        ORDER BY customer_name ASC
     ";
     $statement = $dbConnection->prepare($sql);
-    $statement->execute(['collector', 'inactive']);
+    $statement->execute(['inactive']);
     $rows = $statement->fetchAll();
     $count_rows = $statement->rowCount();
 
@@ -31,15 +30,15 @@
     if (isset($_GET['restore']) && !empty($_GET['restore'])) {
         $restore_id = sanitize($_GET['restore']);
 
-        $sql = $dbConnection->query("UPDATE susu_admins SET admin_status = 'active' WHERE admin_id = '" . $restore_id . "'")->execute();
+        $sql = $dbConnection->query("UPDATE customers SET customer_status = 'active' WHERE customer_id = '" . $restore_id . "'")->execute();
         if ($sql) {
-            $log_message =  'Admin [' . $admin_id . '] has set collector [' . $restore_id . '] status to Active!';
+            $log_message =  'Admin [' . $admin_id . '] has set customer [' . $restore_id . '] status to Active!';
             add_to_log($log_message, $admin_id, 'admin');
             $_SESSION['flash_success'] = $log_message;
-            redirect(PROOT . 'app/collectors');
+            redirect(PROOT . 'app/customers');
         } else {
-            $_SESSION['flash_success'] = 'Could\'nt update collector status to Active!';
-            redirect(PROOT . 'app/archived-collectors');
+            $_SESSION['flash_success'] = 'Could\'nt update customer status to Active!';
+            redirect(PROOT . 'app/archived-customers');
         }
     }
 ?>
@@ -122,46 +121,35 @@
                                         <label class="form-check-label" for="tableCheckAll"></label>
                                     </div>
                                 </th>
-                                <th>Collector</th>
+                                <th>Account number</th>
+                                <th>Name</th>
                                 <th>Phone</th>
+                                <th>Default amount</th>
                                 <th>Address</th>
-                                <th>Location</th>
-                                <th colspan="2">Joined date</th>
+                                <th>Start date</th>
+                                <th>Joined date</th>
+                                <th colspan="2">Total saved</th>
                             </thead>
                             <tbody>
                                 <?php if ($count_rows > 0): ?>
-                                <?php $i = 1; foreach($rows as $row): ?>
-                                <tr>
+                                <?php 
+                                    $i = 1;
+                                    foreach($rows as $row): 
+                                        $total_saved = sum_customer_saves($row["customer_id"], $status = 'Approved');
+
+                                ?>
+                                <tr class="align-middle">
                                     <td style="width: 0px"><?= $i; ?></td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar">
-                                                <img class="avatar-img" src="<?= $photo; ?>" alt="..." />
-                                            </div>
-                                            <div class="ms-4">
-                                                <div><?= ucwords($row["admin_name"]); ?></div>
-                                                <div class="fs-sm text-body-secondary">
-                                                    <a class="text-reset" href="mailto:<?= $row['admin_email']; ?>"><?= $row['admin_email']; ?></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a class="text-muted" href="tel:<?= ($row["admin_phone"]); ?>"><?= $row["admin_phone"]; ?></a>
-                                    </td>
-                                    <td><?= ($row["admin_address"]); ?></td>
-                                    <td><?= $row["admin_state"] . ', ' . $row["admin_city"]; ?></td>
-                                    <td><?= pretty_date_notime($row["created_at"]); ?></td>
+                                    <td class="text-body-secondary"><?= $row["customer_account_number"]; ?></td>
+                                    <td><?= ucwords($row["customer_name"]); ?></td>
+                                    <td><?= $row['customer_phone']; ?></td>
+                                    <td><?= money($row['customer_default_daily_amount']); ?></td>
+                                    <td><?= $row['customer_address']; ?></td>
+                                    <td><?= (($row['customer_start_date'] == '0000-00-00') ? 'N/A' : pretty_date_notime($row['customer_start_date']));?></td>
+                                    <td><?= pretty_date_notime($row['created_at']); ?></td>
+                                    <td><?= money($total_saved); ?></td>
                                     <td style="width: 0px">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-link text-body-tertiary" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <span class="material-symbols-outlined scale-125">more_horiz</span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="<?= PROOT . 'app/collector/' . $row["admin_id"]; ?>">View</a></li>
-                                                <li><a class="dropdown-item" href="#restoreModal_<?= $i; ?>" data-bs-toggle="modal">Restore</a></li>
-                                            </ul>
-                                        </div>
+                                        <a href="<?= PROOT . 'app/archived-customers?restore=' . $row["customer_id"]; ?>" class="btn btn-secondary w-100 mt-4">Restore</a>
                                     </td>
                                 </tr>
 
@@ -186,7 +174,7 @@
                                 <?php $i++; endforeach; ?>
                                 <?php else: ?>
                                     <tr class="text-warning">
-                                        <td colspan="6"> 
+                                        <td colspan="9"> 
                                             <div class="alert alert-info">No data found!</div>
                                         </td>
                                     </tr>

@@ -99,6 +99,7 @@
         }
         if (window.location.href.indexOf("archived-collectors") > -1) {
             $('.nav-collectors').addClass('active');
+            $('.sub-nav-collectors').removeClass('active');
             $('.sub-nav-archived-collectors').addClass('active');
             $('.nav-collectors').attr('aria-expanded', true);
             $('#collectors').addClass('show');
@@ -114,6 +115,13 @@
         if (window.location.href.indexOf("customers") > -1) {
             $('.nav-customers').addClass('active');
             $('.sub-nav-customers').addClass('active');
+            $('.nav-customers').attr('aria-expanded', true);
+            $('#customers').addClass('show');
+        }
+        if (window.location.href.indexOf("archived-customers") > -1) {
+            $('.nav-customers').addClass('active');
+            $('.sub-nav-archived-customers').addClass('active');
+            $('.sub-nav-customers').removeClass('active');
             $('.nav-customers').attr('aria-expanded', true);
             $('#customers').addClass('show');
         }
