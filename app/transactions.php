@@ -48,7 +48,7 @@
     // function to get total number of customers and to display for admin and collector
     function getTotalCustomers() {
         global $dbConnection;
-        if (admin_is_logged_in()) {
+        if (admin_has_permission()) {
             $stmt = $dbConnection->prepare("SELECT COUNT(*) AS total_customers FROM customers WHERE customer_status = ?");
             $stmt->execute(['active']);
         } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
@@ -57,7 +57,7 @@
             $stmt->execute([$admin_id]);
         }
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['total_customers'] ? $row['total_customers'] : 0;
+        return $row['total_customers'] ?? 0;
     }
 
     //
@@ -234,7 +234,7 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Customers</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= getTotalCustomers(0); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= getTotalCustomers(); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->

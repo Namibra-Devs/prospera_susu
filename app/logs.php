@@ -33,7 +33,7 @@
     $today = date("Y-m-d");
     $where = '';
     if (!admin_has_permission()) {
-        $where = ' WHERE susu_admins.admin_id = "' . $admin_id . '" AND CAST(susu_logs.created_at AS date) = "' . $today . '" ';
+        $where = ' WHERE susu_admins.admin_id = "' . $admin_id . '" ';
     }
 
     $sql = "
@@ -102,6 +102,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <?php if (admin_has_permission()): ?>
                                 <div class="col-12 col-lg">
                                     <div class="row gx-3">
                                         <!-- <div class="col col-lg-auto ms-auto">
@@ -200,6 +201,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

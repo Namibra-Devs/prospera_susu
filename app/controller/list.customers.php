@@ -19,7 +19,7 @@ $conn = $dbConnection;
     $query = "SELECT * FROM customers ";
 	// check if a collector is logged in, then show only their customers
 	if (admin_has_permission('collector') && !admin_has_permission('admin')) {
-		$query .= " WHERE customer_added_by = 'collector' AND customer_collector_id = '". $admin_id . "' AND ";
+		$query .= " WHERE customer_added_by = 'collector' AND customer_collector_id = '". $admin_id . "' ";
 	}
 
 	// search query
@@ -28,6 +28,8 @@ $conn = $dbConnection;
     if ($search_query != '') {
 		if (admin_has_permission()) {
 			$query .= " WHERE ";
+		} else {
+			$query .= " AND ";
 		}
         $query .= '
             (customer_name LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
@@ -47,7 +49,6 @@ $conn = $dbConnection;
 
     }
     $query .= ' ORDER BY customer_name ASC ';
-	// dnd($query);
 
     $filter_query = $query . 'LIMIT ' . $start . ', ' . $limit . '';
 
