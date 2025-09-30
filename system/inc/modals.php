@@ -302,26 +302,72 @@
         if (admin_has_permission('collector') && !admin_has_permission('admin')): 
     ?>
         <div class="modal fade" id="todayUploadModal" tabindex="-1" aria-labelledby="todayUploadModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h1 class="modal-title fs-5" id="todayUploadModalLabel">Upload todays collection file</h1>
+                        <button class="btn-close" id="closeUploadModal" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="controller/upload.collection.file.php" method="post" enctype="multipart/form-data" id="upload-collection-form" class="dropzone">
+                            <div class="dz-message">Drop your image here or click to select</div>
+                            <div class="mb-4 mt-2">
+                                <label class="form-label" for="totalcollected">Total amount collected</label>
+                                <input class="form-control" id="totalcollected" name="totalcollected" type="number" min="0.00" step="0.01" placeholder="Enter total amount collected" required />
+                            </div>
+                            <div class="mb-4">
+                                <input class="form-control" id="upload_date" name="upload_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="note">Note (optional)</label>
+                                <textarea class="form-control" id="note" name="note" rows="3" data-autosize></textarea>
+                                <div class="form-text">Limit 500</div>
+                            </div>
+                            <button type="button" id="uploadButton" class="btn btn-secondary w-100">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- UPLOAD CUSTOMER/SAVER DOCUMENTS -->
+    <div class="modal fade" id="customerUploadModal" tabindex="-1" aria-labelledby="customerUploadModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 pb-0">
-                    <h1 class="modal-title fs-5" id="todayUploadModalLabel">Upload todays collection file</h1>
+                    <h1 class="modal-title fs-5" id="customerUploadModalLabel">Upload customer decuments</h1>
                     <button class="btn-close" id="closeUploadModal" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="controller/upload.collection.file.php" method="post" enctype="multipart/form-data" id="upload-collection-form" class="dropzone">
+                    <form action="controller/upload.customer.documents.php" method="post" enctype="multipart/form-data" id="upload-collection-form" class="dropzone">
                         <div class="dz-message">Drop your image here or click to select</div>
                         <div class="mb-4 mt-2">
-                            <label class="form-label" for="totalcollected">Total amount collected</label>
-                            <input class="form-control" id="totalcollected" name="totalcollected" type="number" min="0.00" step="0.01" placeholder="Enter total amount collected" required />
+                            <label class="form-label" for="idcard">ID</label>
+                            <select class="form-control bg-body" id="idcard" name="idcard" type="text">
+                                <option value=""></option>
+                                <option value="ghana-card"<?= (($idcard == 'ghana-card') ? 'selected' : ''); ?>>Ghana Card</option>
+                                <option value="driver-licence"<?= (($idcard == 'driver-licence') ? 'selected' : ''); ?>>Driver Licence</option>
+                                <option value="voters-id-card"<?= (($idcard == 'voters-id-card') ? 'selected' : ''); ?>>Voters ID card</option>
+                            </select>
                         </div>
                         <div class="mb-4">
-                            <input class="form-control" id="upload_date" name="upload_date" type="text" data-flatpickr readonly value="<?= date('Y-m-d'); ?>" required>
+                            <label class="form-label" for="idnumber">ID Number</label>
+                            <input class="form-control bg-body" id="idnumber" name="idnumber" type="text" value="<?= $idnumber; ?>" />
                         </div>
-                         <div class="mb-4">
-                            <label class="form-label" for="note">Note (optional)</label>
-                            <textarea class="form-control" id="note" name="note" rows="3" data-autosize></textarea>
-                            <div class="form-text">Limit 500</div>
+                        <div class="col">
+                            <div class="mb-0">
+                                <label for="dropzone">Front card</label>
+                                <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
+                                <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-0">
+                                <label for="dropzone">Back Card</label>
+                                <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
+                                <div class="dropzone dz-clickable" id="dropzone"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                            </div>
                         </div>
                         <button type="button" id="uploadButton" class="btn btn-secondary w-100">Upload</button>
                     </form>
@@ -329,7 +375,6 @@
             </div>
         </div>
     </div>
-    <?php endif; ?>
     
     <!-- Offcanvas: Order -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="orderModal" aria-labelledby="orderModalLabel">

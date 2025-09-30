@@ -152,6 +152,24 @@
         }
     }
 
+        //
+    // Deposite status
+    if (isset($_GET['c']) && !empty($_GET['c'])) {
+        if (isset($_GET['deactivate']) && !empty($_GET['deactivate'])) {
+            $deactivate_id = sanitize($_GET['deactivate']);
+
+            $sql = $dbConnection->query("UPDATE customers SET customer_status = 'inactive' WHERE customer_id = '" . $deactivate_id . "'")->execute();
+            if ($sql) {
+                $log_message =  'Admin [' . $admin_id . '] has set customer [' . $deactivate_id . '] status to Inactive!';
+                add_to_log($log_message, $admin_id, 'admin');
+                $_SESSION['flash_success'] = $log_message;
+                redirect(PROOT . 'app/customers');
+            } else {
+                $_SESSION['flash_success'] = 'Could\'nt update customer status to Inactive!';
+                redirect(PROOT . 'app/customers');
+            }
+        }
+    }
 
 
 
@@ -383,11 +401,11 @@
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">ID card name</span>
-                                        <span><?= $customer_data["customer_id_type"] == '' ?? 'N/A'; ?></span>
+                                        <span><?= (($customer_data["customer_id_type"] != '') ? $customer_data["customer_id_type"] : 'N/A'); ?></span>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">ID card number</span>
-                                        <span><?= $customer_data["customer_id_number"] ?? 'N/A'; ?></span>
+                                        <span><?= (($customer_data["customer_id_number"] != '') ? $customer_data["customer_id_number"] : 'N/A'); ?></span>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">Added by</span>

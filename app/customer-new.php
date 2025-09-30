@@ -20,13 +20,11 @@
 
     //
     $added_by = null;
-    $added_by_id = null;
-    if (array_key_exists('PRSADMIN', $_SESSION)) {
+    $added_by_id = $admin_id;
+    if (admin_has_permission()) {
         $added_by = 'admin';
-        $added_by_id = $_SESSION['PRSADMIN'];
-    } elseif (array_key_exists('PRSCOLLECTOR', $_SESSION)) {
+    } elseif (admin_has_permission('collector') && !admin_has_permission()) {
         $added_by = 'collector';
-        $added_by_id = $_SESSION['PRSCOLLECTOR'];
     }
 
     //
@@ -78,7 +76,7 @@
         $required = array('name', 'phone', 'address', 'region', 'city', 'amount', 'startdate');
         foreach ($required as $f) {
             if (empty($f)) {
-                $errors = $f . ' is required !';
+                $errors = ucfirst($f) . ' is required !';
                 break;
             }
         }
@@ -153,9 +151,9 @@
                 add_to_log($log_message, $added_by_id, $added_by);
 
                 $_SESSION['flash_success'] = "Customer added successfully !";
-                // redirect(PROOT . 'app/customers');
+                redirect(PROOT . 'app/customers');
             } else {
-                $error = "Failed to add collector. Please try again !";
+                $error = "Failed to add customer. Please try again !";
             }
         }
     }
@@ -209,7 +207,7 @@
 
                     <!-- Form -->
                     <form class="" id="new-customer-form" method="POST" enctype="multipart/form-data">
-
+                        <p class="text-danger"><?= $error; ?></p>
                         <section class="card card-line bg-body-tertiary border-transparent mb-5">
                             <div class="card-body">
                                 <h3 class="fs-5 mb-1">General</h3>
