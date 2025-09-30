@@ -100,7 +100,7 @@ if ($total_data > 0) {
 		$options = '';
 		if (admin_has_permission()) {
 			if ($row['daily_status'] == 'Pending') {
-				$options .= '<li><a class="dropdown-item" href="'. PROOT .'app/collection-verify?id='. $row['daily_id'] .'">Verify collection</a></li>';
+				$options .= '<li><a class="dropdown-item" href="'. PROOT .'app/collections?c=1&verify='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to VERIFY this collection record?\');">Verify collection</a></li>';
 			}
 		}
 
@@ -109,7 +109,7 @@ if ($total_data > 0) {
 			$options .= '
 				<li><a class="dropdown-item" href="#viewModal_'. $row['id'] .'" data-bs-toggle="modal">View details</a></li>
 				<li><hr class="dropdown-divider" /></li>
-				<li><a class="dropdown-item text-danger" href="'. PROOT .'app/collection-delete?id='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to delete this collection record?\');">Delete collection</a></li>
+				<li><a class="dropdown-item text-danger" href="'. PROOT .'app/collections?c=1&delete='. $row['daily_id'] .'&f='.basename($row["daily_proof_image"]).'" onclick="return confirm(\'Are you sure you want to DELETE this collection record?\');">Delete collection</a></li>
 			';
 		}
 
@@ -117,7 +117,7 @@ if ($total_data > 0) {
 		$verify_option = '';
 		if (admin_has_permission()) {
 			if ($row['daily_status'] == 'Pending') {
-				$verify_option .= '<a href="'. PROOT .'app/collections?approve='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to VERIFY this collection record?\');" class="btn btn-secondary w-100 mt-4">Verify</a>
+				$verify_option .= '<a href="'. PROOT .'app/collections?c=1&verify='. $row['daily_id'] .'" onclick="return confirm(\'Are you sure you want to VERIFY this collection record?\');" class="btn btn-secondary w-100 mt-4">Verify</a>
 				';
 			}
 		}
@@ -173,6 +173,7 @@ if ($total_data > 0) {
                         </div>
                         <div class="modal-body">
 							<img src="' . PROOT . 'assets/media/uploads/collection-files/'. basename($row['daily_proof_image']) . '" class="img-thumbnail" />
+							<br>
 							<small><a href="' . PROOT . 'assets/media/uploads/collection-files/'. basename($row['daily_proof_image']) . '" target="_blank"">view image in new tab</a></small>
 
 							<!-- Header -->

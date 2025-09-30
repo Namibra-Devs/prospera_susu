@@ -64,7 +64,7 @@
                     <!-- Heading -->
                     <h1 class="fs-4 mb-0">Logs</h1>
                 </div>
-                <?php if (!admin_has_permission()): ?>
+                <?php if (admin_has_permission()): ?>
                 <div class="col-12 col-sm-auto mt-4 mt-sm-0">
                     <!-- Action -->
                     <a class="btn btn-light d-block" href="<?= goBack(); ?>"><span class="material-symbols-outlined me-1">arrow_back_ios</span> Go back </a>
