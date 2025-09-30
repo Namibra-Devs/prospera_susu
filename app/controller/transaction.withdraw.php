@@ -37,6 +37,10 @@
             $errors = 'Balance has been temptered !';
         }
 
+         if ((float)$b <= 0) {
+            $errors = 'Insufficient Balance !';
+        }
+
         if ((float)$transaction_amount > (float)$b) {
             $errors = 'Amount to withdraw is greater that balance available !';
         }

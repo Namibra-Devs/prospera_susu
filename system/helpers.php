@@ -164,7 +164,7 @@ function admin_has_permission($permission = 'admin') {
 }
 
 // GET ALL ADMINS
-function get_all_admins() {
+function get_all_admins($status = 'active') {
 	global $dbConnection;
 	global $admin_data;
 	$output = '';
@@ -175,7 +175,7 @@ function get_all_admins() {
 		AND admin_permissions != ?
 	";
 	$statement = $dbConnection->prepare($query);
-	$statement->execute(['active', 'collector']);
+	$statement->execute([$status, 'collector']);
 	$result = $statement->fetchAll();
 
 	foreach ($result as $row) {
@@ -191,9 +191,15 @@ function get_all_admins() {
 		';
 					
 		if ($row['admin_id'] != $admin_data['admin_id']) {
-			$output .= '
-				<a href="' . PROOT . 'app/admins?delete='.$row["admin_id"].'" class="btn btn-light"><span class="material-symbols-outlined">delete</span></a>
-			';
+			if ($row["admin_status"] == 'inactive') {
+				$output .= '
+					<a href="' . PROOT . 'app/archived-admins?restore='.$row["admin_id"].'" class="btn btn-light"><span class="material-symbols-outlined">settings_backup_restore</span></a>
+				';
+			} else {
+				$output .= '
+					<a href="' . PROOT . 'app/admins?delete='.$row["admin_id"].'" class="btn btn-light"><span class="material-symbols-outlined">delete</span></a>
+				';
+			}
 		}
 
 		$output .= '
@@ -655,4 +661,11 @@ function get_person_role() {
 	}
 	
 	return $out;
+}
+
+function get_total_customer() {
+	global $dbConnection;
+
+	$sql = $dbConnection->query("SELECT * FROM customers WHERE customer_status = 'active'")->rowCount();
+	return $sql ?? 0;
 }

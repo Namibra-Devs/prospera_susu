@@ -723,7 +723,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="col-auto">
+                                        <!-- <div class="col-auto">
                                             <div class="dropdown">
                                                 <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                                     <span class="material-symbols-outlined">filter_list</span>
@@ -835,7 +835,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

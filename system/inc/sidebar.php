@@ -965,9 +965,9 @@
                             </a>
                             <div class="collapse " id="admins">
                                 <nav class="nav nav-pills">
-                                    <a class="nav-link " href="<?= PROOT; ?>app/admins">Admins</a>
-                                    <a class="nav-link " href="<?= PROOT; ?>app/archived-admins">Archive admins</a>
-                                    <a class="nav-link " href="<?= PROOT; ?>app/admin-new">New admin</a>
+                                    <a class="nav-link sub-nav-admins" href="<?= PROOT; ?>app/admins">Admins</a>
+                                    <a class="nav-link sub-nav-archived-admins" href="<?= PROOT; ?>app/archived-admins">Archive admins</a>
+                                    <a class="nav-link sub-nav-admin-new" href="<?= PROOT; ?>app/admin-new">New admin</a>
                                 </nav>
                             </div>
                         </div>

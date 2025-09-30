@@ -113,10 +113,10 @@
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <!-- Heading -->
-                                        <h4 class="fs-sm fw-normal text-body-secondary mb-1">Loans</h4>
+                                        <h4 class="fs-sm fw-normal text-body-secondary mb-1">Customers</h4>
 
                                         <!-- Text -->
-                                        <div class="fs-4 fw-semibold">14.5%</div>
+                                        <div class="fs-4 fw-semibold"><?= get_total_customer(); ?></div>
                                     </div>
                                     <div class="col-auto">
                                         <!-- Avatar -->
@@ -139,10 +139,10 @@
                     </div>
                     <div class="col-auto my-n2">
                         <select id="chartTypeSelect" class="form-select w-auto">
-                            <option value="line" selected>Line</option>
-                            <option value="bar">Bar</option>
-                            <option value="pie">Pie</option>
-                            <option value="doughnut">Doughnut</option>
+                           <option value="line" selected>Line</option>
+                           <option value="bar">Bar</option>
+                           <option value="pie">Pie</option>
+                           <option value="doughnut">Doughnut</option>
                         </select>
 
 

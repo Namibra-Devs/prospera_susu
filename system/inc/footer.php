@@ -187,8 +187,17 @@
             $('#pushes').addClass('show');
         }
 
+        // admins
         if (window.location.href.indexOf("admins") > -1) {
             $('.nav-admins').addClass('active');
+            $('.sub-nav-admins').addClass('active');
+            $('.nav-admins').attr('aria-expanded', true);
+            $('#admins').addClass('show');
+        }
+        if (window.location.href.indexOf("archived-admins") > -1) {
+            $('.nav-admins').addClass('active');
+            $('.sub-nav-admins').removeClass('active');
+            $('.sub-nav-archived-admins').addClass('active');
             $('.nav-admins').attr('aria-expanded', true);
             $('#admins').addClass('show');
         }
@@ -477,6 +486,13 @@
             var payment_mode = $('#withdrawal_payment_mode').val();
 
             // check if withdrawal amount is greater than balance
+            if (+balance <= 0) {
+                $('.toast-body').html('Balance is insufficient.');
+                $('.toast').toast('show');
+                $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+                return false;
+            }
             if (+amount > +balance) {
                 $('.toast-body').html('Withdrawal amount cannot be greater than balance.');
                 $('.toast').toast('show');
