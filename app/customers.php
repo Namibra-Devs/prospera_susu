@@ -47,8 +47,7 @@
 
     // create downoadable file
     if (isset($_GET['download']) && !empty($_GET['download'])) {
-        $file = 'C:/xampp/htdocs' . $_GET['download'];
-        // dnd($file);
+        $file = BASEURL . 'assets/media/uploads/customers-media/' . $_GET['download'];
 
         if (file_exists($file)) {
             header('Content-Description: File Transfer');
@@ -57,8 +56,8 @@
             header('Content-Length: ' . filesize($file));
             readfile($file);
             
-            redirect(PROOT . 'app/customers/' . $_GET['id']);
-            // exit;
+            //redirect(PROOT . 'app/customers/' . $_GET['id']);
+            exit;
         } else {
             $_SESSION['flash_error'] = "File not found.";
             redirect(PROOT . 'app/customers/' . $_GET['id']);
@@ -459,13 +458,12 @@
                         <div class="d-flex align-items-center justify-content-between mb-5">
                             <h2 class="fs-5 mb-0">Transaction history</h2>
                             <div class="d-flex">
-                                <div class="dropdown">
+                                <!-- <div class="dropdown">
                                     <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                         <span class="material-symbols-outlined">filter_list</span>
                                     </button>
                                     <div class="dropdown-menu rounded-3 p-6">
                                         <h4 class="fs-lg mb-4">Filter</h4>
-                                     
                                     </div>
                                 </div>
                                 <div class="dropdown ms-1">
@@ -473,11 +471,11 @@
                                         <span class="material-symbols-outlined">sort_by_alpha</span>
                                     </button>
                                     <div class="dropdown-menu rounded-3 p-6">
-                                    <h4 class="fs-lg mb-4">Sort</h4>
-                                </div>
+                                        <h4 class="fs-lg mb-4">Sort</h4>
+                                    </div>
+                                </div> -->
                             </div>
                         </div>
-                    </div>
 
                     <!-- Table -->
                     <div class="table-responsive">
@@ -582,7 +580,7 @@
                                 </td>
                                 <td class="text-body-secondary">Uploaded on <?= pretty_date_notime($customer_data['created_at']); ?></td>
                                 <td style="width: 0">
-                                    <a href="<?= PROOT; ?>app/customers?id=<?= $customer_data['customer_id']; ?>&download=<?= $front_file; ?>" class="btn btn-sm btn-light">Download</a>
+                                    <a href="<?= PROOT; ?>app/customers?id=<?= $customer_data['customer_id']; ?>&download=<?= $customer_data['customer_id_photo_front']; ?>" class="btn btn-sm btn-light">Download</a>
                                 </td>
                             </tr>
                             <?php endif; ?>
@@ -613,7 +611,7 @@
                                 </td>
                                 <td class="text-body-secondary">Updated on <?= pretty_date_notime($customer_data['created_at']); ?></td>
                                 <td style="width: 0">
-                                    <a class="btn btn-sm btn-light" href="<?= PROOT; ?>app/customers?id=<?= $customer_data['customer_id']; ?>&download=<?= $front_file; ?>">Download</a>
+                                    <a class="btn btn-sm btn-light" href="<?= PROOT; ?>app/customers?id=<?= $customer_data['customer_id']; ?>&download=<?= $customer_data['customer_id_photo_back']; ?>">Download</a>
                                 </td>
                             </tr>
                             <?php endif; ?>

@@ -301,10 +301,10 @@
                             </a>
                             <div class="dropdown-menu ms-xl-3">
                                 <h6 class="dropdown-header d-none d-xl-block">Documentation</h6>
-                                <a class="dropdown-item " href="./docs/getting-started.html">Getting started</a>
-                                <a class="dropdown-item " href="./docs/components.html">Components</a>
-                                <a class="dropdown-item d-flex " href="./docs/changelog.html"
-                                    >Changelog <span class="badge text-bg-primary ms-auto">1.0.6</span>
+                                <!-- <a class="dropdown-item " href="./docs/getting-started.html">Getting started</a>
+                                <a class="dropdown-item " href="./docs/components.html">Components</a> -->
+                                <a class="dropdown-item d-flex " href="javascript:;"
+                                    >Version <span class="badge text-bg-primary ms-auto">0.0.1</span>
                                     </a>
                             </div>
                         </div>
@@ -612,10 +612,10 @@
                             </a>
                             <div class="dropdown-menu ms-xl-3">
                                 <h6 class="dropdown-header d-none d-xl-block">Documentation</h6>
-                                <a class="dropdown-item " href="./docs/getting-started.html">Getting started</a>
-                                <a class="dropdown-item " href="./docs/components.html">Components</a>
-                                <a class="dropdown-item d-flex " href="./docs/changelog.html"
-                                    >Changelog <span class="badge text-bg-primary ms-auto">1.0.6</span></a
+                                <!-- <a class="dropdown-item " href="./docs/getting-started.html">Getting started</a>
+                                <a class="dropdown-item " href="./docs/components.html">Components</a> -->
+                                <a class="dropdown-item d-flex " href="javascript:;"
+                                    >Version <span class="badge text-bg-primary ms-auto">0.0.1</span></a
                                 >
                             </div>
                         </div>
@@ -997,7 +997,7 @@
             
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills mb-xl-7">
-                        <div class="nav-item">
+                        <!-- <div class="nav-item">
                             <a class="nav-link " href="<?= PROOT; ?>documentation">
                             <span class="material-symbols-outlined me-3">sticky_note_2</span> Getting started
                             </a>
@@ -1006,7 +1006,7 @@
                             <a class="nav-link " href="javascript:;">
                             <span class="material-symbols-outlined me-3">deployed_code</span> Components
                             </a>
-                        </div>
+                        </div> -->
                         <div class="nav-item">
                             <a class="nav-link " href="javascript:;">
                             <span class="material-symbols-outlined me-3">list_alt</span> Version
