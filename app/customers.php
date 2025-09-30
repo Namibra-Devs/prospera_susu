@@ -528,7 +528,7 @@
                         <h2 class="fs-5 mb-0">Documents</h2>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-light" type="button"><span class="material-symbols-outlined text-body-secondary me-1">upload</span>Upload</button>
+                        <button class="btn btn-light" id="#customerUploadModal" type="button" data-bs-toggle="modal" data-bs-target="#customerUploadModal"><span class="material-symbols-outlined text-body-secondary me-1">upload</span>Upload</button>
                     </div>
                 </div>
 
@@ -596,6 +596,47 @@
                     </table>
                 </div>
             </section>
+
+            <!-- UPLOAD CUSTOMER/SAVER DOCUMENTS -->
+            <div class="modal fade" id="customerUploadModal" tabindex="-1" aria-labelledby="customerUploadModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header border-bottom-0 pb-0">
+                            <h1 class="modal-title fs-5" id="customerUploadModalLabel">Upload customer decuments</h1>
+                            <button class="btn-close" id="closeUploadModal" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="controller/upload.customer.documents.php" method="post" enctype="multipart/form-data" id="customer-upload-form" class="dropzone">
+                                                                
+                                <div class="mb-4 mt-2">
+                                    <label class="form-label" for="idcard">ID</label>
+                                    <select class="form-control" id="idcard" name="idcard" type="text">
+                                        <option value=""></option>
+                                        <option value="ghana-card"<?= (($customer_data['customer_id_type'] == 'ghana-card') ? 'selected' : ''); ?>>Ghana Card</option>
+                                        <option value="driver-licence"<?= (($customer_data['customer_id_type'] == 'driver-licence') ? 'selected' : ''); ?>>Driver Licence</option>
+                                        <option value="voters-id-card"<?= (($customer_data['customer_id_type'] == 'voters-id-card') ? 'selected' : ''); ?>>Voters ID card</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label" for="idnumber">ID Number</label>
+                                    <input class="form-control" id="idnumber" name="idnumber" type="text" value="<?= $customer_data['customer_id_number']; ?>" />
+                                </div>
+                                <div class="mb-4">
+                                    <label for="dropzone">Front card</label>
+                                    <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
+                                    <div class="dropzone dz-clickable" id="dropzone-front"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="dropzone">Back Card</label>
+                                    <div class="form-text mt-0 mb-3">Attach files to this customer.</div>
+                                    <div class="dropzone dz-clickable" id="dropzone-back"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                                </div>
+                                <button type="button" id="customer-upload-button" class="btn btn-secondary w-100">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <?php else: ?>
 
@@ -1038,4 +1079,120 @@
         });
 
     });
+</script>
+
+  <!-- UPLOAD COLLECT FILE SCRIPT  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+<script>
+    Dropzone.autoDiscover = false;
+
+    const frontDropzone  = new Dropzone("#dropzone-front", {
+        url: "<?= PROOT; ?>app/controller/upload.customer.document.php",
+        paramName: "front_card", // file name
+        dictDefaultMessage: "Drag and drop file here or click to upload", // default message
+        dictFallbackMessage: "Your browser does not support drag and drop file uploads.",
+        autoProcessQueue: false,
+        maxFiles: 1,
+        maxFilesize: 10, // MB
+        acceptedFiles: "image/*,application/pdf",
+        addRemoveLinks: true
+    });
+    
+    
+    const backDropzone  = new Dropzone("#dropzone-back", {
+        url: "<?= PROOT; ?>app/controller/upload.customer.document.php",
+        paramName: "back_card", // file name
+        dictDefaultMessage: "Drag and drop file here or click to upload", // default message
+        dictFallbackMessage: "Your browser does not support drag and drop file uploads.",
+        autoProcessQueue: false,
+        maxFiles: 1,
+        maxFilesize: 10, // MB
+        acceptedFiles: "image/*,application/pdf",
+        addRemoveLinks: true
+    });
+
+    document.getElementById("customer-upload-button").addEventListener("click", function () { 
+        const formData = new FormData();
+
+        // Add regular form fields
+        formData.append("idcard", document.getElementById("idcard").value);
+        formData.append("idnumber", document.getElementById("idnumber").value);
+
+        // validate if front file is selected
+        if (frontDropzone.getAcceptedFiles().length === 0) {
+            $('.toast-body').html('Please upload a front page of your document.');
+            $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+            return false;
+        }
+        
+        // validate if back file is selected
+        if (backDropzone.getAcceptedFiles().length === 0) {
+            $('.toast-body').html('Please upload a back page of your document.');
+            $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+            return false;
+        }
+
+        // validate
+        var idcard = document.getElementById("idcard").value;
+        if (idcard === '') {
+            $('.toast-body').html('Please select ID card type.');
+            $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+            return false;
+        }
+
+        // validate
+        var idnumber = document.getElementById("idnumber").value;
+        if (idnumber === '') {
+            $('.toast-body').html('Please enter ID card number.');
+            $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+            return false;
+        }
+
+        // Add files
+        formData.append("front_card", frontDropzone.files[0]);
+        formData.append("back_card", backDropzone.files[0]);
+
+        // show loading on button
+        $('#customer-upload-button').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Uploading ...</span>');
+        // disable close button
+        $('#closeUploadModal').attr('disabled', true);
+
+        // Submit via AJAX
+        fetch("<?= PROOT; ?>app/controller/upload.customer.documents.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert("Upload successful!");
+            console.log(data);
+            frontDropzone.removeAllFiles(true);
+            backDropzone.removeAllFiles(true);
+        })
+        .catch(error => {
+            alert("Upload failed.");
+            console.error(error);
+        });
+    });
+
+    // reset form if upload modal is closed
+    $('#customerUploadModal').on('hidden.bs.modal', function () {
+        // reset form
+        $('#customer-upload-form')[0].reset();
+        frontDropzone.removeAllFiles(true);
+        backDropzone.removeAllFiles(true);
+        // enable button
+        $('#uploadButton').attr('disabled', false).html('Upload');
+        // enable close button
+        $('#closeUploadModal').attr('disabled', false);
+    });
+
 </script>

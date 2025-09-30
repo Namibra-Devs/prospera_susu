@@ -5,55 +5,63 @@
     
     $message = null;
     $status = null;
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_date'])) {
-        $uploadDate = $_POST['upload_date'] ?? null;
-        $totalcollected = $_POST['totalcollected'] ?? 0;
-        $note = sanitize($_POST['note']); // 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $idcard = $_POST['idcard'] ?? null;
+        $idnumber = $_POST['idnumber'] ?? 0;
 
-        // check if today date is already uploaded
-        $check_sql = "SELECT * FROM daily_collections WHERE daily_collection_date = ? LIMIT 1";
-        $check_stmt = $dbConnection->prepare($check_sql);
-        $check_stmt->execute([$uploadDate]);
-        if ($check_stmt->rowCount() > 0) {
-            $message = "Collection for this date is already uploaded.";
-        }
 
         // Validate file upload
-        if (!isset($_FILES['collection_file']) || $_FILES['collection_file']['error'] !== UPLOAD_ERR_OK) {
+        if (!isset($_FILES['front_card']) || $_FILES['front_card']['error'] !== UPLOAD_ERR_OK) {
+            $message = "No file uploaded.";   
+        }
+        
+        // Validate file upload
+        if (!isset($_FILES['back_card']) || $_FILES['back_card']['error'] !== UPLOAD_ERR_OK) {
             $message = "No file uploaded.";
-            
         }
 
-        $file = $_FILES['collection_file'];
-        $allowedTypes = ['image/png', 'image/jpeg'];
-        $maxSize = 6 * 1024 * 1024; // 6MB
+        $frontFile = $_FILES['front_card'];
+        $backFile = $_FILES['back_card'];
 
-        if (!in_array($file['type'], $allowedTypes)) {
-            $message = "Only PNG and JPG files are allowed.";
+        $allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
+        $maxSize = 10 * 1024 * 1024; // 10MB
+
+        if (!in_array($frontFile['type'], $allowedTypes)) {
+            $message = "Only PNG and JPG files are allowed on Front card.";
         }
 
-        if ($file['size'] > $maxSize) {
-            $message = "File size exceeds 6MB.";
+         if (!in_array($backFile['type'], $allowedTypes)) {
+            $message = "Only PNG and JPG files are allowed on Back card.";
         }
 
-        $uploadDir =  '../../assets/media/uploads/collection-files/';
+        if ($frontFile['size'] > $maxSize) {
+            $message = "Front file size exceeds 10MB.";
+        }
+        
+        if ($backFile['size'] > $maxSize) {
+            $message = "Back file size exceeds 10MB.";
+        }
+
+        $uploadDir =  '../../assets/media/uploads/customers-media/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
 
-        $filename = basename($file['name']);
+        $frontFilename = basename($frontFile['name']);
+        $backFilename = basename($backFile['name']);
         
-        $targetPath = $uploadDir . $filename;
-        $targetPath = $uploadDir . time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename); // prevent overwriting and sanitize filename
+        $front_targetPath = $uploadDir . $frontFilename;
+        $front_targetPath = $uploadDir . time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $frontFilename); // prevent overwriting and sanitize filename
 
-        $uniqueid = guidv4() . '-' . strtotime(date('Y-m-d H:i:s'));
+        $back_targetPath = $uploadDir . $backFilename;
+        $back_targetPath = $uploadDir . time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $backFilename); // prevent overwriting and sanitize filename
 
         if ($message == null || $message == '') {
-            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+            if (move_uploaded_file($frontFile['tmp_name'], $front_targetPath)) {
                 // insert into daily_collections
                 $sql = "INSERT INTO daily_collections (daily_id, daily_collector_id, daily_collection_date, daily_total_collected, daily_proof_image, daily_note) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt = $dbConnection->prepare($sql);
-                $result = $stmt->execute([$uniqueid, $admin_id, $uploadDate, $totalcollected, $targetPath, $note]);
+                $result = $stmt->execute([$uniqueid, $admin_id, $uploadDate, $totalcollected, $front_targetPath, $note]);
                 if (!$result) {
                     $message = "Database error: Could not save file info.";
                 }
