@@ -45,6 +45,26 @@
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // create downoadable file
+    if (isset($_GET['download']) && !empty($_GET['download'])) {
+        $file = 'C:/xampp/htdocs' . $_GET['download'];
+        // dnd($file);
+
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . basename($file) . '"');
+            header('Content-Length: ' . filesize($file));
+            readfile($file);
+            
+            redirect(PROOT . 'app/customers/' . $_GET['id']);
+            // exit;
+        } else {
+            $_SESSION['flash_error'] = "File not found.";
+            redirect(PROOT . 'app/customers/' . $_GET['id']);
+        }
+    }
+
 
 
     //
@@ -562,7 +582,7 @@
                                 </td>
                                 <td class="text-body-secondary">Uploaded on <?= pretty_date_notime($customer_data['created_at']); ?></td>
                                 <td style="width: 0">
-                                    <button class="btn btn-sm btn-light" type="button">Download</button>
+                                    <a href="<?= PROOT; ?>app/customers?id=<?= $customer_data['customer_id']; ?>&download=<?= $front_file; ?>" class="btn btn-sm btn-light">Download</a>
                                 </td>
                             </tr>
                             <?php endif; ?>
@@ -593,7 +613,7 @@
                                 </td>
                                 <td class="text-body-secondary">Updated on <?= pretty_date_notime($customer_data['created_at']); ?></td>
                                 <td style="width: 0">
-                                    <button class="btn btn-sm btn-light" type="button">Download</button>
+                                    <a class="btn btn-sm btn-light" href="<?= PROOT; ?>app/customers?id=<?= $customer_data['customer_id']; ?>&download=<?= $front_file; ?>">Download</a>
                                 </td>
                             </tr>
                             <?php endif; ?>
