@@ -37,17 +37,17 @@
                             <a class="dropdown-item d-flex" data-bs-theme-value="auto" href="#" role="button"> <span class="material-symbols-outlined me-2">contrast</span> Auto </a>
                     
                             <!-- Navigation position -->
-                            <hr class="dropdown-divider" />
+                            <!-- <hr class="dropdown-divider" />
                             <h6 class="dropdown-header">Navigation position</h6>
                             <a class="dropdown-item d-flex" data-bs-navigation-position-value="sidenav" href="#" role="button">
                                 <span class="material-symbols-outlined me-2">keyboard_tab_rtl</span> Sidenav
                             </a>
                             <a class="dropdown-item d-flex" data-bs-navigation-position-value="topnav" href="#" role="button">
                                 <span class="material-symbols-outlined me-2">vertical_align_top</span> Topnav
-                            </a>
+                            </a> -->
                         
                             <!-- Sidenav sizing -->
-                            <div class="sidenav-sizing">
+                            <!-- <div class="sidenav-sizing">
                                 <hr class="dropdown-divider" />
                                 <h6 class="dropdown-header">Sidenav sizing</h6>
                                 <a class="dropdown-item d-flex" data-bs-sidenav-sizing-value="base" href="#" role="button">
@@ -59,7 +59,7 @@
                                 <a class="dropdown-item d-flex" data-bs-sidenav-sizing-value="sm" href="#" role="button">
                                     <span class="material-symbols-outlined me-2">density_small</span> Small
                                 </a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </nav>
