@@ -91,11 +91,11 @@
         }
         
         // check if email or phone number already exist
-        if (email_exist($email)) {
+        if (!empty($email) && email_exist($email)) {
             $error = "Email address already exists.";
         }
 
-        if (phone_exist($phone)) {
+        if (!empty($phone) && phone_exist($phone)) {
             $error = "Phone number already exists.";
         }
 
