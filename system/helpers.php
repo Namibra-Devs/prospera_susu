@@ -47,30 +47,6 @@ function user_login_redirect($url = 'auth/signin') {
 	redirect(PROOT . $url);
 }
 
-// get user details by id
-function get_id_details($dbConnection, $id) {
-	$statement = $dbConnection->query("SELECT * FROM levina_users WHERE user_id = '" . $id . "'")->fetch(PDO::FETCH_ASSOC);
-	return $statement;
-}
-
- // get list of products
- function count_products() {
-	global $dbConnection;
-	$statement = $dbConnection->query("SELECT * FROM levina_products WHERE product_trash = 0")->rowCount();
-	return $statement;
- }
- 
-// get list of products
-function get_products() {
-	global $dbConnection;
-	$statement = $dbConnection->query("SELECT * FROM levina_products WHERE product_trash = 0 ORDER BY createdAt DESC")->fetchAll(PDO::FETCH_ASSOC);
-	return $statement;
-}
-
-
-
-
-
 
 
 
@@ -617,6 +593,53 @@ function add_to_log($message, $person, $type) {
 		return true;
 	}
 	return false;
+}
+
+// get logs for admins
+function get_logs($admin) {
+	global $dbConnection;
+	$output = '';
+
+	$where = '';
+	if (!admin_has_permission()) {
+		$where = ' WHERE susu_logs.log_person = "' . $admin . '" ';
+	}
+
+	$sql = "
+		SELECT * FROM susu_logs 
+		INNER JOIN susu_admins 
+		ON susu_admins.admin_id = susu_logs.log_person
+		$where 
+		ORDER BY susu_logs.created_at DESC
+		LIMIT 10
+	";
+	$statement = $dbConnection->prepare($sql);
+	$statement->execute();
+	$rows = $statement->fetchAll();
+
+	if ($statement->rowCount() > 0): 
+		foreach ($rows as $row) {
+			$admin_name = explode(' ', $row['admin_name']);
+			$admin_name = ucwords($admin_name[0]);
+
+			$output .= '
+				<li data-icon="account_circle">
+					<div>
+						<h6 class="fs-base mb-1">' . (($row["log_person"] == $admin) ? 'You': $admin_name) . ' <span class="fs-sm fw-normal text-body-secondary ms-1">' . pretty_date($row["created_at"]) .'</span></h6>
+						<p class="mb-0">' . $row["log_message"] . '</p>
+					</div>
+				</li>
+			';
+		}
+	else:
+		$output .= '
+				<div class="alert alert-info">
+					No data found!
+				</div>
+			';
+	endif;
+
+	return $output;
 }
 
 function idle_user() {

@@ -129,9 +129,9 @@
                         </div>
                     </div>
                 </div>
-            
 
                 <!-- Page content -->
+				<?php if (admin_has_permission()): ?>
                 <div class="row align-items-center mb-2">
                     <div class="col">
                         <!-- Heading -->
@@ -152,13 +152,13 @@
                         <select class="form-select" id="yearSelect"></select>
                     </div>
                 </div>
-
+				
                 <!-- Chart -->
                 <div style="height:500px;">
                     <canvas id="financeChart"></canvas>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
+				<?php endif; ?>
 
                 <!-- Divider -->
                 <hr class="my-8" />
@@ -167,16 +167,16 @@
                     <div class="col-12 col-xxl-8">
                         <!-- Header -->
                         <div class="row align-items-center mb-5">
-                        <div class="col">
-                            <!-- Heading -->
-                            <h2 class="fs-5 mb-0">Latest transactions</h2>
-                        </div>
-                        <div class="col-auto">
-                            <a class="btn btn-link my-n2" href="../ecommerce/orders.html">
-                            Browse all
-                            <span class="material-symbols-outlined">arrow_right_alt</span>
-                            </a>
-                        </div>
+							<div class="col">
+								<!-- Heading -->
+								<h2 class="fs-5 mb-0">Latest transactions</h2>
+							</div>
+							<div class="col-auto">
+								<a class="btn btn-link my-n2" href="<?= PROOT; ?>app/transactions">
+									Browse all
+									<span class="material-symbols-outlined">arrow_right_alt</span>
+								</a>
+							</div>
                         </div>
 
                         <!-- Table -->
@@ -188,444 +188,178 @@
                                     <th class="fs-sm">ID</th>
                                     <th class="fs-sm">Client</th>
                                     <th class="fs-sm">Amount</th>
-                                    <th class="fs-sm">Subscription Plan</th>
+                                    <th class="fs-sm">Handler</th>
+                                    <th class="fs-sm">Type</th>
                                     <th class="fs-sm">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                            <td>#001</td>
-                            <td>
-                                <div class="d-flex align-items-center text-nowrap">
-                                <div class="avatar avatar-xs me-2">
-                                    <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
-                                </div>
-                                Michael Johnson
-                                </div>
-                            </td>
-                            <td>$499.00</td>
-                            <td>Enterprise</td>
-                            <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                            </tr>
-                            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#002</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
-                          </div>
-                          Emily Thompson
-                        </div>
-                      </td>
-                      <td>$99.00</td>
-                      <td>Pro</td>
-                      <td><span class="badge bg-warning-subtle text-warning">Pending</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#003</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
-                          </div>
-                          Michael Johnson
-                        </div>
-                      </td>
-                      <td>$999.00</td>
-                      <td>Enterprise</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#004</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-5.jpg" alt="..." />
-                          </div>
-                          Jessica Miller
-                        </div>
-                      </td>
-                      <td>$49.00</td>
-                      <td>Basic</td>
-                      <td><span class="badge bg-danger-subtle text-danger">Failed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#005</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-4.jpg" alt="..." />
-                          </div>
-                          Olivia Davis
-                        </div>
-                      </td>
-                      <td>$199.00</td>
-                      <td>Pro</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#006</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
-                          </div>
-                          Michael Johnson
-                        </div>
-                      </td>
-                      <td>$49.00</td>
-                      <td>Basic</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#007</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
-                          </div>
-                          Emily Thompson
-                        </div>
-                      </td>
-                      <td>$499.00</td>
-                      <td>Enterprise</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#008</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
-                          </div>
-                          Michael Johnson
-                        </div>
-                      </td>
-                      <td>$199.00</td>
-                      <td>Pro</td>
-                      <td><span class="badge bg-warning-subtle text-warning">Pending</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#009</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-5.jpg" alt="..." />
-                          </div>
-                          Jessica Miller
-                        </div>
-                      </td>
-                      <td>$49.00</td>
-                      <td>Basic</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#010</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-4.jpg" alt="..." />
-                          </div>
-                          Olivia Davis
-                        </div>
-                      </td>
-                      <td>$199.00</td>
-                      <td>Pro</td>
-                      <td><span class="badge bg-danger-subtle text-danger">Failed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#011</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-6.jpg" alt="..." />
-                          </div>
-                          Ethan Parker
-                        </div>
-                      </td>
-                      <td>$499.00</td>
-                      <td>Enterprise</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#012</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-1.jpg" alt="..." />
-                          </div>
-                          Sophia Lee
-                        </div>
-                      </td>
-                      <td>$99.00</td>
-                      <td>Pro</td>
-                      <td><span class="badge bg-warning-subtle text-warning">Pending</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#013</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-2.jpg" alt="..." />
-                          </div>
-                          Jack Miller
-                        </div>
-                      </td>
-                      <td>$49.00</td>
-                      <td>Basic</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#014</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-4.jpg" alt="..." />
-                          </div>
-                          Emily Johnson
-                        </div>
-                      </td>
-                      <td>$199.00</td>
-                      <td>Pro</td>
-                      <td><span class="badge bg-danger-subtle text-danger">Failed</span></td>
-                    </tr>
-                    <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                      <td>#015</td>
-                      <td>
-                        <div class="d-flex align-items-center text-nowrap">
-                          <div class="avatar avatar-xs me-2">
-                            <img class="avatar-img" src="../assets/img/photos/photo-6.jpg" alt="..." />
-                          </div>
-                          Noah Brown
-                        </div>
-                      </td>
-                      <td>$99.00</td>
-                      <td>Pro</td>
-                      <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-xxl-4">
-            <!-- Header -->
-            <div class="row align-items-center mb-5">
-              <div class="col">
-                <!-- Heading -->
-                <h2 class="fs-5 mb-0">Top referrers</h2>
-              </div>
-              <div class="col-auto my-n2">
-                <a class="btn btn-link" href="#!">
-                  Browse all
-                  <span class="material-symbols-outlined">arrow_right_alt</span>
-                </a>
-              </div>
-            </div>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+									// 
+									$query = "
+										SELECT * FROM (
+											SELECT 
+												saving_id AS transaction_id, 
+												saving_customer_id AS customer_id, 
+												saving_customer_account_number AS account_number,
+												saving_collector_id AS collector_id, 
+												saving_amount AS amount, 
+												saving_date_collected AS transaction_date, 
+												saving_status AS status, 
+												'saving' AS type, 
+												created_at FROM savings 
+												UNION ALL 
+													SELECT 
+														withdrawal_id AS transaction_id, 
+														withdrawal_customer_id AS customer_id, 
+														withdrawal_customer_account_number AS account_number, 
+														withdrawal_approver_id AS collector_id, 
+														withdrawal_amount_requested AS amount, 
+														withdrawal_date_requested AS transaction_date, 
+														withdrawal_status AS status, 
+														'withdrawal' AS type, 
+														created_at FROM withdrawals
+											) 
+										AS transactions WHERE ";
+									// check if a collector is logged in, then show only their transactions
+									if (admin_has_permission('collector') && !admin_has_permission('admin')) {
+										$query .= " collector_id = '". $admin_id . "' ";
+									} else {
+										$query .= " 1=1 ";
+									}
+									$query .= " ORDER BY created_at DESC LIMIT 20";
+									$statement = $dbConnection->prepare($query);
+									$statement->execute();
+									$rows_count = $statement->rowCount();
+									$trows = $statement->fetchAll();
+								?>
+								<?php if ($rows_count > 0): ?>
+									<?php 
+										$i = 1;
+										foreach ($trows as $trow): 
+											// get customer name
+											$client_name = findCustomerByAccountNumber($trow['account_number'])->customer_name;
+											if (!$client_name) {
+												$client_name = 'Unknown';
+											}
 
-            <div class="card mb-7">
-              <div class="card-body">
-                <!-- List -->
-                <div class="vstack gap-2 mb-6">
-                  <div class="row align-items-center gx-3">
-                    <div class="col-auto"><span class="material-symbols-outlined text-primary me-1">circle</span> Google</div>
-                    <div class="col"><hr style="border-style: dashed" /></div>
-                    <div class="col-auto fs-sm text-body-secondary">52%</div>
-                  </div>
-                  <div class="row align-items-center gx-3">
-                    <div class="col-auto"><span class="material-symbols-outlined text-success me-1">circle</span> Facebook</div>
-                    <div class="col"><hr style="border-style: dashed" /></div>
-                    <div class="col-auto fs-sm text-body-secondary">18%</div>
-                  </div>
-                  <div class="row align-items-center gx-3">
-                    <div class="col-auto"><span class="material-symbols-outlined text-warning me-1">circle</span> LinkedIn</div>
-                    <div class="col"><hr style="border-style: dashed" /></div>
-                    <div class="col-auto fs-sm text-body-secondary">12%</div>
-                  </div>
-                  <div class="row align-items-center gx-3">
-                    <div class="col-auto"><span class="material-symbols-outlined text-dark me-1">circle</span> Direct</div>
-                    <div class="col"><hr style="border-style: dashed" /></div>
-                    <div class="col-auto fs-sm text-body-secondary">18%</div>
-                  </div>
-                </div>
+											// get handler name
+											$handler = findAdminById($trow['collector_id'])->admin_name;
+											if (!$handler) {
+												$handler = 'Admin';
+											}
 
-                <!-- Progress -->
-                <div class="progress-stacked gap-1" style="--bs-progress-height: 1.5rem; --bs-progress-bg: var(--body-bg)">
-                  <div
-                    class="progress"
-                    role="progressbar"
-                    aria-label="Google"
-                    aria-valuenow="52"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    style="width: 52%; --bs-progress-height: inherit"
-                  >
-                    <div class="progress-bar rounded bg-primary" data-bs-toggle="tooltip" data-bs-title="Google">52%</div>
-                  </div>
-                  <div
-                    class="progress"
-                    role="progressbar"
-                    aria-label="Facebook"
-                    aria-valuenow="18"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    style="width: 18%; --bs-progress-height: inherit"
-                  >
-                    <div class="progress-bar rounded bg-success" data-bs-toggle="tooltip" data-bs-title="Facebook">18%</div>
-                  </div>
-                  <div
-                    class="progress"
-                    role="progressbar"
-                    aria-label="LinkedIn"
-                    aria-valuenow="12"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    style="width: 12%; --bs-progress-height: inherit"
-                  >
-                    <div class="progress-bar rounded bg-warning" data-bs-toggle="tooltip" data-bs-title="LinkedIn">12%</div>
-                  </div>
-                  <div
-                    class="progress"
-                    role="progressbar"
-                    aria-label="Direct"
-                    aria-valuenow="18"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    style="width: 18%; --bs-progress-height: inherit"
-                  >
-                    <div class="progress-bar rounded bg-dark" data-bs-toggle="tooltip" data-bs-title="Direct">18%</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+											// get type of transaction
+											$type = 'Unknown';
+											if ($trow['type'] == 'saving') {
+												$type = '<span class="fs-sm text-info">Deposit</span>';
 
-            <!-- Header -->
-            <div class="row align-items-center mb-5">
-              <div class="col">
-                <!-- Heading -->
-                <h2 class="fs-5 mb-0">Support tickets</h2>
-              </div>
-              <div class="col-auto my-n2">
-                <a class="btn btn-link" href="#!">
-                  Browse all
-                  <span class="material-symbols-outlined">arrow_right_alt</span>
-                </a>
-              </div>
-            </div>
+												// check status of deposite transactions
+												if ($trow['status'] == 'Pending') {
+													$trow['status'] = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
+												} elseif ($trow['status'] == 'Approved') {
+													$trow['status'] = '<span class="badge bg-success-subtle text-success">Approved</span>';
+												} elseif ($trow['status'] == 'Rejected') {
+													$trow['status'] = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
+												}
 
-            <!-- Cards -->
-            <div class="vstack gap-2 mb-7">
-              <div class="card">
-                <a class="card-body p-4" data-bs-toggle="collapse" href="#supportTicketOne" role="button" aria-expanded="true" aria-controls="supportTicketOne">
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <div class="avatar avatar-sm fs-lg text-primary"><i data-duoicon="smartphone"></i></div>
-                    </div>
-                    <div class="col ms-n3">
-                      <h5 class="fs-sm fw-normal text-body-secondary mb-1">#10245</h5>
-                      <h3 class="fs-base mb-0">Login issues on mobile</h3>
-                    </div>
-                    <div class="col-auto">
-                      <span class="fs-sm text-body-secondary">Oct 01</span>
-                    </div>
-                  </div>
-                </a>
-                <div class="collapse show" id="supportTicketOne">
-                  <div class="card-body border-top line-clamp-2 text-body-secondary py-4 px-0 mx-4">
-                    A user reports being unable to log in on the mobile app. They've tried resetting their password but continue to receive an error message.
-                    Further investigation needed.
-                  </div>
-                </div>
-              </div>
+											} elseif ($trow['type'] == 'withdrawal') {
+												$type = '<span class="fs-sm text-warning">Withdrawal</span>';
 
-              <div class="card">
-                <a
-                  class="card-body p-4"
-                  data-bs-toggle="collapse"
-                  href="#supportTicketTwo"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="supportTicketTwo"
-                >
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <div class="avatar avatar-sm fs-lg text-primary"><i data-duoicon="credit-card"></i></div>
-                    </div>
-                    <div class="col ms-n3">
-                      <h5 class="fs-sm fw-normal text-body-secondary mb-1">#10245</h5>
-                      <h3 class="fs-base mb-0">Payment not processing</h3>
-                    </div>
-                    <div class="col-auto">
-                      <span class="fs-sm text-body-secondary">Sep 29</span>
-                    </div>
-                  </div>
-                </a>
-                <div class="collapse" id="supportTicketTwo">
-                  <div class="card-body border-top line-clamp-2 text-body-secondary py-4 px-0 mx-4">
-                    Customer is experiencing issues with the payment gateway. Transaction attempts are failing without a clear error message. This affects both
-                    credit card and PayPal payments.
-                  </div>
-                </div>
-              </div>
+												// check status of withdrawal transactions
+												if ($trow['status'] == 'Pending') {
+													$trow['status'] = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
+												} elseif ($trow['status'] == 'Approved') {
+													$trow['status'] = '<span class="badge bg-success-subtle text-success">Approved</span>';
+												} elseif ($trow['status'] == 'Paid') {
+													$trow['status'] = '<span class="badge bg-primary-subtle text-primary">Paid</span>';
+												} elseif ($trow['status'] == 'Rejected') {
+													$trow['status'] = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
+												}
+											}
+									?>
+									<tr>
+										<td style="width: 0px">
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" id="tableCheckOne" />
+												<label class="form-check-label" for="tableCheckOne"></label>
+											</div>
+										</td>
+										<td><?= $i; ?></td>
+										<td><?= ucwords($client_name) . ' (' . $trow['account_number'] . ')'; ?></td>
+										<td><?= money($trow["amount"]); ?></td>
+										<td><?= ucwords($handler); ?></td>
+										<td><?= $type; ?></td>
+										<td><?= $trow['status']; ?></td>
+									</tr>
+									<?php $i++; endforeach; ?>
+								<?php else: ?>
+									<tr class="text-warning">
+										<td colspan="10"> 
+											<div class="alert alert-info">No data found!</div>
+										</td>
+									</tr>
+								<?php endif; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+          	</div>
 
-              <div class="card">
-                <a
-                  class="card-body p-4"
-                  data-bs-toggle="collapse"
-                  href="#supportTicketThree"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="supportTicketThree"
-                >
-                  <div class="row align-items-center">
-                    <div class="col-auto">
-                      <div class="avatar avatar-sm fs-lg text-primary"><i data-duoicon="moon-2"></i></div>
-                    </div>
-                    <div class="col ms-n3">
-                      <h5 class="fs-sm fw-normal text-body-secondary mb-1">#10245</h5>
-                      <h3 class="fs-base mb-0">Feature request: dark mode toggle</h3>
-                    </div>
-                    <div class="col-auto">
-                      <span class="fs-sm text-body-secondary">Sep 28</span>
-                    </div>
-                  </div>
-                </a>
-                <div class="collapse" id="supportTicketThree">
-                  <div class="card-body border-top line-clamp-2 text-body-secondary py-4 px-0 mx-4">
-                    A user has requested a toggle for dark mode in the app settings. They would like a way to switch themes without having to rely on the
-                    system’s default settings.
-                  </div>
-                </div>
-              </div>
-            </div>
+          	<div class="col-12 col-xxl-4">
+				<!-- Header -->
+				<div class="row align-items-center mb-5">
+					<div class="col">
+						<!-- Heading -->
+						<h2 class="fs-5 mb-0">Top referrers</h2>
+					</div>
+					<div class="col-auto my-n2">
+						<a class="btn btn-link" href="#!">
+						Browse all
+						<span class="material-symbols-outlined">arrow_right_alt</span>
+						</a>
+					</div>
+				</div>
 
-            <!-- Header -->
-            <div class="row align-items-center mb-5">
-              <div class="col">
-                <!-- Heading -->
-                <h2 class="fs-5 mb-0">API usage limits</h2>
-              </div>
-            </div>
+				<!-- Activity -->
+				<div class="card mb-7">
+					<div class="card-header">
+						<h3 class="fs-6 mb-0">Recent activity</h3>
+					</div>
+					<div class="card-body">
+						<ul class="activity">
+							<?= get_logs($admin_data['admin_id']); ?>
+						</ul>
+					</div>
+				</div>
 
-            <!-- Card -->
-            <div class="card border-transparent bg-light">
-              <span class="badge position-absolute bg-warning top-0 end-0 translate-middle-y me-n2">75% Used</span>
-              <div class="card-body">
-                <h2 class="fs-base mb-1">ChatGPT</h2>
-                <p class="text-body-secondary">You're approaching your monthly limit.</p>
-                <hr />
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <div class="avatar avatar-sm bg-white fs-lg text-primary"><i data-duoicon="alert-octagon"></i></div>
-                  </div>
-                  <div class="col ms-n3">25,000 / 30,000 calls used</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+				<!-- Header -->
+				<div class="row align-items-center mb-5">
+					<div class="col">
+						<!-- Heading -->
+						<h2 class="fs-5 mb-0">Your details</h2>
+					</div>
+				</div>
+
+				<!-- Card -->
+				<div class="card border-transparent bg-light">
+					<span class="badge position-absolute bg-warning top-0 end-0 translate-middle-y me-n2"><?= $admin_data['login_details_device']; ?></span>
+					<div class="card-body">
+						<h2 class="fs-base mb-1">Location</h2>
+						<p class="text-body-secondary"><?= $admin_data['login_details_device'] . ', ' . $admin_data['login_details_os']; ?></p>
+						<hr />
+						<div class="row align-items-center">
+							<div class="col-auto">
+								<div class="avatar avatar-sm bg-white fs-lg text-primary"><i data-duoicon="alert-octagon"></i></div>
+							</div>
+							<div class="col ms-n3">IP: <?= $admin_data['login_details_ip']; ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+</main>
 
 <?php include ('system/inc/footer.php'); ?>
 
@@ -680,6 +414,7 @@
     });
 </script>
 
+<?php if (admin_has_permission()): ?>
 <script>
     const ctx = document.getElementById('financeChart').getContext('2d');
     let financeChart;
@@ -779,3 +514,4 @@
     // Reload on year change
     yearSelect.addEventListener("change", e => loadChart(e.target.value));
 </script>
+<?php endif; ?>
