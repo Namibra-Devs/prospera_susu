@@ -233,8 +233,8 @@
                     // get total saved amount (subtract withdrawals from saves)
                     $total_saved_amount = $total_approved_saves - $total_approved_withdrawals;
 
-                    //$balanceData = getCustomerBalance(0, $account_number);
-
+                    $balanceData = getCustomerBalance($customer_data['customer_id'], 0);
+                    $balance = $balanceData['balance'];
                     // $balanceData['total_saves']
                     // $balanceData['total_withdrawals']
                     // $balanceData['total_commissions']
@@ -250,10 +250,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <!-- Heading -->
-                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Start date</h4>
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Balance</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold"><?= (($customer_data['customer_start_date'] == null || $customer_data['customer_start_date'] == '0000-00-00') ? 'N/A' : pretty_date_notime($customer_data['customer_start_date'])); ?></div>
+                                    <div class="fs-4 fw-semibold"><?= money($balance); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->

@@ -70,7 +70,8 @@
             </div>
         </div>
     </div> 
-<!-- JAVASCRIPT -->
+    
+    <!-- JAVASCRIPT -->
     <script src="<?= PROOT; ?>assets/js/jquery-3.7.1.min.js"></script>
 
     <!-- Vendor JS -->
@@ -79,40 +80,42 @@
     <!-- Theme JS -->
     <script src="<?= PROOT; ?>assets/js/theme.bundle.js"></script>
 
-<script>
-    $('#signin-button').on('click', function(e) {
-        e.preventDefault(); 
-        
-        if ($('#email').val() != '') {
-            if ($('#password').val() != '') {
-                $('#signin-button').attr('disabled', true);
-                $('#signin-button').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
-                
-                $('.email').addClass('placeholder');
-                $('.email').addClass('col-12');
-                $('#email').addClass('placeholder-wave');
-                $('.password').addClass('placeholder');
-                $('.password').addClass('col-12');
-                $('#password').addClass('placeholder-wave');
+    <script>
+        $('#signin-button').on('click', function(e) {
+            e.preventDefault(); 
+            
+            if ($('#email').val() != '') {
+                if ($('#password').val() != '') {
+                    $('#signin-button').attr('disabled', true);
+                    $('#signin-button').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');
+                    
+                    $('.email').addClass('placeholder');
+                    $('.email').addClass('col-12');
+                    $('#email').addClass('placeholder-wave');
+                    $('.password').addClass('placeholder');
+                    $('.password').addClass('col-12');
+                    $('#password').addClass('placeholder-wave');
 
-                setTimeout(function () {
-                    $('#sigin-form').submit()
-                }, 2000)
+                    setTimeout(function () {
+                        $('#sigin-form').submit()
+                    }, 2000)
+                } else {
+                    $('#password').addClass('input-field-error')
+                    $('#email').removeClass('input-field-error')
+                    alert("Password is required!");
+                    $('#password').val('');
+                    $('#password').focus()
+                    return false;
+                }
             } else {
-                $('#password').addClass('input-field-error')
-                $('#email').removeClass('input-field-error')
-                alert("Password is required!");
-                $('#password').val('');
-                $('#password').focus()
+                $('#email').addClass('input-field-error')
+                alert("Email is required!");
+                $('#email').val('');
+                $('#email').focus()
                 return false;
             }
-        } else {
-            $('#email').addClass('input-field-error')
-            alert("Email is required!");
-            $('#email').val('');
-            $('#email').focus()
-            return false;
-        }
-        return false
-    });
-</script>
+            return false
+        });
+    </script>
+</body>
+</html>
