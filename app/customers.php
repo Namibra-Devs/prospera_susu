@@ -232,6 +232,13 @@
 
                     // get total saved amount (subtract withdrawals from saves)
                     $total_saved_amount = $total_approved_saves - $total_approved_withdrawals;
+
+                    //$balanceData = getCustomerBalance(0, $account_number);
+
+                    // $balanceData['total_saves']
+                    // $balanceData['total_withdrawals']
+                    // $balanceData['total_commissions']
+                    //$total_saved_amount = $balanceData['balance'];
                 }
             ?>
 

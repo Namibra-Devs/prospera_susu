@@ -41,7 +41,8 @@
         }
     }
 ?>
-        <div class="container">
+    
+    <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12" style="max-width: 25rem">
                     <!-- Heading -->
@@ -69,7 +70,14 @@
             </div>
         </div>
     </div> 
-<?php include ('../system/inc/footer.php'); ?>
+<!-- JAVASCRIPT -->
+    <script src="<?= PROOT; ?>assets/js/jquery-3.7.1.min.js"></script>
+
+    <!-- Vendor JS -->
+    <script src="<?= PROOT; ?>assets/js/vendor.bundle.js"></script>
+    
+    <!-- Theme JS -->
+    <script src="<?= PROOT; ?>assets/js/theme.bundle.js"></script>
 
 <script>
     $('#signin-button').on('click', function(e) {

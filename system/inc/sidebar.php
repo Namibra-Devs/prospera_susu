@@ -907,13 +907,13 @@
                         </div>
                         <div class="nav-item">
                             <a
-                            class="nav-link nav-transactions"
-                            href="#"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#transactions"
-                            role="button"
-                            aria-expanded="false"
-                            aria-controls="transactions"
+                                class="nav-link nav-transactions"
+                                href="#"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#transactions"
+                                role="button"
+                                aria-expanded="false"
+                                aria-controls="transactions"
                             >
                                 <span class="material-symbols-outlined me-3">receipt</span> Transactions
                             </a>
@@ -925,9 +925,9 @@
                                     <?php else: ?>
                                     <a class="nav-link" href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal">Add new deposit</a>
                                     <?php endif; ?>
-                                    <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
+                                    <!-- <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
                                     <a class="nav-link sub-nav-not-approved-transactions" href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
-                                    <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a>
+                                    <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a> -->
                                 </nav>
                             </div>
                         </div>

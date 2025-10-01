@@ -305,7 +305,7 @@
                                                 </div>
                                             </div>
                                             <?php endif; ?>
-                                            <div class="col-auto ms-n2">
+                                            <!-- <div class="col-auto ms-n2">
                                                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                                     <input type="radio" class="btn-check" name="sortRadio" id="sortAsc" autocomplete="off" checked />
                                                     <label class="btn btn-light" for="sortAsc" data-bs-toggle="tooltip" data-bs-title="Ascending">
@@ -316,7 +316,7 @@
                                                         <span class="material-symbols-outlined">arrow_downward</span>
                                                     </label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -335,12 +335,12 @@
                                     ?>
                                 </h2>
                             </div>
-                            <div class="col-auto">
+                            <!-- <div class="col-auto">
                                 <a class="btn btn-link my-n2" href="javascript:;">
                                     Browse all
                                     <span class="material-symbols-outlined">arrow_right_alt</span>
                                 </a>
-                            </div>
+                            </div> -->
                         </div>
 
                         <!-- Table -->
