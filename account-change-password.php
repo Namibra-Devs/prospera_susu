@@ -26,6 +26,7 @@
     $confirm = trim($confirm);
     $new_hashed = password_hash($password, PASSWORD_BCRYPT);
     $admin_id = $admin_data['admin_id'];
+    $added_by = (admin_has_permission() ? 'admin' : 'collector');
 
     if (isset($_POST['old_password'])) {
         if (empty($_POST['old_password']) || empty($_POST['password']) || empty($_POST['confirm'])) {
@@ -59,7 +60,7 @@
             if (isset($result)) {
 
                 $log_message = 'Admin [' . $admin_id . '] has changed password!';
-    	        add_to_log($log_message, $admin_id, 'admin');
+    	        add_to_log($log_message, $admin_id, $added_by);
 
                 $_SESSION['flash_success'] = 'Password successfully updated!';
                 redirect(PROOT . "account");
@@ -107,7 +108,7 @@
                     if (isset($result)) {
                         
                         $log_message = 'Admin [' . $admin_id . '] has changed PIN!';
-    	                add_to_log($log_message, $admin_id, 'admin');
+    	                add_to_log($log_message, $admin_id, $added_by);
 
                         $_SESSION['flash_success'] = 'New PIN successfully set!';
                         redirect(PROOT . "account");

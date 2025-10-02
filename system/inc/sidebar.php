@@ -11,13 +11,12 @@
                             <span class="material-symbols-outlined">payment_arrow_down</span>
                         </a>
                     </div>
-                    <?php else: ?>
+                    <?php endif; ?>
                     <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Add new deposit">
                         <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                             <span class="material-symbols-outlined">send_money</span>
                         </a>
                     </div>
-                    <?php endif; ?>
                     <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
                         <a class="nav-link" href="mailto:yevgenysim+simpleqode@gmail.com">
                             <span class="material-symbols-outlined">support</span>
@@ -326,7 +325,7 @@
                             >
                                 <span class="material-symbols-outlined">payment_arrow_down</span> <span class="d-xl-none ms-3">Make new withdrawal</span>
                             </a>
-                            <?php ese: ?>
+                            <?php endif; ?>
                             <a
                                 class="nav-link"
                                 href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
@@ -336,7 +335,6 @@
                             >
                                 <span class="material-symbols-outlined">send_money</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
-                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a class="nav-link" href="mailto:info@namibra.io" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
@@ -637,7 +635,7 @@
                             >
                                 <span class="material-symbols-outlined">payment_arrow_down</span> <span class="d-xl-none ms-3">Make new withdrawal</span>
                             </a>
-                            <?php else: ?>
+                            <?php endif; ?>
                             <a
                                 class="nav-link flex-xl-column"
                                 href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
@@ -647,7 +645,6 @@
                             >
                                 <span class="material-symbols-outlined">local_mall</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
-                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a
@@ -922,9 +919,8 @@
                                     <a class="nav-link sub-nav-transactions" href="<?= PROOT; ?>app/transactions">Transactions</a>
                                     <?php if (admin_has_permission()): ?>
                                     <a class="nav-link" href="#withdrawalModal" data-bs-toggle="modal" data-bs-target="#withdrawalModal">Make new withdrawal</a>
-                                    <?php else: ?>
-                                    <a class="nav-link" href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal">Add new deposit</a>
                                     <?php endif; ?>
+                                    <a class="nav-link" href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal">Add new deposit</a>
                                     <!-- <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
                                     <a class="nav-link sub-nav-not-approved-transactions" href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
                                     <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a> -->
@@ -1025,11 +1021,10 @@
                             <a class="nav-link" href="#withdrawalModal" type="button" data-bs-toggle="modal" data-bs-target="#withdrawalModal">
                                 <span class="material-symbols-outlined me-3">payment_arrow_down</span> Make new withdrawal
                             </a>
-                            <?php else: ?>
+                            <?php endif; ?>
                             <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                                 <span class="material-symbols-outlined me-3">send_money</span> Add new deposit
                             </a>
-                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a class="nav-link" href="mailto:info@namibra.io">

@@ -2,8 +2,6 @@
     
     <!-- Modal: New transaction modal -->
     <?php
-        // Only show this modal if the user has permission to create transactions
-        if (admin_has_permission('collector') && !admin_has_permission('admin')): 
             // get options for customer select
             $options = '';
             $customers = collector_get_customers();
@@ -140,9 +138,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <?php endif; ?>
-    
+    </div>    
     
     <!-- Modal: New withdrawal modal -->
     <?php

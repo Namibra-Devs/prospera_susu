@@ -19,9 +19,10 @@
 			$statement = $dbConnection->prepare($sql);
 			$result = $statement->execute([NULL, $admin_data['admin_id']]);
 			if (isset($result)) {
-				
+				$at = ((admin_has_permission('collector') && !admin_has_permission()) ? 'collector' : 'admin');
+
 				$log_message = 'Admin [' . $admin_id . '] has deleted profile picture!';
-                add_to_log($log_message, $admin_data['admin_id'], 'admin');
+                add_to_log($log_message, $admin_data['admin_id'], $at);
 
 				echo '';
 			}

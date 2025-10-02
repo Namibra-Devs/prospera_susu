@@ -54,57 +54,57 @@ if (isset($_GET['restore'])) {
 }
 
 // add an admin
-if (isset($_GET['add'])) {
-    $errors = '';
-    $admin_fullname = ((isset($_POST['admin_fullname'])) ? sanitize($_POST['admin_fullname']) : '');
-    $admin_email = ((isset($_POST['admin_email'])) ? sanitize($_POST['admin_email']) : '');
-    $admin_phone = ((isset($_POST['admin_phone'])) ? sanitize($_POST['admin_phone']) : '');
-    $admin_password = ((isset($_POST['admin_password'])) ? sanitize($_POST['admin_password']) : '');
-    $confirm = ((isset($_POST['confirm']))? sanitize($_POST['confirm']) : '');
-    $admin_permissions = ((isset($_POST['admin_permissions']))? sanitize($_POST['admin_permissions']) : '');
-    $admin_id = guidv4();
+// if (isset($_GET['add'])) {
+//     $errors = '';
+//     $admin_fullname = ((isset($_POST['admin_fullname'])) ? sanitize($_POST['admin_fullname']) : '');
+//     $admin_email = ((isset($_POST['admin_email'])) ? sanitize($_POST['admin_email']) : '');
+//     $admin_phone = ((isset($_POST['admin_phone'])) ? sanitize($_POST['admin_phone']) : '');
+//     $admin_password = ((isset($_POST['admin_password'])) ? sanitize($_POST['admin_password']) : '');
+//     $confirm = ((isset($_POST['confirm']))? sanitize($_POST['confirm']) : '');
+//     $admin_permissions = ((isset($_POST['admin_permissions']))? sanitize($_POST['admin_permissions']) : '');
+//     $admin_id = guidv4();
 
-    if ($_POST) {
-        $required = array('admin_fullname', 'admin_email', 'admin_phone', 'admin_password', 'confirm', 'admin_permissions');
-        foreach ($required as $f) {
-            if (empty($f)) {
-                $errors = 'You must fill out all fields!';
-                break;
-            }
-        }
+//     if ($_POST) {
+//         $required = array('admin_fullname', 'admin_email', 'admin_phone', 'admin_password', 'confirm', 'admin_permissions');
+//         foreach ($required as $f) {
+//             if (empty($f)) {
+//                 $errors = 'You must fill out all fields!';
+//                 break;
+//             }
+//         }
 
-        if (strlen($admin_password) < 6) {
-            $errors = 'The password must be at least 6 characters!';
-        }
+//         if (strlen($admin_password) < 6) {
+//             $errors = 'The password must be at least 6 characters!';
+//         }
 
-        if ($admin_password != $confirm) {
-            $errors = 'The passwords do not match!';
-        }
+//         if ($admin_password != $confirm) {
+//             $errors = 'The passwords do not match!';
+//         }
 
-        if (!empty($errors)) {
-            $errors;
-        } else {
-            $data = array($admin_id, $admin_fullname, $admin_email, $admin_phone, password_hash($admin_password, PASSWORD_BCRYPT), $admin_permissions);
-            $query = "
-                INSERT INTO `susu_admins`(`admin_id`, `admin_name`, `admin_email`, `admin_phone`, `admin_password`, `admin_permissions`) 
-                VALUES (?, ?, ?, ?, ?, ?)
-            ";
-            $statement = $dbConnection->prepare($query);
-            $result = $statement->execute($data);
-            if (isset($result)) {
+//         if (!empty($errors)) {
+//             $errors;
+//         } else {
+//             $data = array($admin_id, $admin_fullname, $admin_email, $admin_phone, password_hash($admin_password, PASSWORD_BCRYPT), $admin_permissions);
+//             $query = "
+//                 INSERT INTO `susu_admins`(`admin_id`, `admin_name`, `admin_email`, `admin_phone`, `admin_password`, `admin_permissions`) 
+//                 VALUES (?, ?, ?, ?, ?, ?)
+//             ";
+//             $statement = $dbConnection->prepare($query);
+//             $result = $statement->execute($data);
+//             if (isset($result)) {
 
-                $message = "added new admin ".ucwords($admin_fullname)." as a ".strtoupper($admin_permissions)."";
-                add_to_log($message, $admin_data['admin_id'], 'admin');
+//                 $message = "added new admin ".ucwords($admin_fullname)." as a ".strtoupper($admin_permissions)."";
+//                 add_to_log($message, $admin_data['admin_id'], 'admin');
 
-                $_SESSION['flash_success'] = 'Admin has been Added!';
-                redirect(PROOT . "app/admins");
-            } else {
-                $_SESSION['flash_success'] = "Something went wrong!";
-                redirect(PROOT . "app/admins?add=1");
-            }
-        }
-    }
-}
+//                 $_SESSION['flash_success'] = 'Admin has been Added!';
+//                 redirect(PROOT . "app/admins");
+//             } else {
+//                 $_SESSION['flash_success'] = "Something went wrong!";
+//                 redirect(PROOT . "app/admins?add=1");
+//             }
+//         }
+//     }
+// }
 
 
 ?>
