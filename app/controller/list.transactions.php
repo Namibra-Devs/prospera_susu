@@ -417,12 +417,13 @@ echo $output . '
                         statusCell.innerText = item.status;
                     }
 
-                    // ✅ If approved, mark row green
-                    if (action === "approve" && row) {
+                    // ✅ Change row color based on action
+                    row.classList.remove("selected", "approved", "rejected");
+                    if (action === "approve") {
                         row.classList.remove("table-warning");
                         row.classList.add("table-success");
-                    } else if (row) {
-                        row.classList.remove("table-warning");
+                    } else if (action === "reject") {
+                        row.classList.add("table-danger");
                     }
 
                 });
