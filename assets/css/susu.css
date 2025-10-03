@@ -18,15 +18,3 @@
 .w-rem-6 {
     width: 1.5rem !important;
 }
-
-/* Highlight selected rows */
-tr.selected {
-    background-color: #f0f8ff; /* light blue */
-}
-
-/* Approved rows with green background + check */
-tr.approved {
-    background-color: #d4edda !important; /* greenish */
-    color: #155724;
-    font-weight: bold;
-}
