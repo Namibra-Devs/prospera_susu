@@ -189,9 +189,11 @@ if ($total_data > 0) {
         $output .= '
             <div id="message" style="margin-top:10px;"></div>
             <div id="loading" style="display:none; color:blue;">⏳ Processing...</div>
-            <tr colspan="10">
-                <button class="btn btn-sm" id="approve-btn">✅ Approve Selected</button>
-                <button class="btn btn-sm" id="reject-btn">❌ Reject Selected</button>
+            <tr>
+                <td colspan="10"> 
+                    <button class="btn btn-sm" id="approve-btn">✅ Approve Selected</button>
+                    <button class="btn btn-sm" id="reject-btn">❌ Reject Selected</button>
+                </td>
             </tr>
         ';
     }
