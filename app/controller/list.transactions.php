@@ -340,9 +340,29 @@ echo $output . '
 	';
 ?>
 <script>
-   document.getElementById("select-all").addEventListener("change", function(e) {
+    // Toggle row highlight on checkbox change
+    document.querySelectorAll(".transaction-check").forEach(cb => {
+        cb.addEventListener("change", function() {
+            let row = cb.closest("tr");
+            if (cb.checked) {
+                row.classList.add("table-warning");
+            } else {
+                row.classList.remove("table-warning");
+            }
+        });
+    });
+    
+    // Handle select all
+    // 
+    document.getElementById("select-all").addEventListener("change", function(e) {
         document.querySelectorAll(".transaction-check").forEach(cb => {
             cb.checked = e.target.checked;
+            let row = cb.closest("tr");
+            if (e.target.checked) {
+                row.classList.add("table-warning");
+            } else {
+                row.classList.remove("table-warning");
+            }
         });
     });
 
@@ -372,7 +392,6 @@ echo $output . '
             $('.toast-body').html("⚠️ No transactions selected.");
             $('.toast').toast('show');
             $('.toast').removeClass('bg-success').addClass('bg-danger');
-           //  alert();
             return;
         }
         
@@ -385,15 +404,27 @@ echo $output . '
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data.message);
             $('.toast-body').html(data.message);
             $('.toast').toast('show');
             $('.toast').removeClass('bg-danger');
 
             if (data.updated) {
                 data.updated.forEach(item => {
-                    let row = document.querySelector(`tr[data-id='${item.id}'] .status`);
-                    if (row) row.innerText = item.status;
+                    let row = document.querySelector(`tr[data-id='${item.id}']`);
+                    let statusCell = row.querySelector(".status");
+
+                    if (row && statusCell) {
+                        statusCell.innerText = item.status;
+                    }
+
+                    // ✅ If approved, mark row green
+                    if (action === "approve" && row) {
+                        row.classList.remove("table-warning");
+                        row.classList.add("table-success");
+                    } else if (row) {
+                        row.classList.remove("table-warning");
+                    }
+
                 });
             }
 
