@@ -83,8 +83,8 @@ require ('../../system/DatabaseConnector.php');
                     <tr>
                         <th style="width: 0px">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="tableCheckAll" />
-                                <label class="form-check-label" for="tableCheckAll"></label>
+                                <input class="form-check-input" type="checkbox" id="select-all" />
+                                <label class="form-check-label" for="select-all"></label>
                             </div>
                         </th>
                         <th class="fs-sm"></th>
@@ -162,15 +162,15 @@ if ($total_data > 0) {
         }
         // set background color for all today transactions
         if (date('Y-m-d', strtotime($row['transaction_date'])) == date('Y-m-d')) {
-            $output .= '<tr class="table-success">';
+            $output .= '<tr class="table-success" data-id="' . (($row['type'] == 'saving') ? 'save_' : 'withdraw_') . $row["transaction_id"] . '">';
         } else {
-            $output .= '<tr>';
+            $output .= '<tr data-id="' . (($row['type'] == 'saving') ? 'save_' : 'withdraw_') . $row["transaction_id"] . '">';
         }
 
 		$output .= '
                 <td style="width: 0px">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="tableCheckOne" />
+                        <input class="form-check-input transaction-check" type="checkbox" name="transaction_ids[]" id="tableCheckOne" value="' . (($row['type'] == 'saving') ? 'save_' : 'withdraw_') . $row["transaction_id"] . '" />
                         <label class="form-check-label" for="tableCheckOne"></label>
                     </div>
                 </td>
@@ -180,12 +180,21 @@ if ($total_data > 0) {
                 <td>' .  ucwords($handler) . '</td>
                 <td>' . $type . '</td>
                 <td>' . $row['status'] . '</td>
-                '. ((admin_has_permission()) ? '<td>' . $options . '</td>' : '') .' 
+                '. ((admin_has_permission()) ? '<td class="status">' . $options . '</td>' : '') .' 
             </tr>
 		';
 		$i++;
 	}
-
+    if (admin_has_permission()) {
+        $output .= '
+            <div id="message" style="margin-top:10px;"></div>
+            <div id="loading" style="display:none; color:blue;">⏳ Processing...</div>
+            <tr colspan="10">
+                <button class="btn btn-sm" id="approve-btn">✅ Approve Selected</button>
+                <button class="btn btn-sm" id="reject-btn">❌ Reject Selected</button>
+            </tr>
+        ';
+    }
 } else {
 	$output .= '
 		<tr class="text-warning">
@@ -327,3 +336,77 @@ echo $output . '
 			</div>
 		</div>
 	';
+?>
+<script>
+   document.getElementById("select-all").addEventListener("change", function(e) {
+        document.querySelectorAll(".transaction-check").forEach(cb => {
+            cb.checked = e.target.checked;
+        });
+    });
+
+    function setLoading(isLoading) {
+        const approveBtn = document.getElementById("approve-btn");
+        const rejectBtn = document.getElementById("reject-btn");
+        const loadingDiv = document.getElementById("loading");
+
+        if (isLoading) {
+            approveBtn.disabled = true;
+            rejectBtn.disabled = true;
+            loadingDiv.style.display = "block";
+        } else {
+            approveBtn.disabled = false;
+            rejectBtn.disabled = false;
+            loadingDiv.style.display = "none";
+        }
+    }
+
+    function processTransactions(action) {
+        let selected = [];
+        document.querySelectorAll(".transaction-check:checked").forEach(cb => {
+            selected.push(cb.value);
+        });
+
+        if (selected.length === 0) {
+            $('.toast-body').html("⚠️ No transactions selected.");
+            $('.toast').toast('show');
+            $('.toast').removeClass('bg-success').addClass('bg-danger');
+           //  alert();
+            return;
+        }
+        
+        setLoading(true);
+
+        fetch("<?= PROOT; ?>app/controller/transaction.approver.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: action, transactions: selected })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.message);
+            $('.toast-body').html(data.message);
+            $('.toast').toast('show');
+            $('.toast').removeClass('bg-danger');
+
+            if (data.updated) {
+                data.updated.forEach(item => {
+                    let row = document.querySelector(`tr[data-id='${item.id}'] .status`);
+                    if (row) row.innerText = item.status;
+                });
+            }
+
+            // ✅ Uncheck all checkboxes after success
+            document.getElementById("select-all").checked = false;
+            document.querySelectorAll(".transaction-check").forEach(cb => {
+                cb.checked = false;
+            });
+
+        })
+        .catch(err => console.error("Error:", err))
+        .finally(() => setLoading(false));
+    }
+
+    document.getElementById("approve-btn").addEventListener("click", () => processTransactions("approve"));
+    document.getElementById("reject-btn").addEventListener("click", () => processTransactions("reject"));
+
+</script>
