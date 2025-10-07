@@ -15,6 +15,14 @@ require ('../../system/DatabaseConnector.php');
         $start = 0;
     }
 
+    // Get filters from POST
+    $type = isset($_POST['type']) ? $_POST['type'] : '';
+    $date_from = isset($_POST['date_from']) ? $_POST['date_from'] : '';
+    $date_to = isset($_POST['date_to']) ? $_POST['date_to'] : '';
+    $collector = isset($_POST['collector']) ? $_POST['collector'] : '';
+
+
+
     // merge both savings and withdrawals into one query
     $query = "
         SELECT * FROM (
@@ -47,6 +55,33 @@ require ('../../system/DatabaseConnector.php');
     } else {
         $query .= " 1=1 ";
     }
+
+    
+    // Transaction type filter
+    // if ($type && $type != 'all') {
+    //     if ($type == 'deposit') {
+    //         $query .= " AND type = 'saving' ";
+    //     } elseif ($type == 'withdrawal') {
+    //         $query .= " AND type = 'withdrawal' ";
+    //     }
+    // }
+
+    // Date filter
+    if ($date_from && $date_to) {
+        $query .= " AND transaction_date BETWEEN '$date_from' AND '$date_to' ";
+    } elseif ($date_from) {
+        $query .= " AND transaction_date >= '$date_from' ";
+    } elseif ($date_to) {
+        $query .= " AND transaction_date <= '$date_to' ";
+    }
+
+    // Collector filter
+    if ($collector) {
+        $query .= " AND collector_id IN (SELECT admin_id FROM susu_admins WHERE admin_id LIKE '$collector') ";
+    }
+
+
+
     // search query
     $search_query = ((isset($_POST['query'])) ? sanitize($_POST['query']) : '');
     $find_query = str_replace(' ', '%', $search_query);
@@ -93,6 +128,7 @@ require ('../../system/DatabaseConnector.php');
                         <th class="fs-sm">Handler</th>
                         <th class="fs-sm">Type</th>
                         <th class="fs-sm">Status</th>
+                        <th class="fs-sm">Date</th>
                         '. ((admin_has_permission()) ? '<th class="fs-sm"></th>' : '') .'
                     </tr>
                 </thead>
@@ -180,6 +216,7 @@ if ($total_data > 0) {
                 <td>' .  ucwords($handler) . '</td>
                 <td>' . $type . '</td>
                 <td>' . $row['status'] . '</td>
+                <td>' . pretty_date_notime($row['transaction_date']) . '</td>
                 '. ((admin_has_permission()) ? '<td class="status">' . $options . '</td>' : '') .' 
             </tr>
 		';

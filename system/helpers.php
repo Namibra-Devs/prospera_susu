@@ -195,13 +195,6 @@ function get_all_admins($status = 'active') {
 }
 
 
-// get number of clients
-function get_number_of_clients() {
-	global $dbConnection;
-	$statement = $dbConnection->query("SELECT * FROM levina_leads WHERE lead_status = 0")->rowCount();
-	return $statement;
-}
-
 // get number of users
 function get_number_of_customers() {
 	global $dbConnection;
@@ -338,8 +331,12 @@ function get_admin_profile($id) {
 	return $output;
 }
 
-
-
+// get list of collectors
+function list_collector() {
+	global $dbConnection;
+	$statement = $dbConnection->query("SELECT * FROM susu_admins WHERE admin_status = 'active' AND admin_permissions = 'collector' ORDER BY admin_name ASC")->fetchAll(PDO::FETCH_ASSOC);
+	return $statement;
+}
 
 
 

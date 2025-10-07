@@ -60,6 +60,13 @@
         return $row['total_customers'] ?? 0;
     }
 
+    // get collectors for filter
+    $options = '';
+    $list_collectors = list_collector();
+    foreach ($list_collectors as $list_collector) {
+        $options .= '<option value="' . ucwords($list_collector['admin_id']) .'">' . ucwords($list_collector['admin_name'])  . '</option>';
+    }
+
     //
     // Deposite status
     if (isset($_GET['d']) && !empty($_GET['d'])) {
@@ -316,13 +323,13 @@
                                                             <div class="row align-items-center mb-3">
                                                                 <div class="col-4">
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input export_class" type="radio" name="f_deposit" id="inlineRadio1" required value="date">
+                                                                        <input class="form-check-input export_class" type="radio" name="f_deposit" id="inlineRadio1" required value="deposit">
                                                                         <label class="form-check-label" for="inlineRadio1">Deposits</label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input export_class" type="radio" name="f_withdrawal" id="inlineRadio2" required value="month">
+                                                                        <input class="form-check-input export_class" type="radio" name="f_withdrawal" id="inlineRadio2" required value="withdrawal">
                                                                         <label class="form-check-label" for="inlineRadio2">Withdrawals</label>
                                                                     </div>
                                                                 </div>
@@ -336,32 +343,33 @@
                                                             <div class="row align-items-center">
                                                                 <div class="row align-items-center mb-3">
                                                                     <div class="col-3">
-                                                                        <label class="form-label mb-0" for="filterLocation">From</label>
+                                                                        <label class="form-label mb-0" for="filterFromDate">From</label>
                                                                     </div>
                                                                     <div class="col-9">
-                                                                       <input type="date" class="form-control">
+                                                                       <input type="date" class="form-control" id="filterFromDate">
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="row align-items-center mb-3">
                                                                 <div class="col-3">
-                                                                    <label class="form-label mb-0" for="filterLocation">To</label>
+                                                                    <label class="form-label mb-0" for="filterToDate">To</label>
                                                                 </div>
                                                                 <div class="col-9">
-                                                                    <input type="date" class="form-control">
+                                                                    <input type="date" class="form-control" id="filterToDate">
                                                                 </div>
                                                             </div>
                                                             <div class="row align-items-center mb-3">
                                                                 <div class="col-3">
-                                                                    <label class="form-label mb-0" for="filterLocation">Collectors</label>
+                                                                    <label class="form-label mb-0" for="filterCollectors">Collectors</label>
                                                                 </div>
                                                                 <div class="col-9">
-                                                                    <select class="form-select" id="filterLocation" data-choices>
-                                                                        <option value="San Francisco, CA">San Francisco, CA</option>
+                                                                    <select class="form-select" id="filterCollectors" data-choices>
+                                                                        <option value=""></option>
+                                                                        <?= $options; ?>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                        
+                                                            <a href="javascript:;" id="clearFilter" class="mt-2 small">clear filter</a>
                                                         </form>
                                                     </div>
                                                     </div>
@@ -409,13 +417,17 @@
     $(document).ready(function() {
 
         // SEARCH AND PAGINATION FOR LIST
-        function load_data(page, query = '') {
+        function load_data(page, query = '', filters = {}) {
             $.ajax({
                 url : "<?= PROOT; ?>app/controller/list.transactions.php",
                 method : "POST",
                 data : {
                     page : page, 
-                    query : query
+                    query : query, 
+                    type: filters.type || '',
+                    date_from: filters.date_from || '',
+                    date_to: filters.date_to || '',
+                    collector: filters.collector || ''
                 },
                 success : function(data) {
                     $("#load-content").html(data);
@@ -423,10 +435,52 @@
             });
         }
 
+        function getFilters() {
+            return {
+                type: $('input[name="f_deposit"]:checked').val() || 
+                      $('input[name="f_withdrawal"]:checked').val() || 
+                      $('input[name="f_dw_all"]:checked').val() || '',
+                date_from: $('input[type="date"]').eq(0).val(),
+                date_to: $('input[type="date"]').eq(1).val(),
+                collector: $('#filterCollectors').val()
+            }
+        }
+
         load_data(1);
+
         $('#search').keyup(function() {
             var query = $('#search').val();
-            load_data(1, query);
+            load_data(1, query, getFilters());
+        });
+
+         // Filter change
+        $('#filterForm input, #filterForm select').on('change', function() {
+            load_data(1, $('#search').val(), getFilters());
+        });
+
+        // Clear filter functionality
+        $('#clearFilter').on('click', function() {
+            // Reset radio buttons to "All"
+            $('#inlineRadio3').prop('checked', true);
+            $('#inlineRadio1, #inlineRadio2').prop('checked', false);
+
+            // Clear date inputs
+            $('#filterFromDate').val('');
+            $('#filterToDate').val('');
+
+            // Clear collector select
+            $('#filterCollectors').val('').trigger('change');
+
+            // Clear search input
+            $('#search').val('');
+
+            // Reload data with cleared filters
+            load_data(1, '', {
+                type: 'all',
+                date_from: '',
+                date_to: '',
+                collector: ''
+            });
         });
 
         $(document).on('click', '.page-link-go', function() {

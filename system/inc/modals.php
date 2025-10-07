@@ -6,7 +6,7 @@
             $options = '';
             $customers = collector_get_customers();
             foreach ($customers as $customer) {
-                $options .= '<option value="' . sanitize(ucwords($customer['customer_name']) . ',' . $customer['customer_account_number']) . '">' . sanitize(ucwords($customer['customer_name']) . ',' . $customer['customer_account_number']) . '</option>';
+                $options .= '<option value="' . sanitize(ucwords($customer['customer_name']) . ',' . $customer['customer_account_number']) . '">' . ucwords($customer['customer_name'] . ',' . $customer['customer_account_number']) . '</option>';
             }
     ?>
 
