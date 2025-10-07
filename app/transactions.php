@@ -305,18 +305,67 @@
                                                 </div>
                                             </div>
                                             <?php endif; ?>
-                                            <!-- <div class="col-auto ms-n2">
-                                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                                    <input type="radio" class="btn-check" name="sortRadio" id="sortAsc" autocomplete="off" checked />
-                                                    <label class="btn btn-light" for="sortAsc" data-bs-toggle="tooltip" data-bs-title="Ascending">
-                                                        <span class="material-symbols-outlined">arrow_upward</span>
-                                                    </label>
-                                                    <input type="radio" class="btn-check" name="sortRadio" id="sortDesc" autocomplete="off" />
-                                                    <label class="btn btn-light" for="sortDesc" data-bs-toggle="tooltip" data-bs-title="Descending">
-                                                        <span class="material-symbols-outlined">arrow_downward</span>
-                                                    </label>
+                                            <div class="col-auto ms-n2">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                        <span class="material-symbols-outlined">filter_list</span>
+                                                    </button>
+                                                    <div class="dropdown-menu rounded-3 p-6">
+                                                        <h4 class="fs-lg mb-4">Filter</h4>
+                                                        <form style="width: 350px" id="filterForm">
+                                                            <div class="row align-items-center mb-3">
+                                                                <div class="col-4">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input export_class" type="radio" name="f_deposit" id="inlineRadio1" required value="date">
+                                                                        <label class="form-check-label" for="inlineRadio1">Deposits</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input export_class" type="radio" name="f_withdrawal" id="inlineRadio2" required value="month">
+                                                                        <label class="form-check-label" for="inlineRadio2">Withdrawals</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input export_type" type="radio" name="f_dw_all" id="inlineRadio3" required value="all" checked>
+                                                                        <label class="form-check-label" for="inlineRadio3">All</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row align-items-center">
+                                                                <div class="row align-items-center mb-3">
+                                                                    <div class="col-3">
+                                                                        <label class="form-label mb-0" for="filterLocation">From</label>
+                                                                    </div>
+                                                                    <div class="col-9">
+                                                                       <input type="date" class="form-control">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row align-items-center mb-3">
+                                                                <div class="col-3">
+                                                                    <label class="form-label mb-0" for="filterLocation">To</label>
+                                                                </div>
+                                                                <div class="col-9">
+                                                                    <input type="date" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row align-items-center mb-3">
+                                                                <div class="col-3">
+                                                                    <label class="form-label mb-0" for="filterLocation">Collectors</label>
+                                                                </div>
+                                                                <div class="col-9">
+                                                                    <select class="form-select" id="filterLocation" data-choices>
+                                                                        <option value="San Francisco, CA">San Francisco, CA</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        
+                                                        </form>
+                                                    </div>
+                                                    </div>
                                                 </div>
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>

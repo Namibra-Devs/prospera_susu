@@ -1,13 +1,5 @@
 <?php
 
-// generate automatic email (eg; collector_ps_01@susu.com) for collectors
-// function generate_collector_email($name) {
-// 	$name = strtolower($name);
-// 	$name = str_replace(' ', '_', $name);
-// 	$random_number = rand(10, 99);
-// 	return $name . '_' . $random_number . '@susu.com';
-// }
-
 function generateCollectorEmail($collectorId, $name) {
 	$name = strtolower($name);
 	$name = str_replace(' ', '_', $name);
