@@ -391,17 +391,31 @@ echo $output . '
     
     // Handle select all
     // 
-    document.getElementById("select-all").addEventListener("change", function(e) {
-        document.querySelectorAll(".transaction-check").forEach(cb => {
-            cb.checked = e.target.checked;
-            let row = cb.closest("tr");
-            if (e.target.checked) {
-                row.classList.add("table-warning");
-            } else {
-                row.classList.remove("table-warning");
-            }
+    const selectAll = document.getElementById("select-all");
+    if (selectAll) {
+        selectAll.addEventListener("change", function(e) {
+            document.querySelectorAll(".transaction-check").forEach(cb => {
+                cb.checked = e.target.checked;
+                let row = cb.closest("tr");
+                if (e.target.checked) {
+                    row.classList.add("table-warning");
+                } else {
+                    row.classList.remove("table-warning");
+                }
+            });
         });
-    });
+    }
+    // document.getElementById("select-all").addEventListener("change", function(e) {
+    //     document.querySelectorAll(".transaction-check").forEach(cb => {
+    //         cb.checked = e.target.checked;
+    //         let row = cb.closest("tr");
+    //         if (e.target.checked) {
+    //             row.classList.add("table-warning");
+    //         } else {
+    //             row.classList.remove("table-warning");
+    //         }
+    //     });
+    // });
 
     function setLoading(isLoading) {
         const approveBtn = document.getElementById("approve-btn");

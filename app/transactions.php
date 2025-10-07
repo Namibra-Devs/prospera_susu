@@ -421,20 +421,25 @@
     $(document).ready(function() {
 
         // SEARCH AND PAGINATION FOR LIST
-        function load_data(page, query = '', filters = {}) {
+        function load_data(page, query = ''<?= admin_has_permission() ? ', filters = {}' : ''; ?>) {
             $.ajax({
                 url : "<?= PROOT; ?>app/controller/list.transactions.php",
                 method : "POST",
                 data : {
                     page : page, 
-                    query : query, 
+                    query : query<?= admin_has_permission() ? ',' : ''; ?>
+                    <?php if (admin_has_permission()): ?>
                     type: filters.type || '',
                     date_from: filters.date_from || '',
                     date_to: filters.date_to || '',
                     collector: filters.collector || ''
+                    <?php endif; ?>
                 },
                 success : function(data) {
                     $("#load-content").html(data);
+                }, 
+                error: function(error) {
+                    console.log(error);
                 }
             });
         }
@@ -452,7 +457,7 @@
 
         $('#search').keyup(function() {
             var query = $('#search').val();
-            load_data(1, query, getFilters());
+            load_data(1, query<?= admin_has_permission() ? ', getFilters()' : ''; ?>);
         });
 
          // Filter change
@@ -460,10 +465,10 @@
             load_data(1, $('#search').val(), getFilters());
         });
 
-         // Optional: Add a submit button for filters
+        // Optional: Add a submit button for filters
         $('#filterForm').on('submit', function(e) {
             e.preventDefault();
-            load_data(1, $('#search').val(), getFilters());
+            load_data(1, $('#search').val()<?= admin_has_permission() ? ', getFilters()' : ''; ?>);
         });
 
         // Clear filter functionality
@@ -484,19 +489,20 @@
 
             // Reload data with cleared filters
             load_data(1, '', {
-                type: 'all',
+                type: 'all'
+                <?php if (admin_has_permission()): ?>,
                 date_from: '',
                 date_to: '',
                 collector: ''
+                <?php endif; ?>
             });
         });
 
         $(document).on('click', '.page-link-go', function() {
             var page = $(this).data('page_number');
             var query = $('#search').val();
-            load_data(page, query);
+            load_data(page, query<?= admin_has_permission() ? ', getFilters()' : ''; ?>);
         });
             
     });
 </script>
-    
