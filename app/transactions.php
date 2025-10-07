@@ -323,19 +323,19 @@
                                                             <div class="row align-items-center mb-3">
                                                                 <div class="col-4">
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input export_class" type="radio" name="f_deposit" id="inlineRadio1" required value="deposit">
+                                                                        <input class="form-check-input export_class" type="radio" name="transaction_type" id="inlineRadio1" required value="deposit">
                                                                         <label class="form-check-label" for="inlineRadio1">Deposits</label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input export_class" type="radio" name="f_withdrawal" id="inlineRadio2" required value="withdrawal">
+                                                                        <input class="form-check-input export_class" type="radio" name="transaction_type" id="inlineRadio2" required value="withdrawal">
                                                                         <label class="form-check-label" for="inlineRadio2">Withdrawals</label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input export_type" type="radio" name="f_dw_all" id="inlineRadio3" required value="all" checked>
+                                                                        <input class="form-check-input export_type" type="radio" name="transaction_type" id="inlineRadio3" required value="all" checked>
                                                                         <label class="form-check-label" for="inlineRadio3">All</label>
                                                                     </div>
                                                                 </div>
@@ -369,7 +369,9 @@
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <a href="javascript:;" id="clearFilter" class="mt-2 small">clear filter</a>
+                                                            <button type="submit" class="btn btn-primary btn-sm">filter</button>
+                                                            <br><br>
+                                                            <a href="javascript:;" id="clearFilter" class="text-sm">clear filter</a>
                                                         </form>
                                                     </div>
                                                     </div>
@@ -437,9 +439,9 @@
 
         function getFilters() {
             return {
-                type: $('input[name="f_deposit"]:checked').val() || 
-                      $('input[name="f_withdrawal"]:checked').val() || 
-                      $('input[name="f_dw_all"]:checked').val() || '',
+                type: //$('input[name="f_deposit"]:checked').val() || 
+                      //$('input[name="f_withdrawal"]:checked').val() || 
+                      $('input[name="transaction_type"]:checked').val() || '',
                 date_from: $('input[type="date"]').eq(0).val(),
                 date_to: $('input[type="date"]').eq(1).val(),
                 collector: $('#filterCollectors').val()
@@ -455,6 +457,12 @@
 
          // Filter change
         $('#filterForm input, #filterForm select').on('change', function() {
+            load_data(1, $('#search').val(), getFilters());
+        });
+
+         // Optional: Add a submit button for filters
+        $('#filterForm').on('submit', function(e) {
+            e.preventDefault();
             load_data(1, $('#search').val(), getFilters());
         });
 

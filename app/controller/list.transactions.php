@@ -58,13 +58,13 @@ require ('../../system/DatabaseConnector.php');
 
     
     // Transaction type filter
-    // if ($type && $type != 'all') {
-    //     if ($type == 'deposit') {
-    //         $query .= " AND type = 'saving' ";
-    //     } elseif ($type == 'withdrawal') {
-    //         $query .= " AND type = 'withdrawal' ";
-    //     }
-    // }
+    if ($type && $type != 'all') {
+        if ($type == 'deposit') {
+            $query .= " AND type = 'saving' ";
+        } elseif ($type == 'withdrawal') {
+            $query .= " AND type = 'withdrawal' ";
+        }
+    }
 
     // Date filter
     if ($date_from && $date_to) {
@@ -77,7 +77,7 @@ require ('../../system/DatabaseConnector.php');
 
     // Collector filter
     if ($collector) {
-        $query .= " AND collector_id IN (SELECT admin_id FROM susu_admins WHERE admin_id LIKE '$collector') ";
+        $query .= " AND collector_id IN (SELECT admin_id FROM susu_admins WHERE admin_id = '$collector') ";
     }
 
 
