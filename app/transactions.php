@@ -302,7 +302,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <?php if ( admin_has_permission('collector') && !admin_has_permission('admin')): ?>
+                                            <?php if (admin_has_permission('collector') && !admin_has_permission('admin')): ?>
                                             <div class="col-auto">
                                                 <div class="">
                                                     <!-- upload today collection file -->
@@ -312,6 +312,7 @@
                                                 </div>
                                             </div>
                                             <?php endif; ?>
+                                            <?php if (admin_has_permission()): ?>
                                             <div class="col-auto ms-n2">
                                                 <div class="dropdown">
                                                     <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -374,8 +375,9 @@
                                                             <a href="javascript:;" id="clearFilter" class="text-sm">clear filter</a>
                                                         </form>
                                                     </div>
-                                                    </div>
                                                 </div>
+                                            </div>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -439,9 +441,7 @@
 
         function getFilters() {
             return {
-                type: //$('input[name="f_deposit"]:checked').val() || 
-                      //$('input[name="f_withdrawal"]:checked').val() || 
-                      $('input[name="transaction_type"]:checked').val() || '',
+                type: $('input[name="transaction_type"]:checked').val() || '',
                 date_from: $('input[type="date"]').eq(0).val(),
                 date_to: $('input[type="date"]').eq(1).val(),
                 collector: $('#filterCollectors').val()
