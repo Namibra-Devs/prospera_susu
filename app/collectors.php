@@ -332,144 +332,15 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div class="dropdown ms-1">
-                                    <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                        <span class="material-symbols-outlined">sort_by_alpha</span>
-                                    </button>
-                                    <div class="dropdown-menu rounded-3 p-6">
-                                    <h4 class="fs-lg mb-4">Sort</h4>
-                                    <form style="width: 350px" id="filterForm">
-                                        <div class="row gx-3">
-                                        <div class="col">
-                                            <select class="form-select" id="sort" data-choices='{"searchEnabled": false}'>
-                                            <option value="user">User</option>
-                                            <option value="company">Company</option>
-                                            <option value="phone">Phone</option>
-                                            <option value="location">Location</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                            <input type="radio" class="btn-check" name="sortRadio" id="sortAsc" autocomplete="off" checked />
-                                            <label class="btn btn-light" for="sortAsc" data-bs-toggle="tooltip" data-bs-title="Ascending">
-                                                <span class="material-symbols-outlined">arrow_upward</span>
-                                            </label>
-                                            <input type="radio" class="btn-check" name="sortRadio" id="sortDesc" autocomplete="off" />
-                                            <label class="btn btn-light" for="sortDesc" data-bs-toggle="tooltip" data-bs-title="Descending">
-                                                <span class="material-symbols-outlined">arrow_downward</span>
-                                            </label>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </form>
+                                <div class="ms-1">
+                                    <input class="form-control" id="search" name="search" placeholder="search" />
                                 </div>
                             </div>
                         </div>
+
+                        <div id="load-collector-transaction-data"></div>
                     </div>
-
-                    <!-- Table -->
-                    <div class="table-responsive">
-                        <table class="table table-hover table-round mb-0">
-                            <thead>
-                                <th>ID</th>
-                                <th>Product</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Price</th>
-                            </thead>
-                            <tbody>
-                            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                                <td class="text-body-secondary">#3456</td>
-                                <td>Apple MacBook Pro</td>
-                                <td>2021-08-12</td>
-                                <td><span class="badge bg-success-subtle text-success">Completed</span></td>
-                                <td>$2,499</td>
-                                </tr>
-                                <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
-                                <td class="text-body-secondary">#3455</td>
-                                <td>Apple iPhone 12 Pro</td>
-                                <td>2021-08-11</td>
-                                <td><span class="badge bg-secondary-subtle text-secondary">Pending</span></td>
-                                <td>$1,099</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-            <script>
-
-                $(document).ready(function() {
-
-                    // SEARCH AND PAGINATION FOR LIST
-                    function load_data(page, query = ''<?= admin_has_permission() ? ', filters = {}' : ''; ?>) {
-                        $.ajax({
-                            url : "<?= PROOT; ?>app/controller/list.collector.transactions.php",
-                            method : "POST",
-                            data : {
-                                page : page, 
-                                query : query, 
-                                date_from: filters.date_from || '',
-                                date_to: filters.date_to || '',
-                            },
-                            success : function(data) {
-                                $("#load-content").html(data);
-                            }, 
-                            error: function(error) {
-                                console.log(error);
-                            }
-                        });
-                    }
-
-                    function getFilters() {
-                        return {
-                            date_from: $('input[type="date"]').eq(0).val(),
-                            date_to: $('input[type="date"]').eq(1).val(),
-                        }
-                    }
-
-                    load_data(1);
-
-                    $('#search').keyup(function() {
-                        var query = $('#search').val();
-                        load_data(1, query, getFilters());
-                    });
-
-                    // Filter change
-                    $('#filterForm input, #filterForm select').on('change', function() {
-                        load_data(1, $('#search').val(), getFilters());
-                    });
-
-                    // Optional: Add a submit button for filters
-                    $('#filterForm').on('submit', function(e) {
-                        e.preventDefault();
-                        load_data(1, $('#search').val(), getFilters());
-                    });
-
-                    // Clear filter functionality
-                    $('#clearFilter').on('click', function() {
-
-                        // Clear date inputs
-                        $('#filterFromDate').val('');
-                        $('#filterToDate').val('');
-
-                        // Clear search input
-                        $('#search').val('');
-
-                        // Reload data with cleared filters
-                        load_data(1, '', {
-                            date_from: '',
-                            date_to: ''
-                        });
-                    });
-
-                    $(document).on('click', '.page-link-go', function() {
-                        var page = $(this).data('page_number');
-                        var query = $('#search').val();
-                        load_data(page, query, getFilters());
-                    });
-                        
-                });
-            </script>
+                </section>
             <?php else: ?>
 
             <!-- Page header -->
@@ -690,3 +561,78 @@
 
     });
 </script>
+            <script>
+
+                $(document).ready(function() {
+
+                    // SEARCH AND PAGINATION FOR LIST
+                    function load_collector_data(page, query = '', filters = {}) {
+                        $.ajax({
+                            url : "<?= PROOT; ?>app/controller/list.collector.transactions.php",
+                            method : "POST",
+                            data : {
+                                id : "<?= $collector_data["admin_id"] ?? null; ?>", 
+                                page : page, 
+                                query : query, 
+                                date_from: filters.date_from || '', 
+                                date_to: filters.date_to || ''
+                            },
+                            success : function(data) {
+                                $("#load-collector-transaction-data").html(data);
+                            }, 
+                            error: function(error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+
+                    function getFilters() {
+                        return {
+                            date_from: $('input[type="date"]').eq(0).val(),
+                            date_to: $('input[type="date"]').eq(1).val(),
+                        }
+                    }
+
+                    load_collector_data(1);
+
+                    $('#search').keyup(function() {
+                        var query = $('#search').val();
+                        load_collector_data(1, query, getFilters());
+                    });
+
+                    // Filter change
+                    $('#filterForm input, #filterForm select').on('change', function() {
+                        load_collector_data(1, $('#search').val(), getFilters());
+                    });
+
+                    // Optional: Add a submit button for filters
+                    $('#filterForm').on('submit', function(e) {
+                        e.preventDefault();
+                        load_collector_data(1, $('#search').val(), getFilters());
+                    });
+
+                    // Clear filter functionality
+                    $('#clearFilter').on('click', function() {
+
+                        // Clear date inputs
+                        $('#filterFromDate').val('');
+                        $('#filterToDate').val('');
+
+                        // Clear search input
+                        $('#search').val('');
+
+                        // Reload data with cleared filters
+                        load_collector_data(1, '', {
+                            date_from: '',
+                            date_to: ''
+                        });
+                    });
+
+                    $(document).on('click', '.page-link-go', function() {
+                        var page = $(this).data('page_number');
+                        var query = $('#search').val();
+                        load_collector_data(page, query, getFilters());
+                    });
+                        
+                });
+            </script>
