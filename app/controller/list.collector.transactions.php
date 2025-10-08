@@ -75,7 +75,6 @@ require ('../../system/DatabaseConnector.php');
                         <th class="fs-sm">Type</th>
                         <th class="fs-sm">Status</th>
                         <th class="fs-sm">Date</th>
-                        '. ((admin_has_permission()) ? '<th class="fs-sm"></th>' : '') .'
                     </tr>
                 </thead>
                 <tbody>
@@ -97,7 +96,6 @@ if ($total_data > 0) {
             $handler = 'Admin';
         }
 
-        $options = '';
 
         // get type of transaction
         $type = '<span class="fs-sm text-info">Deposit</span>';
@@ -109,11 +107,6 @@ if ($total_data > 0) {
             $row['saving_status'] = '<span class="badge bg-success-subtle text-success">Approved</span>';
         } elseif ($row['saving_status'] == 'Rejected') {
             $row['saving_status'] = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
-        }
-
-        // show approve button if status is pending
-        if ($row['saving_status'] == '<span class="badge bg-warning-subtle text-warning">Pending</span>') {
-            $options .= ' <a href="' . PROOT . 'app/transactions?d=1&approved=' . $row["saving_id"] . '" class="btn btn-sm btn-light" onclick="return confirm(\'Are you sure you want to APPROVE this Deposite Transaction?\');">Approve</a>';
         }
         
         // set background color for all today transactions
@@ -131,7 +124,6 @@ if ($total_data > 0) {
                 <td>' . $type . '</td>
                 <td>' . $row['saving_status'] . '</td>
                 <td>' . pretty_date_notime($row['created_at']) . '</td>
-                '. ((admin_has_permission()) ? '<td class="status">' . $options . '</td>' : '') .' 
             </tr>
 		';
 		$i++;

@@ -123,7 +123,7 @@ if ($total_data > 0) {
                                 Collector with name '. strtoupper($row['admin_name']) . ' will be deleted.
                                 <br>Are you sure you want to proceed to this action.
                             </p>
-                            <a href="' . PROOT . 'app/collectors?delete=' . $row["admin_id"] . '" class="btn btn-secondary w-100 mt-4">Delete</a>
+                            <a href="' . PROOT . 'app/collectors?deactivate=' . $row["admin_id"] . '" class="btn btn-secondary w-100 mt-4">Delete</a>
                         </div>
                     </div>
                 </div>

@@ -82,8 +82,8 @@
 
     //
     // inactivate collector
-    if (isset($_GET['delete']) && !empty($_GET['delete'])) {
-        $delete_id = sanitize($_GET['delete']);
+    if (isset($_GET['deactivate']) && !empty($_GET['deactivate'])) {
+        $delete_id = sanitize($_GET['deactivate']);
 
         $sql = $dbConnection->query("UPDATE susu_admins SET admin_status = 'inactive' WHERE admin_id = '" . $delete_id . "'")->execute();
         if ($sql) {
@@ -96,7 +96,6 @@
             redirect(PROOT . 'app/collectors');
         }
     }
-
 
 
 ?>
@@ -289,7 +288,7 @@
                                 <a href="<?= goBack(); ?>" class="btn btn-light w-100"><< Go back</a>
                             </div>
                             <div class="col">
-                                <a href="<?= PROOT; ?>app/collectors?c=1&deactivate=<?= $collector_data["admin_id"]; ?>" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to DEACTIVATE this collector ?');">Deactivate</a>
+                                <a href="<?= PROOT; ?>app/collectors?deactivate=<?= $collector_data["admin_id"]; ?>" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to DEACTIVATE this collector ?');">Deactivate</a>
                             </div>
                         </div>
                     </div>
