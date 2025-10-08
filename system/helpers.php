@@ -338,13 +338,15 @@ function list_collector() {
 	return $statement;
 }
 
+//
 function sum_collector_saves($collector_id, $status = '') {
 	global $dbConnection;
 
 	$query = "
 		SELECT SUM(saving_amount) AS total 
 		FROM savings 
-		WHERE saving_collector_id = ? ";
+		WHERE saving_collector_id = ? 
+	";
 	if ($status) {
 		$query .= " AND saving_status = '" . $status . "'";
 	}
@@ -355,10 +357,29 @@ function sum_collector_saves($collector_id, $status = '') {
 	return $row['total'] ?? 0;
 }
 
-function  count_collector_customers($id) {
-	
+// 
+function count_collector_customers($id) {
+	global $dbConnection;
+	$sql = $dbConnection->query("SELECT * FROM customers WHERE customer_collector_id = '" . $id . "'")->rowCount();
+	return $sql ?? 0;
 }
 
+// get collector or admin last login
+function person_last_login($id) {
+	global $dbConnection;
+	$query = "
+		SELECT created_at  
+		FROM susu_login_details 
+		WHERE login_details_person_id = ? 
+		ORDER BY id DESC 
+		LIMIT 1
+	";
+	$statement = $dbConnection->prepare($query);
+	$statement->execute([$id]);
+	$row = $statement->fetch(PDO::FETCH_ASSOC);
+
+	return $row['created_at'] ?? 0;
+}
 
 
 //////////////////////////////////////// CUSTOMERS

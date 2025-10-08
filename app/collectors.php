@@ -145,12 +145,12 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Registered Customers</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold">$1,250</div>
+                                    <div class="fs-4 fw-semibold"><?= $count_customers; ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-lg bg-body text-primary">
-                                        <i class="fs-4" data-duoicon="credit-card"></i>
+                                        <i class="fs-4" data-duoicon="bell-badge"></i>
                                     </div>
                                 </div>
                             </div>
@@ -166,12 +166,12 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total Deposit</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold">35.5 hrs</div>
+                                    <div class="fs-4 fw-semibold"><?= money($total_saves); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-lg bg-body text-primary">
-                                        <i class="fs-4" data-duoicon="clock"></i>
+                                        <i class="fs-4" data-duoicon="credit-card"></i>
                                     </div>
                                 </div>
                             </div>
@@ -187,12 +187,15 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Pending Deposits</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold">2:55 hrs</div>
+                                    <div class="fs-4 fw-semibold">
+                                        <?= money($total_pending_saves); ?>
+                                        <small class="text-danger fs-sm"><?= money(sum_collector_saves($view, 'Rejected')); ?></small>
+                                    </div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
                                     <div class="avatar avatar-lg bg-body text-primary">
-                                        <i class="fs-4" data-duoicon="slideshow"></i>
+                                        <i class="fs-4" data-duoicon="chart-pie"></i>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +211,7 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Approved Deposits</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold">14.5%</div>
+                                    <div class="fs-4 fw-semibold"><?= money($total_approved_saves); ?></div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -221,6 +224,76 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Page content -->
+            <div class="row">
+                <div class="col-12 col-xxl-4">
+                    <div class="position-sticky mb-8" style="top: 40px">
+                        <!-- Card -->
+                        <div class="card bg-body mb-3">
+
+                            <!-- Avatar -->
+                            <div class="avatar avatar-xl rounded-circle mt-n7 mx-auto">
+                                <img 
+                                    class="avatar-img border border-white border-3" 
+                                    src="<?= (($collector_data['admin_profile'] != NULL) ? $collector_data['admin_profile'] : PROOT . 'assets/media/avatar.png'); ?>" 
+                                    alt="..." 
+                                />
+                            </div>
+
+                            <!-- Body -->
+                            <div class="card-body text-center">
+                            <!-- Heading -->
+                                <h1 class="card-title fs-5"><?= ucwords($collector_data['admin_name']); ?></h1>
+
+                                <!-- Text -->
+                                <p class="text-body-secondary mb-6"><?= strtoupper($collector_data['admin_permissions']); ?></p>
+
+                                <!-- List -->
+                                <ul class="list-group list-group-flush mb-0">
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Email</span>
+                                        <span><?= ucwords($collector_data["admin_email"]); ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Address</span>
+                                        <span><?= ucwords($collector_data["admin_address"]); ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Phone</span>
+                                        <a class="text-body" href="tel:<?= $collector_data["admin_phone"]; ?>"><?= $collector_data["admin_phone"]; ?></a>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Location</span>
+                                        <span><?= ucwords($collector_data["admin_state"] . ', ' . $collector_data["admin_city"]); ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Added by</span>
+                                        <span>SUPER ADMIN</span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Joined at</span>
+                                        <span><?= pretty_date_notime($collector_data["created_at"]); ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Last login</span>
+                                        <span class="text-info"><?= pretty_date(person_last_login($collector_data["admin_id"])); ?></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="row gx-3">
+                            <div class="col">
+                                <button class="btn btn-light w-100" type="button">Call</button>
+                            </div>
+                            <div class="col">
+                                <a href="<?= PROOT; ?>app/collectors?c=1&deactivate=<?= $collector_data["admin_id"]; ?>" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to DEACTIVATE this collector ?');">Deactivate</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
             <?php else: ?>
 
