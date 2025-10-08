@@ -560,78 +560,78 @@
 
     });
 </script>
-            <script>
+<script>
 
-                $(document).ready(function() {
+    $(document).ready(function() {
 
-                    // SEARCH AND PAGINATION FOR LIST
-                    function load_collector_data(page, query = '', filters = {}) {
-                        $.ajax({
-                            url : "<?= PROOT; ?>app/controller/list.collector.transactions.php",
-                            method : "POST",
-                            data : {
-                                id : "<?= $collector_data["admin_id"] ?? null; ?>", 
-                                page : page, 
-                                query : query, 
-                                date_from: filters.date_from || '', 
-                                date_to: filters.date_to || ''
-                            },
-                            success : function(data) {
-                                $("#load-collector-transaction-data").html(data);
-                            }, 
-                            error: function(error) {
-                                console.log(error);
-                            }
-                        });
-                    }
+        // SEARCH AND PAGINATION FOR LIST
+        function load_collector_data(page, query = '', filters = {}) {
+            $.ajax({
+                url : "<?= PROOT; ?>app/controller/list.collector.transactions.php",
+                method : "POST",
+                data : {
+                    id : "<?= $collector_data["admin_id"] ?? null; ?>", 
+                    page : page, 
+                    query : query, 
+                    date_from: filters.date_from || '', 
+                    date_to: filters.date_to || ''
+                },
+                success : function(data) {
+                    $("#load-collector-transaction-data").html(data);
+                }, 
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
 
-                    function getFilters() {
-                        return {
-                            date_from: $('input[type="date"]').eq(0).val(),
-                            date_to: $('input[type="date"]').eq(1).val(),
-                        }
-                    }
+        function getFilters() {
+            return {
+                date_from: $('input[type="date"]').eq(0).val(),
+                date_to: $('input[type="date"]').eq(1).val(),
+            }
+        }
 
-                    load_collector_data(1);
+        load_collector_data(1);
 
-                    $('#search').keyup(function() {
-                        var query = $('#search').val();
-                        load_collector_data(1, query, getFilters());
-                    });
+        $('#search').keyup(function() {
+            var query = $('#search').val();
+            load_collector_data(1, query, getFilters());
+        });
 
-                    // Filter change
-                    $('#filterForm input, #filterForm select').on('change', function() {
-                        load_collector_data(1, $('#search').val(), getFilters());
-                    });
+        // Filter change
+        $('#filterForm input, #filterForm select').on('change', function() {
+            load_collector_data(1, $('#search').val(), getFilters());
+        });
 
-                    // Optional: Add a submit button for filters
-                    $('#filterForm').on('submit', function(e) {
-                        e.preventDefault();
-                        load_collector_data(1, $('#search').val(), getFilters());
-                    });
+        // Optional: Add a submit button for filters
+        $('#filterForm').on('submit', function(e) {
+            e.preventDefault();
+            load_collector_data(1, $('#search').val(), getFilters());
+        });
 
-                    // Clear filter functionality
-                    $('#clearFilter').on('click', function() {
+        // Clear filter functionality
+        $('#clearFilter').on('click', function() {
 
-                        // Clear date inputs
-                        $('#filterFromDate').val('');
-                        $('#filterToDate').val('');
+            // Clear date inputs
+            $('#filterFromDate').val('');
+            $('#filterToDate').val('');
 
-                        // Clear search input
-                        $('#search').val('');
+            // Clear search input
+            $('#search').val('');
 
-                        // Reload data with cleared filters
-                        load_collector_data(1, '', {
-                            date_from: '',
-                            date_to: ''
-                        });
-                    });
+            // Reload data with cleared filters
+            load_collector_data(1, '', {
+                date_from: '',
+                date_to: ''
+            });
+        });
 
-                    $(document).on('click', '.page-link-go', function() {
-                        var page = $(this).data('page_number');
-                        var query = $('#search').val();
-                        load_collector_data(page, query, getFilters());
-                    });
-                        
-                });
-            </script>
+        $(document).on('click', '.page-link-go', function() {
+            var page = $(this).data('page_number');
+            var query = $('#search').val();
+            load_collector_data(page, query, getFilters());
+        });
+            
+    });
+</script>

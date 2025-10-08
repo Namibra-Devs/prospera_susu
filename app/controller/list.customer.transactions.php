@@ -16,16 +16,15 @@ require ('../../system/DatabaseConnector.php');
     }
 
     // Get filters from POST
-    $type = isset($_POST['type']) ? $_POST['type'] : '';
-    $date_from = isset($_POST['date_from']) ? $_POST['date_from'] : '';
-    $date_to = isset($_POST['date_to']) ? $_POST['date_to'] : '';
-    $collector = isset($_POST['collector']) ? $_POST['collector'] : '';
-
-
+    $id = isset($_POST['date_from']) ? sanitize($_POST['id']) : '';
+    $type = isset($_POST['type']) ? sanitize($_POST['type']) : '';
+    $date_from = isset($_POST['date_from']) ? sanitize($_POST['date_from']) : '';
+    $date_to = isset($_POST['date_to']) ? sanitize($_POST['date_to']) : '';
+    $collector = isset($_POST['collector']) ? sanitize($_POST['collector']) : '';
 
     // merge both savings and withdrawals into one query
     $query = "
-        SELECT * FROM (
+		SELECT * FROM (
             SELECT 
                 saving_id AS transaction_id, 
                 saving_customer_id AS customer_id, 
@@ -48,8 +47,8 @@ require ('../../system/DatabaseConnector.php');
                         'withdrawal' AS type, 
                         created_at FROM withdrawals
             ) 
-        AS transactions WHERE ";
-    // check if a collector is logged in, then show only their transactions
+        AS transactions WHERE customer_id = '" . $id . "' AND ";
+	// check if a collector is logged in, then show only their transactions
     if (admin_has_permission('collector') && !admin_has_permission('admin')) {
         $query .= " collector_id = '". $admin_id . "' ";
     } else {
@@ -74,7 +73,7 @@ require ('../../system/DatabaseConnector.php');
         $query .= " AND transaction_date <= '$date_to' ";
     }
 
-    // Collector filter
+	// Collector filter
     if ($collector) {
         $query .= " AND collector_id IN (SELECT admin_id FROM susu_admins WHERE admin_id = '$collector') ";
     }
@@ -89,13 +88,12 @@ require ('../../system/DatabaseConnector.php');
             OR account_number LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR transaction_date LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
             OR status LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR type LIKE "%'.str_replace(' ', '%', $_POST['query']).'%" 
-            OR created_at LIKE "%'.str_replace(' ', '%', $_POST['query']).'%")
+            OR type LIKE "%'.str_replace(' ', '%', $_POST['query']).'%")
 		';
 
     }
 
-    $query .= 'ORDER BY created_at DESC ';
+    $query .= 'ORDER BY transaction_date DESC ';
 
     $filter_query = $query . 'LIMIT ' . $start . ', ' . $limit . '';
 
@@ -113,12 +111,6 @@ require ('../../system/DatabaseConnector.php');
             <table class="table table-hover mb-0">
                 <thead>
                     <tr>
-                        <th style="width: 0px">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="select-all" />
-                                <label class="form-check-label" for="select-all"></label>
-                            </div>
-                        </th>
                         <th class="fs-sm"></th>
                         <th class="fs-sm">Client</th>
                         <th class="fs-sm">Amount</th>
@@ -126,7 +118,6 @@ require ('../../system/DatabaseConnector.php');
                         <th class="fs-sm">Type</th>
                         <th class="fs-sm">Status</th>
                         <th class="fs-sm">Date</th>
-                        '. ((admin_has_permission()) ? '<th class="fs-sm"></th>' : '') .'
                     </tr>
                 </thead>
                 <tbody>
@@ -148,9 +139,8 @@ if ($total_data > 0) {
             $handler = 'Admin';
         }
 
-        $options = '';
 
-        // get type of transaction
+         // get type of transaction
         $type = 'Unknown';
         if ($row['type'] == 'saving') {
             $type = '<span class="fs-sm text-info">Deposit</span>';
@@ -181,56 +171,27 @@ if ($total_data > 0) {
             } elseif ($row['status'] == 'Rejected') {
                 $row['status'] = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
             }
-
-            // show approve button if status is pending
-            if ($row['status'] == '<span class="badge bg-warning-subtle text-warning">Pending</span>') {
-                $options .= ' <a href="' . PROOT . 'app/transactions?w=1&approved=' . $row["transaction_id"] . '" class="btn btn-sm btn-warning" onclick="return confirm(\'Are you sure you want to APPROVE this Withdrawal Transaction?\');">Approve</a>';
-                $options .= ' <a href="' . PROOT . 'app/transactions?w=1&reject=' . $row["transaction_id"] . '" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure you want to REJECT this Withdrawal Transaction?\');">Reject</a>';
-            }
-
-            // show paid button if status is approved
-            if ($row['status'] == '<span class="badge bg-success-subtle text-success">Approved</span>') {
-                $options .= ' <a href="'.PROOT.'app/transactions?w=1&paid='.$row["transaction_id"].'" class="btn btn-sm btn-success" onclick="return confirm(\'Are you sure you want to set this Withdrawal Transaction as PAID?\');">Mark as Paid</a>';
-            }
         }
+        
         // set background color for all today transactions
-        if (date('Y-m-d', strtotime($row['transaction_date'])) == date('Y-m-d')) {
-            $output .= '<tr class="table-success" data-id="' . (($row['type'] == 'saving') ? 'save_' : 'withdraw_') . $row["transaction_id"] . '">';
+        if (date('Y-m-d', strtotime($row['created_at'])) == date('Y-m-d')) {
+            $output .= '<tr class="table-success" data-id="save_' . $row["transaction_id"] . '">';
         } else {
-            $output .= '<tr data-id="' . (($row['type'] == 'saving') ? 'save_' : 'withdraw_') . $row["transaction_id"] . '">';
+            $output .= '<tr data-id="save_ '. $row["transaction_id"] . '">';
         }
 
 		$output .= '
-                <td style="width: 0px">
-                    <div class="form-check">
-                        <input class="form-check-input transaction-check" type="checkbox" name="transaction_ids[]" id="tableCheckOne" value="' . (($row['type'] == 'saving') ? 'save_' : 'withdraw_') . $row["transaction_id"] . '" />
-                        <label class="form-check-label" for="tableCheckOne"></label>
-                    </div>
-                </td>
                 <td>' . $i . '</td>
                 <td>' . ucwords($client_name) . ' (' . $row['account_number'] . ')</td>
                 <td>' . money($row["amount"]) . '</td>
                 <td>' .  ucwords($handler) . '</td>
                 <td>' . $type . '</td>
                 <td>' . $row['status'] . '</td>
-                <td>' . pretty_date_notime($row['transaction_date']) . '</td>
-                '. ((admin_has_permission()) ? '<td class="status">' . $options . '</td>' : '') .' 
+                <td>' . pretty_date_notime($row['created_at']) . '</td>
             </tr>
 		';
 		$i++;
 	}
-    if (admin_has_permission()) {
-        $output .= '
-            <div id="message" style="margin-top:10px;"></div>
-            <div id="loading" style="display:none; color:blue;">⏳ Processing...</div>
-            <tr>
-                <td colspan="10"> 
-                    <button class="btn btn-sm" id="approve-btn">✅ Approve Selected</button>
-                    <button class="btn btn-sm" id="reject-btn">❌ Reject Selected</button>
-                </td>
-            </tr>
-        ';
-    }
 } else {
 	$output .= '
 		<tr class="text-warning">
@@ -373,122 +334,3 @@ echo $output . '
 		</div>
 	';
 ?>
-<script>
-    // Toggle row highlight on checkbox change
-    document.querySelectorAll(".transaction-check").forEach(cb => {
-        cb.addEventListener("change", function() {
-            let row = cb.closest("tr");
-            if (cb.checked) {
-                row.classList.add("table-warning");
-            } else {
-                row.classList.remove("table-warning");
-            }
-        });
-    });
-    
-    // Handle select all
-    // 
-    const selectAll = document.getElementById("select-all");
-    if (selectAll) {
-        selectAll.addEventListener("change", function(e) {
-            document.querySelectorAll(".transaction-check").forEach(cb => {
-                cb.checked = e.target.checked;
-                let row = cb.closest("tr");
-                if (e.target.checked) {
-                    row.classList.add("table-warning");
-                } else {
-                    row.classList.remove("table-warning");
-                }
-            });
-        });
-    }
-    // document.getElementById("select-all").addEventListener("change", function(e) {
-    //     document.querySelectorAll(".transaction-check").forEach(cb => {
-    //         cb.checked = e.target.checked;
-    //         let row = cb.closest("tr");
-    //         if (e.target.checked) {
-    //             row.classList.add("table-warning");
-    //         } else {
-    //             row.classList.remove("table-warning");
-    //         }
-    //     });
-    // });
-
-    function setLoading(isLoading) {
-        const approveBtn = document.getElementById("approve-btn");
-        const rejectBtn = document.getElementById("reject-btn");
-        const loadingDiv = document.getElementById("loading");
-
-        if (isLoading) {
-            approveBtn.disabled = true;
-            rejectBtn.disabled = true;
-            loadingDiv.style.display = "block";
-        } else {
-            approveBtn.disabled = false;
-            rejectBtn.disabled = false;
-            loadingDiv.style.display = "none";
-        }
-    }
-
-    function processTransactions(action) {
-        let selected = [];
-        document.querySelectorAll(".transaction-check:checked").forEach(cb => {
-            selected.push(cb.value);
-        });
-
-        if (selected.length === 0) {
-            $('.toast-body').html("⚠️ No transactions selected.");
-            $('.toast').toast('show');
-            $('.toast').removeClass('bg-success').addClass('bg-danger');
-            return;
-        }
-        
-        setLoading(true);
-
-        fetch("<?= PROOT; ?>app/controller/transaction.approver.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: action, transactions: selected })
-        })
-        .then(res => res.json())
-        .then(data => {
-            $('.toast-body').html(data.message);
-            $('.toast').toast('show');
-            $('.toast').removeClass('bg-danger');
-
-            if (data.updated) {
-                data.updated.forEach(item => {
-                    let row = document.querySelector(`tr[data-id='${item.id}']`);
-                    let statusCell = row.querySelector(".status");
-
-                    if (row && statusCell) {
-                        statusCell.innerText = item.status;
-                    }
-
-                    // ✅ Change row color based on action
-                    row.classList.remove("selected", "approved", "rejected");
-                    if (action === "approve") {
-                        row.classList.remove("table-warning");
-                        row.classList.add("table-success");
-                    } else if (action === "reject") {
-                        row.classList.add("table-danger");
-                    }
-
-                });
-            }
-
-            // ✅ Uncheck all checkboxes after success
-            document.getElementById("select-all").checked = false;
-            document.querySelectorAll(".transaction-check").forEach(cb => {
-                cb.checked = false;
-            });
-
-        })
-        .catch(err => console.error("Error:", err))
-        .finally(() => setLoading(false));
-    }
-
-    document.getElementById("approve-btn").addEventListener("click", () => processTransactions("approve"));
-    document.getElementById("reject-btn").addEventListener("click", () => processTransactions("reject"));
-
-</script>

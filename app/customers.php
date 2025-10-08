@@ -445,9 +445,9 @@
 
                         <!-- Buttons -->
                         <div class="row gx-3">
-                            <div class="col">
+                            <!-- <div class="col">
                                 <a class="btn btn-light w-100" href="<?= PROOT; ?>app/customers/edit=<?= $customer_data['customer_id']; ?>">Update</a>
-                            </div>
+                            </div> -->
                             <?php if (admin_has_permission()): ?>
                             <div class="col">
                                 <a href="<?= PROOT; ?>app/customers?c=1&deactivate=<?= $customer_data["customer_id"]; ?>" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to DEACTIVATE this customer ?');">Deactivate</a>
@@ -463,85 +463,77 @@
                         <div class="d-flex align-items-center justify-content-between mb-5">
                             <h2 class="fs-5 mb-0">Transaction history</h2>
                             <div class="d-flex">
-                                <!-- <div class="dropdown">
+                               <div class="dropdown">
                                     <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                         <span class="material-symbols-outlined">filter_list</span>
                                     </button>
                                     <div class="dropdown-menu rounded-3 p-6">
                                         <h4 class="fs-lg mb-4">Filter</h4>
+                                        <form style="width: 350px" id="filterForm">
+                                            <div class="row align-items-center mb-3">
+                                                <div class="col-4">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input export_class" type="radio" name="transaction_type" id="inlineRadio1" required value="deposit">
+                                                        <label class="form-check-label" for="inlineRadio1">Deposits</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input export_class" type="radio" name="transaction_type" id="inlineRadio2" required value="withdrawal">
+                                                        <label class="form-check-label" for="inlineRadio2">Withdrawals</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input export_type" type="radio" name="transaction_type" id="inlineRadio3" required value="all" checked>
+                                                        <label class="form-check-label" for="inlineRadio3">All</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center">
+                                                <div class="row align-items-center mb-3">
+                                                    <div class="col-3">
+                                                        <label class="form-label mb-0" for="filterFromDate">From</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <input type="date" class="form-control" id="filterFromDate">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center mb-3">
+                                                <div class="col-3">
+                                                    <label class="form-label mb-0" for="filterToDate">To</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <input type="date" class="form-control" id="filterToDate">
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center mb-3">
+                                                <div class="col-3">
+                                                    <label class="form-label mb-0" for="filterCollectors">Collectors</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <select class="form-select" id="filterCollectors" data-choices>
+                                                        <option value=""></option>
+                                                        <?= $options; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-sm">filter</button>
+                                            <br><br>
+                                            <a href="javascript:;" id="clearFilter" class="text-sm">clear filter</a>
+                                        </form>
                                     </div>
                                 </div>
-                                <div class="dropdown ms-1">
-                                    <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                        <span class="material-symbols-outlined">sort_by_alpha</span>
-                                    </button>
-                                    <div class="dropdown-menu rounded-3 p-6">
-                                        <h4 class="fs-lg mb-4">Sort</h4>
-                                    </div>
-                                </div> -->
+                                <div class="ms-1">
+                                    <input class="form-control" id="search" name="search" placeholder="search" />
+                                </div>
                             </div>
                         </div>
 
-                    <!-- Table -->
-                    <div class="table-responsive">
-                        <table class="table table-hover table-round mb-0">
-                        <thead>
-                            <th>ID</th>
-                            <th>Collector</th>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Amount</th>
-                        </thead>
-                        <tbody>
-                            <?php 
-                                $all_saves = fetchAllTransaction($customer_data['customer_id']);
-                                if (count($all_saves) > 0):
-                                    $i = 1;
-                                    foreach ($all_saves as $save): 
-                                        $type = ($save['type'] == 'saving') ? '<span class="fs-sm text-primary">Deposit</span>' : '<span class="fs-sm text-danger">Withdrawal</span>';
-                                        
-                                        $collector = findAdminById($save['collector_id'])->admin_name;
-                                        if (!$collector) {
-                                            $collector = 'Admin';
-                                        }
+                        <!-- Table -->
+                        <div id="load-customer-transaction-data"></div>
 
-                                        $status_badge = '';
-                                        if ($save['status'] == 'Approved') {
-                                            $status_badge = '<span class="badge bg-success-subtle text-success">Approved</span>';
-                                        } elseif ($save['status'] == 'Pending') {
-                                            $status_badge = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
-                                        } elseif ($save['status'] == 'Rejected') {
-                                            $status_badge = '<span class="badge bg-danger-subtle text-danger">Rejected</span>';
-                                        } elseif ($save['status'] == 'Paid') {
-                                            $status_badge = '<span class="badge bg-primary-subtle text-primary">Paid</span>';
-                                        } else {
-                                            $status_badge = '<span class="badge bg-secondary-subtle text-secondary">Unknown</span>';
-                                        }
-                            ?>
-                            <tr>
-                                <td class="text-body-secondary"><?= $i; ?></td>
-                                <td><?= ucwords($collector); ?></td>
-                                <td><?= pretty_date_notime($save['transaction_date']); ?></td>
-                                <td><?= $type; ?></td>
-                                <td><?= $status_badge; ?></td>
-                                <td><?= money($save["amount"]); ?></td>
-                            </tr>
-                            <?php 
-                                        $i++;
-                                    endforeach;
-                                else:
-                                    echo '
-                                        <tr>
-                                            <td colspan="7">
-                                                <div class="alert alert-info">No saves found!</div>
-                                            </td>
-                                        </tr>
-                                    ';
-                                endif;
-                            ?>
-                        </tbody>
-                    </table>
                 </div>
             </section>
             <section>
@@ -1228,4 +1220,96 @@
         $('#closeUploadModal').attr('disabled', false);
     });
 
+</script>
+
+<script>
+
+    $(document).ready(function() {
+
+        // SEARCH AND PAGINATION FOR LIST
+        function load_customer_data(page, query = ''<?= admin_has_permission() ? ', filters = {}' : ''; ?>) {
+            $.ajax({
+                url : "<?= PROOT; ?>app/controller/list.customer.transactions.php",
+                method : "POST",
+                data : {
+                    id : "<?= $customer_data["customer_id"] ?? null; ?>",
+                    page : page, 
+                    query : query<?= admin_has_permission() ? ',' : ''; ?>
+                    <?php if (admin_has_permission()): ?>
+                    type: filters.type || '',
+                    date_from: filters.date_from || '',
+                    date_to: filters.date_to || '',
+                    collector: filters.collector || ''
+                    <?php endif; ?>
+                },
+                success : function(data) {
+                    $("#load-customer-transaction-data").html(data);
+                }, 
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function getFilters() {
+            return {
+                type: $('input[name="transaction_type"]:checked').val() || '',
+                date_from: $('input[type="date"]').eq(0).val(),
+                date_to: $('input[type="date"]').eq(1).val(),
+                collector: $('#filterCollectors').val()
+            }
+        }
+
+        load_customer_data(1);
+
+        $('#search').keyup(function() {
+            var query = $('#search').val();
+            load_customer_data(1, query<?= admin_has_permission() ? ', getFilters()' : ''; ?>);
+        });
+
+         // Filter change
+        $('#filterForm input, #filterForm select').on('change', function() {
+            load_customer_data(1, $('#search').val(), getFilters());
+        });
+
+        // Optional: Add a submit button for filters
+        $('#filterForm').on('submit', function(e) {
+            e.preventDefault();
+            load_customer_data(1, $('#search').val()<?= admin_has_permission() ? ', getFilters()' : ''; ?>);
+        });
+
+        // Clear filter functionality
+        $('#clearFilter').on('click', function() {
+            // Reset radio buttons to "All"
+            $('#inlineRadio3').prop('checked', true);
+            $('#inlineRadio1, #inlineRadio2').prop('checked', false);
+
+            // Clear date inputs
+            $('#filterFromDate').val('');
+            $('#filterToDate').val('');
+
+            // Clear collector select
+            $('#filterCollectors').val('').trigger('change');
+
+            // Clear search input
+            $('#search').val('');
+
+            // Reload data with cleared filters
+            load_customer_data(1, '', {
+                type: 'all'
+                <?php if (admin_has_permission()): ?>,
+                date_from: '',
+                date_to: '',
+                collector: ''
+                <?php endif; ?>
+            });
+        });
+
+        $(document).on('click', '.page-link-go', function() {
+            var page = $(this).data('page_number');
+            var query = $('#search').val();
+            load_customer_data(page, query<?= admin_has_permission() ? ', getFilters()' : ''; ?>);
+        });
+            
+    });
 </script>
