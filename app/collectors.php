@@ -286,6 +286,9 @@
                         <!-- Buttons -->
                         <div class="row gx-3">
                             <div class="col">
+                                <a href="<?= goBack(); ?>" class="btn btn-light w-100"><< Go back</a>
+                            </div>
+                            <div class="col">
                                 <a href="<?= PROOT; ?>app/collectors?c=1&deactivate=<?= $collector_data["admin_id"]; ?>" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to DEACTIVATE this collector ?');">Deactivate</a>
                             </div>
                         </div>
@@ -296,7 +299,7 @@
                     <section class="mb-8">
                     <!-- Header -->
                         <div class="d-flex align-items-center justify-content-between mb-5">
-                            <h2 class="fs-5 mb-0">Recent orders</h2>
+                            <h2 class="fs-5 mb-0">Recent activities</h2>
                             <div class="d-flex">
                                 <div class="dropdown">
                                     <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -305,43 +308,27 @@
                                     <div class="dropdown-menu rounded-3 p-6">
                                         <h4 class="fs-lg mb-4">Filter</h4>
                                         <form style="width: 350px" id="filterForm">
-                                            <div class="row align-items-center mb-3">
-                                                <div class="col-3">
-                                                    <label class="form-label mb-0" for="filterUser">User</label>
-                                                </div>
-                                                <div class="col-9">
-                                                    <select
-                                                    class="form-select"
-                                                    id="filterUser"
-                                                   ></select>
-                                                </div>
-                                            </div>
-                                            <div class="row align-items-center mb-3">
-                                                <div class="col-3">
-                                                    <label class="form-label mb-0" for="filterCompany">Company</label>
-                                                </div>
-                                                <div class="col-9">
-                                                    <select class="form-select" id="filterCompany" data-choices='{"placeholder": "some"}'>
-                                                    <option value="TechPinnacle Solutions">TechPinnacle Solutions</option>
-                                                    <option value="Quantum Dynamics">Quantum Dynamics</option>
-                                                    <option value="Pinnacle Technologies">Pinnacle Technologies</option>
-                                                    <option value="Apex Innovations">Apex Innovations</option>
-                                                    </select>
-                                                </div>
-                                            </div>
                                             <div class="row align-items-center">
-                                                <div class="col-3">
-                                                    <label class="form-label mb-0" for="filterLocation">Location</label>
-                                                </div>
-                                                <div class="col-9">
-                                                    <select class="form-select" id="filterLocation" data-choices>
-                                                    <option value="San Francisco, CA">San Francisco, CA</option>
-                                                    <option value="Austin, TX">Austin, TX</option>
-                                                    <option value="Miami, FL">Miami, FL</option>
-                                                    <option value="Seattle, WA">Seattle, WA</option>
-                                                    </select>
+                                                <div class="row align-items-center mb-3">
+                                                    <div class="col-3">
+                                                        <label class="form-label mb-0" for="filterFromDate">From</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <input type="date" class="form-control" id="filterFromDate">
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="row align-items-center mb-3">
+                                                <div class="col-3">
+                                                    <label class="form-label mb-0" for="filterToDate">To</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <input type="date" class="form-control" id="filterToDate">
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-sm">filter</button>
+                                            <br><br>
+                                            <a href="javascript:;" id="clearFilter" class="text-sm">clear filter</a>
                                         </form>
                                     </div>
                                 </div>
@@ -409,7 +396,80 @@
                     </table>
                 </div>
             </section>
-                
+            <script>
+
+                $(document).ready(function() {
+
+                    // SEARCH AND PAGINATION FOR LIST
+                    function load_data(page, query = ''<?= admin_has_permission() ? ', filters = {}' : ''; ?>) {
+                        $.ajax({
+                            url : "<?= PROOT; ?>app/controller/list.collector.transactions.php",
+                            method : "POST",
+                            data : {
+                                page : page, 
+                                query : query, 
+                                date_from: filters.date_from || '',
+                                date_to: filters.date_to || '',
+                            },
+                            success : function(data) {
+                                $("#load-content").html(data);
+                            }, 
+                            error: function(error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+
+                    function getFilters() {
+                        return {
+                            date_from: $('input[type="date"]').eq(0).val(),
+                            date_to: $('input[type="date"]').eq(1).val(),
+                        }
+                    }
+
+                    load_data(1);
+
+                    $('#search').keyup(function() {
+                        var query = $('#search').val();
+                        load_data(1, query, getFilters());
+                    });
+
+                    // Filter change
+                    $('#filterForm input, #filterForm select').on('change', function() {
+                        load_data(1, $('#search').val(), getFilters());
+                    });
+
+                    // Optional: Add a submit button for filters
+                    $('#filterForm').on('submit', function(e) {
+                        e.preventDefault();
+                        load_data(1, $('#search').val(), getFilters());
+                    });
+
+                    // Clear filter functionality
+                    $('#clearFilter').on('click', function() {
+
+                        // Clear date inputs
+                        $('#filterFromDate').val('');
+                        $('#filterToDate').val('');
+
+                        // Clear search input
+                        $('#search').val('');
+
+                        // Reload data with cleared filters
+                        load_data(1, '', {
+                            date_from: '',
+                            date_to: ''
+                        });
+                    });
+
+                    $(document).on('click', '.page-link-go', function() {
+                        var page = $(this).data('page_number');
+                        var query = $('#search').val();
+                        load_data(page, query, getFilters());
+                    });
+                        
+                });
+            </script>
             <?php else: ?>
 
             <!-- Page header -->
