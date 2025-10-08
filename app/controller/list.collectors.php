@@ -102,7 +102,7 @@ if ($total_data > 0) {
                             <span class="material-symbols-outlined scale-125">more_horiz</span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="'. PROOT . 'app/collector/' . $row["admin_id"] .'">View</a></li>
+                            <li><a class="dropdown-item" href="'. PROOT . 'app/collectors/' . $row["admin_id"] .'">View</a></li>
                             <!-- <li><a class="dropdown-item" href="' . PROOT . 'app/collectors?edit=' . $row["admin_id"] . '">Update</a></li> -->
                             <li><a class="dropdown-item" href="#deleteModal_'. $row["id"] . '" data-bs-toggle="modal">Delete</a></li>
                         </ul>

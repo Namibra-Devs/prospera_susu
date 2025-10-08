@@ -238,7 +238,7 @@
                     // $balanceData['total_saves']
                     // $balanceData['total_withdrawals']
                     // $balanceData['total_commissions']
-                    //$total_saved_amount = $balanceData['balance'];
+                    // $total_saved_amount = $balanceData['balance'];
                 }
             ?>
 

@@ -105,6 +105,125 @@
     <main class="main px-lg-6">
         <!-- Content -->
         <div class="container-lg">
+            <?php if (isset($_GET['view'])):
+                
+                $view = sanitize($_GET['view']);
+
+                // fetch collector data
+                $query = "
+                    SELECT * FROM susu_admins 
+                    WHERE admin_id = ? 
+                    AND susu_admins.admin_status = 'active'
+                    LIMIT 1
+                ";
+                $statement = $dbConnection->prepare($query);
+                $statement->execute([$view]);
+                if ($statement->rowCount() < 1) {
+                    $_SESSION['flash_error'] = 'Collector not found!';
+                   redirect(PROOT . 'app/collectors');
+                } else {
+                    $collector_data = $statement->fetch(PDO::FETCH_ASSOC);
+
+                    // get total deposit from a particular collector 
+                    $count_customers = count_collector_customers($view);
+                    $total_saves = sum_collector_saves($view, '');
+                    $total_pending_saves = sum_collector_saves($view, 'Pending');
+                    $total_approved_saves = sum_collector_saves($view, 'Approved');
+
+                }
+            
+            ?>
+
+            <!-- Stats -->
+            <div class="row mb-8">
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Registered Customers</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold">$1,250</div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total Deposit</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold">35.5 hrs</div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="clock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-md-0">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Pending Deposits</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold">2:55 hrs</div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="slideshow"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3">
+                    <div class="card bg-body-tertiary border-transparent">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <!-- Heading -->
+                                    <h4 class="fs-sm fw-normal text-body-secondary mb-1">Approved Deposits</h4>
+
+                                    <!-- Text -->
+                                    <div class="fs-4 fw-semibold">14.5%</div>
+                                </div>
+                                <div class="col-auto">
+                                    <!-- Avatar -->
+                                    <div class="avatar avatar-lg bg-body text-primary">
+                                        <i class="fs-4" data-duoicon="discount"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            <?php else: ?>
+
             <!-- Page header -->
             <div class="row align-items-center mb-7">
                 <div class="col-auto">
@@ -285,6 +404,7 @@
                     <div id="load-content"></div>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
 
 <?php include ('../system/inc/footer.php'); ?>

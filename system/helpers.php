@@ -338,6 +338,26 @@ function list_collector() {
 	return $statement;
 }
 
+function sum_collector_saves($collector_id, $status = '') {
+	global $dbConnection;
+
+	$query = "
+		SELECT SUM(saving_amount) AS total 
+		FROM savings 
+		WHERE saving_collector_id = ? ";
+	if ($status) {
+		$query .= " AND saving_status = '" . $status . "'";
+	}
+	$statement = $dbConnection->prepare($query);
+	$statement->execute([$collector_id]);
+	$row = $statement->fetch(PDO::FETCH_ASSOC);
+
+	return $row['total'] ?? 0;
+}
+
+function  count_collector_customers($id) {
+	
+}
 
 
 
