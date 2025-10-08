@@ -286,14 +286,129 @@
                         <!-- Buttons -->
                         <div class="row gx-3">
                             <div class="col">
-                                <button class="btn btn-light w-100" type="button">Call</button>
-                            </div>
-                            <div class="col">
                                 <a href="<?= PROOT; ?>app/collectors?c=1&deactivate=<?= $collector_data["admin_id"]; ?>" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to DEACTIVATE this collector ?');">Deactivate</a>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-12 col-xxl">
+                    <section class="mb-8">
+                    <!-- Header -->
+                        <div class="d-flex align-items-center justify-content-between mb-5">
+                            <h2 class="fs-5 mb-0">Recent orders</h2>
+                            <div class="d-flex">
+                                <div class="dropdown">
+                                    <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                        <span class="material-symbols-outlined">filter_list</span>
+                                    </button>
+                                    <div class="dropdown-menu rounded-3 p-6">
+                                        <h4 class="fs-lg mb-4">Filter</h4>
+                                        <form style="width: 350px" id="filterForm">
+                                            <div class="row align-items-center mb-3">
+                                                <div class="col-3">
+                                                    <label class="form-label mb-0" for="filterUser">User</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <select
+                                                    class="form-select"
+                                                    id="filterUser"
+                                                   ></select>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center mb-3">
+                                                <div class="col-3">
+                                                    <label class="form-label mb-0" for="filterCompany">Company</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <select class="form-select" id="filterCompany" data-choices='{"placeholder": "some"}'>
+                                                    <option value="TechPinnacle Solutions">TechPinnacle Solutions</option>
+                                                    <option value="Quantum Dynamics">Quantum Dynamics</option>
+                                                    <option value="Pinnacle Technologies">Pinnacle Technologies</option>
+                                                    <option value="Apex Innovations">Apex Innovations</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center">
+                                                <div class="col-3">
+                                                    <label class="form-label mb-0" for="filterLocation">Location</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <select class="form-select" id="filterLocation" data-choices>
+                                                    <option value="San Francisco, CA">San Francisco, CA</option>
+                                                    <option value="Austin, TX">Austin, TX</option>
+                                                    <option value="Miami, FL">Miami, FL</option>
+                                                    <option value="Seattle, WA">Seattle, WA</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="dropdown ms-1">
+                                    <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                        <span class="material-symbols-outlined">sort_by_alpha</span>
+                                    </button>
+                                    <div class="dropdown-menu rounded-3 p-6">
+                                    <h4 class="fs-lg mb-4">Sort</h4>
+                                    <form style="width: 350px" id="filterForm">
+                                        <div class="row gx-3">
+                                        <div class="col">
+                                            <select class="form-select" id="sort" data-choices='{"searchEnabled": false}'>
+                                            <option value="user">User</option>
+                                            <option value="company">Company</option>
+                                            <option value="phone">Phone</option>
+                                            <option value="location">Location</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                            <input type="radio" class="btn-check" name="sortRadio" id="sortAsc" autocomplete="off" checked />
+                                            <label class="btn btn-light" for="sortAsc" data-bs-toggle="tooltip" data-bs-title="Ascending">
+                                                <span class="material-symbols-outlined">arrow_upward</span>
+                                            </label>
+                                            <input type="radio" class="btn-check" name="sortRadio" id="sortDesc" autocomplete="off" />
+                                            <label class="btn btn-light" for="sortDesc" data-bs-toggle="tooltip" data-bs-title="Descending">
+                                                <span class="material-symbols-outlined">arrow_downward</span>
+                                            </label>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-round mb-0">
+                            <thead>
+                                <th>ID</th>
+                                <th>Product</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Price</th>
+                            </thead>
+                            <tbody>
+                            <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
+                                <td class="text-body-secondary">#3456</td>
+                                <td>Apple MacBook Pro</td>
+                                <td>2021-08-12</td>
+                                <td><span class="badge bg-success-subtle text-success">Completed</span></td>
+                                <td>$2,499</td>
+                                </tr>
+                                <tr role="button" data-bs-toggle="offcanvas" data-bs-target="#orderModal" aria-controls="orderModal">
+                                <td class="text-body-secondary">#3455</td>
+                                <td>Apple iPhone 12 Pro</td>
+                                <td>2021-08-11</td>
+                                <td><span class="badge bg-secondary-subtle text-secondary">Pending</span></td>
+                                <td>$1,099</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
                 
             <?php else: ?>
 
