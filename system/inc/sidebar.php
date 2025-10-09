@@ -88,7 +88,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
-                            <li><a class="dropdown-item" href="<?= PROOT; ?>auth/password-reset" target="_blank">Change password</a></li>
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>account-change-password" target="_blank">Change password</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
                         </ul>
@@ -406,7 +406,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
-                            <li><a class="dropdown-item" href="<?= PROOT; ?>auth/password-reset" target="_blank">Change password</a></li>
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>account-change-password" target="_blank">Change password</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
                         </ul>
@@ -721,7 +721,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
-                            <li><a class="dropdown-item" href="<?= PROOT; ?>auth/password-reset" target="_blank">Change password</a></li>
+                            <li><a class="dropdown-item" href="<?= PROOT; ?>account-change-password" target="_blank">Change password</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
                         </ul>

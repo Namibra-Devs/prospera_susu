@@ -22,7 +22,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="<?= PROOT; ?>account">Account</a></li>
-                        <li><a class="dropdown-item" href="<?= PROOT; ?>auth/password-reset">Change password</a></li>
+                        <li><a class="dropdown-item" href="<?= PROOT; ?>account-change-password">Change password</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="<?= PROOT; ?>auth/sign-out">Sign out</a></li>
                     </ul>
