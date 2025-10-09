@@ -57,6 +57,7 @@
     $post = cleanPost($_POST);
 
     // Collect and sanitize input
+    $account_number = $post['account_number'] ?? '';
     $name     = $post['name'] ?? '';
     $email    = $post['email'] ?? '';
     $phone    = $post['phone'] ?? '';
@@ -97,6 +98,16 @@
 
         if (!empty($phone) && phone_exist($phone)) {
             $error = "Phone number already exists.";
+        }
+
+        if (!$account_number) {
+            $account_number = generateAccountNumber($dbConnection);
+        } else {
+            // check if entered account already exists or not.
+            $a = $dbConnection->query("SELECT customer_account_number FROM customers WHERE customer_account_number = '" . $account_number . "' ORDER BY customer_account_number DESC LIMIT 1")->rowCount();
+            if ($a > 0) {
+                $error = "Entered account number already exist !";
+            }
         }
 
         // Handle file upload if exists
@@ -144,7 +155,7 @@
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $result = $stmt->execute([
-                $unique_id, generateAccountNumber($dbConnection), $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $front_photo_path, $back_photo_path, $amount, $target, $duration, $startdate
+                $unique_id, $account_number, $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $front_photo_path, $back_photo_path, $amount, $target, $duration, $startdate
             ]);
             if ($result) {
                 $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new customer ' . ucwords($name) . ' (' . $phone . ')';
@@ -213,6 +224,11 @@
                                 <h3 class="fs-5 mb-1">General</h3>
                                 <p class="text-body-secondary mb-5">General information about the project.</p>
                                 <hr>
+                                <div class="mb-4">
+                                    <label class="form-label" for="account_number">Account number</label>
+                                    <input class="form-control bg-body" id="account_number" name="account_number" type="text" value="<?= $account_number; ?>" />
+                                    <small class="form-text text-info">Only use this field if the customer is already having an acount number else leave it blank to generate one on its own.</small>
+                                </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="name">Full name</label>
                                     <input class="form-control bg-body" id="name" name="name" type="text" value="<?= $name; ?>" required />
