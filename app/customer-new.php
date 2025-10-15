@@ -72,6 +72,30 @@
     $idnumber  = $post['idnumber'] ?? '';
     // $collector = $post['collector'] ?? '';
 
+    if (isset($_GET['edit']) && !empty($_GET['edit'])) {
+        $edit_id = sanitize($_GET['edit']);
+
+        $edit_row = findCustomerByID($edit_id);
+        //dnd($edit_row);
+        if ($edit_row) {
+            $account_number = $post['account_number'] ?? $edit_row->customer_account_number;
+            $name     = $post['name'] ?? $edit_row->customer_name;
+            $email    = $post['email'] ?? $edit_row->customer_email;
+            $phone    = $post['phone'] ?? $edit_row->customer_phone ;
+            $address  = $post['address'] ?? $edit_row->customer_address;
+            $region   = $post['region'] ?? $edit_row->customer_region;
+            $city     = $post['city'] ?? $edit_row->customer_city;
+            $amount   = $post['amount'] ?? $edit_row->customer_default_daily_amount;
+            $target   = $post['target'] ?? $edit_row->customer_target;
+            $duration = $post['duration'] ?? $edit_row->customer_duration;
+            $startdate = $post['startdate'] ?? $edit_row->customer_start_date;
+            // $idcard    = $post['idcard'] ?? $edit_sql->;
+            // $idnumber  = $post['idnumber'] ?? $edit_sql->;
+        } else {
+            //redirect(PROOT . 'app/customers');
+        }
+    }
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $required = array('name', 'phone', 'address', 'region', 'city', 'amount', 'startdate');
@@ -282,7 +306,8 @@
                                 </div>
                             </div>
                         </section>
-                        
+                        <?php if (isset($_GET['edit']) && !empty($_GET['edit'])): ?>
+                        <?php else: ?>>
                         <section class="card bg-body-tertiary border-transparent mb-7">
                             <div class="card-body">
                                 <h3 class="fs-5 mb-1">ID details</h3>
@@ -331,6 +356,7 @@
                                 </div>
                             </div>
                         </section>
+                        <?php endif; ?>
 
                         <button type="submit" class="btn btn-secondary w-100" id="submit-customer">
                             Save customer

@@ -445,9 +445,9 @@
 
                         <!-- Buttons -->
                         <div class="row gx-3">
-                            <!-- <div class="col">
-                                <a class="btn btn-light w-100" href="<?= PROOT; ?>app/customers/edit=<?= $customer_data['customer_id']; ?>">Update</a>
-                            </div> -->
+                            <div class="col">
+                                <a class="btn btn-light w-100" href="<?= PROOT; ?>app/customer-new?edit=<?= $customer_data['customer_id']; ?>">Update</a>
+                            </div>
                             <?php if (admin_has_permission()): ?>
                             <div class="col">
                                 <a href="<?= PROOT; ?>app/customers?c=1&deactivate=<?= $customer_data["customer_id"]; ?>" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to DEACTIVATE this customer ?');">Deactivate</a>
