@@ -420,6 +420,10 @@
                                         <a class="text-body" href="tel:<?= $customer_data["customer_phone"]; ?>"><?= $customer_data["customer_phone"]; ?></a>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Email</span>
+                                        <a class="text-body" href="mailto:<?= $customer_data["customer_phone"]; ?>"><?= $customer_data["customer_email"] ?? 'N/A'; ?></a>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">Location</span>
                                         <span><?= ucwords($customer_data["customer_region"] . ', ' . $customer_data["customer_city"]); ?></span>
                                     </li>
@@ -434,6 +438,10 @@
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">Added by</span>
                                         <span><?= get_customer_added_by($customer_data['customer_added_by'], $customer_data['customer_collector_id']); ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
+                                        <span class="text-body-secondary">Dialy default deposit</span>
+                                        <span class="text-body"><?= money($customer_data["customer_default_daily_amount"]); ?></span>
                                     </li>
                                     <li class="list-group-item d-flex align-items-center justify-content-between bg-body px-0">
                                         <span class="text-body-secondary">Joined at</span>
