@@ -58,8 +58,8 @@
     $city     = $post['city'] ?? '';
     $amount   = $post['amount'] ?? 10;
     $target   = $post['target'] ?? '';
-    $duration = $post['duration'] ?? '';
-    $startdate = $post['startdate'] ?? '';
+    $duration = $post['duration'] ?? null;
+    $startdate = $post['startdate'] ?? null;
     $idcard    = $post['idcard'] ?? '';
     $idnumber  = $post['idnumber'] ?? '';
     // $collector = $post['collector'] ?? '';
@@ -86,7 +86,7 @@
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+        //dnd($post['startdate']);
         $required = array('name', 'phone', 'address', 'region', 'city', 'amount', 'startdate');
         foreach ($required as $f) {
             if (empty($f)) {
