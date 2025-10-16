@@ -174,7 +174,6 @@
         }
 
         if (!$error) {
-            $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
             $conn = $dbConnection;
             if (isset($_GET['edit']) && !empty($_GET['edit'])) {
                 $stmt = $conn->prepare("
@@ -182,25 +181,38 @@
                     SET customer_account_number = ?, customer_name = ?, customer_phone = ?, customer_email = ?, customer_address = ?, customer_region = ?, customer_city = ?, customer_default_daily_amount = ?, customer_target = ?, customer_duration = ?, customer_start_date = ? 
                     WHERE customer_id = ?
                 ");
-            } else {
+                $result = $stmt->execute([
+                    $account_number, $name, $phone, $email, $address, $region, $city, $amount, $target, $duration, $startdate, $edit_id
+                ]);
+                if ($result) {
+                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] updated customer ' . ucwords($name) . ' (' . $phone . ')';
+                    add_to_log($log_message, $added_by_id, $added_by);
 
-            }
-            // Insert into database
-            $stmt = $conn->prepare("
-                INSERT INTO customers (customer_id, customer_account_number, customer_collector_id, customer_added_by, customer_name, customer_phone, customer_email, customer_address, customer_region, customer_city, customer_id_type, customer_id_number, customer_id_photo_front, customer_id_photo_back, customer_default_daily_amount, customer_target, customer_duration, customer_start_date) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-            $result = $stmt->execute([
-                $unique_id, $account_number, $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $front_photo_path, $back_photo_path, $amount, $target, $duration, $startdate
-            ]);
-            if ($result) {
-                $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new customer ' . ucwords($name) . ' (' . $phone . ')';
-                add_to_log($log_message, $added_by_id, $added_by);
-
-                $_SESSION['flash_success'] = "Customer added successfully !";
-                redirect(PROOT . 'app/customers');
+                    $_SESSION['flash_success'] = "Customer updated successfully !";
+                    redirect(PROOT . 'app/customers/' . $edit_id);
+                } else {
+                    $error = "Failed to update customer. Please try again !";
+                }
             } else {
-                $error = "Failed to add customer. Please try again !";
+                $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
+            
+                // Insert into database
+                $stmt = $conn->prepare("
+                    INSERT INTO customers (customer_id, customer_account_number, customer_collector_id, customer_added_by, customer_name, customer_phone, customer_email, customer_address, customer_region, customer_city, customer_id_type, customer_id_number, customer_id_photo_front, customer_id_photo_back, customer_default_daily_amount, customer_target, customer_duration, customer_start_date) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ");
+                $result = $stmt->execute([
+                    $unique_id, $account_number, $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $front_photo_path, $back_photo_path, $amount, $target, $duration, $startdate
+                ]);
+                if ($result) {
+                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new customer ' . ucwords($name) . ' (' . $phone . ')';
+                    add_to_log($log_message, $added_by_id, $added_by);
+
+                    $_SESSION['flash_success'] = "Customer added successfully !";
+                    redirect(PROOT . 'app/customers');
+                } else {
+                    $error = "Failed to add customer. Please try again !";
+                }
             }
         }
     }
