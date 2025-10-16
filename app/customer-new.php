@@ -28,39 +28,31 @@
     }
 
     //
-    function email_exist($email) {
+    function email_exist($email, $edit_id = null) {
         global $dbConnection;
-        $query = "SELECT customer_email FROM customers WHERE customer_email = ? LIMIT 1";
+        $query = "SELECT * FROM customers WHERE customer_email = ? AND customer_id != '" . $edit_id . "' LIMIT 1";
         $statement = $dbConnection->prepare($query);
         $statement->execute([$email]);
         return $statement->rowCount() > 0;
     }
     
     //
-    function phone_exist($phone) {
+    function phone_exist($phone, $edit_id = null) {
         global $dbConnection;
-        $query = "SELECT customer_phone FROM customers WHERE customer_phone = ? LIMIT 1";
+        $query = "SELECT customer_phone FROM customers WHERE customer_phone = ? AND customer_id != '" . $edit_id . "' LIMIT 1";
         $statement = $dbConnection->prepare($query);
         $statement->execute([$phone]);
         return $statement->rowCount() > 0;
     }
 
-    // fetch collectors
-    // $collector_row = $dbConnection->query("SELECT * FROM collectors WHERE collector_status = 'active' ORDER BY collector_name ASC")->fetchAll();
-    // $collector_options = '';
-    // if ($collector_row) {
-    //     $collector_options .= '
-    //         <option value="' . $collector_row['collector_id'] . '">' . ucwords($collector_row["collector_name"]) . '</option>
-    //     ';
-    // }
     $error = '';
     $post = cleanPost($_POST);
 
     // Collect and sanitize input
     $account_number = $post['account_number'] ?? '';
     $name     = $post['name'] ?? '';
-    $email    = $post['email'] ?? '';
-    $phone    = $post['phone'] ?? '';
+    $email    = $post['email'] ?? null;
+    $phone    = $post['phone'] ?? null;
     $address  = $post['address'] ?? '';
     $region   = $post['region'] ?? '';
     $city     = $post['city'] ?? '';
@@ -88,10 +80,8 @@
             $target   = $post['target'] ?? $edit_row->customer_target;
             $duration = $post['duration'] ?? $edit_row->customer_duration;
             $startdate = $post['startdate'] ?? $edit_row->customer_start_date;
-            // $idcard    = $post['idcard'] ?? $edit_sql->;
-            // $idnumber  = $post['idnumber'] ?? $edit_sql->;
         } else {
-            //redirect(PROOT . 'app/customers');
+            redirect(PROOT . 'app/customers');
         }
     }
 
@@ -104,23 +94,18 @@
                 break;
             }
         }
-
-        // Validate required fields
-        // if (!$name || !$phone || !$address || !$region || !$city || !$amount || !$startdate) {
-        //     $error = "All fields are required.";
-        // }
         
         if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Invalid email address.";
         }
         
         // check if email or phone number already exist
-        if (!empty($email) && email_exist($email)) {
-            $error = "Email address already exists.";
+        if (!empty($email) && email_exist($email, ((isset($_GET['edit']) ? $edit_id : null)))) {
+            $error = "Email address already exists !";
         }
 
-        if (!empty($phone) && phone_exist($phone)) {
-            $error = "Phone number already exists.";
+        if (!empty($phone) && phone_exist($phone, ((isset($_GET['edit']) ? $edit_id : null)))) {
+            $error = "Phone number already exists !";
         }
 
         if (!$account_number) {
@@ -128,6 +113,9 @@
         } else {
             // check if entered account already exists or not.
             $a = $dbConnection->query("SELECT customer_account_number FROM customers WHERE customer_account_number = '" . $account_number . "' ORDER BY customer_account_number DESC LIMIT 1")->rowCount();
+            if (isset($_GET['edit'])){
+                $a = $dbConnection->query("SELECT customer_account_number FROM customers WHERE customer_account_number = '" . $account_number . "' AND customer_id != '" . $edit_id . "' ORDER BY customer_account_number DESC LIMIT 1")->rowCount();
+            }
             if ($a > 0) {
                 $error = "Entered account number already exist !";
             }
