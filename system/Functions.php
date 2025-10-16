@@ -46,7 +46,7 @@
 	}
 
 	// Make Date Readable
-	function pretty_date_notime($date){
+	function pretty_date_notime($date) {
 		return date("M d, Y", strtotime($date));
 	}
 
