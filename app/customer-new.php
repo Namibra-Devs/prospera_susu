@@ -76,7 +76,6 @@
         $edit_id = sanitize($_GET['edit']);
 
         $edit_row = findCustomerByID($edit_id);
-        //dnd($edit_row);
         if ($edit_row) {
             $account_number = $post['account_number'] ?? $edit_row->customer_account_number;
             $name     = $post['name'] ?? $edit_row->customer_name;
@@ -134,45 +133,58 @@
             }
         }
 
-        // Handle file upload if exists
-        $front_photo_path = null;
-        if (isset($_FILES['front_photo']) && $_FILES['front_photo']['error'] === UPLOAD_ERR_OK) {
-            $allowed = ['jpg', 'jpeg', 'png', 'gif'];
-            $ext = strtolower(pathinfo($_FILES['front_photo']['name'], PATHINFO_EXTENSION));
-            if (in_array($ext, $allowed)) {
-                $upload_dir = '../assets/media/uploads/customers-media/';
-                if (!is_dir($upload_dir)) {
-                    mkdir($upload_dir, 0777, true);
+        if (isset($_GET['edit']) && $_GET['edit']) {
+
+        } else {
+            // Handle file upload if exists
+            $front_photo_path = null;
+            if (isset($_FILES['front_photo']) && $_FILES['front_photo']['error'] === UPLOAD_ERR_OK) {
+                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+                $ext = strtolower(pathinfo($_FILES['front_photo']['name'], PATHINFO_EXTENSION));
+                if (in_array($ext, $allowed)) {
+                    $upload_dir = '../assets/media/uploads/customers-media/';
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0777, true);
+                    }
+                    $filename = uniqid('customer_front_id_', true) . '.' . $ext;
+                    $front_photo_path = $upload_dir . $filename;
+                    move_uploaded_file($_FILES['front_photo']['tmp_name'], $front_photo_path);
+                } else {
+                    $error = "Invalid front photo id card file type.";
                 }
-                $filename = uniqid('customer_front_id_', true) . '.' . $ext;
-                $front_photo_path = $upload_dir . $filename;
-                move_uploaded_file($_FILES['front_photo']['tmp_name'], $front_photo_path);
-            } else {
-                $error = "Invalid front photo id card file type.";
             }
-        }
-        
-        // Handle file upload if exists
-        $back_photo_path = null;
-        if (isset($_FILES['back_photo']) && $_FILES['back_photo']['error'] === UPLOAD_ERR_OK) {
-            $allowed = ['jpg', 'jpeg', 'png', 'gif'];
-            $ext = strtolower(pathinfo($_FILES['back_photo']['name'], PATHINFO_EXTENSION));
-            if (in_array($ext, $allowed)) {
-                $upload_dir = '../assets/media/uploads/customers-media/';
-                if (!is_dir($upload_dir)) {
-                    mkdir($upload_dir, 0777, true);
+            
+            // Handle file upload if exists
+            $back_photo_path = null;
+            if (isset($_FILES['back_photo']) && $_FILES['back_photo']['error'] === UPLOAD_ERR_OK) {
+                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+                $ext = strtolower(pathinfo($_FILES['back_photo']['name'], PATHINFO_EXTENSION));
+                if (in_array($ext, $allowed)) {
+                    $upload_dir = '../assets/media/uploads/customers-media/';
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0777, true);
+                    }
+                    $filename = uniqid('customer_back_id_', true) . '.' . $ext;
+                    $back_photo_path = $upload_dir . $filename;
+                    move_uploaded_file($_FILES['back_photo']['tmp_name'], $back_photo_path);
+                } else {
+                    $error = "Invalid back photo id card file type.";
                 }
-                $filename = uniqid('customer_back_id_', true) . '.' . $ext;
-                $back_photo_path = $upload_dir . $filename;
-                move_uploaded_file($_FILES['back_photo']['tmp_name'], $back_photo_path);
-            } else {
-                $error = "Invalid back photo id card file type.";
             }
         }
 
         if (!$error) {
             $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:m:s"));
             $conn = $dbConnection;
+            if (isset($_GET['edit']) && !empty($_GET['edit'])) {
+                $stmt = $conn->prepare("
+                    UPDATE customers 
+                    SET customer_account_number = ?, customer_name = ?, customer_phone = ?, customer_email = ?, customer_address = ?, customer_region = ?, customer_city = ?, customer_default_daily_amount = ?, customer_target = ?, customer_duration = ?, customer_start_date = ? 
+                    WHERE customer_id = ?
+                ");
+            } else {
+
+            }
             // Insert into database
             $stmt = $conn->prepare("
                 INSERT INTO customers (customer_id, customer_account_number, customer_collector_id, customer_added_by, customer_name, customer_phone, customer_email, customer_address, customer_region, customer_city, customer_id_type, customer_id_number, customer_id_photo_front, customer_id_photo_back, customer_default_daily_amount, customer_target, customer_duration, customer_start_date) 
@@ -241,7 +253,7 @@
                 <div class="col">
 
                     <!-- Form -->
-                    <form class="" id="new-customer-form" method="POST" enctype="multipart/form-data">
+                    <form class="" id="new-customer-form" action="customer-new.php<?= ((isset($_GET['edit']) && !empty($_GET['edit'])) ? '?edit=' . $edit_id : ''); ?>" method="POST" enctype="multipart/form-data">
                         <p class="text-danger"><?= $error; ?></p>
                         <section class="card card-line bg-body-tertiary border-transparent mb-5">
                             <div class="card-body">
@@ -307,7 +319,7 @@
                             </div>
                         </section>
                         <?php if (isset($_GET['edit']) && !empty($_GET['edit'])): ?>
-                        <?php else: ?>>
+                        <?php else: ?>
                         <section class="card bg-body-tertiary border-transparent mb-7">
                             <div class="card-body">
                                 <h3 class="fs-5 mb-1">ID details</h3>
