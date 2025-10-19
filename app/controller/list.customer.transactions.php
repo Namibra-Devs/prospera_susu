@@ -155,9 +155,9 @@ if ($total_data > 0) {
             }
 
             // show approve button if status is pending
-            if ($row['status'] == '<span class="badge bg-warning-subtle text-warning">Pending</span>') {
-                $options .= ' <a href="' . PROOT . 'app/transactions?d=1&approved=' . $row["transaction_id"] . '" class="btn btn-sm btn-light" onclick="return confirm(\'Are you sure you want to APPROVE this Deposite Transaction?\');">Approve</a>';
-            }
+            // if ($row['status'] == '<span class="badge bg-warning-subtle text-warning">Pending</span>') {
+            //     @$options .= ' <a href="' . PROOT . 'app/transactions?d=1&approved=' . $row["transaction_id"] . '" class="btn btn-sm btn-light" onclick="return confirm(\'Are you sure you want to APPROVE this Deposite Transaction?\');">Approve</a>';
+            // }
         } elseif ($row['type'] == 'withdrawal') {
             $type = '<span class="fs-sm text-warning">Withdrawal</span>';
 

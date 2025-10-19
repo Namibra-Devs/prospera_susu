@@ -365,12 +365,21 @@
                     background-color: #dc3545; /* red */
                     color: white;
                 }
+                .withdrawn { 
+                    background: #007bff; 
+                    color:#fff 
+                }
+
+                .rejected {
+                    background-color: #ff66b2; /* pink */
+                    color: #fff;
+                }
+
                 .muted-small { 
                     font-weight: 400; 
                     font-size: 0.8rem; 
                     display: block;
                 }
-
             </style>
 
             <div class="mb-8">
@@ -380,6 +389,7 @@
                     <h5>Legend:</h5>
                     <div class="d-flex flex-wrap gap-3">
                         <span class="badge bg-success">Approved Savings</span>
+                        <span class="badge bg-primary">Withdrawn</span>
                         <span class="badge bg-warning text-dark">Pending Savings</span>
                         <span class="badge bg-light text-dark border">Not Saved</span>
                         <span class="badge bg-danger">Commission</span>
@@ -902,13 +912,62 @@
                 if (commissionDayGlobal === d) {
                     cls = 'commission';
                     innerHTML = `<div>${d}<span class="muted-small">(Fee)</span></div>`;
-                } else if (savedDaysGlobal[d]) {
-                    // check if any entry pending
-                    const hasPending = savedDaysGlobal[d].entries.some(en => en.status === 'Pending');
-                    cls = hasPending ? 'pending' : 'saved';
+                }
+
+                // else if (savedDaysGlobal[d]) {
+                //     const entries = savedDaysGlobal[d].entries;
+                //     const statuses = entries.map(en => en.status.toLowerCase());
+
+                //     // Determine box color by priority
+                //     if (statuses.includes('rejected')) {
+                //         cls = 'rejected'; // pink
+                //     } else if (statuses.includes('pending')) {
+                //         cls = 'pending'; // orange
+                //     } else {
+                //         cls = 'saved'; // green
+                //     }
+
+                //     const amt = parseFloat(savedDaysGlobal[d].amount).toFixed(2);
+                //     innerHTML = `<div>${d}<span class="muted-small">GHS ${amt}</span></div>`;
+
+                //     // Withdrawn override (blue)
+                //     if (data.withdrawn_days && data.withdrawn_days.includes(d)) {
+                //         cls = 'withdrawn';
+                //         const totalWithdrawn = data.withdrawals
+                //             .filter(w => ['approved', 'completed'].includes(w.status.toLowerCase()))
+                //             .reduce((sum, w) => sum + parseFloat(w.amount), 0);
+
+                //         innerHTML = `<div>${d}<span class="muted-small text-white">GHS ${totalWithdrawn.toFixed(2)} <br>(Withdrawn)</span></div>`;
+                //     }
+                // }
+
+
+                else if (savedDaysGlobal[d]) {
+                    const entries = savedDaysGlobal[d].entries;
+                    const statuses = entries.map(en => en.status.toLowerCase());
+
+                    // Determine base class by deposit status
+                    if (statuses.includes('rejected')) {
+                        cls = 'rejected'; // pink
+                    } else if (statuses.includes('pending')) {
+                        cls = 'pending'; // orange
+                    } else {
+                        cls = 'saved'; // green (approved)
+                    }
+
+                    // Default label and amount
                     const amt = parseFloat(savedDaysGlobal[d].amount).toFixed(2);
                     innerHTML = `<div>${d}<span class="muted-small">GHS ${amt}</span></div>`;
+
+                    // 🔵 Handle withdrawals (per-day amount)
+                    if (data.withdrawn_days && data.withdrawn_days.includes(d)) {
+                        cls = 'withdrawn';
+                        const perDayWithdrawAmount = parseFloat(data.daily_withdraw_amount || 0).toFixed(2);
+                        innerHTML = `<div>${d}<span class="muted-small text-white">GHS ${perDayWithdrawAmount} (Withdrawn)</span></div>`;
+                    }
                 }
+
+
 
                 // attach day element
                 const $cell = $(`<div class="day ${cls}" data-day="${d}">${innerHTML}</div>`);
@@ -921,7 +980,7 @@
             // attach click handlers
             $('.day').off('click').on('click', function () {
                 const day = parseInt($(this).data('day'), 10);
-                openDayModal(day);
+                openDayModal(day, data);
             });
         })
         .fail(function (xhr, status, err) {
@@ -929,9 +988,9 @@
             try { msg = xhr.responseText || msg; } catch(e) {}
             alert(msg);
         });
-    }				
+    }
 
-    function openDayModal(day) {
+    function openDayModal(day, data) {
         const modal = new bootstrap.Modal(document.getElementById('dayModal'));
         let html = `
             <div class="vstack gap-3 card bg-body">
@@ -948,6 +1007,15 @@
                         </div>
                     </div>
         `;
+        const savedDay = savedDaysGlobal[day];
+        const dayWithdrawals = data.withdrawals.filter(w => 
+            ['approved', 'completed'].includes(w.status.toLowerCase())
+        )
+
+        const isCommissionDay = data.commission_day && parseInt(day) === parseInt(data.commission_day);
+        const isWithdrawnDay = data.withdrawn_days && data.withdrawn_days.includes(day);
+        const isRejected = savedDay && savedDay.entries.some(e => e.status.toLowerCase() === 'rejected');
+
 
         // if commission day
         if (commissionDayGlobal === day) {
@@ -1048,11 +1116,31 @@
             </div>
         `;
 
-        const dayWithdrawals = withdrawalsGlobal.filter(w => w.day === day);
-        if (dayWithdrawals.length) {
+        if (!isCommissionDay && !isRejected && dayWithdrawals.length) {
             html += `<hr><strong>Withdrawals:</strong><ul>`;
             dayWithdrawals.forEach(w => {
             html += `<li>Withdrawal ID ${w.id} — GHS ${w.amount.toFixed(2)} — <em>${w.status}</em></li>`;
+            });
+            html += `</ul>`;
+        }
+
+        // --- If this is a withdrawn day, show original deposit info too
+        // if (!isCommissionDay && data.withdrawn_days && data.withdrawn_days.includes(day) && dayData) {
+        //     html += `<hr><strong>Original Deposit Info:</strong>
+        //         <p>Date: ${dayData.date}</p>
+        //         <p>Amount: GHS ${parseFloat(dayData.amount).toFixed(2)}</p>`;
+        // }
+
+        // 🟦 Show withdrawal details below deposits (only for blue boxes)
+        if (!isCommissionDay && !isRejected && isWithdrawnDay && dayWithdrawals.length > 0) {
+            html += `<hr><strong>Withdrawal Details:</strong><ul>`;
+            dayWithdrawals.forEach(w => {
+                html += `<li>
+                    Withdrawal ID: ${w.id}<br>
+                    Amount: GHS ${parseFloat(w.amount).toFixed(2)}<br>
+                    Status: <em>${w.status}</em><br>
+                    Date: ${w.date}
+                </li>`;
             });
             html += `</ul>`;
         }

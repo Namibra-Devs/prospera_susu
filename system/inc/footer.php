@@ -235,7 +235,7 @@
 
                 // Make an AJAX request to fetch the default amount
                 $.ajax({
-                    url: 'controller/get_customer_default_amount.php',
+                    url: '<?= PROOT; ?>app/controller/get_customer_default_amount.php',
                     type: 'GET',
                     data: { customer_name: customerName, account_number: accountNumber },
                     success: function(response) {
@@ -364,7 +364,7 @@
             var formData = $(this).serialize(); // Serialize the form data
             $.ajax({
                 type: 'POST',
-                url: 'controller/transaction.add.php',
+                url: '<?= PROOT; ?>app/controller/transaction.add.php',
                 data: formData,
                 beforeSend: function() {
                     $this.find('#submit-transaction').attr('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span> Processing ...</span>');

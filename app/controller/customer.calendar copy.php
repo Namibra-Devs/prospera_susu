@@ -114,27 +114,6 @@
         ];
     }
 
-
-$expanded_saved_days = [];
-$counter = 1;
-foreach ($saved_days as $dayNum => $dayData) {
-    foreach ($dayData['entries'] as $entry) {
-        // assign a new calendar box for each entry, even if same date
-        $expanded_saved_days[$counter] = [
-            'date' => $dayData['date'],
-            'amount' => $entry['amount'],
-            'entries' => [$entry]
-        ];
-        $counter++;
-    }
-}
-$saved_days = $expanded_saved_days;
-
-
-
-
-
-
     // --- 6) check commission for this cycle (if any)
     $sqlComm = "
         SELECT commission_id, commission_amount, commission_date
@@ -182,79 +161,61 @@ $saved_days = $expanded_saved_days;
         ];
     }
 
+    // --- 7) response
+    // echo json_encode([
+    //     'current_cycle' => $use_cycle,
+    //     'active_cycle' => $active_cycle,
+    //     'cycle_start' => $cycleStart->format('Y-m-d'),
+    //     'cycle_end' => $cycleEnd->format('Y-m-d'),
+    //     'saved_days' => $saved_days,
+    //     'commission_day' => $commission_day,
+    //     'commission_amount' => $commission_amount, 
+    //     'withdrawals' => $withdrawals
+    // ]);
 
+    // --- 8) Determine withdrawn days (blue logic)
+    $withdrawn_days = [];
+    $dailyAmount = 0;
 
-
-// --- 7) fetch withdrawals already done above (we’ll reuse)
-$totalWithdrawn = 0;
-foreach ($withdrawals as $w) {
-    if (strtolower($w['status']) === 'approved' || strtolower($w['status']) === 'completed') {
-        $totalWithdrawn += $w['amount'];
+    // Try to get customer’s default daily amount
+    $dailyStmt = $dbConnection->prepare("SELECT customer_default_daily_amount FROM customers WHERE customer_id = ?");
+    $dailyStmt->execute([$customer_id]);
+    if ($r = $dailyStmt->fetch(PDO::FETCH_ASSOC)) {
+        $dailyAmount = (float)$r['customer_default_daily_amount'];
     }
-}
 
-
-// --- 8) Determine withdrawn days (blue logic, start after commission)
-$withdrawn_days = [];
-$withdrawStartIndex = 0;
-$dailyAmount = 0;
-
-// Get customer’s default daily amount
-$dailyStmt = $dbConnection->prepare("SELECT customer_default_daily_amount FROM customers WHERE customer_id = ?");
-$dailyStmt->execute([$customer_id]);
-if ($r = $dailyStmt->fetch(PDO::FETCH_ASSOC)) {
-    $dailyAmount = (float)$r['customer_default_daily_amount'];
-}
-
-// If valid daily amount and we have withdrawals + saved days
-if ($dailyAmount > 0 && $totalWithdrawn > 0 && !empty($saved_days)) {
-    // Total days equivalent to withdrawals
-    $withdrawnDaysCount = floor($totalWithdrawn / $dailyAmount);
-
-    // Only approved savings days can be eaten by withdrawals
-    $approvedDays = [];
-    foreach ($saved_days as $dayNum => $dayData) {
-        $hasApproved = false;
-        foreach ($dayData['entries'] as $e) {
-            if (strtolower($e['status']) === 'approved') {
-                $hasApproved = true;
-                break;
+    // If valid daily amount and we have withdrawals + saved days
+    if ($dailyAmount > 0 && !empty($withdrawals) && !empty($saved_days)) {
+        // Get total withdrawal amount for this cycle
+        $totalWithdrawn = 0;
+        foreach ($withdrawals as $w) {
+            if (strtolower($w['status']) === 'approved' || strtolower($w['status']) === 'completed') {
+                $totalWithdrawn += $w['amount'];
             }
         }
-        if ($hasApproved) $approvedDays[] = $dayNum;
-    }
-    sort($approvedDays);
 
-    // Skip commission day if exists
-    if ($commission_day) {
-        $withdrawStartIndex = array_search($commission_day, $approvedDays);
-        if ($withdrawStartIndex !== false) $withdrawStartIndex++;
+        if ($totalWithdrawn > 0) {
+            // Determine number of days equivalent to the withdrawal
+            $withdrawnDaysCount = floor($totalWithdrawn / $dailyAmount);
 
-        // $approvedDays = array_values(array_filter($approvedDays, fn($d) => $d != $commission_day));
-    }
+            // Get the list of saved day numbers sorted ascending
+            $dayNumbers = array_keys($saved_days);
+            sort($dayNumbers);
 
-    for ($i = $withdrawStartIndex; $i < $withdrawStartIndex + $withdrawnDaysCount && $i < count($approvedDays); $i++) {
-        $withdrawn_days[] = $approvedDays[$i];
+            // Pick the last N days to mark as withdrawn
+            $withdrawn_days = array_slice($dayNumbers, -$withdrawnDaysCount);
+        }
     }
 
-
-
-
-    $dayNumbers = $approvedDays;
-
-    // Start eating from the earliest saved day (not from the end)
-    // $withdrawn_days = array_slice($dayNumbers, 0, $withdrawnDaysCount);
-}
-
-// --- 7) response
-echo json_encode([
-    'current_cycle' => $use_cycle,
-    'active_cycle' => $active_cycle,
-    'cycle_start' => $cycleStart->format('Y-m-d'),
-    'cycle_end' => $cycleEnd->format('Y-m-d'),
-    'saved_days' => $saved_days,
-    'commission_day' => $commission_day,
-    'commission_amount' => $commission_amount,
-    'withdrawals' => $withdrawals,
-    'withdrawn_days' => $withdrawn_days
-]);
+    // --- 9) response
+    echo json_encode([
+        'current_cycle' => $use_cycle,
+        'active_cycle' => $active_cycle,
+        'cycle_start' => $cycleStart->format('Y-m-d'),
+        'cycle_end' => $cycleEnd->format('Y-m-d'),
+        'saved_days' => $saved_days,
+        'commission_day' => $commission_day,
+        'commission_amount' => $commission_amount, 
+        'withdrawals' => $withdrawals,
+        'withdrawn_days' => $withdrawn_days
+    ]);
