@@ -114,25 +114,21 @@
         ];
     }
 
-
-$expanded_saved_days = [];
-$counter = 1;
-foreach ($saved_days as $dayNum => $dayData) {
-    foreach ($dayData['entries'] as $entry) {
-        // assign a new calendar box for each entry, even if same date
-        $expanded_saved_days[$counter] = [
-            'date' => $dayData['date'],
-            'amount' => $entry['amount'],
-            'entries' => [$entry]
-        ];
-        $counter++;
+    // Expand saved days to have one entry per calendar box
+    $expanded_saved_days = [];
+    $counter = 1;
+    foreach ($saved_days as $dayNum => $dayData) {
+        foreach ($dayData['entries'] as $entry) {
+            // assign a new calendar box for each entry, even if same date
+            $expanded_saved_days[$counter] = [
+                'date' => $dayData['date'],
+                'amount' => $entry['amount'],
+                'entries' => [$entry]
+            ];
+            $counter++;
+        }
     }
-}
-$saved_days = $expanded_saved_days;
-
-
-
-
+    $saved_days = $expanded_saved_days;
 
 
     // --- 6) check commission for this cycle (if any)
@@ -193,6 +189,7 @@ $saved_days = $expanded_saved_days;
 
     // --- 8) Determine withdrawn days (blue logic, start after commission)
     $withdrawn_days = [];
+    $withdrawal_map = [];
     $dailyAmount = 0;
 
     // Get customer’s default daily amount
@@ -225,6 +222,31 @@ $saved_days = $expanded_saved_days;
         if ($commission_day) {
             $approvedDays = array_values(array_filter($approvedDays, fn($d) => $d != $commission_day));
         }
+
+        $currentIndex = 0;
+
+        // Each withdrawal will “consume” N days starting after commission day
+        foreach ($withdrawals as $w) {
+            if (!in_array(strtolower($w['status']), ['approved', 'completed'])) continue;
+
+            $daysToEat = floor(floatval($w['amount']) / $dailyAmount);
+
+            for ($i = 0; $i < $daysToEat && $currentIndex < count($approvedDays); $i++) {
+                $dayNum = $approvedDays[$currentIndex];
+                $withdrawn_days[] = $dayNum;
+
+                // link this specific withdrawal to this day
+                $withdrawal_map[$dayNum] = [
+                    'id' => $w['id'],
+                    'amount' => $dailyAmount,
+                    'status' => $w['status'],
+                    'date' => $w['date']
+                ];
+
+                $currentIndex++;
+            }
+        }
+
         $dayNumbers = $approvedDays;
 
         // Start eating from the earliest saved day (not from the end)
@@ -242,5 +264,6 @@ $saved_days = $expanded_saved_days;
         'commission_amount' => $commission_amount,
         'withdrawals' => $withdrawals,
         'withdrawn_days' => $withdrawn_days, 
+        'withdrawal_map' => $withdrawal_map, 
         'daily_withdraw_amount' => $dailyAmount
     ]);

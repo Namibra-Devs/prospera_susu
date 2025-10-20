@@ -1015,7 +1015,10 @@
         const isCommissionDay = data.commission_day && parseInt(day) === parseInt(data.commission_day);
         const isWithdrawnDay = data.withdrawn_days && data.withdrawn_days.includes(day);
         const isRejected = savedDay && savedDay.entries.some(e => e.status.toLowerCase() === 'rejected');
-
+        const isPending = savedDay && savedDay.entries.some(e => e.status.toLowerCase() === 'pending');
+        
+        // 🧩 Prevent blank cells (no savings, no commission, no withdrawal)
+        if (!savedDay && !isCommissionDay && !isWithdrawnDay) return;
 
         // if commission day
         if (commissionDayGlobal === day) {
@@ -1116,7 +1119,7 @@
             </div>
         `;
 
-        if (!isCommissionDay && !isRejected && dayWithdrawals.length) {
+        if (!isCommissionDay && !isRejected && !isPending && dayWithdrawals.length) {
             html += `<hr><strong>Withdrawals:</strong><ul>`;
             dayWithdrawals.forEach(w => {
             html += `<li>Withdrawal ID ${w.id} — GHS ${w.amount.toFixed(2)} — <em>${w.status}</em></li>`;
@@ -1124,27 +1127,32 @@
             html += `</ul>`;
         }
 
-        // --- If this is a withdrawn day, show original deposit info too
-        // if (!isCommissionDay && data.withdrawn_days && data.withdrawn_days.includes(day) && dayData) {
-        //     html += `<hr><strong>Original Deposit Info:</strong>
-        //         <p>Date: ${dayData.date}</p>
-        //         <p>Amount: GHS ${parseFloat(dayData.amount).toFixed(2)}</p>`;
-        // }
-
-        // 🟦 Show withdrawal details below deposits (only for blue boxes)
+        // Show withdrawal details below deposits (only for blue boxes)
         if (!isCommissionDay && !isRejected && isWithdrawnDay && dayWithdrawals.length > 0) {
-            html += `<hr><strong>Withdrawal Details:</strong><ul>`;
-            dayWithdrawals.forEach(w => {
-                html += `<li>
-                    Withdrawal ID: ${w.id}<br>
-                    Amount: GHS ${parseFloat(w.amount).toFixed(2)}<br>
-                    Status: <em>${w.status}</em><br>
-                    Date: ${w.date}
-                </li>`;
-            });
-            html += `</ul>`;
-        }
+            // html += `<hr><strong>Withdrawal Details:</strong><ul>`;
+            // dayWithdrawals.forEach(w => {
+            //     html += `<li>
+            //         Withdrawal ID: ${w.id}<br>
+            //         Amount: GHS ${parseFloat(w.amount).toFixed(2)}<br>
+            //         Status: <em>${w.status}</em><br>
+            //         Date: ${w.date}
+            //     </li>`;
+            // });
+            // html += `</ul>`;
 
+            const thisWithdrawal = data.withdrawal_map && data.withdrawal_map[day];
+            if (thisWithdrawal) {
+                html += `<hr><strong>Withdrawal Details:</strong><ul>`;
+                html += `<li>
+                    Withdrawal ID: ${thisWithdrawal.id}<br>
+                    Amount: GHS ${parseFloat(thisWithdrawal.amount).toFixed(2)}<br>
+                    Status: <em>${thisWithdrawal.status}</em><br>
+                    Date: ${thisWithdrawal.date}
+                </li>`;
+                html += `</ul>`;
+            }
+
+        }
 
         $('#modalTitle').text(`Day ${day} details`);
         $('#modalBody').html(html);
