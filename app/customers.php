@@ -995,7 +995,7 @@
         let html = `
             <div class="vstack gap-3 card bg-body">
 				<div class="card-body py-3">
-                    <div class="row align-items-center gx-4">
+                    <div class="row align-items-center gx-4 mb-2">
                         <div class="col-auto">
                             <span class="text-body-secondary">Day</span>
                         </div>
@@ -1043,47 +1043,50 @@
             html += `<p>No savings recorded for this day.</p>`;
         } else {
             html += `
-                <div class="row align-items-center gx-4">
-                    <div class="col-auto">
-                        <span class="text-body-secondary">Date</span>
+                <div class="p-2 mb-3 rounded bg-success-subtle border-start border-4 border-success shadow-sm">
+                    <h6 class="fw-bold text-success mb-2">💰 Deposit Details</h6>
+                    <div class="row align-items-center gx-4">
+                        <div class="col-auto">
+                            <span class="text-body-secondary">Date</span>
+                        </div>
+                        <div class="col">
+                            <hr class="my-0 border-style-dotted" />
+                        </div>
+                        <div class="col-auto">
+                            <span class="material-symbols-outlined text-body-tertiary me-1">date_range</span> ${dayData.date}
+                        </div>
                     </div>
-                    <div class="col">
-                        <hr class="my-0 border-style-dotted" />
-                    </div>
-                    <div class="col-auto">
-                        <span class="material-symbols-outlined text-body-tertiary me-1">date_range</span> ${dayData.date}
-                    </div>
-                </div>
             `;
-            html += `
-                <div class="row align-items-center gx-4">
-                    <div class="col-auto">
-                        <span class="text-body-secondary">Total saved</span>
+                html += `
+                    <div class="row align-items-center gx-4">
+                        <div class="col-auto">
+                            <span class="text-body-secondary">Total saved</span>
+                        </div>
+                        <div class="col">
+                            <hr class="my-0 border-style-dotted" />
+                        </div>
+                        <div class="col-auto">
+                            <span class="material-symbols-outlined text-body-tertiary me-1">savings</span> GHS ${parseFloat(dayData.amount).toFixed(2)}
+                        </div>
                     </div>
-                    <div class="col">
-                        <hr class="my-0 border-style-dotted" />
-                    </div>
-                    <div class="col-auto">
-                        <span class="material-symbols-outlined text-body-tertiary me-1">savings</span> GHS ${parseFloat(dayData.amount).toFixed(2)}
-                    </div>
-                </div>
-            `;
+                `;
 
-            html += `<hr/><div><strong>Entries:</strong></div>`;
+                html += `<hr/><div><strong>Entries:</strong></div>`;
             // html += `<ul>`;
             dayData.entries.forEach(en => {
                 html += `
-                    <div class="row align-items-center gx-4">
-                    <div class="col-auto">
-                        <span class="text-body-secondary">Satus</span>
-                    </div>
-                    <div class="col">
-                        <hr class="my-0 border-style-dotted" />
-                    </div>
-                    <div class="col-auto">
-                        <span class="badge bg-secondary-subtle text-secondary">${en.status}</span>'
-                    </div>
-                </div>
+                    <div class="mb-2 ps-2 border-start border-3 ${en.status.toLowerCase() === 'rejected' ? 'border-danger' : en.status.toLowerCase() === 'pending' ? 'border-warning' : 'border-success'}">
+                        <div class="row align-items-center gx-4">
+                            <div class="col-auto">
+                                <span class="text-body-secondary">Satus</span>
+                            </div>
+                            <div class="col">
+                                <hr class="my-0 border-style-dotted" />
+                            </div>
+                            <div class="col-auto">
+                                <span class="badge ${en.status.toLowerCase() === 'rejected' ? 'bg-danger' : en.status.toLowerCase() === 'pending' ? 'bg-warning text-dark' : 'bg-success'}">${en.status}</span>'
+                            </div>
+                        </div>
                 `;
                 html += `
                     <div class="row align-items-center gx-4">
@@ -1119,26 +1122,19 @@
             </div>
         `;
 
-        if (!isCommissionDay && !isRejected && !isPending && dayWithdrawals.length) {
-            // html += `<hr><strong>Withdrawals:</strong><ul>`;
-            // dayWithdrawals.forEach(w => {
-            // html += `<li>Withdrawal ID ${w.id} — GHS ${w.amount.toFixed(2)} — <em>${w.status}</em></li>`;
-            // });
-            // html += `</ul>`;
-        }
-
         // Show withdrawal details below deposits (only for blue boxes)
         if (!isCommissionDay && !isRejected && isWithdrawnDay && dayWithdrawals.length > 0) {
             const thisWithdrawal = data.withdrawal_map && data.withdrawal_map[day];
             if (thisWithdrawal) {
-                html += `<hr><strong>Withdrawal Details:</strong><ul>`;
-                html += `<li>
-                    Withdrawal ID: ${thisWithdrawal.id}<br>
-                    Amount: GHS ${parseFloat(thisWithdrawal.amount).toFixed(2)}<br>
-                    Status: <em>${thisWithdrawal.status}</em><br>
-                    Date: ${thisWithdrawal.date}
-                </li>`;
-                html += `</ul>`;
+                html += `
+                    <div class="p-2 mt-3 rounded bg-primary-subtle border-start border-4 border-primary shadow-sm">
+                        <h6 class="fw-bold text-primary mb-2">🔵 Withdrawal Details</h6>
+                        <div class="small text-muted">Withdrawal ID: ${thisWithdrawal.id}</div>
+                            <div class="small text-muted">Amount: GHS ${parseFloat(thisWithdrawal.amount).toFixed(2)}</div>
+                        <div class="small text-muted">Status: ${thisWithdrawal.status}</div>
+                        <div class="small text-muted">Date: ${thisWithdrawal.date}</div>
+                    </div>
+                `;
             }
 
         }
