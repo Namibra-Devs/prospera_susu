@@ -97,7 +97,7 @@
 
         if (!isset($saved_days[$dayNumber])) {
             $saved_days[$dayNumber] = [
-                'date' => $date,
+                'date' => pretty_date_notime($date),
                 'amount' => 0.00,
                 'entries' => []
             ];
