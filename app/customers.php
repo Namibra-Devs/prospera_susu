@@ -960,14 +960,15 @@
                     const amt = parseFloat(savedDaysGlobal[d].amount).toFixed(2);
                     innerHTML = `<div>${d}<span class="muted-small">GHS ${amt}</span></div>`;
 
-                    // 🔵 Handle withdrawals (per-day amount)
+                    // Handle withdrawals (per-day amount)
                     if (data.withdrawn_days && data.withdrawn_days.includes(d)) {
                         cls = 'withdrawn';
                         const perDayWithdrawAmount = parseFloat(data.daily_withdraw_amount || 0).toFixed(2);
-                        innerHTML = `<div>${d}<span class="muted-small text-white">GHS ${perDayWithdrawAmount} (Withdrawn)</span></div>`;
+                        innerHTML = `
+                            <div>${d}<span class="muted-small text-white">GHS ${perDayWithdrawAmount} <br>(Withdrawn)</span></div>
+                        `;
                     }
                 }
-
 
 
                 // attach day element

@@ -44,6 +44,28 @@
         if ((float)$transaction_amount > (float)$b) {
             $errors = 'Amount to withdraw is greater that balance available !';
         }
+
+        // balance = 400
+        // days = balance / defualt
+        // days = 400 / 10 = 40 days
+        $default = $find_customer_row->customer_default_daily_amount;
+        $balance_days = (int)($b / $default);
+
+        // withdrawal = 40
+        // withdrawal days = withdrawal / defualt
+        // withdrawal days = 40 / 10 = 4 days
+        $withdrawal_days = (int)($transaction_amount / $default);
+
+        if ((int)($withdrawal_days > $balance_days)) {
+            $errors = 'Withdrawals days exceed balance days !';
+        }
+
+        // 
+        if ($withdrawal_days <= 0) {
+            $errors = 'Invalid withdrawal amount !';
+        }
+
+        // new balance = balance - withdrawal
         $new_balance = (float)($b - $transaction_amount);
 
         // validate inputs
