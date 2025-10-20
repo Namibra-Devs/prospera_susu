@@ -182,7 +182,7 @@
     // --- 7) fetch withdrawals already done above (we’ll reuse)
     $totalWithdrawn = 0;
     foreach ($withdrawals as $w) {
-        if (strtolower($w['status']) === 'approved' || strtolower($w['status']) === 'completed') {
+        if (strtolower($w['status']) === 'approved' || strtolower($w['status']) === 'paid') {
             $totalWithdrawn += $w['amount'];
         }
     }
@@ -227,7 +227,7 @@
 
         // Each withdrawal will “consume” N days starting after commission day
         foreach ($withdrawals as $w) {
-            if (!in_array(strtolower($w['status']), ['approved', 'completed'])) continue;
+            if (!in_array(strtolower($w['status']), ['approved', 'paid'])) continue;
 
             $daysToEat = floor(floatval($w['amount']) / $dailyAmount);
 

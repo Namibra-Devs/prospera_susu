@@ -1013,7 +1013,7 @@
         `;
         const savedDay = savedDaysGlobal[day];
         const dayWithdrawals = data.withdrawals.filter(w => 
-            ['approved', 'completed'].includes(w.status.toLowerCase())
+            ['approved', 'paid'].includes(w.status.toLowerCase())
         )
 
         const isCommissionDay = data.commission_day && parseInt(day) === parseInt(data.commission_day);
@@ -1142,8 +1142,10 @@
             }
 
         }
-
-        $('#modalTitle').text(`Day ${day} details`);
+        html += `
+            </div>
+        `;
+        $('#dayModalLabel').text(dayWithdrawals.length > 0 ? `Day ${day} details (Withdrawals made)` : `Day ${day} details`);
         $('#modalBody').html(html);
         modal.show();
     }

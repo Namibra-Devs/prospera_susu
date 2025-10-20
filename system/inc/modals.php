@@ -282,7 +282,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 pb-0">
-                    <h1 class="modal-title fs-5" id="transactionModalLabel">Day Details</h1>
+                    <h1 class="modal-title fs-5" id="dayModalLabel">Day Details</h1>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalBody">
