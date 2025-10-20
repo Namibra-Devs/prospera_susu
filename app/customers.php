@@ -352,7 +352,7 @@
                     color: white;
                 }
                 .pending { 
-                    background: #fd7e14; 
+                    background: #FFC107; 
                     color: #fff; 
                 } /* orange pending */
 
@@ -371,7 +371,7 @@
                 }
 
                 .rejected {
-                    background-color: #ff66b2; /* pink */
+                    background-color: #6c757d; /* gray */
                     color: #fff;
                 }
 
@@ -388,9 +388,10 @@
                 <div class="mb-3">
                     <h5>Legend:</h5>
                     <div class="d-flex flex-wrap gap-3">
-                        <span class="badge bg-success">Approved Savings</span>
+                        <span class="badge bg-success">Approved Deopsit</span>
                         <span class="badge bg-primary">Withdrawn</span>
-                        <span class="badge bg-warning text-dark">Pending Savings</span>
+                        <span class="badge bg-warning text-dark">Pending Deposit</span>
+                        <span class="badge text-dark" style="background-color: #6c757d;">Rejected Deposit</span>
                         <span class="badge bg-light text-dark border">Not Saved</span>
                         <span class="badge bg-danger">Commission</span>
                     </div>
