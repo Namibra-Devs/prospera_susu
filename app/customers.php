@@ -223,20 +223,21 @@
                    redirect(PROOT . 'app/customers');
                 } else {
                     $customer_data = $statement->fetch(PDO::FETCH_ASSOC);
+                    $balanceData = getCustomerBalance($customer_data['customer_id'], 0);
 
                     // get total saves by customer with status type
                     $total_approved_saves = sum_customer_saves($customer_data['customer_id'], 'Approved');
 
                     // get total withdrawals by customer with status type
-                    $total_approved_withdrawals = sum_customer_withdrawals($customer_data['customer_id'], 'Approved');
+                    // $total_approved_withdrawals = sum_customer_withdrawals($customer_data['customer_id'], 'Approved');
+                    $total_approved_withdrawals = $balanceData['total_withdrawals'];
 
                     // get total saved amount (subtract withdrawals from saves)
                     $total_saved_amount = $total_approved_saves - $total_approved_withdrawals;
 
-                    $balanceData = getCustomerBalance($customer_data['customer_id'], 0);
                     $balance = $balanceData['balance'];
                     // $balanceData['total_saves']
-                    // $balanceData['total_withdrawals']
+                    // 
                     // $balanceData['total_commissions']
                     // $total_saved_amount = $balanceData['balance'];
 
