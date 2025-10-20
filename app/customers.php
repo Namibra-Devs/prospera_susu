@@ -1120,26 +1120,15 @@
         `;
 
         if (!isCommissionDay && !isRejected && !isPending && dayWithdrawals.length) {
-            html += `<hr><strong>Withdrawals:</strong><ul>`;
-            dayWithdrawals.forEach(w => {
-            html += `<li>Withdrawal ID ${w.id} — GHS ${w.amount.toFixed(2)} — <em>${w.status}</em></li>`;
-            });
-            html += `</ul>`;
+            // html += `<hr><strong>Withdrawals:</strong><ul>`;
+            // dayWithdrawals.forEach(w => {
+            // html += `<li>Withdrawal ID ${w.id} — GHS ${w.amount.toFixed(2)} — <em>${w.status}</em></li>`;
+            // });
+            // html += `</ul>`;
         }
 
         // Show withdrawal details below deposits (only for blue boxes)
         if (!isCommissionDay && !isRejected && isWithdrawnDay && dayWithdrawals.length > 0) {
-            // html += `<hr><strong>Withdrawal Details:</strong><ul>`;
-            // dayWithdrawals.forEach(w => {
-            //     html += `<li>
-            //         Withdrawal ID: ${w.id}<br>
-            //         Amount: GHS ${parseFloat(w.amount).toFixed(2)}<br>
-            //         Status: <em>${w.status}</em><br>
-            //         Date: ${w.date}
-            //     </li>`;
-            // });
-            // html += `</ul>`;
-
             const thisWithdrawal = data.withdrawal_map && data.withdrawal_map[day];
             if (thisWithdrawal) {
                 html += `<hr><strong>Withdrawal Details:</strong><ul>`;
