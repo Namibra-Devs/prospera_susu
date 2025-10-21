@@ -236,9 +236,9 @@
                     $total_saved_amount = $total_approved_saves - $total_approved_withdrawals;
 
                     $balance = $balanceData['balance'];
-                    // $balanceData['total_saves']
+                    // $balanceData['total_saves'];
                     // 
-                    // $balanceData['total_commissions']
+                    // $balanceData['total_commissions'];
                     // $total_saved_amount = $balanceData['balance'];
 
                     $total_saved_amount = $total_saved_amount - $balanceData['total_commissions'];
