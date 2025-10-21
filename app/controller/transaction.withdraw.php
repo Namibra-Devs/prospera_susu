@@ -48,7 +48,12 @@
         // calculate balance days and withdrawal days
         $default = $find_customer_row->customer_default_daily_amount;
         $balance_days = (int)($b / $default);
-        $withdrawal_days = (int)($transaction_amount / $default);
+        $withdrawal_days = ($transaction_amount / $default);
+
+        // calculation where when withdrawal days are calculated, if there is a decimal, it should give an error
+        if (is_float($withdrawal_days) && floor($withdrawal_days) != $withdrawal_days) {
+            $errors = 'Withdrawal amount must be in multiples of ' . number_format($default, 2) . ' !';
+        }
 
         // validate withrawal days against blanace days
         if ((int)($withdrawal_days > $balance_days)) {
