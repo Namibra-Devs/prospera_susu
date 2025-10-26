@@ -963,7 +963,7 @@
                                 <nav class="nav nav-pills">
                                     <a class="nav-link sub-nav-admins" href="<?= PROOT; ?>app/admins">Admins</a>
                                     <a class="nav-link sub-nav-archived-admins" href="<?= PROOT; ?>app/archived-admins">Archive admins</a>
-                                    <a class="nav-link sub-nav-admin-new" href="<?= PROOT; ?>app/admin-new">New admin</a>
+                                    <a class="nav-link sub-nav-admin-new" href="<?= PROOT; ?>app/admins?add=1">New admin</a>
                                 </nav>
                             </div>
                         </div>
@@ -997,12 +997,13 @@
                             <a class="nav-link " href="<?= PROOT; ?>documentation">
                             <span class="material-symbols-outlined me-3">sticky_note_2</span> Getting started
                             </a>
-                        </div>
-                        <div class="nav-item">
-                            <a class="nav-link " href="javascript:;">
-                            <span class="material-symbols-outlined me-3">deployed_code</span> Components
-                            </a>
                         </div> -->
+                        <div class="nav-item">
+                            <a class="nav-link " href="<?= PROOT; ?>app/system">
+                                <span class="material-symbols-outlined me-3">deployed_code</span> 
+                                System
+                            </a>
+                        </div>
                         <div class="nav-item">
                             <a class="nav-link " href="javascript:;">
                             <span class="material-symbols-outlined me-3">list_alt</span> Version
