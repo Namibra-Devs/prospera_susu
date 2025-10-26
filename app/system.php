@@ -22,6 +22,7 @@ include ('../system/inc/sidebar.php');
 include ('../system/inc/topnav-base.php');
 include ('../system/inc/topnav.php');
 
+// Fetch settings
 function getSystemSettings($dbConnection) {
     $sql = "SELECT * FROM system_settings LIMIT 1";
     $stmt = $dbConnection->query($sql);
@@ -29,6 +30,32 @@ function getSystemSettings($dbConnection) {
 }
 
 
+// function updateSystemSettings($dbConnection, $data) {
+//     $sql = "UPDATE system_settings SET 
+//                 app_name = :app_name,
+//                 app_logo = :app_logo,
+//                 default_saving_amount = :default_saving_amount,
+//                 company_email = :company_email,
+//                 company_phone = :company_phone,
+//                 company_address = :company_address,
+//                 currency_symbol = :currency_symbol,
+//                 updated_by = :updated_by
+//             WHERE id = 1";
+    
+//     $stmt = $dbConnection->prepare($sql);
+//     return $stmt->execute([
+//         ':app_name' => $data['app_name'],
+//         ':app_logo' => $data['app_logo'],
+//         ':default_saving_amount' => $data['default_saving_amount'],
+//         ':company_email' => $data['company_email'],
+//         ':company_phone' => $data['company_phone'],
+//         ':company_address' => $data['company_address'],
+//         ':currency_symbol' => $data['currency_symbol'],
+//         ':updated_by' => $data['updated_by'] ?? null
+//     ]);
+// }
+
+// Update settings
 function updateSystemSettings($dbConnection, $data) {
     $sql = "UPDATE system_settings SET 
                 app_name = :app_name,
@@ -42,16 +69,44 @@ function updateSystemSettings($dbConnection, $data) {
             WHERE id = 1";
     
     $stmt = $dbConnection->prepare($sql);
-    return $stmt->execute([
-        ':app_name' => $data['app_name'],
-        ':app_logo' => $data['app_logo'],
-        ':default_saving_amount' => $data['default_saving_amount'],
-        ':company_email' => $data['company_email'],
-        ':company_phone' => $data['company_phone'],
-        ':company_address' => $data['company_address'],
-        ':currency_symbol' => $data['currency_symbol'],
-        ':updated_by' => $data['updated_by'] ?? null
-    ]);
+    return $stmt->execute($data);
+}
+
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $app_logo = $settings['app_logo'];
+
+    // Handle file upload
+    if (!empty($_FILES['app_logo']['name'])) {
+        $targetDir = "uploads/";
+        if (!file_exists($targetDir)) mkdir($targetDir, 0777, true);
+
+        $fileName = time() . "_" . basename($_FILES["app_logo"]["name"]);
+        $targetFilePath = $targetDir . $fileName;
+
+        if (move_uploaded_file($_FILES["app_logo"]["tmp_name"], $targetFilePath)) {
+            $app_logo = $targetFilePath;
+        }
+    }
+
+    $updateData = [
+        ':app_name' => $_POST['app_name'],
+        ':app_logo' => $app_logo,
+        ':default_saving_amount' => $_POST['default_saving_amount'],
+        ':company_email' => $_POST['company_email'],
+        ':company_phone' => $_POST['company_phone'],
+        ':company_address' => $_POST['company_address'],
+        ':currency_symbol' => $_POST['currency_symbol'],
+        ':updated_by' => 1 // replace with logged-in admin id
+    ];
+
+    if (updateSystemSettings($dbConnection, $updateData)) {
+        $message = '<div class="alert alert-success">Settings updated successfully!</div>';
+        $settings = getSystemSettings($dbConnection); // Refresh data
+    } else {
+        $message = '<div class="alert alert-danger">Error updating settings.</div>';
+    }
 }
 
 
