@@ -39,7 +39,13 @@ function user_login_redirect($url = 'auth/signin') {
 	redirect(PROOT . $url);
 }
 
-
+// Fetch settings
+function getSystemSettings() {
+	global $dbConnection;
+    $sql = "SELECT * FROM system_settings LIMIT 1";
+    $stmt = $dbConnection->query($sql);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 
 

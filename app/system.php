@@ -14,20 +14,13 @@ if (!admin_has_permission()) {
     admin_permission_redirect('index');
 }
 
-$title = 'Admins | ';
+$title = 'System | ';
 $body_class = '';
 include ('../system/inc/head.php');
 include ('../system/inc/modals.php');
 include ('../system/inc/sidebar.php');
 include ('../system/inc/topnav-base.php');
 include ('../system/inc/topnav.php');
-
-// Fetch settings
-function getSystemSettings($dbConnection) {
-    $sql = "SELECT * FROM system_settings LIMIT 1";
-    $stmt = $dbConnection->query($sql);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
 
 // Update settings
 function updateSystemSettings($dbConnection, $data) {
@@ -48,7 +41,6 @@ function updateSystemSettings($dbConnection, $data) {
 }
 
 $message = '';
-$settings = getSystemSettings($dbConnection);
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -75,6 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $targetFilePath = $targetDir . $fileName;
 
         if ($message == '' && move_uploaded_file($_FILES["app_logo"]["tmp_name"], $targetFilePath)) {
+
+            // check if old logo exists and delete
+            if ($settings['app_logo'] && file_exists('../' . $settings['app_logo'])) {
+                unlink('../' . $settings['app_logo']);
+            } 
+
             $app_logo = $targetFilePath;
             $app_logo = str_replace('../', '', $app_logo); // Store relative path
         }

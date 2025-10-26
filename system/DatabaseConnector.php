@@ -95,6 +95,9 @@
     require_once ("Functions.php");
     require_once ("helpers.php");
     require_once dirname(__DIR__) . "/config.php";
+    $settings = getSystemSettings();
+    $appLogo = PROOT . $settings['app_logo'] ?? 'assets/media/logo/logo.png';
+    $appName = ucwords($settings['app_name'] ?? 'Prospera Susu');
 
     if (!is_dir(__DIR__ . '/cache')) mkdir(__DIR__ . '/cache', 0755, true);
 	if (!is_dir(__DIR__ . '/logs')) mkdir(__DIR__ . '/logs', 0755, true);

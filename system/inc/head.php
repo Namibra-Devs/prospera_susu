@@ -197,7 +197,7 @@
     </script>
     
     <!-- Favicon -->
-    <link rel="shortcut icon" href="<?= PROOT; ?>assets/media/logo/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?= $appLogo; ?>" type="image/x-icon" />
     
     <!-- Fonts and icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -213,6 +213,6 @@
     <link rel="stylesheet" href="<?= PROOT; ?>assets/css/susu.css" />
     
     <!-- Title -->
-    <title><?= $title; ?> Prospera susu</title>
+    <title><?= $title . $appName; ?></title>
 </head>
 <body class="<?= $body_class; ?>">
