@@ -22,6 +22,18 @@ include ('../system/inc/sidebar.php');
 include ('../system/inc/topnav-base.php');
 include ('../system/inc/topnav.php');
 
+// get last updated admin data
+$that_admin = 'N/A';
+$last_updated_by_admin_id = $settings['updated_by'] ?? null;
+if ($last_updated_by_admin_id) {
+    if ($admin_id == $last_updated_by_admin_id) {
+        $that_admin = 'You';
+    } else {
+        $last_admin = findAdminById($last_updated_by_admin_id);
+        $that_admin = $last_admin ? ucwords($last_admin->admin_name) : 'N/A';
+    }
+}
+
 // Update settings
 function updateSystemSettings($dbConnection, $data) {
     $sql = "
@@ -151,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="col-12 col-lg-auto mb-3 mb-lg-0">
                                     <ul class="nav nav-pills">
                                         <li class="nav-item">
-                                            <a class="nav-link bg-dark active" aria-current="page" href="<?= PROOT; ?>app/admins">App </a>
+                                            <a class="nav-link bg-dark active" aria-current="page" href="<?= PROOT; ?>app/system">App </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -164,7 +176,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body d-flex flex-column">
-
                                 <?= $message ?>
                                 <form method="POST" enctype="multipart/form-data">
                                     <div class="row mb-3">
@@ -212,10 +223,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button type="submit" class="btn btn-warning px-4">Save Changes</button>
                                     </div>
                                 </form>
+                                <div class="p lead text-muted mt-4">
+                                    <em>Lastly updated by <?= $that_admin; ?></ema>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-    </div>
+            </div>
 
 <?php include ('../system/inc/footer.php'); ?>
