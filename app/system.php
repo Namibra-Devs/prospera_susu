@@ -22,6 +22,39 @@ include ('../system/inc/sidebar.php');
 include ('../system/inc/topnav-base.php');
 include ('../system/inc/topnav.php');
 
+function getSystemSettings($dbConnection) {
+    $sql = "SELECT * FROM system_settings LIMIT 1";
+    $stmt = $dbConnection->query($sql);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+function updateSystemSettings($dbConnection, $data) {
+    $sql = "UPDATE system_settings SET 
+                app_name = :app_name,
+                app_logo = :app_logo,
+                default_saving_amount = :default_saving_amount,
+                company_email = :company_email,
+                company_phone = :company_phone,
+                company_address = :company_address,
+                currency_symbol = :currency_symbol,
+                updated_by = :updated_by
+            WHERE id = 1";
+    
+    $stmt = $dbConnection->prepare($sql);
+    return $stmt->execute([
+        ':app_name' => $data['app_name'],
+        ':app_logo' => $data['app_logo'],
+        ':default_saving_amount' => $data['default_saving_amount'],
+        ':company_email' => $data['company_email'],
+        ':company_phone' => $data['company_phone'],
+        ':company_address' => $data['company_address'],
+        ':currency_symbol' => $data['currency_symbol'],
+        ':updated_by' => $data['updated_by'] ?? null
+    ]);
+}
+
+
 
 
 
