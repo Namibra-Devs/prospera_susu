@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileName = time() . "_" . basename($_FILES["app_logo"]["name"]);
         $targetFilePath = $targetDir . $fileName;
 
-        if ($message == '' && move_uploaded_file($_FILES["app_logo"]["tmp_name"], $targetFilePath)) {
+        if (($message == '' || $message == null || empty($message)) && move_uploaded_file($_FILES["app_logo"]["tmp_name"], $targetFilePath)) {
 
             // check if old logo exists and delete
             if ($settings['app_logo'] && file_exists('../' . $settings['app_logo'])) {
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ':updated_by' => $admin_id
     ];
 
-    if ($message == '' && updateSystemSettings($dbConnection, $updateData)) {
+    if (($message == '' || $message == null || empty($message)) && updateSystemSettings($dbConnection, $updateData)) {
         $message = '<div class="alert alert-success">Settings updated successfully!</div>';
         $settings = getSystemSettings($dbConnection); // Refresh data
     } 

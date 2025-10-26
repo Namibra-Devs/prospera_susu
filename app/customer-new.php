@@ -56,7 +56,7 @@
     $address  = $post['address'] ?? '';
     $region   = $post['region'] ?? '';
     $city     = $post['city'] ?? '';
-    $amount   = $post['amount'] ?? 10;
+    $amount   = $post['amount'] ?? $settings['default_saving_amount'] ?? 2.00;
     $target   = $post['target'] ?? '';
     $duration = $post['duration'] ?? null;
     $startdate = $post['startdate'] ?? null;
@@ -119,6 +119,11 @@
             if ($a > 0) {
                 $error = "Entered account number already exist !";
             }
+        }
+
+        // check for minimum amount
+        if ($amount < ($settings['default_saving_amount'] ?? 2.00)) {
+            $error = "The minimum daily saving amount is GHS " . money($settings['default_saving_amount'] ?? 2.00) . " !";
         }
 
         if (isset($_GET['edit']) && $_GET['edit']) {
@@ -301,8 +306,8 @@
                                 <hr>
                                 <div class="mb-4">
                                     <label class="form-label" for="amount">Daily amount</label>
-                                    <input class="form-control bg-body" id="amount" name="amount" type="number" min="10" step="0.01" value="<?= $amount; ?>" required />
-                                    <small class="form-text">Mininum GHS 10.00</small>
+                                    <input class="form-control bg-body" id="amount" name="amount" type="number" min="2" step="0.01" value="<?= $amount; ?>" required />
+                                    <small class="form-text">Mininum GHS <?= money($settings['default_saving_amount'] ?? '2.00'); ?></small>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="target">Target</label>
