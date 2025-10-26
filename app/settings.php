@@ -7,11 +7,6 @@
         admin_login_redirect();
     }
 
-    //
-	if (is_array(capital_mover($admin_id)) && capital_mover($admin_id)["msg"] == "touched") {
-		redirect(PROOT . 'auth/end-trade-checker');
-	}
-
     include ("../includes/header.inc.php");
     include ("../includes/aside.inc.php");
     include ("../includes/left.nav.inc.php");
@@ -46,13 +41,13 @@
             if (isset($result)) {
 
                 $message = "updated profile details";
-                add_to_log($message, $admin_data['admin_id']);
+                add_to_log($message, $admin_data['admin_id'], 'admin');
 
                 $_SESSION['flash_success'] = 'Admin has been updated!';
-                redirect(PROOT . "account/profile");
+                redirect(PROOT . "account");
             } else {
-                echo js_alert("Something went wrong!");
-                redirect(PROOT . "account/profile");
+                $_SESSION['flash_error'] = ("Something went wrong!");
+                redirect(PROOT . "account");
             }
         }
     }

@@ -90,6 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     if (($message == '' || $message == null || empty($message)) && updateSystemSettings($dbConnection, $updateData)) {
+        // add to log 
+        $message = "admin with id [" . $admin_id . "] has been updated system settings!";
+        add_to_log($message, $admin_data['admin_id'], 'admin');
+
         $message = '<div class="alert alert-success">Settings updated successfully!</div>';
         $settings = getSystemSettings($dbConnection); // Refresh data
     } 

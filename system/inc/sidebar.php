@@ -998,12 +998,14 @@
                             <span class="material-symbols-outlined me-3">sticky_note_2</span> Getting started
                             </a>
                         </div> -->
+                        <?php if (admin_has_permission()): ?>
                         <div class="nav-item">
                             <a class="nav-link " href="<?= PROOT; ?>app/system">
                                 <span class="material-symbols-outlined me-3">deployed_code</span> 
                                 System
                             </a>
                         </div>
+                        <?php endif; ?>
                         <div class="nav-item">
                             <a class="nav-link " href="javascript:;">
                             <span class="material-symbols-outlined me-3">list_alt</span> Version
