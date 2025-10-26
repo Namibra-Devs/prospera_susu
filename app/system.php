@@ -111,8 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-
-
 ?>
     <!-- Main -->
     <main class="main px-lg-6">
