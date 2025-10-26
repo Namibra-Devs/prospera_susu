@@ -29,49 +29,26 @@ function getSystemSettings($dbConnection) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-
-// function updateSystemSettings($dbConnection, $data) {
-//     $sql = "UPDATE system_settings SET 
-//                 app_name = :app_name,
-//                 app_logo = :app_logo,
-//                 default_saving_amount = :default_saving_amount,
-//                 company_email = :company_email,
-//                 company_phone = :company_phone,
-//                 company_address = :company_address,
-//                 currency_symbol = :currency_symbol,
-//                 updated_by = :updated_by
-//             WHERE id = 1";
-    
-//     $stmt = $dbConnection->prepare($sql);
-//     return $stmt->execute([
-//         ':app_name' => $data['app_name'],
-//         ':app_logo' => $data['app_logo'],
-//         ':default_saving_amount' => $data['default_saving_amount'],
-//         ':company_email' => $data['company_email'],
-//         ':company_phone' => $data['company_phone'],
-//         ':company_address' => $data['company_address'],
-//         ':currency_symbol' => $data['currency_symbol'],
-//         ':updated_by' => $data['updated_by'] ?? null
-//     ]);
-// }
-
 // Update settings
 function updateSystemSettings($dbConnection, $data) {
-    $sql = "UPDATE system_settings SET 
-                app_name = :app_name,
-                app_logo = :app_logo,
-                default_saving_amount = :default_saving_amount,
-                company_email = :company_email,
-                company_phone = :company_phone,
-                company_address = :company_address,
-                currency_symbol = :currency_symbol,
-                updated_by = :updated_by
-            WHERE id = 1";
-    
+    $sql = "
+        UPDATE system_settings SET 
+            app_name = :app_name,
+            app_logo = :app_logo,
+            default_saving_amount = :default_saving_amount,
+            company_email = :company_email,
+            company_phone = :company_phone,
+            company_address = :company_address,
+            currency_symbol = :currency_symbol,
+            updated_by = :updated_by
+        WHERE id = 1
+    ";
     $stmt = $dbConnection->prepare($sql);
     return $stmt->execute($data);
 }
 
+$message = '';
+$settings = getSystemSettings($dbConnection);
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -79,34 +56,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle file upload
     if (!empty($_FILES['app_logo']['name'])) {
-        $targetDir = "uploads/";
+        $targetDir = "../assets/media/logo/";
         if (!file_exists($targetDir)) mkdir($targetDir, 0777, true);
+
+        // accept only certain file types
+        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
+        $fileType = strtolower(pathinfo($_FILES["app_logo"]["name"], PATHINFO_EXTENSION));
+        if (!in_array($fileType, $allowedTypes)) {
+            $message = '<div class="alert alert-danger">Invalid file type for logo. Allowed types: ' . implode(', ', $allowedTypes) . '.</div>';
+        }
+
+        // file size limit (e.g., 10MB)
+        if ($_FILES["app_logo"]["size"] > 10 * 1024 * 1024) {
+            $message = '<div class="alert alert-danger">File size exceeds 2MB limit.</div>';
+        }
 
         $fileName = time() . "_" . basename($_FILES["app_logo"]["name"]);
         $targetFilePath = $targetDir . $fileName;
 
-        if (move_uploaded_file($_FILES["app_logo"]["tmp_name"], $targetFilePath)) {
+        if ($message == '' && move_uploaded_file($_FILES["app_logo"]["tmp_name"], $targetFilePath)) {
             $app_logo = $targetFilePath;
+            $app_logo = str_replace('../', '', $app_logo); // Store relative path
         }
     }
 
     $updateData = [
-        ':app_name' => $_POST['app_name'],
-        ':app_logo' => $app_logo,
-        ':default_saving_amount' => $_POST['default_saving_amount'],
-        ':company_email' => $_POST['company_email'],
-        ':company_phone' => $_POST['company_phone'],
-        ':company_address' => $_POST['company_address'],
-        ':currency_symbol' => $_POST['currency_symbol'],
-        ':updated_by' => 1 // replace with logged-in admin id
+        ':app_name' => $_POST['app_name'], 
+        ':app_logo' => $app_logo, 
+        ':default_saving_amount' => $_POST['default_saving_amount'], 
+        ':company_email' => $_POST['company_email'], 
+        ':company_phone' => $_POST['company_phone'], 
+        ':company_address' => $_POST['company_address'], 
+        ':currency_symbol' => $_POST['currency_symbol'], 
+        ':updated_by' => $admin_id
     ];
 
-    if (updateSystemSettings($dbConnection, $updateData)) {
+    if ($message == '' && updateSystemSettings($dbConnection, $updateData)) {
         $message = '<div class="alert alert-success">Settings updated successfully!</div>';
         $settings = getSystemSettings($dbConnection); // Refresh data
-    } else {
-        $message = '<div class="alert alert-danger">Error updating settings.</div>';
-    }
+    } 
+    // else {
+    //     $message = '<div class="alert alert-danger">Error updating settings.</div>';
+    // }
 }
 
 
@@ -141,12 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <!-- Action -->
                     <div class="row gx-2">
                         <div class="col-6 col-sm-auto">
-                            <?php if (!isset($_GET['add']) || !$_GET['add']): ?>
-                            <a class="btn btn-secondary d-block" href="<?= PROOT; ?>app/admins?add=1"> <span class="material-symbols-outlined me-1">add</span> New admin </a>
-                            <?php endif; ?>
-                        </div>
-                        <div class="col-6 col-sm-auto">
-                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"> Go back </a>
+                            <a class="btn btn-light d-block" href="<?= goBack(); ?>"> << Go back </a>
                         </div>
                     </div>
 
@@ -163,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="col-12 col-lg-auto mb-3 mb-lg-0">
                                     <ul class="nav nav-pills">
                                         <li class="nav-item">
-                                            <a class="nav-link bg-dark active" aria-current="page" href="<?= PROOT; ?>app/admins">All admins <?= $admin_count; ?></a>
+                                            <a class="nav-link bg-dark active" aria-current="page" href="<?= PROOT; ?>app/admins">App </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -171,50 +157,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                 </div>
-    
-
 
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body d-flex flex-column">
-                                <form method="POST" action="<?= PROOT; ?>app/admins.php?add=1">
-                                    <div class="text-danger"><?= $errors; ?></div>
-                                    <div class="mb-3">
-                                        <label for="admin_fullname" class="form-label">Full name</label>
-                                        <input type="text" class="form-control" name="admin_fullname" id="admin_fullname" value="<?= $admin_fullname; ?>" required>
-                                        <div class="text-sm text-muted">Enter full name in this field</div>
+
+                                <?= $message ?>
+                                <form method="POST" enctype="multipart/form-data">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">App Name</label>
+                                            <input type="text" name="app_name" class="form-control" value="<?= sanitize($settings['app_name'] ?? '') ?>" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Default Saving Amount (<?= sanitize($settings['currency_symbol']) ?>)</label>
+                                            <input type="number" step="0.01" name="default_saving_amount" class="form-control" value="<?= sanitize($settings['default_saving_amount']) ?>" required>
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="admin_email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="admin_email" id="admin_email" value="<?= $admin_email; ?>" required>
-                                        <div class="text-sm text-muted">Enter email in this field</div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">App Logo</label>
+                                            <input type="file" name="app_logo" class="form-control">
+                                            <?php if ($settings['app_logo']): ?>
+                                                <div class="mt-2">
+                                                    <img src="<?= PROOT . sanitize($settings['app_logo']); ?>" alt="App Logo" height="60">
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Currency Symbol</label>
+                                            <input type="text" name="currency_symbol" class="form-control" value="<?= sanitize($settings['currency_symbol']); ?>" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Company Email</label>
+                                            <input type="email" name="company_email" class="form-control" value="<?= sanitize($settings['company_email'] ?? ''); ?>">
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="admin_phone" class="form-label">Phone number</label>
-                                        <input type="number" class="form-control" name="admin_phone" id="admin_phone" value="<?= $admin_phone; ?>" placeholder="(___)___-____" data-inputmask="'mask': '(999)999-9999'" required>
-                                        <div class="text-sm text-muted">Enter phone numner in this field</div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Company Phone</label>
+                                            <input type="text" name="company_phone" class="form-control" value="<?= sanitize($settings['company_phone'] ?? ''); ?>">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Company Address</label>
+                                            <textarea name="company_address" class="form-control"><?= sanitize($settings['company_address'] ?? ''); ?></textarea>
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="admin_password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" name="admin_password" id="admin_password" value="<?= $admin_password; ?>" required>
-                                        <div class="text-sm text-muted">Enter password in this field</div>
+
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-warning px-4">Save Changes</button>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="confirm" class="form-label">Confirm Password</label>
-                                        <input type="password" class="form-control" name="confirm" id="confirm" value="<?= $confirm; ?>" required>
-                                        <div class="text-sm text-muted">Enter confirm new password in this field</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="admin_permissions" class="form-label">Permission</label>
-                                        <select class="form-control" name="admin_permissions" id="admin_permissions" required>
-                                            <option value=""<?= (($admin_permissions == '')?' selected' : '') ?>></option>
-                                            <option value="approver"<?= (($admin_permissions == 'approver')?' selected' : '') ?>>Approver</option>
-                                            <option value="admin,approver"<?= (($admin_permissions == 'admin,approver')?' selected' : '') ?>>Admin,  Approver</option>
-                                        </select>
-                                        <div class="text-sm text-muted">Select type of admin permission in this field</div>
-                                    </div>
-                                    <button type="submit" class="btn btn-dark" name="submit_admin" id="submit_admin">Add admin</button>
                                 </form>
                             </div>
                         </div>
