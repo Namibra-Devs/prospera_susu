@@ -291,6 +291,49 @@
             </div>
         </div>
     </div>
+   
+    <!-- Upload Transaction Modal -->
+    <div class="modal fade" id="transactionUploadModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);" aria-labelledby="transactionUploadModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h1 class="modal-title fs-5" id="transactionUploadModalLabel">Upload transaction</h1>
+                    <button class="btn-close tum-close-btn" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">IMPORTANT NOTICE</h4>
+                        <p>Please read and follow the instructions below carefully to prevent data redundancy or corruption.</p>
+                        <hr>
+                        <p class="mb-0">
+                            <ul>
+                                <li>Ensure the file you upload is either an <b>Excel (.xlsx)</b> or <b>CSV (.csv)</b> file</li>
+                                <li>Double-check your file thoroughly <b>before uploading</b>.</li>
+                                <li>Verify that all <b>customer account numbers</b> provided are <b>accurate</b> and <b>already exist in the system</b></li>
+                                <li>Any customer account number <b>not found in the system</b> will be <b>skipped</b>, while the remaining valid records will be uploaded.</li>
+                                <li>The date format in your file must be <b>Month/Day/Year (MM/DD/YYYY)</b> or <b>Day/Month/Year (DD/MM/YYYY)</b>.</li>
+                            </ul>
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Select Excel or CSV File</label>
+                        <input type="file" id="transaction_file" class="form-control" accept=".csv, .xls, .xlsx">
+                    </div>
+
+                    <div class="progress mb-3" style="height: 25px; display:none;">
+                        <div id="uploadProgress" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%">0%</div>
+                    </div>
+
+                    <div id="previewArea"></div>
+
+                    <div class="text-end mt-3">
+                        <button id="uploadTransactionButton" class="btn btn-success" style="display:none;">Submit to Database</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
      <!-- Modal: Upload todays collection -->
     <?php

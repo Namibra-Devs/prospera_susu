@@ -61,6 +61,7 @@
 
 	// Check For Incorrect Input Of Data
 	function sanitize($dirty) {
+		if (empty($dirty) || $dirty == NULL || $dirty == '') return '';
 	    $clean = htmlentities($dirty, ENT_QUOTES, "UTF-8");
 	    return trim($clean);
 	}

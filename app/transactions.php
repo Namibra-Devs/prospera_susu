@@ -14,6 +14,8 @@
     include ('../system/inc/topnav-base.php');
     include ('../system/inc/topnav.php');
 
+    $DATE = date("Y-m-d H:i:s");
+
     // function to get total amount of transactions
     function getTotalTransactionAmount($type = 'Approved') {
         global $dbConnection;
@@ -73,7 +75,7 @@
         if (isset($_GET['approved']) && !empty($_GET['approved'])) {
             $approved_id = sanitize($_GET['approved']);
 
-            $sql = $dbConnection->query("UPDATE savings SET saving_status = 'Approved' WHERE saving_id = '".$approved_id."'")->execute();
+            $sql = $dbConnection->query("UPDATE savings SET saving_status = 'Approved', saving_approved_by = '" . $admin_id . "', saving_operation_date = '" . $DATE . "' WHERE saving_id = '".$approved_id."'")->execute();
             if ($sql) {
                 $log_message =  'Admin [' . $admin_id . '] has set deposit [' . $approved_id . '] status to Approved!';
                 add_to_log($log_message, $admin_id, 'admin');
@@ -81,6 +83,21 @@
                 redirect(PROOT . 'app/transactions');
             } else {
                 $_SESSION['flash_success'] = 'Could\'nt update deposit status to Approved!';
+                redirect(PROOT . 'app/transactions');
+            }
+        }
+        
+        if (isset($_GET['reject']) && !empty($_GET['reject'])) {
+            $reject_id = sanitize($_GET['reject']);
+
+            $sql = $dbConnection->query("UPDATE savings SET saving_status = 'Rejected', saving_approved_by = '" . $admin_id . "', saving_operation_date = '" . $DATE . "' WHERE saving_id = '".$reject_id."'")->execute();
+            if ($sql) {
+                $log_message =  'Admin [' . $admin_id . '] has set deposit [' . $reject_id . '] status to Rejected!';
+                add_to_log($log_message, $admin_id, 'admin');
+                $_SESSION['flash_success'] = $log_message;
+                redirect(PROOT . 'app/transactions');
+            } else {
+                $_SESSION['flash_success'] = 'Could\'nt update deposit status to Rejected!';
                 redirect(PROOT . 'app/transactions');
             }
         }
@@ -95,7 +112,7 @@
         if (isset($_GET['paid']) && !empty($_GET['paid'])) {
             $paid_id = sanitize($_GET['paid']);
 
-            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Paid' WHERE withdrawal_id = '".$paid_id."'")->execute();
+            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Paid', withdrawal_approver_id = '" . $admin_id . "', withdrawal_date_approved = '" . $DATE . "' WHERE withdrawal_id = '".$paid_id."'")->execute();
             if ($sql) {
                 $log_message =  'Admin [' . $admin_id . '] set withdrawal [' . $paid_id . '] status to Paid!';
                 add_to_log($log_message, $admin_id, 'admin');
@@ -111,7 +128,7 @@
         if (isset($_GET['approved']) && !empty($_GET['approved'])) {
             $approved_id = sanitize($_GET['approved']);
 
-            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Approved' WHERE withdrawal_id = '".$approved_id."'")->execute();
+            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Approved', withdrawal_approver_id = '" . $admin_id . "', withdrawal_date_approved = '" . $DATE . "' WHERE withdrawal_id = '".$approved_id."'")->execute();
             if ($sql) {
                 $log_message =  'Admin [' . $admin_id . '] set withdrawal [' . $approved_id . '] status to Approved!';
                 add_to_log($log_message, $admin_id, 'admin');
@@ -127,15 +144,15 @@
         if (isset($_GET['reject']) && !empty($_GET['reject'])) {
             $reject_id = sanitize($_GET['reject']);
 
-            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Rejected' WHERE withdrawal_id = '".$reject_id."'")->execute();
+            $sql = $dbConnection->query("UPDATE withdrawals SET withdrawal_status = 'Rejected', withdrawal_approver_id = '" . $admin_id . "', withdrawal_date_approved = '" . $DATE . "' WHERE withdrawal_id = '".$reject_id."'")->execute();
             if ($sql) {
                 $log_message =  'Admin [' . $admin_id . '] set withdrawal [' . $reject_id . '] status to Rejected!';
                 add_to_log($log_message, $admin_id, 'admin');
                 $_SESSION['flash_success'] = $log_message;
-                //redirect(PROOT . 'app/transactions');
+                redirect(PROOT . 'app/transactions');
             } else {
                 $_SESSION['flash_success'] = 'Could\'nt update withdrawal status to Rejected!';
-                //redirect(PROOT . 'app/transactions');
+                redirect(PROOT . 'app/transactions');
             }
         }
     }

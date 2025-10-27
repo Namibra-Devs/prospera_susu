@@ -17,13 +17,18 @@
                             <span class="material-symbols-outlined">send_money</span>
                         </a>
                     </div>
+                    <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Upload transaction">
+                        <a class="nav-link" href="#transactionUploadModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionUploadModal">
+                            <span class="material-symbols-outlined">cloud_upload</span>
+                        </a>
+                    </div>
                     <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
-                        <a class="nav-link" href="mailto:yevgenysim+simpleqode@gmail.com">
+                        <a class="nav-link" href="mailto:info@namibra.io">
                             <span class="material-symbols-outlined">support</span>
                         </a>
                     </div>
                     <div class="nav-item dropend mt-auto">
-                        <a href="#" role="button" data-bs-toggle="dropdown" data-bs-settings-switcher aria-expanded="false">
+                        <a href="<?= PROOT; ?>account" role="button" data-bs-toggle="dropdown" data-bs-settings-switcher aria-expanded="false">
                             <div class="nav-link">
                                 <span class="material-symbols-outlined">settings</span>
                             </div>
@@ -335,6 +340,15 @@
                             >
                                 <span class="material-symbols-outlined">send_money</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
+                            <a
+                                class="nav-link"
+                                href="#transactionUploadModal" data-bs-toggle="modal" data-bs-target="#transactionUploadModal"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                data-bs-title="Upload transaction"
+                            >
+                                <span class="material-symbols-outlined">cloud_upload</span> <span class="d-xl-none ms-3">Upload transaction</span>
+                            </a>
                         </div>
                         <div class="nav-item">
                             <a class="nav-link" href="mailto:info@namibra.io" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
@@ -645,6 +659,15 @@
                             >
                                 <span class="material-symbols-outlined">local_mall</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
+                            <a
+                                class="nav-link flex-xl-column"
+                                href="#transactionUploadModal" data-bs-toggle="modal" data-bs-target="#transactionUploadModal"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                data-bs-title="Upload transaction"
+                            >
+                                <span class="material-symbols-outlined">cloud_upload</span> <span class="d-xl-none ms-3">Upload transaction</span>
+                            </a>
                         </div>
                         <div class="nav-item">
                             <a
@@ -921,6 +944,7 @@
                                     <a class="nav-link" href="#withdrawalModal" data-bs-toggle="modal" data-bs-target="#withdrawalModal">Make new withdrawal</a>
                                     <?php endif; ?>
                                     <a class="nav-link" href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal">Add new deposit</a>
+                                    <a class="nav-link" href="#transactionUploadModal" data-bs-toggle="modal" data-bs-target="#transactionUploadModal">Upload transaction</a>
                                     <!-- <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
                                     <a class="nav-link sub-nav-not-approved-transactions" href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
                                     <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a> -->
@@ -1027,6 +1051,9 @@
                             <?php endif; ?>
                             <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                                 <span class="material-symbols-outlined me-3">send_money</span> Add new deposit
+                            </a>
+                            <a class="nav-link" href="#transactionUploadModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionUploadModal">
+                                <span class="material-symbols-outlined me-3">cloud_upload</span> Upload transaction
                             </a>
                         </div>
                         <div class="nav-item">

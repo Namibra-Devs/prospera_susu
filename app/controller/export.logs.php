@@ -4,7 +4,8 @@
     if (!admin_is_logged_in()) {
         admin_login_redirect();
     }
-require '../../vendor/autoload.php';
+    
+    require '../../vendor/autoload.php';
 
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
