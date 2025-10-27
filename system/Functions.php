@@ -50,12 +50,28 @@
 		return date("M d, Y", strtotime($date));
 	}
 
+	function shortenMoney($amount) {
+		// Convert to float in case it comes as string
+		$amount = floatval($amount);
+
+		if ($amount >= 1000000000) {          // Billions
+			return round($amount / 1000000000, 1) . 'B';
+		} elseif ($amount >= 1000000) {       // Millions
+			return round($amount / 1000000, 1) . 'M';
+		} elseif ($amount >= 1000) {          // Thousands
+			return round($amount / 1000, 1) . 'K';
+		} else {
+			return number_format($amount, 2); // Less than 1000 stays normal
+		}
+	}
+
 	// Display money in a readable way
 	function money($number) {
 		$output = '0.00';
 		if ($number != NULL || $number != '') 
 			$output = number_format($number, 2);
-	
+			$output = shortenMoney($number);
+		
 		return '₵' . $output;
 	}
 
