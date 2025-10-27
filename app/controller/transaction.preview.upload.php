@@ -75,7 +75,6 @@
         <thead class="table-primary">
             <tr>
                 <th>Account Number</th>
-                <!-- <th>Collector ID</th> -->
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Note</th>

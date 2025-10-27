@@ -312,6 +312,7 @@
                                 <li>Verify that all <b>customer account numbers</b> provided are <b>accurate</b> and <b>already exist in the system</b></li>
                                 <li>Any customer account number <b>not found in the system</b> will be <b>skipped</b>, while the remaining valid records will be uploaded.</li>
                                 <li>The date format in your file must be <b>Month/Day/Year (MM/DD/YYYY)</b> or <b>Day/Month/Year (DD/MM/YYYY)</b>.</li>
+                                <li>If a customer is making an <b>advance deposit</b>; make sure you list the <b>days one by one</b> (but not to <b>sum the money and add as one</b>).</li>
                             </ul>
                         </p>
                     </div>
