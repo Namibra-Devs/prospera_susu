@@ -131,7 +131,7 @@
         <div class="collapse navbar-collapse" id="topnavBaseCollapse">
             <!-- Search -->
             <div class="input-group d-xl-none my-4 my-xl-0">
-                <input class="form-control" id="topnavSearchInputMobile" type="search" placeholder="Search" aria-label="Search" aria-describedby="navbarSearchMobile" />
+                <input class="form-control" id="topnavSearchInputMobile" type="search" placeholder="Search1" aria-label="Search" aria-describedby="navbarSearchMobile" />
                 <span class="input-group-text" id="navbarSearchMobile">
                     <span class="material-symbols-outlined">search</span>
                 </span>

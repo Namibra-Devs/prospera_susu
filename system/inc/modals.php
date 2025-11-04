@@ -276,6 +276,174 @@
         </div>
     </div>
     <?php endif; ?>
+
+    <!-- Collectors filter on transactions modal -->
+    <?php if (admin_has_permission('approver')): ?>
+        
+    <!-- Upload Transaction Modal -->
+    <div class="modal fade" id="collectorsFilterModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);" aria-labelledby="collectorsFilterModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h1 class="modal-title fs-5" id="collectorsFilterModalLabel">Filter Transactions</h1>
+                    <button class="btn-close tum-close-btn" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="collectors-filter-form" method="POST">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label" for="collector_select">Select collector</label>
+                                <select class="form-select" id="collector_select" name="collector_id">
+                                    <option value="">All collectors</option>
+                                    <?php foreach ($collectors as $collector): ?>
+                                        <option value="<?= $collector['id']; ?>"><?= $collector['name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="account_number">Customer account number</label>
+                                <input type="text" class="form-control" id="account_number" name="account_number" placeholder="Enter account number" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="customer_name">Customer name</label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter customer name" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="note_keyword">Note keyword</label>
+                                <input type="text" class="form-control" id="note_keyword" name="note_keyword" placeholder="Enter keyword in note" />
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col">
+                                <label class="form-label" for="sort_by">Sort by</label>
+                                <select class="form-select" id="sort_by" name="sort_by">
+                                    <option value="date_desc">Date (newest first)</option>
+                                    <option value="date_asc">Date (oldest first)</option>
+                                    <option value="amount_desc">Amount (highest first)</option>
+                                    <option value="amount_asc">Amount (lowest first)</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="filter_start_date">Start date</label>
+                                <input type="date" class="form-control" id="filter_start_date" name="filter_start_date" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="filter_end_date">End date</label>
+                                <input type="date" class="form-control" id="filter_end_date" name="filter_end_date" />
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col">
+                                <label class="form-label" for="transaction_type">Transaction type</label>
+                                    <select class="form-select" id="transaction_type" name="transaction_type">>
+                                        <option value="">All types</option>
+                                        <option value="deposit">Deposits</option>
+                                        <option value="withdrawal">Withdrawals</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="payment_mode_filter">Mode of payment</label>
+                                <select class="form-select" id="payment_mode_filter" name="payment_mode_filter">>
+                                    <option value="">All modes</option>
+                                    <option value="bank">Bank</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="airteltigomoney">AirtelTigo Money</option>
+                                    <option value="mtnmobilemoney">MTN Mobile Money</option>
+                                    <option value="telecelcash">Tecel Cash</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="min_amount">Minimum amount</label>
+                                <input type="number" class="form-control" id="min_amount" name="min_amount" step="0.01" placeholder="0.00" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="max_amount">Maximum amount</label>
+                                <input type="number" class="form-control" id="max_amount" name="max_amount" step="0.01" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn btn-secondary" id="applyCollectorsFilterButton" name="applyCollectorsFilterButton">Apply filter</button>
+                            <button type="button" class="btn btn-link text-danger" id="clearCollectorsFilterButton" name="clearCollectorsFilterButton">Clear filter</button>
+                        </div>
+                    </form>
+                    <hr class="my-5" />
+                    <div class="row mb-8">
+                        <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0 d-none" id="filter-deposits-container">
+                            <div class="card bg-body-tertiary border-transparent">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <!-- Heading -->
+                                            <h4 class="fs-sm fw-normal text-body-secondary mb-1">Deposits</h4>
+
+                                            <!-- Text -->
+                                            <div class="fs-4 fw-semibold" id="filter-deposits">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <!-- Avatar -->
+                                            <div class="avatar avatar-lg bg-body text-primary">
+                                                <i class="fs-4" data-duoicon="clock"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0 d-none" id="filter-withdrawals-container">
+                            <div class="card bg-body-tertiary border-transparent">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <!-- Heading -->
+                                            <h4 class="fs-sm fw-normal text-body-secondary mb-1">Withdrawals</h4>
+
+                                            <!-- Text -->
+                                            <div class="fs-4 fw-semibold" id="filter-withdrawals">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <!-- Avatar -->
+                                            <div class="avatar avatar-lg bg-body text-primary">
+                                                <i class="fs-4" data-duoicon="credit-card"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0 d-none" id="filter-total-transactions-container">
+                            <div class="card bg-body-tertiary border-transparent">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <!-- Heading -->
+                                            <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total transactions</h4>
+
+                                            <!-- Text -->
+                                            <div class="fs-4 fw-semibold" id="filter-total-transactions">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <!-- Avatar -->
+                                            <div class="avatar avatar-lg bg-body text-primary">
+                                                <i class="fs-4" data-duoicon="transactions"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-5" />
+                    <div class="card mb-7 mb-xxl-0">
+                        <div id="collectors-filter-results">
+                            <!-- Filtered results will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+    <!-- Modal: Collectors filter on transactions -->
     
     <!-- Modal -->
     <div class="modal fade" id="dayModal" tabindex="-1" aria-hidden="true">

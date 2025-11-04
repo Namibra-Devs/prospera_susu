@@ -5,7 +5,7 @@
                 <div class="col">
                     <!-- Search -->
                     <div class="input-group" style="max-width: 400px">
-                        <input class="form-control" id="topnavSearchInput" type="search" placeholder="Search" aria-label="Search" aria-describedby="navbarSearch" />
+                        <input class="form-control" id="topnavSearchInput" type="search" placeholder="Search" aria-label="Search" aria-describedby="navbarSearch" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                         <span class="input-group-text" id="navbarSearch">
                             <kbd class="badge bg-body-secondary text-body">⌘</kbd>
                             <kbd class="badge bg-body-secondary text-body ms-1">K</kbd>

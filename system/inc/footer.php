@@ -813,5 +813,58 @@
         });
     });
 </script>
+<script>
+    // collectors filter modal
+    $(document).ready(function(){
+        // clear filter button
+        $('#clearCollectorsFilterButton').on('click', function() {
+            // reset form
+            $('#collectors-filter-form')[0].reset();
+            // hide filter results
+            $('#collectors-filter-results').html('');
+            // hide filter cards
+            $('#filter-deposits-container').addClass('d-none');
+            $('#filter-withdrawals-container').addClass('d-none');
+        });
+
+        // submit filter form
+        $('#collectors-filter-form').on('submit', function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize(); // Serialize the form data
+
+            $.ajax({
+                type: 'GET',
+                url: '<?= PROOT; ?>app/controller/transaction.collectors.filter.php',
+                data: formData,
+                beforeSend: function() {
+                    $('#collectors-filter-results').html('<p class="text-muted">Loading...</p>');
+                },
+                success: function(response) {
+                    // Display filtered results
+                    $('#collectors-filter-results').html(response);
+
+                    // Show filter summary cards
+                    $('#filter-deposits-container').removeClass('d-none');
+                    $('#filter-withdrawals-container').removeClass('d-none');
+                    $('#filter-total-transactions-container').removeClass('d-none');
+                }
+            });
+        });
+
+        // reset form if modal is closed
+        $('#collectorsFilterModal').on('hidden.bs.modal', function () {
+            // reset form
+            $('#collectors-filter-form')[0].reset();
+            // hide filter results
+            $('#collectors-filter-results').html('');
+            // hide filter cards
+            $('#filter-deposits-container').addClass('d-none');
+            $('#filter-withdrawals-container').addClass('d-none');
+        });
+
+    });
+</script>
+
+
 </body>
 </html>
