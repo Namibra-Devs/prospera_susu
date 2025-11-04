@@ -31,9 +31,10 @@
                 $error = 'This admin is unknown or password is incorrect !';
             }
 
-            if (!empty($error) || $error != '') {
-                $_SESSION['flash_error'] = $error;
-                redirect(PROOT . 'auth/sign-in');
+            if (!empty($error) || $error != '' || isset($error)) {
+                echo '<p class="text-danger">' . $error . '</p>';
+                // $_SESSION['flash_error'] = $error;
+                // redirect(PROOT . 'auth/sign-in');
             } else {
                 $admin_id = $row->admin_id;
                 adminLogin($admin_id);
@@ -52,7 +53,8 @@
                     <p class="lead text-center text-body-warning">Access our dashboard and start tracking your tasks.</p>
 
                     <!-- Form -->
-                    <form class="mb-5" id="sigin-form" method="POST">
+                    <form class="mb-5" id="signin-form" method="POST">
+                        <p class="text-danger"><?= $error; ?></p>
                         <div class="mb-4 email">
                             <label class="visually-hidden" for="email">Email Address</label>
                             <input class="form-control" id="email" type="email" name="email" placeholder="Enter your email address..." autocomplete="off" autofocus required />
@@ -97,7 +99,7 @@
                     $('#password').addClass('placeholder-wave');
 
                     setTimeout(function () {
-                        $('#sigin-form').submit()
+                        $('#signin-form').submit()
                     }, 2000)
                 } else {
                     $('#password').addClass('input-field-error')
