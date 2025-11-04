@@ -1,5 +1,4 @@
 <?php
-    
     require ('../system/DatabaseConnector.php');
 
     if (admin_is_logged_in()) {
@@ -31,10 +30,8 @@
                 $error = 'This admin is unknown or password is incorrect !';
             }
 
-            if (!empty($error) || $error != '' || isset($error)) {
-                echo '<p class="text-danger">' . $error . '</p>';
-                // $_SESSION['flash_error'] = $error;
-                // redirect(PROOT . 'auth/sign-in');
+            if (!empty($error) || $error != '' || $error != NULL) {
+                // Do nothing, error message is already set
             } else {
                 $admin_id = $row->admin_id;
                 adminLogin($admin_id);
