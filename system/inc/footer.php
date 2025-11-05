@@ -822,15 +822,14 @@
             $('#collectors-filter-form')[0].reset();
             // hide filter results
             $('#collectors-filter-results').html('');
-            // hide filter cards
-            $('#filter-deposits-container').addClass('d-none');
-            $('#filter-withdrawals-container').addClass('d-none');
         });
 
         // submit filter form
         $('#collectors-filter-form').on('submit', function(e) {
             e.preventDefault();
             var formData = $(this).serialize(); // Serialize the form data
+            // clean previous results
+            $('#collectors-filter-results').html(''); 
 
             $.ajax({
                 type: 'GET',
@@ -842,11 +841,6 @@
                 success: function(response) {
                     // Display filtered results
                     $('#collectors-filter-results').html(response);
-
-                    // Show filter summary cards
-                    $('#filter-deposits-container').removeClass('d-none');
-                    $('#filter-withdrawals-container').removeClass('d-none');
-                    $('#filter-total-transactions-container').removeClass('d-none');
                 }
             });
         });
@@ -857,9 +851,6 @@
             $('#collectors-filter-form')[0].reset();
             // hide filter results
             $('#collectors-filter-results').html('');
-            // hide filter cards
-            $('#filter-deposits-container').addClass('d-none');
-            $('#filter-withdrawals-container').addClass('d-none');
         });
 
     });

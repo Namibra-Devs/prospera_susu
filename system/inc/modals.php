@@ -278,7 +278,14 @@
     <?php endif; ?>
 
     <!-- Collectors filter on transactions modal -->
-    <?php if (admin_has_permission('approver')): ?>
+    <?php 
+        if (admin_has_permission('approver')): 
+            // get all collectors
+            $sqlC = "SELECT * FROM susu_admins ORDER BY admin_name ASC";
+            $statement = $dbConnection->prepare($sqlC);
+            $statement->execute();
+            $collectors = $statement->fetchAll();
+    ?>
         
     <!-- Upload Transaction Modal -->
     <div class="modal fade" id="collectorsFilterModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" style="backdrop-filter: blur(5px);" aria-labelledby="collectorsFilterModalLabel">
@@ -296,7 +303,7 @@
                                 <select class="form-select" id="collector_select" name="collector_id">
                                     <option value="">All collectors</option>
                                     <?php foreach ($collectors as $collector): ?>
-                                        <option value="<?= $collector['id']; ?>"><?= $collector['name']; ?></option>
+                                        <option value="<?= $collector['admin_id']; ?>"><?= ucwords($collector['admin_name']); ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -366,77 +373,8 @@
                             <button type="button" class="btn btn-link text-danger" id="clearCollectorsFilterButton" name="clearCollectorsFilterButton">Clear filter</button>
                         </div>
                     </form>
-                    <hr class="my-5" />
-                    <div class="row mb-8">
-                        <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0 d-none" id="filter-deposits-container">
-                            <div class="card bg-body-tertiary border-transparent">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            <!-- Heading -->
-                                            <h4 class="fs-sm fw-normal text-body-secondary mb-1">Deposits</h4>
-
-                                            <!-- Text -->
-                                            <div class="fs-4 fw-semibold" id="filter-deposits">0</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <!-- Avatar -->
-                                            <div class="avatar avatar-lg bg-body text-primary">
-                                                <i class="fs-4" data-duoicon="clock"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0 d-none" id="filter-withdrawals-container">
-                            <div class="card bg-body-tertiary border-transparent">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            <!-- Heading -->
-                                            <h4 class="fs-sm fw-normal text-body-secondary mb-1">Withdrawals</h4>
-
-                                            <!-- Text -->
-                                            <div class="fs-4 fw-semibold" id="filter-withdrawals">0</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <!-- Avatar -->
-                                            <div class="avatar avatar-lg bg-body text-primary">
-                                                <i class="fs-4" data-duoicon="credit-card"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-xxl-3 mb-4 mb-xxl-0 d-none" id="filter-total-transactions-container">
-                            <div class="card bg-body-tertiary border-transparent">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            <!-- Heading -->
-                                            <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total transactions</h4>
-
-                                            <!-- Text -->
-                                            <div class="fs-4 fw-semibold" id="filter-total-transactions">0</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <!-- Avatar -->
-                                            <div class="avatar avatar-lg bg-body text-primary">
-                                                <i class="fs-4" data-duoicon="transactions"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="my-5" />
-                    <div class="card mb-7 mb-xxl-0">
-                        <div id="collectors-filter-results">
-                            <!-- Filtered results will be displayed here -->
-                        </div>
+                    <div id="collectors-filter-results">
+                        <!-- Filtered results will be displayed here -->
                     </div>
                 </div>
             </div>
