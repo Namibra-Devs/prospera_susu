@@ -202,7 +202,7 @@
                 <div class="collapse navbar-collapse" id="sidenavSmallCollapse">
                     <!-- Search -->
                     <div class="input-group d-xl-none my-4 my-xl-0">
-                        <input class="form-control" type="search" placeholder="Search1" aria-label="Search" aria-describedby="sidenavSmallSearchMobile" />
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" aria-describedby="sidenavSmallSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                         <span class="input-group-text" id="sidenavSmallSearchMobile">
                             <span class="material-symbols-outlined">search</span>
                         </span>
@@ -529,7 +529,7 @@
                 <div class="collapse navbar-collapse" id="sidenavMediumCollapse">
                     <!-- Search -->
                     <div class="input-group d-xl-none my-4 my-xl-0">
-                        <input class="form-control" type="search" placeholder="Search1" aria-label="Search" aria-describedby="sidenavMediumSearchMobile" />
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" aria-describedby="sidenavMediumSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                         <span class="input-group-text" id="sidenavMediumSearchMobile">
                             <span class="material-symbols-outlined">search</span>
                         </span>
@@ -853,7 +853,7 @@
                 <div class="collapse navbar-collapse" id="sidenavBaseCollapse">
                     <!-- Search -->
                     <div class="input-group d-xl-none my-4 my-xl-0">
-                        <input class="form-control" type="search" placeholder="Search1" aria-label="Search" aria-describedby="sidenavBaseSearchMobile" />
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" aria-describedby="sidenavBaseSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                         <span class="input-group-text" id="sidenavBaseSearchMobile">
                             <span class="material-symbols-outlined">search</span>
                         </span>

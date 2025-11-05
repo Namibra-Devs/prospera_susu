@@ -2,20 +2,29 @@
     require ('../../system/DatabaseConnector.php');
 
     // Get filters from GET parameters
-    $collector_id = isset($_GET['collector_id']) ? sanitize($_GET['collector_id']) : '';
+    $limit = isset($_POST['limit']) ? sanitize($_POST['limit']) : '10';
+    $page = 1;
+    if (isset($_POST['page']) && $_POST['page'] > 1) {
+        $start = (($_POST['page'] - 1) * $limit);
+        $page = $_POST['page'];
+    } else {
+        $start = 0;
+    }
+
+    $collector_id = isset($_POST['collector_id']) ? sanitize($_POST['collector_id']) : '';
     $collector_id = ($collector_id == 'all' || $collector_id == '') ? null : $collector_id;
-    $account_number = isset($_GET['account_number']) ? sanitize($_GET['account_number']) : '';
-    $customer_name = isset($_GET['customer_name']) ? sanitize($_GET['customer_name']) : '';
-    $note_keyword = isset($_GET['note_keyword']) ? sanitize($_GET['note_keyword']) : '';
-    $sort_by = isset($_GET['sort_by']) ? sanitize($_GET['sort_by']) : '';
-    $date_from = isset($_GET['filter_start_date']) ? sanitize($_GET['filter_start_date']) : '';
-    $date_to = isset($_GET['filter_end_date']) ? sanitize($_GET['filter_end_date']) : '';
-    $transaction_type = isset($_GET['transaction_type']) ? sanitize($_GET['transaction_type']) : '';
+    $account_number = isset($_POST['account_number']) ? sanitize($_POST['account_number']) : '';
+    $customer_name = isset($_POST['customer_name']) ? sanitize($_POST['customer_name']) : '';
+    $note_keyword = isset($_POST['note_keyword']) ? sanitize($_POST['note_keyword']) : '';
+    $sort_by = isset($_POST['sort_by']) ? sanitize($_POST['sort_by']) : '';
+    $date_from = isset($_POST['filter_start_date']) ? sanitize($_POST['filter_start_date']) : '';
+    $date_to = isset($_POST['filter_end_date']) ? sanitize($_POST['filter_end_date']) : '';
+    $transaction_type = isset($_POST['transaction_type']) ? sanitize($_POST['transaction_type']) : '';
     $transaction_type = ($transaction_type == 'all' || $transaction_type == '') ? null : $transaction_type;
-    $payment_mode_filter = isset($_GET['payment_mode']) ? sanitize($_GET['payment_mode']) : '';
+    $payment_mode_filter = isset($_POST['payment_mode_filter']) ? sanitize($_POST['payment_mode_filter']) : '';
     $payment_mode_filter = ($payment_mode_filter == 'all' || $payment_mode_filter == '') ? null : $payment_mode_filter;
-    $min_amount = isset($_GET['min_amount']) ? sanitize($_GET['min_amount']) : '';
-    $max_amount = isset($_GET['max_amount']) ? sanitize($_GET['max_amount']) : '';
+    $min_amount = isset($_POST['min_amount']) ? sanitize($_POST['min_amount']) : '';
+    $max_amount = isset($_POST['max_amount']) ? sanitize($_POST['max_amount']) : '';
     $results_html = '';
     $results_stats = '';
 
@@ -28,6 +37,8 @@
                 saving_collector_id AS collector_id, 
                 saving_amount AS amount, 
                 saving_date_collected AS transaction_date, 
+                saving_mode AS payment_mode, 
+                saving_note AS note_content, 
                 saving_status AS status, 
                 'saving' AS type, 
                 created_at FROM savings 
@@ -39,6 +50,8 @@
                         withdrawal_approver_id AS collector_id, 
                         withdrawal_amount_requested AS amount, 
                         withdrawal_date_requested AS transaction_date, 
+                        withdrawal_mode AS payment_mode, 
+                        withdrawal_note AS note_content, 
                         withdrawal_status AS status, 
                         'withdrawal' AS type, 
                         created_at FROM withdrawals
@@ -68,7 +81,7 @@
     }
     if (!empty($note_keyword)) {
         // Join with notes table to filter by note keyword
-        $query .= " AND transaction_id IN (SELECT note_transaction_id FROM notes WHERE note_content LIKE '%$note_keyword%') ";
+        $query .= " AND (note_content LIKE '%$note_keyword%') ";
     }
     if (!empty($date_from)) {
         $query .= " AND DATE(transaction_date) >= '$date_from' ";
@@ -81,6 +94,9 @@
     }
     if (!empty($max_amount)) {
         $query .= " AND amount <= '$max_amount' ";
+    }
+    if (!empty($payment_mode_filter)) {
+        $query .= " AND payment_mode = '$payment_mode_filter' ";
     }
     // Apply sorting
     if (!empty($sort_by)) {
@@ -103,11 +119,64 @@
     } else {
         $query .= " ORDER BY transaction_date DESC ";
     }
+
     // Execute query
     $statement = $dbConnection->prepare($query);
     $statement->execute();
-    $transactions = $statement->fetchAll(PDO::FETCH_OBJ);
+    $transaction_stats = $statement->fetchAll(PDO::FETCH_OBJ);
+	$total_data = $statement->rowCount();
 
+    if ($total_data > 0) {
+        // if transaction type is saving, sum amount as deposits, else sum as withdrawals
+        $total_deposits = 0;
+        $total_withdrawals = 0;
+        foreach ($transaction_stats as $transaction_stat) {
+            if ($transaction_stat->type === 'saving') {
+                $total_deposits += $transaction_stat->amount;
+            } else {
+                $total_withdrawals += $transaction_stat->amount;
+            }
+        }
+    }
+
+    $filter_query = $query . ' LIMIT ' . $start . ', ' . $limit . '';
+    $statement = $dbConnection->prepare($filter_query);
+	$statement->execute();
+    $transactions = $statement->fetchAll(PDO::FETCH_OBJ);
+    $count_filter = $statement->rowCount();
+
+    // search result data
+    $filters = [
+        'collector_id' => $collector_id,
+        'account_number' => $account_number,
+        'customer_name' => $customer_name,
+        'note_keyword' => $note_keyword,
+        'date_from' => $date_from,
+        'date_to' => $date_to,
+        'transaction_type' => $transaction_type,
+        'payment_mode' => $payment_mode_filter,
+        'min_amount' => $min_amount,
+        'max_amount' => $max_amount,
+        'sort_by' => $sort_by,
+        'limit' => $limit,
+        'page' => $page
+    ];
+    // make it readable for users
+    // if filter keys value is empty dont show
+    $search_query = '';
+    foreach ($filters as $key => $value) {
+        if (!empty($value)) {
+            $search_query .= $key . '=' . $value . '&';
+        }
+    }
+    $search_query = rtrim($search_query, '&');
+    // add the number of seconds it took to display results
+    $start_time = microtime(true);
+    $end_time = microtime(true);
+    $execution_time = $end_time - $start_time;
+    $search_query .= ' (in ' . number_format($execution_time, 4) . ' seconds)';
+
+    // Generate HTML for results and stats
     $results_html = '
         <hr class="my-5" />
         <div class="card mb-7 mb-xxl-0">
@@ -136,11 +205,7 @@
 
     // Generate HTML for results
     if (count($transactions) > 0) {
-        // if transaction type is saving, sum amount as deposits, else sum as withdrawals
-        $total_deposits = 0;
-        $total_withdrawals = 0;
         $i = 1;
-
         foreach ($transactions as $transaction) {
             // get customer name
             $client_name = findCustomerByAccountNumber($transaction->account_number)->customer_name;
@@ -156,8 +221,6 @@
 
             $options = '';
             if ($transaction->type === 'saving') {
-                $total_deposits += $transaction->amount;
-
                 $type = '<span class="fs-sm text-info">Deposit</span>';
 
                 // check status of deposite transactions
@@ -175,8 +238,6 @@
                     $options .= ' <a href="' . PROOT . 'app/transactions?d=1&reject=' . $transaction->transaction_id . '" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure you want to REJECT this Deposit Transaction?\');">Reject</a>';
                 }
             } else {
-                $total_withdrawals += $transaction->amount;
-
                 $type = '<span class="fs-sm text-warning">Withdrawal</span>';
 
                 // check status of withdrawal transactions
@@ -251,6 +312,7 @@
 
         $results_stats = '
             <hr class="my-5" />
+            <div class="alert alert-info small">Search results for: <i>' . $search_query . '</i></div>
             <div class="row mb-8">
                 <div class="col-12 col-md-6 col-xxl-4 mb-4 mb-xxl-0">
                     <div class="card bg-body-tertiary border-transparent">
@@ -294,7 +356,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-6 col-xxl-4 mb-4 mb-xxl-0 d-none" id="filter-total-transactions-container">
+                <div class="col-12 col-md-6 col-xxl-4 mb-4 mb-xxl-0" id="filter-total-transactions-container">
                     <div class="card bg-body-tertiary border-transparent">
                         <div class="card-body">
                             <div class="row align-items-center">
@@ -303,7 +365,7 @@
                                     <h4 class="fs-sm fw-normal text-body-secondary mb-1">Total transactions</h4>
 
                                     <!-- Text -->
-                                    <div class="fs-4 fw-semibold" id="filter-total-transactions">' . count($transactions) . '</div>
+                                    <div class="fs-4 fw-semibold" id="filter-total-transactions">' . $total_data . '</div>
                                 </div>
                                 <div class="col-auto">
                                     <!-- Avatar -->
@@ -327,15 +389,134 @@
         ';
     }
 
-
-    echo $results_stats;
-    echo $results_html . '
-                        </tbody>
-                    </table>
-                </div>
+    $results_html .= '
+                    </tbody>
+                </table>
             </div>
         </div>
+        <div class="row align-items-center">
+            <div class="col">
+                <!-- Text -->
+                <p class="text-body-secondary mb-0">Showing ' . $count_filter . ' items out of ' . $total_data . ' results found</p>
+            </div>
+            <div class="col-auto">
     ';
+
+    if ($total_data > 0) {
+        $results_html .= '
+            <nav aria-label="Page navigation example">
+                <ul class="pagination mb-0">
+        ';
+
+        $total_links = ceil($total_data / $limit);
+
+        $previous_link = '';
+        $next_link = '';
+        $page_link = '';
+
+        if ($total_links > 4) {
+            if ($page < 5) {
+                for ($count = 1; $count <= 5; $count++) {
+                    $page_array[] = $count;
+                }
+                $page_array[] = '...';
+                $page_array[] = $total_links;
+            } else {
+                $end_limit = $total_links - 5;
+                if ($page > $end_limit) {
+                    $page_array[] = 1;
+                    $page_array[] = '...';
+
+                    for ($count = $end_limit; $count <= $total_links; $count++) {
+                        $page_array[] = $count;
+                    }
+                } else {
+                    $page_array[] = 1;
+                    $page_array[] = '...';
+                    for ($count = $page - 1; $count <= $page + 1; $count++) {
+                        $page_array[] = $count;
+                    }
+                    $page_array[] = '...';
+                    $page_array[] = $total_links;
+                }
+            }
+        } else {
+            for ($count = 1; $count <= $total_links; $count++) {
+                $page_array[] = $count;
+            }
+        }
+
+        for ($count = 0; $count < count($page_array); $count++) {
+            if ($page == $page_array[$count]) {
+                $page_link .= '
+                    <li class="page-item active">
+                        <a class="page-link" href="javascript:;">'.$page_array[$count].'</a>
+                    </li>
+                ';
+
+                $previous_id = $page_array[$count] - 1;
+                if ($previous_id > 0) {
+                    $previous_link = '
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:;" data-page_number="'.$previous_id.'" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    ';
+                } else {
+                    $previous_link = '
+                        <li class="page-item disabled">
+                            <a class="page-link" href="javascript:;" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    ';
+                }
+
+                $next_id = $page_array[$count] + 1;
+                if ($next_id >= $total_links) {
+                    $next_link = '
+                        <li class="page-item disabled">
+                            <a class="page-link" href="javascript:;" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    ';
+                } else {
+                    $next_link = '
+                        <li class="page-item">
+                            <a class="page-link" href="javascript:;" aria-label="Next" data-page_number="'.$next_id.'">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    ';
+                }
+
+            } else {
+                
+                if ($page_array[$count] == '...') {
+                    $page_link .= '
+                        <li class="page-item disabled">
+                            <a class="page-link" href="javascript:;">...</a>
+                        </li>
+                    ';
+                } else {
+                    $page_link .= '
+                        <li class="page-item">
+                            <a class="page-link page-link-go" href="javascript:;" data-page_number="'.$page_array[$count].'">'.$page_array[$count].'</a>
+                        </li>
+                    ';
+                }
+            }
+
+        }
+
+        $results_html .= $previous_link. $page_link . $next_link;
+    }
+
+
+    echo $results_stats;
+    echo $results_html;
 ?>
                     
 <script>

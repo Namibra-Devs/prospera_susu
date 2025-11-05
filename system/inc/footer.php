@@ -832,7 +832,7 @@
             $('#collectors-filter-results').html(''); 
 
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: '<?= PROOT; ?>app/controller/transaction.collectors.filter.php',
                 data: formData,
                 beforeSend: function() {
@@ -851,6 +851,59 @@
             $('#collectors-filter-form')[0].reset();
             // hide filter results
             $('#collectors-filter-results').html('');
+        });
+
+        // get filtered data
+        function getFiltersC() {
+            return {
+                collector_id: $('#collector_id').val(),
+                account_number: $('#account_number').val(),
+                customer_name: $('#customer_name').val(),
+                note_keyword: $('#note_keyword').val(),
+                sort_by: $('#sort_by').val(),
+                filter_start_date: $('#filter_start_date').val(),
+                filter_end_date: $('#filter_end_date').val(),
+                transaction_type: $('#transaction_type').val(),
+                payment_mode_filter: $('#payment_mode_filter').val(),
+                min_amount: $('#min_amount').val(),
+                max_amount: $('#max_amount').val(),
+                limit: $('#limit').val()
+            };
+        }
+
+        // SEARCH AND PAGINATION FOR LIST
+        function load_filter_data(page, filters = '{}') {
+            $.ajax({
+                url : "<?= PROOT; ?>app/controller/transaction.collectors.filter.php",
+                method : "POST",
+                data : {
+                    page : page, 
+                    collector_id: filters.collector_id,
+                    account_number: filters.account_number,
+                    customer_name: filters.customer_name,
+                    note_keyword: filters.note_keyword,
+                    sort_by: filters.sort_by,
+                    filter_start_date: filters.filter_start_date,
+                    filter_end_date: filters.filter_end_date,
+                    transaction_type: filters.transaction_type,
+                    payment_mode_filter: filters.payment_mode_filter,
+                    min_amount: filters.min_amount,
+                    max_amount: filters.max_amount,
+                    limit: filters.limit
+                },
+                success : function(data) {
+                    $("#collectors-filter-results").html(data);
+                }, 
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+        load_filter_data(1)
+
+        $(document).on('click', '.page-link-go', function() {
+            var page = $(this).data('page_number');
+            load_filter_data(page, getFiltersC());
         });
 
     });

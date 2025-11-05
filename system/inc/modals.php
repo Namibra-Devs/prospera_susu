@@ -297,7 +297,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="collectors-filter-form" method="POST">
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col">
                                 <label class="form-label" for="collector_select">Select collector</label>
                                 <select class="form-select" id="collector_select" name="collector_id">
@@ -368,6 +368,14 @@
                                 <input type="number" class="form-control" id="max_amount" name="max_amount" step="0.01" placeholder="0.00" />
                             </div>
                         </div>
+                        <!-- select page limit -->
+                        <select name="limit" id="limit">
+                            <option>5</option>
+                            <option selected>10</option>
+                            <option>25</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
                         <div class="text-end mt-3">
                             <button type="submit" class="btn btn-secondary" id="applyCollectorsFilterButton" name="applyCollectorsFilterButton">Apply filter</button>
                             <button type="button" class="btn btn-link text-danger" id="clearCollectorsFilterButton" name="clearCollectorsFilterButton">Clear filter</button>

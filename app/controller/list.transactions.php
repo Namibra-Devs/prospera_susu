@@ -8,7 +8,7 @@ require ('../../system/DatabaseConnector.php');
     $limit = 10;
     $page = 1;
 
-    if ($_POST['page'] > 1) {
+    if (isset($_POST['page']) && $_POST['page'] > 1) {
         $start = (($_POST['page'] - 1) * $limit);
         $page = $_POST['page'];
     } else {
