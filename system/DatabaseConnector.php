@@ -86,6 +86,7 @@
 				$admin_data['last'] = ucwords($fn[1]);
 			}
 			$admin_permission = $admin_data['admin_permissions']; // get admin's permission
+            
 		} else {
 			redirect(PROOT . 'auth/sign-out');
 		}
@@ -98,6 +99,16 @@
     $settings = getSystemSettings();
     $appLogo = PROOT . $settings['app_logo'] ?? 'assets/media/logo/logo.png';
     $appName = ucwords($settings['app_name'] ?? 'Prospera Susu');
+    $added_by  = null;
+    if (isset($_SESSION['PRSADMIN'])) {
+        if (admin_has_permission('admin')) {
+            $added_by = 'Admin';
+        } else if (admin_has_permission('approver') && !admin_has_permission('admin')) {
+            $added_by = 'Approver';
+        } else if (admin_has_permission('collector') && !admin_has_permission('admin')) {
+            $added_by = 'Collector';
+        }
+    }
 
     if (!is_dir(__DIR__ . '/cache')) mkdir(__DIR__ . '/cache', 0755, true);
 	if (!is_dir(__DIR__ . '/logs')) mkdir(__DIR__ . '/logs', 0755, true);

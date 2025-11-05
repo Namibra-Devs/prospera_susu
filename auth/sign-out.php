@@ -22,8 +22,8 @@
     ]);
     
 
-    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] has logged out.';
-    add_to_log($log_message, $added_by_id, $added_by);
+    $log_message = ucwords($added_by) . ' [' . $admin_id . '] has logged out.';
+    add_to_log($log_message, $admin_id, $added_by);
     
     unset($_SESSION['PRSADMIN']);
     unset($_SESSION['last_activity']);
