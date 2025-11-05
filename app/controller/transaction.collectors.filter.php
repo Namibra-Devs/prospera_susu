@@ -325,12 +325,6 @@
                                     <!-- Text -->
                                     <div class="fs-4 fw-semibold" id="filter-deposits">' . money($total_deposits) . '</div>
                                 </div>
-                                <div class="col-auto">
-                                    <!-- Avatar -->
-                                    <div class="avatar avatar-lg bg-body text-primary">
-                                        <i class="fs-4" data-duoicon="clock"></i>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -346,12 +340,6 @@
                                     <!-- Text -->
                                     <div class="fs-4 fw-semibold" id="filter-withdrawals">' . money($total_withdrawals) . '</div>
                                 </div>
-                                <div class="col-auto">
-                                    <!-- Avatar -->
-                                    <div class="avatar avatar-lg bg-body text-primary">
-                                        <i class="fs-4" data-duoicon="credit-card"></i>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -366,12 +354,6 @@
 
                                     <!-- Text -->
                                     <div class="fs-4 fw-semibold" id="filter-total-transactions">' . $total_data . '</div>
-                                </div>
-                                <div class="col-auto">
-                                    <!-- Avatar -->
-                                    <div class="avatar avatar-lg bg-body text-primary">
-                                        <i class="fs-4" data-duoicon="transactions"></i>
-                                    </div>
                                 </div>
                             </div>
                         </div>
