@@ -130,12 +130,14 @@
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="topnavBaseCollapse">
             <!-- Search -->
+            <?php if (basename($_SERVER['PHP_SELF']) === 'index.php' || basename($_SERVER['PHP_SELF']) === 'index' || basename($_SERVER['PHP_SELF']) === ''): ?>
             <div class="input-group d-xl-none my-4 my-xl-0">
                 <input class="form-control" id="topnavSearchInputMobile" type="search" placeholder="Search" aria-label="Search" aria-describedby="navbarSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                 <span class="input-group-text" id="navbarSearchMobile">
                     <span class="material-symbols-outlined">search</span>
                 </span>
             </div>
+            <?php endif; ?>
     
             <!-- Nav -->
             <nav class="navbar-nav nav-pills mx-auto">

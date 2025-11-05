@@ -19,7 +19,7 @@
     // function to get total amount of transactions
     function getTotalTransactionAmount($type = 'Approved') {
         global $dbConnection;
-        if (admin_is_logged_in()) {
+        if (admin_has_permission('approver')) {
             $stmt = $dbConnection->prepare("SELECT SUM(saving_amount) AS total_amount FROM savings WHERE saving_status = ?");
             $stmt->execute([$type]);
         } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
@@ -50,7 +50,7 @@
     // function to get total number of customers and to display for admin and collector
     function getTotalCustomers() {
         global $dbConnection;
-        if (admin_has_permission()) {
+        if (admin_has_permission('approver')) {
             $stmt = $dbConnection->prepare("SELECT COUNT(*) AS total_customers FROM customers WHERE customer_status = ?");
             $stmt->execute(['active']);
         } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
@@ -329,7 +329,7 @@
                                                 </div>
                                             </div>
                                             <?php endif; ?>
-                                            <?php if (admin_has_permission()): ?>
+                                            <?php if (admin_has_permission('approver')): ?>
                                             <div class="col-auto ms-n2">
                                                 <div class="dropdown">
                                                     <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -438,14 +438,14 @@
     $(document).ready(function() {
 
         // SEARCH AND PAGINATION FOR LIST
-        function load_data(page, query = ''<?= admin_has_permission() ? ', filters = {}' : ''; ?>) {
+        function load_data(page, query = ''<?= admin_has_permission('approver') ? ', filters = {}' : ''; ?>) {
             $.ajax({
                 url : "<?= PROOT; ?>app/controller/list.transactions.php",
                 method : "POST",
                 data : {
                     page : page, 
-                    query : query<?= admin_has_permission() ? ',' : ''; ?>
-                    <?php if (admin_has_permission()): ?>
+                    query : query<?= admin_has_permission('approver') ? ',' : ''; ?>
+                    <?php if (admin_has_permission('approver')): ?>
                     type: filters.type || '',
                     date_from: filters.date_from || '',
                     date_to: filters.date_to || '',

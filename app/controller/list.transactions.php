@@ -126,7 +126,7 @@ require ('../../system/DatabaseConnector.php');
                         <th class="fs-sm">Type</th>
                         <th class="fs-sm">Status</th>
                         <th class="fs-sm">Date</th>
-                        '. ((admin_has_permission()) ? '<th class="fs-sm"></th>' : '') .'
+                        '. ((admin_has_permission('approver')) ? '<th class="fs-sm"></th>' : '') .'
                     </tr>
                 </thead>
                 <tbody>
@@ -215,19 +215,19 @@ if ($total_data > 0) {
                 <td>' . $type . '</td>
                 <td>' . $row['status'] . '</td>
                 <td>' . pretty_date_notime($row['transaction_date']) . '</td>
-                '. ((admin_has_permission()) ? '<td class="status">' . $options . '</td>' : '') .' 
+                '. ((admin_has_permission('approver')) ? '<td class="status">' . $options . '</td>' : '') .' 
             </tr>
 		';
 		$i++;
 	}
-    if (admin_has_permission()) {
+    if (admin_has_permission('approver')) {
         $output .= '
             <div id="message" style="margin-top:10px;"></div>
             <div id="loading" style="display:none; color:blue;">⏳ Processing...</div>
             <tr>
                 <td colspan="10"> 
-                    <button class="btn btn-sm" id="approve-btn">✅ Approve Selected</button>
-                    <button class="btn btn-sm" id="reject-btn">❌ Reject Selected</button>
+                    <button class="btn btn-sm" id="approve-btn-new">✅ Approve Selected</button>
+                    <button class="btn btn-sm" id="reject-btn-new">❌ Reject Selected</button>
                 </td>
             </tr>
         ';
@@ -376,33 +376,50 @@ echo $output . '
 ?>
 <script>
     // Toggle row highlight on checkbox change
-    document.querySelectorAll(".transaction-check").forEach(cb => {
-        cb.addEventListener("change", function() {
-            let row = cb.closest("tr");
-            if (cb.checked) {
-                row.classList.add("table-warning");
-            } else {
-                row.classList.remove("table-warning");
-            }
-        });
+    // document.querySelectorAll(".transaction-check").forEach(cb => {
+    //     cb.addEventListener("change", function() {
+    //         let row = cb.closest("tr");
+    //         if (cb.checked) {
+    //             row.classList.add("table-warning");
+    //         } else {
+    //             row.classList.remove("table-warning");
+    //         }
+    //     });
+    // });
+    $(document).on('change', '.transaction-check, .transaction-check', function() {
+        var $row = $(this).closest('tr');
+        if (this.checked) {
+            $row.addClass('table-warning');
+        } else {
+            $row.removeClass('table-warning');
+        }
     });
     
     // Handle select all
     // 
-    const selectAll = document.getElementById("select-all");
-    if (selectAll) {
-        selectAll.addEventListener("change", function(e) {
-            document.querySelectorAll(".transaction-check").forEach(cb => {
-                cb.checked = e.target.checked;
-                let row = cb.closest("tr");
-                if (e.target.checked) {
-                    row.classList.add("table-warning");
-                } else {
-                    row.classList.remove("table-warning");
-                }
-            });
+    // const selectAll = document.getElementById("select-all");
+    // if (selectAll) {
+    //     selectAll.addEventListener("change", function(e) {
+    //         document.querySelectorAll(".transaction-check").forEach(cb => {
+    //             cb.checked = e.target.checked;
+    //             let row = cb.closest("tr");
+    //             if (e.target.checked) {
+    //                 row.classList.add("table-warning");
+    //             } else {
+    //                 row.classList.remove("table-warning");
+    //             }
+    //         });
+    //     });
+    // }
+    $(document).on('change', '#select-all', function() {
+        var checked = this.checked;
+        // apply to all matching checkboxes inside current DOM
+        $('.transaction-check').each(function() {
+            this.checked = checked;
+            var $row = $(this).closest('tr');
+            if (checked) $row.addClass('table-warning'); else $row.removeClass('table-warning');
         });
-    }
+    });
     // document.getElementById("select-all").addEventListener("change", function(e) {
     //     document.querySelectorAll(".transaction-check").forEach(cb => {
     //         cb.checked = e.target.checked;
@@ -416,8 +433,8 @@ echo $output . '
     // });
 
     function setLoading(isLoading) {
-        const approveBtn = document.getElementById("approve-btn");
-        const rejectBtn = document.getElementById("reject-btn");
+        const approveBtn = document.getElementById("approve-btn-new");
+        const rejectBtn = document.getElementById("reject-btn-new");
         const loadingDiv = document.getElementById("loading");
 
         if (isLoading) {
@@ -489,7 +506,24 @@ echo $output . '
         .finally(() => setLoading(false));
     }
 
-    document.getElementById("approve-btn").addEventListener("click", () => processTransactions("approve"));
-    document.getElementById("reject-btn").addEventListener("click", () => processTransactions("reject"));
-
+    // document.getElementById("approve-btn").addEventListener("click", () => processTransactions("approve"));
+    // document.getElementById("reject-btn").addEventListener("click", () => processTransactions("reject"));
+    // delegated clicks for approve/reject buttons to call page-level processTransactions if present
+    $(document).on('click', '#approve-btn-new', function(e) {
+        e.preventDefault();
+        if (typeof processTransactions === 'function') {
+            processTransactions('approve');
+        } else {
+            // fallback: trigger custom event so page-specific code can listen
+            $(document).trigger('transactions:process', ['approve']);
+        }
+    });
+    $(document).on('click', '#reject-btn-new', function(e) {
+        e.preventDefault();
+        if (typeof processTransactions === 'function') {
+            processTransactions('reject');
+        } else {
+            $(document).trigger('transactions:process', ['reject']);
+        }
+    });
 </script>

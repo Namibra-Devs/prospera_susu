@@ -4,6 +4,7 @@
             <div class="row">
                 <div class="col">
                     <!-- Search -->
+                    <?php if (basename($_SERVER['PHP_SELF']) === 'index.php' || basename($_SERVER['PHP_SELF']) === 'index' || basename($_SERVER['PHP_SELF']) === ''): ?>
                     <div class="input-group" style="max-width: 400px">
                         <input class="form-control" id="topnavSearchInput" type="search" placeholder="Search" aria-label="Search" aria-describedby="navbarSearch" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                         <span class="input-group-text" id="navbarSearch">
@@ -11,6 +12,7 @@
                             <kbd class="badge bg-body-secondary text-body ms-1">K</kbd>
                         </span>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <div class="col-auto d-flex">
                     <!-- User -->

@@ -12,6 +12,7 @@
                         </a>
                     </div>
                     <?php endif; ?>
+                    <?php if (admin_has_permission('collector')): ?>
                     <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Add new deposit">
                         <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                             <span class="material-symbols-outlined">send_money</span>
@@ -22,6 +23,7 @@
                             <span class="material-symbols-outlined">cloud_upload</span>
                         </a>
                     </div>
+                    <?php endif; ?>
                     <div class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
                         <a class="nav-link" href="mailto:info@namibra.io">
                             <span class="material-symbols-outlined">support</span>
@@ -201,12 +203,15 @@
                 <!-- Collapse -->
                 <div class="collapse navbar-collapse" id="sidenavSmallCollapse">
                     <!-- Search -->
+                     <!-- show search bar only on index page -->
+                    <?php if (basename($_SERVER['PHP_SELF']) === 'index.php' || basename($_SERVER['PHP_SELF']) === 'index' || basename($_SERVER['PHP_SELF']) === ''): ?>
                     <div class="input-group d-xl-none my-4 my-xl-0">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" aria-describedby="sidenavSmallSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
+                        <input class="form-control" type="search" placeholder="Search12" aria-label="Search" aria-describedby="sidenavSmallSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                         <span class="input-group-text" id="sidenavSmallSearchMobile">
                             <span class="material-symbols-outlined">search</span>
                         </span>
                     </div>
+                    <?php endif; ?>
             
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills">
@@ -331,13 +336,14 @@
                                 <span class="material-symbols-outlined">payment_arrow_down</span> <span class="d-xl-none ms-3">Make new withdrawal</span>
                             </a>
                             <?php endif; ?>
-                            <a
+                            <?php if (admin_has_permission('collector')): ?>
+                                <a
                                 class="nav-link"
                                 href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
                                 data-bs-title="Add new deposit"
-                            >
+                                >
                                 <span class="material-symbols-outlined">send_money</span> <span class="d-xl-none ms-3">Add new deposit</span>
                             </a>
                             <a
@@ -346,9 +352,10 @@
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
                                 data-bs-title="Upload transaction"
-                            >
+                                >
                                 <span class="material-symbols-outlined">cloud_upload</span> <span class="d-xl-none ms-3">Upload transaction</span>
                             </a>
+                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a class="nav-link" href="mailto:info@namibra.io" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Contact us">
@@ -528,12 +535,14 @@
                 <!-- Collapse -->
                 <div class="collapse navbar-collapse" id="sidenavMediumCollapse">
                     <!-- Search -->
+                    <?php if (basename($_SERVER['PHP_SELF']) === 'index.php' || basename($_SERVER['PHP_SELF']) === 'index' || basename($_SERVER['PHP_SELF']) === ''): ?>
                     <div class="input-group d-xl-none my-4 my-xl-0">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" aria-describedby="sidenavMediumSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
+                        <input class="form-control" type="search" placeholder="Search12" aria-label="Search" aria-describedby="sidenavMediumSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                         <span class="input-group-text" id="sidenavMediumSearchMobile">
                             <span class="material-symbols-outlined">search</span>
                         </span>
                     </div>
+                    <?php endif; ?>
             
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills">
@@ -650,6 +659,7 @@
                                 <span class="material-symbols-outlined">payment_arrow_down</span> <span class="d-xl-none ms-3">Make new withdrawal</span>
                             </a>
                             <?php endif; ?>
+                            <?php if (admin_has_permission('collector')): ?>
                             <a
                                 class="nav-link flex-xl-column"
                                 href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal"
@@ -665,9 +675,10 @@
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
                                 data-bs-title="Upload transaction"
-                            >
+                                >
                                 <span class="material-symbols-outlined">cloud_upload</span> <span class="d-xl-none ms-3">Upload transaction</span>
                             </a>
+                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a
@@ -852,12 +863,14 @@
                 <!-- Collapse -->
                 <div class="collapse navbar-collapse" id="sidenavBaseCollapse">
                     <!-- Search -->
+                    <?php if (basename($_SERVER['PHP_SELF']) === 'index.php' || basename($_SERVER['PHP_SELF']) === 'index' || basename($_SERVER['PHP_SELF']) === ''): ?>
                     <div class="input-group d-xl-none my-4 my-xl-0">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" aria-describedby="sidenavBaseSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
+                        <input class="form-control" type="search" placeholder="Search12" aria-label="Search" aria-describedby="sidenavBaseSearchMobile" aria-modal="true"  data-bs-toggle="modal" data-bs-target="#collectorsFilterModal" />
                         <span class="input-group-text" id="sidenavBaseSearchMobile">
                             <span class="material-symbols-outlined">search</span>
                         </span>
                     </div>
+                    <?php endif; ?>
             
                     <!-- Nav -->
                     <nav class="navbar-nav nav-pills mb-7">
@@ -881,7 +894,7 @@
                                 </nav>
                             </div>
                         </div>
-                        <?php if ((admin_is_logged_in() && admin_has_permission('approver'))): ?>
+                        <?php if (admin_has_permission('admin')): ?>
                         <div class="nav-item">
                             <a
                                 class="nav-link nav-collectors"
@@ -902,7 +915,7 @@
                                 </nav>
                             </div>
                         </div>
-                        <?php endif; ?>
+                        
                         <div class="nav-item">
                             <a
                             class="nav-link nav-customers"
@@ -918,13 +931,12 @@
                             <div class="collapse " id="customers">
                                 <nav class="nav nav-pills">
                                     <a class="nav-link sub-nav-customers" href="<?= PROOT; ?>app/customers">Customers</a>
-                                    <?php if ((admin_is_logged_in() && admin_has_permission('approver'))): ?>
                                     <a class="nav-link sub-nav-archived-customers" href="<?= PROOT; ?>app/archived-customers">Archived customers</a>
-                                    <?php endif; ?>
                                     <a class="nav-link sub-nav-new-customers" href="<?= PROOT; ?>app/customer-new">New customer</a>
                                 </nav>
                             </div>
                         </div>
+                        <?php endif; ?>
                         <div class="nav-item">
                             <a
                                 class="nav-link nav-transactions"
@@ -943,8 +955,10 @@
                                     <?php if (admin_has_permission()): ?>
                                     <a class="nav-link" href="#withdrawalModal" data-bs-toggle="modal" data-bs-target="#withdrawalModal">Make new withdrawal</a>
                                     <?php endif; ?>
+                                    <?php if (admin_has_permission('collector')): ?>
                                     <a class="nav-link" href="#transactionModal" data-bs-toggle="modal" data-bs-target="#transactionModal">Add new deposit</a>
                                     <a class="nav-link" href="#transactionUploadModal" data-bs-toggle="modal" data-bs-target="#transactionUploadModal">Upload transaction</a>
+                                    <?php endif; ?>
                                     <!-- <a class="nav-link sub-nav-approved-transactions" href="<?= PROOT; ?>app/transactions-approved">Approved transactions </a>
                                     <a class="nav-link sub-nav-not-approved-transactions" href="<?= PROOT; ?>app/transactions-not-approved">Not approved transactions </a>
                                     <a class="nav-link sub-nav-archived-transactions" href="<?= PROOT; ?>app/transactions-archive">Archive transactions</a> -->
@@ -970,7 +984,7 @@
                                 </nav>
                             </div>
                         </div>
-                        <?php if ((admin_is_logged_in() && admin_has_permission('approver'))): ?>
+                        <?php if (admin_has_permission('admin')): ?>
                         <div class="nav-item">
                             <a
                             class="nav-link nav-admins"
@@ -1049,12 +1063,14 @@
                                 <span class="material-symbols-outlined me-3">payment_arrow_down</span> Make new withdrawal
                             </a>
                             <?php endif; ?>
+                            <?php if (admin_has_permission('collector')): ?>
                             <a class="nav-link" href="#transactionModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionModal">
                                 <span class="material-symbols-outlined me-3">send_money</span> Add new deposit
                             </a>
                             <a class="nav-link" href="#transactionUploadModal" type="button" data-bs-toggle="modal" data-bs-target="#transactionUploadModal">
                                 <span class="material-symbols-outlined me-3">cloud_upload</span> Upload transaction
                             </a>
+                            <?php endif; ?>
                         </div>
                         <div class="nav-item">
                             <a class="nav-link" href="mailto:info@namibra.io">
