@@ -756,62 +756,62 @@
             $('#closeUploadModal').attr('disabled', false);
         });
 
-</script>
+    </script>
 
-<script>
-    $(document).ready(function(){
-        $('#transaction_file').on('change', function(e) {
-            let file = e.target.files[0];
-            if (!file) return;
+    <script>
+        $(document).ready(function(){
+            $('#transaction_file').on('change', function(e) {
+                let file = e.target.files[0];
+                if (!file) return;
 
-            let formData = new FormData();
-            formData.append('file', file);
+                let formData = new FormData();
+                formData.append('file', file);
 
-            $('.progress').show();
-            $('#uploadProgress').css('width', '0%').text('0%');
-            $('#previewArea').html('<p class="text-muted">Processing file... Please wait.</p>');
-            $('#uploadTransactionButton').hide();
-
-            $.ajax({
-                xhr: function() {
-                    let xhr = new XMLHttpRequest();
-                    xhr.upload.addEventListener('progress', function(e) {
-                        if (e.lengthComputable) {
-                            let percent = Math.round((e.loaded / e.total) * 100);
-                            $('#uploadProgress').css('width', percent + '%').text(percent + '%');
-                        }
-                    });
-                    return xhr;
-                },
-                url: '<?= PROOT;  ?>app/controller/transaction.preview.upload.php',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    $('.progress').hide();
-                    $('#previewArea').html(response);
-                    $('#uploadTransactionButton').show();
-                }
-            });
-        });
-
-        $('#uploadTransactionButton').click(function() {
-            $.post('<?= PROOT; ?>app/controller/transaction.upload.insert.php', function(response) {
-                $('#previewArea').html(response);
+                $('.progress').show();
+                $('#uploadProgress').css('width', '0%').text('0%');
+                $('#previewArea').html('<p class="text-muted">Processing file... Please wait.</p>');
                 $('#uploadTransactionButton').hide();
+
+                $.ajax({
+                    xhr: function() {
+                        let xhr = new XMLHttpRequest();
+                        xhr.upload.addEventListener('progress', function(e) {
+                            if (e.lengthComputable) {
+                                let percent = Math.round((e.loaded / e.total) * 100);
+                                $('#uploadProgress').css('width', percent + '%').text(percent + '%');
+                            }
+                        });
+                        return xhr;
+                    },
+                    url: '<?= PROOT;  ?>app/controller/transaction.preview.upload.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        $('.progress').hide();
+                        $('#previewArea').html(response);
+                        $('#uploadTransactionButton').show();
+                    }
+                });
+            });
+
+            $('#uploadTransactionButton').click(function() {
+                $.post('<?= PROOT; ?>app/controller/transaction.upload.insert.php', function(response) {
+                    $('#previewArea').html(response);
+                    $('#uploadTransactionButton').hide();
+                    $('#transaction_file').val('');
+                });
+            });
+
+            // reset form if upload modal is closed
+            $('#transactionUploadModal').on('hidden.bs.modal', function () {
+                // reset form
                 $('#transaction_file').val('');
+                $('#previewArea').html('');
+                $('#uploadTransactionButton').hide();
             });
         });
-
-        // reset form if upload modal is closed
-        $('#transactionUploadModal').on('hidden.bs.modal', function () {
-            // reset form
-            $('#transaction_file').val('');
-            $('#previewArea').html('');
-            $('#uploadTransactionButton').hide();
-        });
-    });
-</script>
+    </script>
 </body>
 </html>
