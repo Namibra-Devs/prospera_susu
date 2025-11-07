@@ -94,7 +94,6 @@
 
             $message = "exported " . strtoupper($FileExtType) . " trades data";
             // 
-            $added_by = (admin_has_permission() ? 'admin' : 'collector');
             $log_message = ucwords($added_by) . ' [' . $admin_id . '] ' . $message;
             add_to_log($log_message, $admin_id, $added_by);
 

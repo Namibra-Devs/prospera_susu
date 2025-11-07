@@ -25,8 +25,6 @@
     $confirm = ((isset($_POST['confirm'])) ? sanitize($_POST['confirm']) : '');
     $confirm = trim($confirm);
     $new_hashed = password_hash($password, PASSWORD_BCRYPT);
-    $admin_id = $admin_data['admin_id'];
-    $added_by = (admin_has_permission() ? 'admin' : 'collector');
 
     if (isset($_POST['old_password'])) {
         if (empty($_POST['old_password']) || empty($_POST['password']) || empty($_POST['confirm'])) {

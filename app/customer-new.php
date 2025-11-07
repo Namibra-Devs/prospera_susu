@@ -19,15 +19,6 @@
     include ('../system/inc/topnav.php');
 
     //
-    $added_by = null;
-    $added_by_id = $admin_id;
-    if (admin_has_permission()) {
-        $added_by = 'admin';
-    } elseif (admin_has_permission('collector') && !admin_has_permission()) {
-        $added_by = 'collector';
-    }
-
-    //
     function email_exist($email, $edit_id = null) {
         global $dbConnection;
         $query = "SELECT * FROM customers WHERE customer_email = ? AND customer_id != '" . $edit_id . "' LIMIT 1";
@@ -178,8 +169,8 @@
                     $account_number, $name, $phone, $email, $address, $region, $city, $amount, $target, $duration, $startdate, $edit_id
                 ]);
                 if ($result) {
-                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] updated customer ' . ucwords($name) . ' (' . $phone . ')';
-                    add_to_log($log_message, $added_by_id, $added_by);
+                    $log_message = ucwords($added_by) . ' [' . $admin_id . '] updated customer ' . ucwords($name) . ' (' . $phone . ')';
+                    add_to_log($log_message, $admin_id, $added_by);
 
                     $_SESSION['flash_success'] = "Customer updated successfully !";
                     redirect(PROOT . 'app/customers/' . $edit_id);
@@ -195,11 +186,11 @@
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ");
                 $result = $stmt->execute([
-                    $unique_id, $account_number, $added_by_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $front_photo_path, $back_photo_path, $amount, $target, $duration, $startdate
+                    $unique_id, $account_number, $admin_id, $added_by, $name, $phone, $email, $address, $region, $city, $idcard, $idnumber, $front_photo_path, $back_photo_path, $amount, $target, $duration, $startdate
                 ]);
                 if ($result) {
-                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new customer ' . ucwords($name) . ' (' . $phone . ')';
-                    add_to_log($log_message, $added_by_id, $added_by);
+                    $log_message = ucwords($added_by) . ' [' . $admin_id . '] added new customer ' . ucwords($name) . ' (' . $phone . ')';
+                    add_to_log($log_message, $admin_id, $added_by);
 
                     $_SESSION['flash_success'] = "Customer added successfully !";
                     redirect(PROOT . 'app/customers');

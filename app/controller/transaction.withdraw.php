@@ -4,11 +4,7 @@
     $errors = null;
     $message = null;
 
-    $added_by = null;
-    $added_by_id = $admin_id;
-    if (admin_has_permission()) {
-        $added_by = 'admin';
-    } else {
+    if (!admin_has_permission()) {
         $errors = 'You don\'t have permission to take this action !';
     }
 
@@ -91,8 +87,8 @@
 
                 if ($stmt) {
                     // 
-                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] made new withdrawal transaction for ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
-                    add_to_log($log_message, $added_by_id, $added_by);
+                    $log_message = ucwords($added_by) . ' [' . $admin_id . '] made new withdrawal transaction for ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
+                    add_to_log($log_message, $admin_id, $added_by);
 
                     $message = 'Withdrawal transaction added successfully.';
                 } else {

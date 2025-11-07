@@ -4,14 +4,6 @@
     $errors = null;
     $message = null;
 
-    $added_by = null;
-    $added_by_id = $admin_id;
-    if (admin_has_permission()) {
-        $added_by = 'admin';
-    } elseif (admin_has_permission('collector') && !admin_has_permission('admin')) {
-        $added_by = 'collector';
-    }
-
     // check if is posted
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_customer'])) {
 
@@ -114,8 +106,8 @@
                             $update_start_date_stmt->execute([$next_date, $find_customer_row->customer_id]);
                         }
 
-                        $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account for day ' . ($i + 1);
-                        add_to_log($log_message, $added_by_id, $added_by);
+                        $log_message = ucwords($added_by) . ' [' . $admin_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account for day ' . ($i + 1);
+                        add_to_log($log_message, $admin_id, $added_by);
 
                         $message = 'Transaction added successfully.';
                     } else {
@@ -170,8 +162,8 @@
                     }
 
                     // 
-                    $log_message = ucwords($added_by) . ' [' . $added_by_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
-                    add_to_log($log_message, $added_by_id, $added_by);
+                    $log_message = ucwords($added_by) . ' [' . $admin_id . '] added new transaction to ' . ucwords($customer_name) . ' (' . $customer_account_number . ') account';
+                    add_to_log($log_message, $admin_id, $added_by);
 
                     $message = 'Transaction added successfully.';
                 } else {

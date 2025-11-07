@@ -43,7 +43,6 @@
             $statement = $dbConnection->prepare($query);
             $result = $statement->execute($data);
             if (isset($result)) {
-                $added_by = (admin_has_permission() ? 'admin' : 'collector');
                 $log_message = 'Admin [' . $admin_id . '] has updated profile details!';
                 add_to_log($log_message, $admin_data['admin_id'], $added_by);
 
