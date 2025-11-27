@@ -428,6 +428,7 @@
                                 <li>The date format in your file must be <b>Month/Day/Year (MM/DD/YYYY)</b> or <b>Day/Month/Year (DD/MM/YYYY)</b>.</li>
                                 <li>If a customer is making an <b>advance deposit</b>; make sure you list the <b>days one by one</b> (but not to <b>sum the money and add as one</b>).</li>
                             </ul>
+                            <em class="text-info">Rows highlighted in red contain errors and will not be uploaded.</em>
                         </p>
                     </div>
 
