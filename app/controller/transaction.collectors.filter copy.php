@@ -177,49 +177,8 @@
     $search_query .= ' (in ' . number_format($execution_time, 4) . ' seconds)';
 
     // Generate HTML for results and stats
-    $results_html = ' 
-        <div class="d-flex align-items-center justify-content-between mb-5">
-            <h2 class="fs-5 mb-0">Search results</h2>
-                <div class="d-flex">
-                    <div class="dropdown">
-                        <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                            <span class="material-symbols-outlined">filter_list</span>
-                        </button>
-                        <div class="dropdown-menu rounded-3 p-6">
-                            <h4 class="fs-lg mb-4">Export/Download result</h4>
-                            <form style="width: 350px" id="exportForm" action="' . PROOT . 'app/controller/export.transaction.collectors.filter.php">
-                            <div class="row gx-3">
-                                <div class="col-sm-12 mb-3">
-                                    <div class="btn-group w-100" role="group" aria-label="Basic radio toggle button group">
-                                        <input type="radio" class="btn-check" name="export-type" id="export_xlsx" autocomplete="off" checked value="xlsx" required />
-                                        <label class="btn btn-light" for="export_xlsx" data-bs-toggle="tooltip" data-bs-title="XLSX">
-                                        <img src="' . PROOT . 'assets/media/XLSX.png" class="w-rem-6 h-rem-6 rounded-circle" alt="...">
-                                        </label>
-                                        <input type="radio" class="btn-check" name="export-type" id="export_csv" autocomplete="off" value="csv" required />
-                                        <label class="btn btn-light" for="export_csv" data-bs-toggle="tooltip" data-bs-title="CSV">
-                                        <img src="' . PROOT . 'assets/media/CSV.png" class="w-rem-6 h-rem-6 rounded-circle" alt="...">
-                                        </label>
-                                        <input type="radio" class="btn-check" name="export-type" id="export_pdf" autocomplete="off" value="pdf" required />
-                                        <label class="btn btn-light" for="export_pdf" data-bs-toggle="tooltip" data-bs-title="PDF">
-                                        <img src="' . PROOT . 'assets/media/PDF.png" class="w-rem-6 rh-rem-6 ounded-circle" alt="...">
-                                        </label>
-                                        <input type="radio" class="btn-check" name="export-type" id="export_xls" autocomplete="off" value="xls" required />
-                                        <label class="btn btn-light" for="export_xls" data-bs-toggle="tooltip" data-bs-title="XLS">
-                                        <img src="' . PROOT . 'assets/media/XLS.png" class="w-rem-6 h-rem-6 rounded-circle" alt="...">
-                                        </label>
-                                    </div>
-                                </div>
-                                <button id="submit-export" type="button" class="btn btn-warning">Export</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
+    $results_html = '
+        <hr class="my-5" />
         <div class="card mb-7 mb-xxl-0">
             <div class="table-responsive">
                 <table class="table table-hover table-sm mb-0">
@@ -544,6 +503,16 @@
                     
 <script>
     // Toggle row highlight on checkbox change
+    // document.querySelectorAll(".transaction-check-tt").forEach(cb => {
+    //     cb.addEventListener("change", function() {
+    //         let row = cb.closest("tr");
+    //         if (cb.checked) {
+    //             row.classList.add("table-warning");
+    //         } else {
+    //             row.classList.remove("table-warning");
+    //         }
+    //     });
+    // });
     $(document).on('change', '.transaction-check-tt, .transaction-check, .transaction-check', function() {
         var $row = $(this).closest('tr');
         if (this.checked) {
@@ -554,7 +523,21 @@
     });
     
     // Handle select all
-
+    // 
+    // const selectAll = document.getElementById("select-all-transactions");
+    // if (selectAll) {
+    //     selectAll.addEventListener("change", function(e) {
+    //         document.querySelectorAll(".transaction-check-tt").forEach(cb => {
+    //             cb.checked = e.target.checked;
+    //             let row = cb.closest("tr");
+    //             if (e.target.checked) {
+    //                 row.classList.add("table-warning");
+    //             } else {
+    //                 row.classList.remove("table-warning");
+    //             }
+    //         });
+    //     });
+    // }
     // select / unselect all
     $(document).on('change', '#select-all-transactions, #select-all', function() {
         var checked = this.checked;
@@ -565,6 +548,17 @@
             if (checked) $row.addClass('table-warning'); else $row.removeClass('table-warning');
         });
     });
+    // document.getElementById("select-all").addEventListener("change", function(e) {
+    //     document.querySelectorAll(".transaction-check").forEach(cb => {
+    //         cb.checked = e.target.checked;
+    //         let row = cb.closest("tr");
+    //         if (e.target.checked) {
+    //             row.classList.add("table-warning");
+    //         } else {
+    //             row.classList.remove("table-warning");
+    //         }
+    //     });
+    // });
 
     function setLoading(isLoading) {
         const approveBtn = document.getElementById("approve-btn");
@@ -639,6 +633,9 @@
         .catch(err => console.error("Error:", err))
         .finally(() => setLoading(false));
     }
+
+    // document.getElementById("approve-btn").addEventListener("click", () => processTransactions("approve"));
+    // document.getElementById("reject-btn").addEventListener("click", () => processTransactions("reject"));
 
     // delegated clicks for approve/reject buttons to call page-level processTransactions if present
     $(document).on('click', '#approve-btn', function(e) {
