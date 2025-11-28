@@ -22,10 +22,21 @@
     $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
     \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
 
-    if (isset($_GET['exp_with'])) {
+    // check if export data session is available
+    $session_data = issetElse($_SESSION, 'transaction_stats', []);
+    if (empty($session_data)) {
+        $_SESSION['flash_error'] = "No data to export!";
+        redirect(PROOT . "app/transactions/collectors.filter");
+    }
 
-        $exp_with = (isset($_GET['exp_with']) && !empty($_GET['exp_with']) ? sanitize($_GET['exp_with']) : '');
-        $exp_status = (isset($_GET['export-status']) && !empty($_GET['export-status']) ? sanitize($_GET['export-status']) : '');
+    // if (!isset($_SESSION['transaction_stats']) || empty($_SESSION['transaction_stats'])) {
+    //     $_SESSION['flash_error'] = "No data to export!";
+    //     redirect(PROOT . "app/transactions/collectors.filter");
+    // }
+
+    if (isset($_GET['export-type'])) {
+        dnd($session_data);
+
         $exp_type = (isset($_GET['export-type']) && !empty($_GET['export-type']) ? sanitize($_GET['export-type']) : '');
         $get_out_from_date = null;        
         

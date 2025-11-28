@@ -126,6 +126,9 @@
     $transaction_stats = $statement->fetchAll(PDO::FETCH_OBJ);
 	$total_data = $statement->rowCount();
 
+    // store transaction stats in session for export
+    $_SESSION['transaction_stats'] = $transaction_stats;
+
     if ($total_data > 0) {
         // if transaction type is saving, sum amount as deposits, else sum as withdrawals
         $total_deposits = 0;
@@ -180,14 +183,14 @@
     $results_html = ' 
         <div class="d-flex align-items-center justify-content-between mb-5">
             <h2 class="fs-5 mb-0">Search results</h2>
-                <div class="d-flex">
-                    <div class="dropdown">
-                        <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                            <span class="material-symbols-outlined">filter_list</span>
-                        </button>
-                        <div class="dropdown-menu rounded-3 p-6">
-                            <h4 class="fs-lg mb-4">Export/Download result</h4>
-                            <form style="width: 350px" id="exportForm" action="' . PROOT . 'app/controller/export.transaction.collectors.filter.php">
+            <div class="d-flex">
+                <div class="dropdown">
+                    <button class="btn btn-light px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <span class="material-symbols-outlined">filter_list</span>
+                    </button>
+                    <div class="dropdown-menu rounded-3 p-6">
+                        <h4 class="fs-lg mb-4">Export/Download result</h4>
+                        <form style="width: 350px" id="exportForm" action="' . PROOT . 'app/controller/export.transaction.collectors.filter.php">
                             <div class="row gx-3">
                                 <div class="col-sm-12 mb-3">
                                     <div class="btn-group w-100" role="group" aria-label="Basic radio toggle button group">
@@ -658,5 +661,28 @@
             $(document).trigger('transactions:process', ['reject']);
         }
     });
+
+</script>
+
+<script>
+    $('#submit-export').on('click', function() {
+
+            // if ($(".export_class:checked").val()) {
+            //     var select_for = $(".export_class:checked").val();
+
+
+                $('#submit-export').attr('disabled', true);
+                $('#submit-export').text('Exporting ...');
+                setTimeout(function () {
+                    $('#exportForm').submit();
+
+                    $('#submit-export').attr('disabled', false);
+                    $('#submit-export').text('Export');
+                    // location.reload();
+                }, 2000)
+            // } else {
+            //     return false;
+            // }
+        });
 
 </script>
