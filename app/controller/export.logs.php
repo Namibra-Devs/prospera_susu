@@ -92,7 +92,7 @@
                 $NewFileName = $fileName . '.pdf';
             }
 
-            $message = "exported " . strtoupper($FileExtType) . " trades data";
+            $message = "exported " . strtoupper($FileExtType) . " log data";
             // 
             $log_message = ucwords($added_by) . ' [' . $admin_id . '] ' . $message;
             add_to_log($log_message, $admin_id, $added_by);

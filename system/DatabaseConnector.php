@@ -19,7 +19,10 @@
     } catch (\PDOException $e) {
         exit($e->getMessage());
     }
-    session_start();
+    // ensure session is started
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
 
     // if (isset($_SESSION['PRSCOLLECTOR'])) {
     //     $collector_id = $_SESSION['PRSCOLLECTOR'];

@@ -666,23 +666,15 @@
 
 <script>
     $('#submit-export').on('click', function() {
+        $('#submit-export').attr('disabled', true);
+        $('#submit-export').text('Exporting ...');
+        setTimeout(function () {
+            $('#exportForm').submit();
 
-            // if ($(".export_class:checked").val()) {
-            //     var select_for = $(".export_class:checked").val();
-
-
-                $('#submit-export').attr('disabled', true);
-                $('#submit-export').text('Exporting ...');
-                setTimeout(function () {
-                    $('#exportForm').submit();
-
-                    $('#submit-export').attr('disabled', false);
-                    $('#submit-export').text('Export');
-                    // location.reload();
-                }, 2000)
-            // } else {
-            //     return false;
-            // }
-        });
+            $('#submit-export').attr('disabled', false);
+            $('#submit-export').text('Export');
+            // location.reload();
+        }, 2000)
+    });
 
 </script>
