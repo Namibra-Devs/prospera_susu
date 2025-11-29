@@ -81,7 +81,7 @@
                 $client_name = 'Unknown';
                 if ($account_number) {
                     $c = findCustomerByAccountNumber($account_number);
-                    if ($c && isset($c->customer_name)) $client_name = $c->customer_name;
+                    if ($c && isset($c->customer_name)) $client_name = ucwords($c->customer_name);
                 }
 
                 // get handler name
