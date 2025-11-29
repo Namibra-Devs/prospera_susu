@@ -13,6 +13,14 @@
     use PhpOffice\PhpSpreadsheet\Writer\Csv;
     use PhpOffice\PhpSpreadsheet\IOFactory;
 
+    
+    // Dompdf, Mpdf or Tcpdf (as appropriate)
+    // $className = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf::class;
+    // IOFactory::registerWriter('Pdf', $className);
+
+    // $class = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+    // \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $class);
+
     // check if export data session is available
     $session_data = issetElse($_SESSION, 'transaction_stats', []);
     if (empty($session_data) || !is_array($session_data)) {
@@ -33,22 +41,12 @@
     // optional status/label used for filename/logging
     $exp_status = isset($_GET['status']) ? sanitize($_GET['status']) : 'filter';
 
-    // register PDF writer if one of supported PDF libraries is available
-    $pdfWriterAvailable = false;
-    $pdfWriterAdapter = null;
-    // prefer mPDF, fall back to Dompdf, then TCPDF
-    if (class_exists('\Mpdf\Mpdf')) {
-        \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class);
-        $pdfWriterAvailable = true;
-        $pdfWriterAdapter = 'Mpdf';
-    } elseif (class_exists('\Dompdf\Dompdf')) {
-        \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', \PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf::class);
-        $pdfWriterAvailable = true;
-        $pdfWriterAdapter = 'Dompdf';
-    } elseif (class_exists('\TCPDF')) {
-        \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf::class);
-        $pdfWriterAvailable = true;
-        $pdfWriterAdapter = 'Tcpdf';
+    // register PDF writer (mpdf) if available
+    try {
+        $pdfClass = \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class;
+        \PhpOffice\PhpSpreadsheet\IOFactory::registerWriter('Pdf', $pdfClass);
+    } catch (\Throwable $e) {
+        // ignore if pdf writer not available; we'll catch later if requested
     }
 
     if (isset($_GET['export-type'])) {
@@ -77,6 +75,13 @@
                 $statusVal = isset($row->status) ? $row->status : (isset($row['status']) ? $row['status'] : '');
                 $transaction_date = isset($row->transaction_date) ? $row->transaction_date : (isset($row['saving_operation_date']) ? $row['saving_operation_date'] : (isset($row['withdrawal_date_approved']) ? $row['withdrawal_date_approved'] : ''));
 
+
+                // get customer name
+                // $client_name = findCustomerByAccountNumber($row->account_number)->customer_name;
+                // if (!$client_name) {
+                //     $client_name = 'Unknown';
+                // }
+
                 // get customer name
                 $client_name = 'Unknown';
                 if ($account_number) {
@@ -85,11 +90,23 @@
                 }
 
                 // get handler name
+                // $handler = findAdminById($row->collector_id)->admin_name;
+                // if (!$handler) {
+                //     $handler = 'Admin';
+                // }
                 $handler = 'Admin';
                 if ($collector_id) {
                     $h = findAdminById($collector_id);
                     if ($h && isset($h->admin_name)) $handler = $h->admin_name;
                 }
+
+                // if ($row->type === 'saving') {
+                //     $trans_type = 'Saving';
+                // } elseif ($row->type === 'withdrawal') {
+                //     $trans_type = 'Withdrawal';
+                // } else {
+                //     $trans_type = 'Unknown';
+                // }
 
                 if ($typeVal === 'saving') {
                     $trans_type = 'Saving';
@@ -99,6 +116,13 @@
                     $trans_type = ucfirst($typeVal ?? 'Unknown');
                 }
 
+                // $sheet->setCellValue('A' . $rowCount, $client_name);
+                // $sheet->setCellValue('B' . $rowCount, $row->amount);
+                // $sheet->setCellValue('C' . $rowCount, ucwords($handler));
+                // $sheet->setCellValue('D' . $rowCount, $trans_type);
+                // $sheet->setCellValue('E' . $rowCount, ucwords($row->status));
+                // $sheet->setCellValue('F' . $rowCount, date('d M Y H:i:s', strtotime($row->transaction_date)));
+                // $rowCount++;
                 $sheet->setCellValue('A' . $rowCount, $client_name);
                 $sheet->setCellValue('B' . $rowCount, $amount);
                 $sheet->setCellValue('C' . $rowCount, ucwords($handler));
@@ -107,6 +131,9 @@
                 $sheet->setCellValue('F' . $rowCount, $transaction_date ? date('d M Y H:i:s', strtotime($transaction_date)) : '');
                 $rowCount++;
             }
+
+            // $FileExtType = $exp_type;
+            // $fileName = "Prospera-susu-Filter-" . $exp_status . "-sheet";
 
             // build safe filename
             $safeStatus = preg_replace('/[^A-Za-z0-9_\-]/', '-', $exp_status);
@@ -125,6 +152,23 @@
             // clear any output buffers to avoid corrupting binary output
             while (ob_get_level()) ob_end_clean();
 
+            // if ($FileExtType == 'xlsx') {
+            //     $writer = new Xlsx($spreadsheet);
+            //     $NewFileName = $fileName . '.xlsx';
+            // } elseif($FileExtType == 'xls') {
+            //     $writer = new Xls($spreadsheet);
+            //     $NewFileName = $fileName . '.xls';
+            // } elseif($FileExtType == 'csv') {
+            //     $writer = new Csv($spreadsheet);
+            //     $NewFileName = $fileName . '.csv';
+            // } elseif($FileExtType == 'pdf') {
+            //     //$writer = new Csv($spreadsheet);
+
+            //     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+            //     $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf($spreadsheet);
+
+            //     $NewFileName = $fileName . '.pdf';
+            // }
             try {
                 if ($exp_type == 'xlsx') {
                     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -145,19 +189,10 @@
                     $writer->save('php://output');
                 } elseif ($exp_type == 'pdf') {
                     // try to create a PDF writer via IOFactory
-                    if (!$pdfWriterAvailable) {
-                        // informative error for the user/admin and safe redirect
-                        $_SESSION['flash_error'] = "PDF export requires one of: mPDF, Dompdf or TCPDF. Install one via composer (e.g. composer require mpdf/mpdf) or choose another export format.";
-                        // cleanup and redirect back to the filter page
-                        unset($_SESSION['transaction_stats']);
-                        redirect(PROOT . "app/transactions/collectors.filter");
-                        exit;
-                    }
-
                     header('Content-Type: application/pdf');
                     header('Content-Disposition: attachment; filename="' . rawurlencode($newFileName) . '"');
-                    // create writer via IOFactory (registered above)
-                    $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Pdf');
+                    // IOFactory::createWriter may throw if Pdf writer not registered
+                    $writer = IOFactory::createWriter($spreadsheet, 'Pdf');
                     $writer->save('php://output');
                 }
                 // ensure session flag for success
@@ -169,21 +204,33 @@
                 exit;
             }
 
+            // $message = "exported " . strtoupper($FileExtType) . " filter data";
+            // // 
+            // $log_message = ucwords($added_by) . ' [' . $admin_id . '] ' . $message;
+            // add_to_log($log_message, $admin_id, $added_by);
+
+            // $writer->save($NewFileName);
+            // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            // header('Content-Disposition: attactment; filename="' . urlencode($NewFileName) . '"');
+            // $writer->save('php://output');
+
+           // $_SESSION['flash_success'] = "Downloaded!";
+
             // cleanup session export data if present
             unset($_SESSION['transaction_stats']);
 
             // stop further output
             exit;
+
         } else {
             $_SESSION['flash_error'] = "No Record Found!";
         }
 
         unset($_SESSION['transaction_stats']);
-        redirect(PROOT . "app/");
         exit;
     } else {
         $_SESSION['flash_error'] = "Invalid request!";
         redirect(PROOT . "app/");
         exit;
     }
-?>
+    ?>
