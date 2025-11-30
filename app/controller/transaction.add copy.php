@@ -16,7 +16,8 @@
         $payment_mode = sanitize($_POST['payment_mode']); 
 
         $is_advance_payment = (isset($_POST['is_advance_payment']) && $_POST['is_advance_payment'] === 'yes') ? true : false;
-        $advance_payment_amount = ($is_advance_payment && isset($_POST['advance_payment'])) ? sanitize($_POST['advance_payment']) : 0;
+        $advance_payment = ($is_advance_payment && isset($_POST['advance_payment'])) ? sanitize($_POST['advance_payment']) : 0;
+
 
         $find_customer_row = findCustomerByAccountNumber($customer_account_number);
         if (!$find_customer_row) {
@@ -47,49 +48,17 @@
 
         // 
         if ($is_advance_payment) {
-
-            // advance payment days
-            $advance_payment_days = isset($_POST['advance_payment_days_hidden']) ? (int)sanitize($_POST['advance_payment_days_hidden']) : 0;
-            if ($advance_payment_days <= 0) {
-                $errors = 'Please select a valid advance payment option.';
+            if ($advance_payment <= 1) {
+                $errors = 'Please select advance payment option.';
+            } elseif ($advance_payment > 31) {
+                $errors = 'Advance payment cannot be more than 31 days.';
             }
-
-            // advance payment amount must be devisible by default amount
-            if ($advance_payment_amount % $find_customer_row->customer_default_daily_amount != 0) {
-                $errors = 'Advance payment amount must be devisible by customer default amount.';
-            }
-
-            // calculate advance payment days using advance payment amount and customer default amount
-            $advance_payment_days_new = ceil($advance_payment_amount / $find_customer_row->customer_default_daily_amount);
-            
-            if ($advance_payment_days != $advance_payment_days_new) {
-                $errors = 'Advance payment days mismatch. Please try again.';
-            }
-
-            // if ($advance_payment <= 1) {
-            //     $errors = 'Please select advance payment option.';
-            // } elseif ($advance_payment > 31) {
-            //     $errors = 'Advance payment cannot be more than 31 days.';
-            // }
-
             // calculate total amount
-            $transaction_amount = $transaction_amount * $advance_payment_days;
-            
-            // check if transaction_amount is equal to advance payment amount
-            if ($transaction_amount != $advance_payment_amount) {
-                $errors = 'Transaction amount does not match advance payment amount.';
-            }
-
-            $transaction_note .= ' (Advance payment for ' . $advance_payment_days . ' days)';
-
-            // insert advance payment details into advance_payments table
-            $advanceSql = "INSERT INTO saving_advance (advance_id, advance_amount, advance_days) VALUE (?, ?, ?)";
-            $advanceStmt = $dbConnection->prepare($advanceSql);
-            $advance_id = guidv4() . '-' . strtotime(date("Y-m-d H:i:s"));
-            $advanceStmt->execute([$advance_id, $advance_payment_amount, $advance_payment_days]);
+            $transaction_amount = $transaction_amount * $advance_payment;
+            $transaction_note .= ' (Advance payment for ' . $advance_payment . ' days)';
 
             // create a foreach loop to add multiple transactions for advance payment
-            for ($i = 0; $i < $advance_payment_days; $i++) {
+            for ($i = 0; $i < $advance_payment; $i++) {
 
                 // always move forward from the last saved date
                 $next_date = date('Y-m-d', strtotime($start_date . " + $i days"));
@@ -107,9 +76,11 @@
                         break; // free date found
                     }
                 }
+
                 $next_unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:i:s")) . '-' . $i;
 
-                $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode, saving_advance_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
                 // check if there are no error before inserting
                 if (empty($errors) || $errors == null) {
@@ -118,11 +89,10 @@
                         $find_customer_row->customer_id, 
                         $customer_account_number, 
                         $admin_id, 
-                        $find_customer_row->customer_default_daily_amount, 
+                        $transaction_amount / $advance_payment, 
                         $next_date, 
                         'Advance payment for ' . $customer_name . ' (' . $customer_account_number . ') for day ' . ($i + 1), 
-                        $payment_mode, 
-                        $advance_id
+                        $payment_mode
                     ]);
                     
                     // log message

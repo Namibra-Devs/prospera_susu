@@ -61,11 +61,6 @@
             $errors = 'Invalid withdrawal amount !';
         }
 
-        // amout to withdraw should be devisible by default daily amount
-        if ($transaction_amount % $default !== 0) {
-            $errors = 'Withdrawal amount must be in multiples of ' . number_format($default, 2) . ' !';
-        }
-
         // new balance = balance - withdrawal
         $new_balance = (float)($b - $transaction_amount);
 

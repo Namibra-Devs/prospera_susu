@@ -298,10 +298,6 @@
 
                 return false;
             } else {
-                // hide first step
-                $('#first_step').hide();
-                // show preview step
-                $('#preview_step').show();
 
                 // set preview values
                 var customerText = $('#select_customer option:selected').text();
@@ -324,11 +320,32 @@
 
                 var isAdvancePaymentChecked = $('#is_advance_payment').is(':checked');
                 if (isAdvancePaymentChecked) {
-                    var advancePaymentDays = $('#advance_payment').val();
+                    var advancePaymentAmount = $('#advance_payment').val();
+                    // make advance payment amount be in currency format
+                    advancePaymentAmount = parseFloat(advancePaymentAmount).toFixed(2);
+                    $('#preview_advance_payment_amount').html('GHS ' + advancePaymentAmount);
+                    // use advance payment amount to calculate for the number of advance payment days using customer default amount
+                    var defaultAmount = parseFloat($('#default_amount').val());
+                    // check if advance payment amount if devisible by default amount
+                    if (advancePaymentAmount % defaultAmount !== 0) {
+                        $('.toast-body').html('Advance payment amount must be devisible by default amount.');
+                        $('.toast').toast('show');
+                        $('.toast').removeClass('bg-success').addClass('bg-danger');
+
+                        return false;
+                    }
+                    var advancePaymentDays = Math.floor(advancePaymentAmount / defaultAmount);
                     $('#preview_advance_payment').html('Yes, for ' + advancePaymentDays + ' days');
+                    // set hidden input value for advance payment days
+                    $('#advance_payment_days_hidden').val(advancePaymentDays);
                 } else {
                     $('#preview_advance_payment').html('No');
                 }
+                
+                // hide first step
+                $('#first_step').hide();
+                // show preview step
+                $('#preview_step').show();
 
                 // change modal title
                 $('#transactionModalLabel').html('Preview transaction');

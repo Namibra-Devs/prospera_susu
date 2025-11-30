@@ -56,11 +56,12 @@
                             <input type="checkbox" id="is_advance_payment" name="is_advance_payment" value="yes" />
                             <div class="mb-4 mt-2" id="advance_payment_div" style="display: none;">
                                 <label class="form-label" for="advance_payment">Advance payment</label>
-                                <div class="form-floating"> 
-                                    <input type="number" class="form-control" id="advance_payment" placeholder="0.00" name="advance_payment" min="0" step="1" /> 
-                                    <label for="advance_payment">Full amount</label> 
-                                </div>
-                                <div class="form-text">Make sure the amount is devisible by cutomers daily default amount</div>
+                                <select class="form-select" id="advance_payment" name="advance_payment" required>
+                                    <option value="1">1</option>
+                                    <?php for ($i = 2; $i <= 31; $i++) {
+                                        echo '<option value="' . $i . '">' . $i . '</option>';
+                                    } ?>
+                                </select>
                             </div>
                             <button type="button" id="next_step" class="btn btn-link w-100 mt-4">Next step</button>
                         </div>
@@ -116,17 +117,7 @@
                                 </div>
                                 <div class="row align-items-center gx-4">
                                     <div class="col-auto">
-                                        <span class="text-body-secondary">Advance payment amount</span>
-                                    </div>
-                                    <div class="col">
-                                        <hr class="my-0 border-style-dotted" />
-                                    </div>
-                                    <div class="col-auto" id="preview_advance_payment_amount"></div>
-                                </div>
-                                <div class="row align-items-center gx-4">
-                                    <div class="col-auto">
                                         <span class="text-body-secondary">Advance payment for</span>
-                                        <input type="hidden" id="advance_payment_days_hidden" name="advance_payment_days_hidden" />
                                     </div>
                                     <div class="col">
                                         <hr class="my-0 border-style-dotted" />
@@ -185,7 +176,6 @@
                             <div class="mb-4">
                                 <label class="form-label" for="amount-to-withdraw">Amount to withdraw <span id="label-defualt-amount"></span></label>
                                 <input class="form-control" type="number" min="0.00" step="0.01" placeholder="Enter amount" id="amount-to-withdraw" name="amount-to-withdraw" required />
-                                <div class="form-text">Make sure the amount is devisible by cutomers daily default amount</div>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="withdrawal_payment_mode">Mode of withdrawal</label>
