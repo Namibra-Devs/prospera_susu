@@ -48,7 +48,7 @@
 
         // calculation where when withdrawal days are calculated, if there is a decimal, it should give an error
         if (is_float($withdrawal_days) && floor($withdrawal_days) != $withdrawal_days) {
-            $errors = 'Withdrawal amount must be in multiples of ' . number_format($default, 2) . ' !';
+            $errors = 'Withdrawal amount must be in multiples of ' . money($default) . ' !';
         }
 
         // validate withrawal days against blanace days
@@ -63,7 +63,7 @@
 
         // amout to withdraw should be devisible by default daily amount
         if ($transaction_amount % $default !== 0) {
-            $errors = 'Withdrawal amount must be in multiples of ' . number_format($default, 2) . ' !';
+            $errors = 'Withdrawal amount must be in multiples of ' . money($default) . ' !';
         }
 
         // new balance = balance - withdrawal

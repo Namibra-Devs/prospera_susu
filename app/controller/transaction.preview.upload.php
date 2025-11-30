@@ -46,7 +46,7 @@
         }
     }
     // calculate total amount
-    $total_amount = ($data[0][5] ?? 0);
+    $total_amount = ($data[0][6] ?? 0);
 
     if (empty($data)) {
         echo "<div class='alert alert-warning'>No records found in file.</div>";
@@ -57,8 +57,8 @@
     $groupedData = [];
     $uploadData = [];
     foreach ($data as $row) {
-
-        list($account_number, $amount, $date, $note, $payment_mode) = $row;
+        
+        list($account_number, $amount, $date, $note, $payment_mode, $advance_option) = $row;
         $isValid = true;
         $errors = [];
 
@@ -76,6 +76,32 @@
             $isValid = false;
             $errors[] = "Invalid payment mode";
             // exit;
+        }
+
+        // check if advance_option is yes
+        if ($advance_option == 'yes' || $advance_option == 'YES' || $advance_option == '1' || $advance_option == 'y' || $advance_option == 'Y') {
+            // grab customer default amount
+            $default_amount = $customer_id->customer_default_daily_amount;
+
+            // check if deposit amount id devisible by default aount
+            if ($amount % $default_amount !== 0) {
+                $errors[] = 'Amount must be in multiples of ' . money($default_amount) . ' !';
+            }
+
+            // calculate advance days
+            $advance_payment_days = ($amount / $default_amount);
+
+            // insert into advance table
+            $transaction_note .= ' (Advance payment for ' . $advance_payment_days . ' days)';
+
+            // insert advance payment details into advance_payments table
+            $advanceSql = "INSERT INTO saving_advance (advance_id, advance_amount, advance_days) VALUE (?, ?, ?)";
+            $advanceStmt = $dbConnection->prepare($advanceSql);
+            $advance_id = guidv4() . '-' . strtotime(date("Y-m-d H:i:s"));
+            $advanceStmt->execute([$advance_id, $amount, $advance_payment_days]);
+            
+            // loop days and insert into savings table
+
         }
 
         $groupedData[] = [
@@ -167,6 +193,7 @@
                 <th>Date</th>
                 <th>Note</th>
                 <th>Payment Mode</th>
+                <th>Advance</th>
                 <th>Errors</th>
             </tr>
         </thead>
@@ -186,6 +213,7 @@
                 <td><?= sanitize($row['date']) ?></td>
                 <td><?= sanitize($row['note']) ?></td>
                 <td><?= sanitize($row['payment_mode']) ?></td>
+                <td><?= sanitize($row['advance_option']) ?></td>
                 <td>
                     <em class="text-info"><?= implode(", ", array_map('sanitize', $row['errors'])) ?></em>
                 </td>
