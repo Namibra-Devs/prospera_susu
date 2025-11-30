@@ -78,10 +78,8 @@
             // exit;
         }
 
-        // grab customer default amount
-        $default_amount = $customer_id->customer_default_daily_amount;
-
         // check if advance_option is yes
+        if ($customer_id) { $default_amount = $customer_id->customer_default_daily_amount; }
         if ($advance_option == 'yes' || $advance_option == 'YES' || $advance_option == '1' || $advance_option == 'y' || $advance_option == 'Y') {
             
 
@@ -107,10 +105,7 @@
             
             // loop days and insert into savings table
 
-        }
-
-        //
-        if ($default_amount != $amount) {
+        } else if ($default_amount != $amount) {
             $errors[] = 'Invalid amount !';
         }
 

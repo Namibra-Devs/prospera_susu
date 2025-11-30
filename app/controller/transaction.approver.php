@@ -56,16 +56,19 @@
                 $response['message'] = "Unrecognized transaction id format: {$trans}";
                 continue;
             }
-
+            
             if ($sql) {
                 $stmt = $dbConnection->prepare($sql);
                 $ok = $stmt->execute($params);
                 if ($ok) {
-                    // update saving advance table
-                    $newSQL = "UPDATE saving_advance SET advance_status = ?, advance_operated_by = ?, updated_at = ? WHERE advance_id = ?";
-                    $newParams = [$status, $admin_id, $newdate, $aid];
-                    $newStmt = $dbConnection->prepare($newSQL);
-                    $newStmt->execute($newParams);
+                    if (preg_match('/^advance_deposit_(.+)$/', $trans, $m) || preg_match('/^advance_withdrawal_(.+)$/', $trans, $m)) {
+                        
+                        // update saving advance table
+                        $newSQL = "UPDATE saving_advance SET advance_status = ?, advance_operated_by = ?, updated_at = ? WHERE advance_id = ?";
+                        $newParams = [$status, $admin_id, $newdate, $aid];
+                        $newStmt = $dbConnection->prepare($newSQL);
+                        $newStmt->execute($newParams);
+                    }
 
 
                     // log if function exists

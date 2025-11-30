@@ -17,24 +17,41 @@
         $transaction_note = $note;
         // get cusomer account number to fetch customer_id
         $get_customer = findCustomerByAccountNumber($account_number);
+        if (!$get_customer) { 
+            echo "<div class='alert alert-success'>Invalid customer !</div>";
+            exit;
+        }
+
         $customer_name = ucwords($get_customer->customer_name);
+        // grab customer default amount
+        $default_amount = $get_customer->customer_default_daily_amount;
+
+        // fetch the last saving_date_collected for the customer
+        $last_date_sql = "SELECT MAX(saving_date_collected) as last_date 
+                        FROM savings 
+                        WHERE saving_customer_account_number = ?";
+        $last_date_stmt = $dbConnection->prepare($last_date_sql);
+        $last_date_stmt->execute([$account_number]);
+        $last_date_row = $last_date_stmt->fetch(PDO::FETCH_ASSOC);
+
+        // start from last saved date + 1 day OR today if no previous saving
+        $start_date = $last_date_row && $last_date_row['last_date'] 
+            ? date('Y-m-d', strtotime($last_date_row['last_date'] . ' +1 day'))
+            : date('Y-m-d'); // if no record exists, start from today
 
         // check if advance_option is yes
         if ($advance_option == 'yes' || $advance_option == 'YES' || $advance_option == '1' || $advance_option == 'y' || $advance_option == 'Y') {
-            // grab customer default amount
-            $default_amount = $get_customer->customer_default_daily_amount;
 
             // check if deposit amount id devisible by default aount
-            if ($amount % $default_amount !== 0) {
-                echo 'Amount must be in multiples of ' . money($default_amount) . ' !';
+            $remainder = $amount / $default_amount;
+            if (floor($remainder) == $remainder) {
+            } else {
+                echo "<div class='alert alert-success'>" . $account_number . " amount must be in multiples of " . money($default_amount) . " !</div>";
                 exit;
             }
 
             // calculate advance days
             $advance_payment_days = ($amount / $default_amount);
-
-            // insert into advance table
-            $transaction_note .= ' Advance payment for ' . $customer_name . ' (' . $account_number . ') for day ' . ($i + 1);
 
             // insert advance payment details into advance_payments table
             $advanceSql = "INSERT INTO saving_advance (advance_id, advance_amount, advance_days) VALUE (?, ?, ?)";
@@ -45,6 +62,8 @@
             // loop days and insert into savings table
             // create a foreach loop to add multiple transactions for advance payment
             for ($i = 0; $i < $advance_payment_days; $i++) {
+                // insert into advance table
+                $transaction_note .= ' Advance payment for ' . $customer_name . ' (' . $account_number . ') for day ' . ($i + 1);
 
                 // always move forward from the last saved date
                 $next_date = date('Y-m-d', strtotime($start_date . " + $i days"));
@@ -64,11 +83,11 @@
                 }
                 $next_unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:i:s")) . '-' . $i;
 
-                $stmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode, saving_advance_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $ADstmt = $dbConnection->prepare("INSERT INTO savings (saving_id, saving_customer_id, saving_customer_account_number, saving_collector_id, saving_amount, saving_date_collected, saving_note, saving_mode, saving_advance_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 // check if there are no error before inserting
                 if (empty($errors) || $errors == null) {
-                    $stmt->execute([
+                    $ADstmt->execute([
                         $next_unique_id, 
                         $get_customer->customer_id, 
                         $account_number, 
@@ -81,7 +100,7 @@
                     ]);
                     
                     // log message
-                    if ($stmt) {
+                    if ($ADstmt) {
                         processMonthlyCommission($get_customer->customer_id);
 
                         // check if customer_start_date is null, then set it to the date of first saving
@@ -100,28 +119,37 @@
                     }
                 }
             }
+        } else {
+            if ($default_amount != $amount) {
+                echo "<div class='alert alert-success'>Invalid amount !</div>";
+                exit;
+            }
+
+            $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:i:s"));
+            // get cusomer account number to fetch customer_id
+            $customer_id = findCustomerByAccountNumber($row[0]);
+            if (!$customer_id) continue; // skip if account number not found
+
+            // set date to fit database
+            $newdate = date('Y-m-d H:i:s', strtotime($row[2]));
+            $row[2] = $newdate;
+
+            $newData = [
+                $unique_id,
+                $customer_id->customer_id, // customer_id (to be fetched from account_number)
+                $row[0] ?? null, // account_number
+                $admin_id ?? null, // collector_id
+                $row[1] ?? null, // amount
+                $row[2] ?? null, // date
+                $row[3] ?? null, // note
+                strtolower($row[4]) ?? null, // payment_mode
+            ];
+            $stmt->execute($newData);
+
+            processMonthlyCommission($get_customer->customer_id);
+
+            $inserted++;
         }
-
-        $unique_id = guidv4() . '-' . strtotime(date("Y-m-d H:i:s"));
-        // get cusomer account number to fetch customer_id
-        $customer_id = findCustomerByAccountNumber($row[0]);
-        if (!$customer_id) continue; // skip if account number not found
-
-        // set date to fit database
-        $newdate = date('Y-m-d H:i:s', strtotime($row[2]));
-        $row[2] = $newdate;
-
-        $stmt->execute([
-            $unique_id,
-            $customer_id->customer_id, // customer_id (to be fetched from account_number)
-            $row[0] ?? null, // account_number
-            $admin_id ?? null, // collector_id
-            $row[1] ?? null, // amount
-            $row[2] ?? null, // date
-            $row[3] ?? null, // note
-            strtolower($row[4]) ?? null, // payment_mode
-        ]);
-        $inserted++;
     }
 
     if (isset($_SESSION['file_upload_data'])) {

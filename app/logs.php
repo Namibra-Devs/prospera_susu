@@ -115,12 +115,12 @@
                                         </div> -->
                                         <div class="col col-auto ms-auto">
                                             <div class="dropdown">
-                                            <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                                <span class="material-symbols-outlined">export_notes</span>
-                                            </button>
-                                            <div class="dropdown-menu rounded-3 p-6">
-                                                <h4 class="fs-lg mb-4">Export trades</h4>
-                                                <form style="width: 350px" id="exportForm" action="<?= PROOT; ?>app/controller/export.logs.php">
+                                                <button class="btn btn-dark px-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                    <span class="material-symbols-outlined">export_notes</span>
+                                                </button>
+                                                <div class="dropdown-menu rounded-3 p-6">
+                                                    <h4 class="fs-lg mb-4">Export trades</h4>
+                                                    <form style="width: 350px" id="exportForm" action="<?= PROOT; ?>app/controller/export.logs.php">
                                                     <div class="row gx-3">
                                                     <div class="col-sm-12 mb-3">
                                                             <div class="form-check form-check-inline">
