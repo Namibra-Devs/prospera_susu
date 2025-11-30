@@ -14,10 +14,11 @@
         if (count($row) < 6) continue;
 
         list($account_number, $amount, $date, $note, $payment_mode, $advance_option) = $row;
+        $transaction_note = $note;
         // get cusomer account number to fetch customer_id
         $get_customer = findCustomerByAccountNumber($account_number);
         $customer_name = ucwords($get_customer->customer_name);
-        
+
         // check if advance_option is yes
         if ($advance_option == 'yes' || $advance_option == 'YES' || $advance_option == '1' || $advance_option == 'y' || $advance_option == 'Y') {
             // grab customer default amount
@@ -33,7 +34,7 @@
             $advance_payment_days = ($amount / $default_amount);
 
             // insert into advance table
-            $transaction_note .= ' (Advance payment for ' . $advance_payment_days . ' days)';
+            $transaction_note .= ' Advance payment for ' . $customer_name . ' (' . $account_number . ') for day ' . ($i + 1);
 
             // insert advance payment details into advance_payments table
             $advanceSql = "INSERT INTO saving_advance (advance_id, advance_amount, advance_days) VALUE (?, ?, ?)";
@@ -74,7 +75,7 @@
                         $admin_id, 
                         $get_customer->customer_default_daily_amount, 
                         $next_date, 
-                        'Advance payment for ' . $customer_name . ' (' . $account_number . ') for day ' . ($i + 1), 
+                        $transaction_note, 
                         $payment_mode, 
                         $advance_id
                     ]);
