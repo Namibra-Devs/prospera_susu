@@ -79,9 +79,8 @@
         }
 
         // check if advance_option is yes
-        if ($customer_id) { $default_amount = $customer_id->customer_default_daily_amount; }
+        if ($customer_id) { $default_amount = $customer_id->customer_default_daily_amount; } else { $default_amount = $amount; }
         if ($advance_option == 'yes' || $advance_option == 'YES' || $advance_option == '1' || $advance_option == 'y' || $advance_option == 'Y') {
-            
 
             // check if deposit amount id devisible by default amount
             $remainder = $amount / $default_amount;
@@ -90,20 +89,6 @@
             } else {
                 $errors[] = 'Amount must be in multiples of ' . money($default_amount) . ' !';
             }
-            
-            // calculate advance days
-            // $advance_payment_days = ($amount / $default_amount);
-
-            // // insert into advance table
-            // $transaction_note .= ' (Advance payment for ' . $advance_payment_days . ' days)';
-
-            // // insert advance payment details into advance_payments table
-            // $advanceSql = "INSERT INTO saving_advance (advance_id, advance_amount, advance_days) VALUE (?, ?, ?)";
-            // $advanceStmt = $dbConnection->prepare($advanceSql);
-            // $advance_id = guidv4() . '-' . strtotime(date("Y-m-d H:i:s"));
-            // $advanceStmt->execute([$advance_id, $amount, $advance_payment_days]);
-            
-            // loop days and insert into savings table
 
         } else if ($default_amount != $amount) {
             $errors[] = 'Invalid amount !';
@@ -130,6 +115,7 @@
         //     $row[3] ?? null, // note
         //     $row[4] ?? null, // payment_mode
         // ];
+        
     }
 
     $uploadData[] = [
