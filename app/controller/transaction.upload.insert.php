@@ -173,14 +173,6 @@
         unset($_SESSION['file_upload_data']);
     }
 
-    // if (isset($_SESSION['upload_file_path'])) {
-    //     $filePath = '../../' . $_SESSION['upload_file_path'];
-    //     if (file_exists($filePath)) {
-    //         unlink($filePath); // delete the file after processing
-    //     }
-    //     unset($_SESSION['upload_file_path']);
-    // }
-
     unset($_SESSION['preview_data']);
 
     echo "<div class='alert alert-success'>✅ Successfully inserted {$inserted} records into savings table!</div>";

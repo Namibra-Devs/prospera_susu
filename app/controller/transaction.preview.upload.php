@@ -4,6 +4,15 @@
     require '../../vendor/autoload.php';
     use PhpOffice\PhpSpreadsheet\IOFactory;
 
+    // delete upload file if there are errors
+    function delete_file($file) {
+        if (file_exists($file)) {
+            unlink($file); // delete the file after processing
+        } else {
+            unlink($file); // delete the file after processing
+        }
+    }
+
     $validPaymentModes = ['cash','bank','airteltigomoney','mtnmobilemoney','telecelcash'];
     if (!isset($_FILES['file'])) {
         echo "<div class='alert alert-danger'>No file uploaded!</div>";
@@ -50,6 +59,7 @@
 
     if (empty($data)) {
         echo "<div class='alert alert-warning'>No records found in file.</div>";
+        delete_file($tempFile);
         exit;
     }
 
@@ -134,6 +144,7 @@
     if ($count_not_valid > 0) {
         // echo "<div class='alert alert-danger'>No valid records to preview. Please check the errors.</div>";
         // exit;
+        delete_file($tempFile);
     } else {
         echo "<div class='alert alert-success'>Preview generated. Please review the data before inserting.</div>";
         // only store valid rows
@@ -153,6 +164,7 @@
         //     ] : null;
         // }, array_filter($groupedData, fn($row) => $row['valid']));
     }
+    
 
 ?>
 
