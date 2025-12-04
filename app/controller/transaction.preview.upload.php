@@ -97,10 +97,12 @@
             if (floor($remainder) == $remainder) {
                 // echo "devisible";
             } else {
+                $isValid = false;
                 $errors[] = 'Amount must be in multiples of ' . money($default_amount) . ' !';
             }
 
         } else if ($default_amount != $amount) {
+            $isValid = false;
             $errors[] = 'Invalid amount !';
         }
 
